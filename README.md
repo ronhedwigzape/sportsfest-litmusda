@@ -1,6 +1,6 @@
 # sportsfest-litmusda
 
-Literacy, Dance, Music, and Cheerdance Sportsfest Tabulation System 
+Literacy, Dance, Music, and Cheerdance Sportsfest-Foundation Tabulation System 
 
 ## Development Setup
 Here are the steps to set up the development environment for this project:
