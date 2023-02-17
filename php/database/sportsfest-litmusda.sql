@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 17, 2023 at 01:05 PM
+-- Generation Time: Feb 17, 2023 at 05:14 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -188,15 +188,111 @@ CREATE TABLE `criteria_vocalsolomale` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `ratings_acousticband`
+--
+
+CREATE TABLE `ratings_acousticband` (
+  `id` int(10) NOT NULL,
+  `judge_id` int(10) UNSIGNED NOT NULL,
+  `criteria_id` int(10) UNSIGNED NOT NULL,
+  `team_id` int(10) UNSIGNED NOT NULL,
+  `value` float UNSIGNED NOT NULL DEFAULT 0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ratings_balagtasan`
+--
+
+CREATE TABLE `ratings_balagtasan` (
+  `id` int(10) NOT NULL,
+  `judge_id` int(10) UNSIGNED NOT NULL,
+  `criteria_id` int(10) UNSIGNED NOT NULL,
+  `team_id` int(10) UNSIGNED NOT NULL,
+  `value` float UNSIGNED NOT NULL DEFAULT 0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ratings_cheerdance`
+--
+
+CREATE TABLE `ratings_cheerdance` (
+  `id` int(10) NOT NULL,
+  `judge_id` int(10) UNSIGNED NOT NULL,
+  `criteria_id` int(10) UNSIGNED NOT NULL,
+  `team_id` int(10) UNSIGNED NOT NULL,
+  `value` float UNSIGNED NOT NULL DEFAULT 0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ratings_hiphop`
+--
+
+CREATE TABLE `ratings_hiphop` (
+  `id` int(10) NOT NULL,
+  `judge_id` int(10) UNSIGNED NOT NULL,
+  `criteria_id` int(10) UNSIGNED NOT NULL,
+  `team_id` int(10) UNSIGNED NOT NULL,
+  `value` float UNSIGNED NOT NULL DEFAULT 0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ratings_jazzchant`
+--
+
+CREATE TABLE `ratings_jazzchant` (
+  `id` int(10) NOT NULL,
+  `judge_id` int(10) UNSIGNED NOT NULL,
+  `criteria_id` int(10) UNSIGNED NOT NULL,
+  `team_id` int(10) UNSIGNED NOT NULL,
+  `value` float UNSIGNED NOT NULL DEFAULT 0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ratings_jazzdance`
+--
+
+CREATE TABLE `ratings_jazzdance` (
+  `id` int(10) NOT NULL,
+  `judge_id` int(10) UNSIGNED NOT NULL,
+  `criteria_id` int(10) UNSIGNED NOT NULL,
+  `team_id` int(10) UNSIGNED NOT NULL,
+  `value` float UNSIGNED NOT NULL DEFAULT 0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `ratings_oration`
 --
 
 CREATE TABLE `ratings_oration` (
-  `id` int(255) NOT NULL,
+  `id` int(10) NOT NULL,
   `judge_id` int(10) UNSIGNED NOT NULL,
   `criteria_id` int(10) UNSIGNED NOT NULL,
   `team_id` int(10) UNSIGNED NOT NULL,
-  `value` float UNSIGNED DEFAULT 0,
+  `value` float UNSIGNED NOT NULL DEFAULT 0,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -266,6 +362,70 @@ INSERT INTO `ratings_oration` (`id`, `judge_id`, `criteria_id`, `team_id`, `valu
 (58, 5, 2, 3, 0, '2023-02-17 09:19:08', '2023-02-17 09:19:08'),
 (59, 5, 3, 3, 0, '2023-02-17 09:19:08', '2023-02-17 09:19:08'),
 (60, 5, 4, 3, 0, '2023-02-17 09:19:08', '2023-02-17 09:19:08');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ratings_tigsik`
+--
+
+CREATE TABLE `ratings_tigsik` (
+  `id` int(10) NOT NULL,
+  `judge_id` int(10) UNSIGNED NOT NULL,
+  `criteria_id` int(10) UNSIGNED NOT NULL,
+  `team_id` int(10) UNSIGNED NOT NULL,
+  `value` float UNSIGNED NOT NULL DEFAULT 0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ratings_vocalduet`
+--
+
+CREATE TABLE `ratings_vocalduet` (
+  `id` int(10) NOT NULL,
+  `judge_id` int(10) UNSIGNED NOT NULL,
+  `criteria_id` int(10) UNSIGNED NOT NULL,
+  `team_id` int(10) UNSIGNED NOT NULL,
+  `value` float UNSIGNED NOT NULL DEFAULT 0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ratings_vocalsolofemale`
+--
+
+CREATE TABLE `ratings_vocalsolofemale` (
+  `id` int(10) NOT NULL,
+  `judge_id` int(10) UNSIGNED NOT NULL,
+  `criteria_id` int(10) UNSIGNED NOT NULL,
+  `team_id` int(10) UNSIGNED NOT NULL,
+  `value` float UNSIGNED NOT NULL DEFAULT 0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ratings_vocalsolomale`
+--
+
+CREATE TABLE `ratings_vocalsolomale` (
+  `id` int(10) NOT NULL,
+  `judge_id` int(10) UNSIGNED NOT NULL,
+  `criteria_id` int(10) UNSIGNED NOT NULL,
+  `team_id` int(10) UNSIGNED NOT NULL,
+  `value` float UNSIGNED NOT NULL DEFAULT 0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -408,11 +568,101 @@ ALTER TABLE `criteria_vocalsolomale`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `ratings_acousticband`
+--
+ALTER TABLE `ratings_acousticband`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `judge_id` (`judge_id`),
+  ADD KEY `criteria_id` (`criteria_id`),
+  ADD KEY `team_id` (`team_id`);
+
+--
+-- Indexes for table `ratings_balagtasan`
+--
+ALTER TABLE `ratings_balagtasan`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `judge_id` (`judge_id`),
+  ADD KEY `criteria_id` (`criteria_id`),
+  ADD KEY `team_id` (`team_id`);
+
+--
+-- Indexes for table `ratings_cheerdance`
+--
+ALTER TABLE `ratings_cheerdance`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `judge_id` (`judge_id`),
+  ADD KEY `criteria_id` (`criteria_id`),
+  ADD KEY `team_id` (`team_id`);
+
+--
+-- Indexes for table `ratings_hiphop`
+--
+ALTER TABLE `ratings_hiphop`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `judge_id` (`judge_id`),
+  ADD KEY `criteria_id` (`criteria_id`),
+  ADD KEY `team_id` (`team_id`);
+
+--
+-- Indexes for table `ratings_jazzchant`
+--
+ALTER TABLE `ratings_jazzchant`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `judge_id` (`judge_id`),
+  ADD KEY `criteria_id` (`criteria_id`),
+  ADD KEY `team_id` (`team_id`);
+
+--
+-- Indexes for table `ratings_jazzdance`
+--
+ALTER TABLE `ratings_jazzdance`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `judge_id` (`judge_id`),
+  ADD KEY `criteria_id` (`criteria_id`),
+  ADD KEY `team_id` (`team_id`);
+
+--
 -- Indexes for table `ratings_oration`
 --
 ALTER TABLE `ratings_oration`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `judge_id_2` (`judge_id`,`criteria_id`,`team_id`),
+  ADD KEY `judge_id` (`judge_id`),
+  ADD KEY `criteria_id` (`criteria_id`),
+  ADD KEY `team_id` (`team_id`);
+
+--
+-- Indexes for table `ratings_tigsik`
+--
+ALTER TABLE `ratings_tigsik`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `judge_id` (`judge_id`),
+  ADD KEY `criteria_id` (`criteria_id`),
+  ADD KEY `team_id` (`team_id`);
+
+--
+-- Indexes for table `ratings_vocalduet`
+--
+ALTER TABLE `ratings_vocalduet`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `judge_id` (`judge_id`),
+  ADD KEY `criteria_id` (`criteria_id`),
+  ADD KEY `team_id` (`team_id`);
+
+--
+-- Indexes for table `ratings_vocalsolofemale`
+--
+ALTER TABLE `ratings_vocalsolofemale`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `judge_id` (`judge_id`),
+  ADD KEY `criteria_id` (`criteria_id`),
+  ADD KEY `team_id` (`team_id`);
+
+--
+-- Indexes for table `ratings_vocalsolomale`
+--
+ALTER TABLE `ratings_vocalsolomale`
+  ADD PRIMARY KEY (`id`),
   ADD KEY `judge_id` (`judge_id`),
   ADD KEY `criteria_id` (`criteria_id`),
   ADD KEY `team_id` (`team_id`);
@@ -506,10 +756,70 @@ ALTER TABLE `criteria_vocalsolomale`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `ratings_acousticband`
+--
+ALTER TABLE `ratings_acousticband`
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `ratings_balagtasan`
+--
+ALTER TABLE `ratings_balagtasan`
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `ratings_cheerdance`
+--
+ALTER TABLE `ratings_cheerdance`
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `ratings_hiphop`
+--
+ALTER TABLE `ratings_hiphop`
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `ratings_jazzchant`
+--
+ALTER TABLE `ratings_jazzchant`
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `ratings_jazzdance`
+--
+ALTER TABLE `ratings_jazzdance`
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `ratings_oration`
 --
 ALTER TABLE `ratings_oration`
-  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
+
+--
+-- AUTO_INCREMENT for table `ratings_tigsik`
+--
+ALTER TABLE `ratings_tigsik`
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `ratings_vocalduet`
+--
+ALTER TABLE `ratings_vocalduet`
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `ratings_vocalsolofemale`
+--
+ALTER TABLE `ratings_vocalsolofemale`
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `ratings_vocalsolomale`
+--
+ALTER TABLE `ratings_vocalsolomale`
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `teams`

@@ -11,7 +11,6 @@
                   variant="underlined"
                   required
               ></v-text-field>
-
               <v-text-field
                   v-model="password"
                   :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
@@ -26,7 +25,6 @@
               <v-code class="bg-white" align="right">
                 <v-btn
                     class="mt-4 "
-            
                 >
                   log in
                 </v-btn>
@@ -39,9 +37,6 @@
 </template>
 
 <script>
-import { reactive } from 'vue'
-import { useVuelidate } from '@vuelidate/core'
-import { required } from '@vuelidate/validators'
 
 export default {
   data () {
