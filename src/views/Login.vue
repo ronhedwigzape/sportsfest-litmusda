@@ -26,7 +26,7 @@
               <v-code class="bg-white" align="right">
                 <v-btn
                     class="mt-4 "
-                    @submit=""
+            
                 >
                   log in
                 </v-btn>
@@ -57,3 +57,6 @@ export default {
   },
 }
 </script>
+<style scoped>
+
+</style>

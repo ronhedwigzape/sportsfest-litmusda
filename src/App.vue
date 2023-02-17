@@ -1,6 +1,6 @@
 <template>
   <v-app>
-
+    <v-app-bar class="secondary" :elevation="2"></v-app-bar>
     <v-main>
         <login />
     </v-main>
@@ -39,3 +39,6 @@ export default {
   }
 }
 </script>
+<style scoped>
+
+</style>
