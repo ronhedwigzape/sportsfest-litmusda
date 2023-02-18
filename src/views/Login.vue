@@ -2,6 +2,7 @@
     <v-container class="d-flex align-center justify-center fill-height">
       <v-row justify="center" align="center">
         <v-col xs="12" sm="10" md="8" lg="6">
+          <v-img style="height: 300;" src="/src/assets/foundationlogo.png"></v-img>
           <v-card class="ma-16 pa-10">
             <form>
               <v-text-field
