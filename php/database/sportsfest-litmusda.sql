@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.1.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 17, 2023 at 05:14 PM
--- Server version: 10.4.27-MariaDB
--- PHP Version: 8.2.0
+-- Generation Time: Feb 18, 2023 at 06:00 AM
+-- Server version: 10.4.21-MariaDB
+-- PHP Version: 8.0.11
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -33,7 +33,18 @@ CREATE TABLE `criteria_acousticband` (
   `percentage` float UNSIGNED NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `criteria_acousticband`
+--
+
+INSERT INTO `criteria_acousticband` (`id`, `title`, `percentage`, `created_at`, `updated_at`) VALUES
+(1, 'VOCAL POWER', 40, '2023-02-18 04:28:44', '2023-02-18 04:28:44'),
+(2, 'INSTRUMENTAL', 20, '2023-02-18 04:28:44', '2023-02-18 04:28:44'),
+(3, 'CREATIVITY', 20, '2023-02-18 04:28:44', '2023-02-18 04:28:44'),
+(4, 'AUDIENCE IMPACT', 10, '2023-02-18 04:28:44', '2023-02-18 04:30:14'),
+(5, 'OVER ALL', 10, '2023-02-18 04:28:44', '2023-02-18 04:28:44');
 
 -- --------------------------------------------------------
 
@@ -47,7 +58,18 @@ CREATE TABLE `criteria_balagtasan` (
   `percentage` float UNSIGNED NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `criteria_balagtasan`
+--
+
+INSERT INTO `criteria_balagtasan` (`id`, `title`, `percentage`, `created_at`, `updated_at`) VALUES
+(1, 'NILALAMAN', 30, '2023-02-18 04:16:43', '2023-02-18 04:57:52'),
+(2, 'PARAAN NG PAGBIGKAS', 20, '2023-02-18 04:16:43', '2023-02-18 04:58:15'),
+(3, 'INTERPRETASYON', 20, '2023-02-18 04:16:43', '2023-02-18 04:58:22'),
+(4, 'KAANGKUPAN NG KILOS O GALAW', 20, '2023-02-18 04:16:43', '2023-02-18 04:58:27'),
+(5, 'KASUOTAN AT PROPS', 10, '2023-02-18 04:16:43', '2023-02-18 04:58:34');
 
 -- --------------------------------------------------------
 
@@ -61,7 +83,19 @@ CREATE TABLE `criteria_cheerdance` (
   `percentage` float UNSIGNED NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `criteria_cheerdance`
+--
+
+INSERT INTO `criteria_cheerdance` (`id`, `title`, `percentage`, `created_at`, `updated_at`) VALUES
+(1, 'CHOREOGRAPHY', 35, '2023-02-18 04:35:20', '2023-02-18 04:35:20'),
+(2, 'SYNCHRONIZATION AND ACCURACY', 20, '2023-02-18 04:35:20', '2023-02-18 04:35:20'),
+(3, 'CHEERS, CHANTS & YELLS', 10, '2023-02-18 04:35:20', '2023-02-18 04:35:20'),
+(4, 'COSTUME & PROPS', 10, '2023-02-18 04:35:20', '2023-02-18 04:35:20'),
+(5, 'OVER-ALL PERFORMANCE', 15, '2023-02-18 04:35:20', '2023-02-18 04:35:20'),
+(6, 'AUDIENCE IMPACT', 10, '2023-02-18 04:35:20', '2023-02-18 04:35:20');
 
 -- --------------------------------------------------------
 
@@ -75,7 +109,18 @@ CREATE TABLE `criteria_hiphop` (
   `percentage` float UNSIGNED NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `criteria_hiphop`
+--
+
+INSERT INTO `criteria_hiphop` (`id`, `title`, `percentage`, `created_at`, `updated_at`) VALUES
+(1, 'PERFORMANCE', 30, '2023-02-18 04:40:29', '2023-02-18 04:40:29'),
+(2, 'CHOREOGRAPHY', 20, '2023-02-18 04:40:29', '2023-02-18 04:40:29'),
+(3, 'TECHNIQUE/STYLE', 20, '2023-02-18 04:40:29', '2023-02-18 04:40:29'),
+(4, 'RHYTHM AND TIMING', 20, '2023-02-18 04:40:29', '2023-02-18 04:40:29'),
+(5, 'COSTUME/PROPS', 10, '2023-02-18 04:40:29', '2023-02-18 04:40:29');
 
 -- --------------------------------------------------------
 
@@ -89,7 +134,18 @@ CREATE TABLE `criteria_jazzchant` (
   `percentage` float UNSIGNED NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `criteria_jazzchant`
+--
+
+INSERT INTO `criteria_jazzchant` (`id`, `title`, `percentage`, `created_at`, `updated_at`) VALUES
+(1, 'DELIVERY', 30, '2023-02-18 04:46:37', '2023-02-18 04:46:37'),
+(2, 'STRESS AND RHYTHM', 30, '2023-02-18 04:46:37', '2023-02-18 04:46:37'),
+(3, 'MASTERY', 20, '2023-02-18 04:46:37', '2023-02-18 04:46:37'),
+(4, 'CHOREOGRAPHY', 10, '2023-02-18 04:46:37', '2023-02-18 04:46:37'),
+(5, 'COSTUME, PROPS, SOUND EFFECTS', 10, '2023-02-18 04:46:37', '2023-02-18 04:46:37');
 
 -- --------------------------------------------------------
 
@@ -103,7 +159,18 @@ CREATE TABLE `criteria_jazzdance` (
   `percentage` float UNSIGNED NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `criteria_jazzdance`
+--
+
+INSERT INTO `criteria_jazzdance` (`id`, `title`, `percentage`, `created_at`, `updated_at`) VALUES
+(1, 'PERFORMANCE', 30, '2023-02-18 04:49:38', '2023-02-18 04:49:38'),
+(2, 'CHOREOGRAPHY AND ORIGINALITY', 20, '2023-02-18 04:49:38', '2023-02-18 04:49:38'),
+(3, 'TECHNIQUE/STYLE', 20, '2023-02-18 04:49:38', '2023-02-18 04:49:38'),
+(4, 'RHYTHM AND TIMING', 20, '2023-02-18 04:49:38', '2023-02-18 04:49:38'),
+(5, 'COSTUME', 10, '2023-02-18 04:49:38', '2023-02-18 04:49:38');
 
 -- --------------------------------------------------------
 
@@ -117,7 +184,7 @@ CREATE TABLE `criteria_oration` (
   `percentage` float UNSIGNED NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `criteria_oration`
@@ -141,7 +208,18 @@ CREATE TABLE `criteria_tigsik` (
   `percentage` float UNSIGNED NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `criteria_tigsik`
+--
+
+INSERT INTO `criteria_tigsik` (`id`, `title`, `percentage`, `created_at`, `updated_at`) VALUES
+(1, 'NILALAMAN', 30, '2023-02-18 04:25:15', '2023-02-18 04:25:15'),
+(2, 'PARAAN NG PAGBIGKAS', 20, '2023-02-18 04:25:15', '2023-02-18 04:25:15'),
+(3, 'INTERPRETASYON', 20, '2023-02-18 04:25:15', '2023-02-18 04:25:15'),
+(4, 'KAANGKUPAN NG KILOS O GALAW', 20, '2023-02-18 04:25:15', '2023-02-18 04:25:15'),
+(5, 'KASUOTAN AT PROPS', 10, '2023-02-18 04:25:15', '2023-02-18 04:25:15');
 
 -- --------------------------------------------------------
 
@@ -155,7 +233,16 @@ CREATE TABLE `criteria_vocalduet` (
   `percentage` float UNSIGNED NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `criteria_vocalduet`
+--
+
+INSERT INTO `criteria_vocalduet` (`id`, `title`, `percentage`, `created_at`, `updated_at`) VALUES
+(1, 'TONE QUALITY', 40, '2023-02-18 04:52:29', '2023-02-18 04:52:29'),
+(2, 'BLENDING AND INTERPRETATION/COUNTERPOINT', 40, '2023-02-18 04:52:29', '2023-02-18 04:52:29'),
+(3, 'STAGE PRESENCE', 20, '2023-02-18 04:52:29', '2023-02-18 04:52:29');
 
 -- --------------------------------------------------------
 
@@ -169,7 +256,16 @@ CREATE TABLE `criteria_vocalsolofemale` (
   `percentage` float UNSIGNED NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `criteria_vocalsolofemale`
+--
+
+INSERT INTO `criteria_vocalsolofemale` (`id`, `title`, `percentage`, `created_at`, `updated_at`) VALUES
+(1, 'TONE QUALITY', 40, '2023-02-18 04:54:15', '2023-02-18 04:54:15'),
+(2, 'INTERPRETATION, DELIVERY, DYNAMICS', 40, '2023-02-18 04:54:15', '2023-02-18 04:54:15'),
+(3, 'STAGE PRESENCE', 20, '2023-02-18 04:54:15', '2023-02-18 04:54:15');
 
 -- --------------------------------------------------------
 
@@ -183,7 +279,16 @@ CREATE TABLE `criteria_vocalsolomale` (
   `percentage` float UNSIGNED NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `criteria_vocalsolomale`
+--
+
+INSERT INTO `criteria_vocalsolomale` (`id`, `title`, `percentage`, `created_at`, `updated_at`) VALUES
+(1, 'TONE QUALITY', 40, '2023-02-18 04:55:38', '2023-02-18 04:55:38'),
+(2, 'INTERPRETATION, DELIVERY, DYNAMICS', 40, '2023-02-18 04:55:38', '2023-02-18 04:55:38'),
+(3, 'STAGE PRESENCE', 20, '2023-02-18 04:55:38', '2023-02-18 04:55:38');
 
 -- --------------------------------------------------------
 
@@ -199,7 +304,7 @@ CREATE TABLE `ratings_acousticband` (
   `value` float UNSIGNED NOT NULL DEFAULT 0,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -215,7 +320,7 @@ CREATE TABLE `ratings_balagtasan` (
   `value` float UNSIGNED NOT NULL DEFAULT 0,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -231,7 +336,7 @@ CREATE TABLE `ratings_cheerdance` (
   `value` float UNSIGNED NOT NULL DEFAULT 0,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -247,7 +352,7 @@ CREATE TABLE `ratings_hiphop` (
   `value` float UNSIGNED NOT NULL DEFAULT 0,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -263,7 +368,7 @@ CREATE TABLE `ratings_jazzchant` (
   `value` float UNSIGNED NOT NULL DEFAULT 0,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -279,7 +384,7 @@ CREATE TABLE `ratings_jazzdance` (
   `value` float UNSIGNED NOT NULL DEFAULT 0,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -295,7 +400,7 @@ CREATE TABLE `ratings_oration` (
   `value` float UNSIGNED NOT NULL DEFAULT 0,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `ratings_oration`
@@ -377,7 +482,7 @@ CREATE TABLE `ratings_tigsik` (
   `value` float UNSIGNED NOT NULL DEFAULT 0,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -393,7 +498,7 @@ CREATE TABLE `ratings_vocalduet` (
   `value` float UNSIGNED NOT NULL DEFAULT 0,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -409,7 +514,7 @@ CREATE TABLE `ratings_vocalsolofemale` (
   `value` float UNSIGNED NOT NULL DEFAULT 0,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -425,7 +530,7 @@ CREATE TABLE `ratings_vocalsolomale` (
   `value` float UNSIGNED NOT NULL DEFAULT 0,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -438,7 +543,7 @@ CREATE TABLE `teams` (
   `color` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
   `logo` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `teams`
@@ -462,7 +567,7 @@ CREATE TABLE `users_admin` (
   `username` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `avatar` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `users_admin`
@@ -484,7 +589,7 @@ CREATE TABLE `users_judge` (
   `password` varchar(255) NOT NULL,
   `number` int(255) UNSIGNED NOT NULL,
   `avatar` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `users_judge`
@@ -693,37 +798,37 @@ ALTER TABLE `users_judge`
 -- AUTO_INCREMENT for table `criteria_acousticband`
 --
 ALTER TABLE `criteria_acousticband`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `criteria_balagtasan`
 --
 ALTER TABLE `criteria_balagtasan`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `criteria_cheerdance`
 --
 ALTER TABLE `criteria_cheerdance`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `criteria_hiphop`
 --
 ALTER TABLE `criteria_hiphop`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `criteria_jazzchant`
 --
 ALTER TABLE `criteria_jazzchant`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `criteria_jazzdance`
 --
 ALTER TABLE `criteria_jazzdance`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `criteria_oration`
@@ -735,25 +840,25 @@ ALTER TABLE `criteria_oration`
 -- AUTO_INCREMENT for table `criteria_tigsik`
 --
 ALTER TABLE `criteria_tigsik`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `criteria_vocalduet`
 --
 ALTER TABLE `criteria_vocalduet`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `criteria_vocalsolofemale`
 --
 ALTER TABLE `criteria_vocalsolofemale`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `criteria_vocalsolomale`
 --
 ALTER TABLE `criteria_vocalsolomale`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `ratings_acousticband`
