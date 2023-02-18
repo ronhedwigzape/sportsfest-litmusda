@@ -39,6 +39,7 @@
 <script>
 
 export default {
+  name: 'Login',
   data () {
     return {
       show1: false,
