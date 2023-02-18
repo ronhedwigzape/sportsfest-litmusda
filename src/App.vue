@@ -1,8 +1,11 @@
 <template>
   <v-app>
-    <v-app-bar class="secondary" :elevation="2"></v-app-bar>
     <v-main>
-        <login />
+      <router-link :to="`/`">Login</router-link> |
+      <router-link :to="`/admin`">Admin</router-link> |
+      <router-link :to="`/judge`">Judge</router-link> |
+
+      <router-view />
     </v-main>
   </v-app>
 </template>
