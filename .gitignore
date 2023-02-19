@@ -15,6 +15,7 @@ coverage
 *.local
 .env
 public
+app/_test.php
 
 /cypress/videos/
 /cypress/screenshots/

@@ -9,7 +9,7 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ /sportsfest-litmusda/public/index.html [L]
 
-# Exclude the public and app directories from the rewrite rule
+# Exclude the public and php directories from the rewrite rule
 RewriteCond %{REQUEST_URI} !^/sportsfest-litmusda/public/
 RewriteCond %{REQUEST_URI} !^/sportsfest-litmusda/php/
 RewriteRule ^(.*)$ /sportsfest-litmusda/public/$1 [L]
