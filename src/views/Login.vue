@@ -24,6 +24,7 @@
                             label="Username"
                             variant="outlined"
                             required
+                            autofocus
                         ></v-text-field>
                         <v-text-field
                             v-model="password"

@@ -1,69 +1,72 @@
 <template>
-    <v-layout>
-        <v-app-bar
-            color="primary"
-            prominent
-        >
-            <v-app-bar-nav-icon variant="text" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+  <v-layout
+      style="height: 100vh;">
+    <v-navigation-drawer
+        class="bg-deep-purple"
+        theme="dark"
+    >
+      <v-col align="center" >
+        <v-avatar
+            size="150">
+          <v-img :src="avatar" />
+        </v-avatar>
 
-            <v-toolbar-title>LitMusDa</v-toolbar-title>
+        <h1 class="mt-5">JUDGE_NAME</h1>
+      </v-col>
 
-            <v-btn variant="text" icon="mdi-dots-vertical" type="button"></v-btn>
-        </v-app-bar>
-        <v-navigation-drawer>
-            <v-list>
-                <v-list-item>
-                    <div class="v-navigator-drawer_content">
-                        <div
-                            class="v-sheet v-theme--light d-flex flex-column justify-center align-center align-center my-5 mx-3">
-                            <div class="v-avatar v-theme v-avatar--dencitydefault v-avatar--variant-flat mb-3"
-                                 style="width: 120px; height: 120px;">
-                                <div class="v-responsive v-img">
-                                    <div class="v-responsive_sizer" style="padding-bottom: 100%;" id="app"></div>
-                                    <v-img src="/src/assets/no-avatar.jpg"></v-img>
-                                </div>
-                                <span class="v-avatar_underlay"></span>
-                            </div>
-                            <div class="text-center">
-                                <p class="text-h6 text-uppercase">
-                                    Judge 01
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </v-list-item>
-            </v-list>
-        </v-navigation-drawer>
+      <v-list color="transparent">
+        <v-list-item prepend-icon="mdi-view-dashboard" title="Events"></v-list-item>
+      </v-list>
 
-        <v-main style="min-height: 300px;">
-            <v-table>
-                <thead>
-                <tr>
-                    <th colspan="2" class="py-2">
-                        <div class="text-h5 text-center text-primary text-uppercase font-weight-bold">Oration</div>
-                    </th>
-                    <th class="py-2 text-center text-primary" style="width:13%">Delivery <br> 40%</th>
-                    <th class="py-2 text-center text-primary" style="width:13%">Craftmanship <br> 30%</th>
-                    <th class="py-2 text-center text-primary" style="width:13%">Personality <br> 20%</th>
-                    <th class="py-2 text-center text-primary" style="width:13%">Overall Impact <br> 10%</th>
-                    <th class="py-2 text-center text-primary" style="width:13%">Total</th>
-                    <th class="py-2 text-center text-primary" style="width:13%">Rank</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td class="py-2 text-center" style="width:13%"></td>
-                </tr>
-                </tbody>
-            </v-table>
-        </v-main>
-    </v-layout>
+      <template v-slot:append>
+        <div class="pa-2">
+          <v-btn block @click="signOut">
+            Logout
+          </v-btn>
+        </div>
+      </template>
+    </v-navigation-drawer>
+
+    <v-app-bar title="JUDGE" style="background-color: #1e1e1e; color: white;"></v-app-bar>
+
+    <v-main style="min-height: 300px;"></v-main>
+  </v-layout>
 </template>
 
 
 <script>
+    import $ from "jquery";
+
     export default {
-        name: 'Judge'
+        name: 'Judge',
+      data(){
+        return {
+          avatar: `${import.meta.env.BASE_URL}avatar.PNG`,
+          signedOut: false
+        }
+      },
+      methods: {
+        signOut() {
+          $.ajax({
+            url: `${this.$store.getters.appURL}/index.php`,
+            type: 'POST',
+            xhrFields: {
+              withCredentials: true
+            },
+            data: {
+              signOut: this.signedOut
+            },
+            success: (data) => {
+              data = JSON.parse(data);
+              this.$store.commit('auth/setUser', data.user = null);
+              this.$router.push('/');
+            },
+            error: (error) => {
+              alert(`ERROR ${error.status}: ${error.statusText}`);
+            },
+          })
+        }
+      }
     }
 </script>
 
