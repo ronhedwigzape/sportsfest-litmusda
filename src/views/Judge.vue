@@ -41,7 +41,7 @@
         name: 'Judge',
       data(){
         return {
-          avatar: `${import.meta.env.BASE_URL}avatar.PNG`,
+          avatar: `${import.meta.env.BASE_URL}no-avatar.jpg`,
           signedOut: false
         }
       },

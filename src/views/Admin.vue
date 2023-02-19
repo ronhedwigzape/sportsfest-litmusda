@@ -41,7 +41,7 @@ import $ from 'jquery';
       data() {
           return {
             signedOut: false,
-            avatar: `${import.meta.env.BASE_URL}avatar.PNG`
+            avatar: `${import.meta.env.BASE_URL}no-avatar.jpg`
           }
       },
       methods: {
