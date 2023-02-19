@@ -16,7 +16,7 @@
                         </v-row>
                     </template>
                 </v-img>
-                <v-card class="ma-16 pa-10">
+                <v-card class="mx-10 my-5 pa-10 elevation-5">
                     <v-form @submit.prevent="handleSubmit">
                         <v-text-field
                             v-model="username"
@@ -24,6 +24,7 @@
                             label="Username"
                             variant="outlined"
                             required
+                            autofocus
                         ></v-text-field>
                         <v-text-field
                             v-model="password"
@@ -39,7 +40,7 @@
                         ></v-text-field>
                         <v-code class="bg-white" align="right">
                             <v-btn
-                                class="mt-4"
+                                class="mt-4 bg-amber-darken-1"
                                 type="submit"
                             >
                                 log in

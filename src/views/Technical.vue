@@ -10,13 +10,13 @@
           <v-img :src="avatar" />
         </v-avatar>
         <h1 class="mt-5">
-          JUDGE_NAME
+          TECHNICAL_NAME
           <v-chip
               class="ma-2"
-              color="green"
+              color="red"
           >
             <v-icon start icon="mdi-account-circle"></v-icon>
-            JUDGE
+            TECHNICAL
           </v-chip></h1>
       </v-col>
 
@@ -73,55 +73,50 @@
       </template>
     </v-navigation-drawer>
 
-
-    <v-app-bar title="JUDGE" color="deep-purple-darken-3"></v-app-bar>
-
+    <v-app-bar title="TECHNICAL" color="deep-purple-darken-3"></v-app-bar>
 
   </v-layout>
 </template>
-
-
 <script>
-    import $ from "jquery";
-    import eventNav from "../components/nav/EventNav.vue";
+import $ from 'jquery';
+import eventNav from "../components/nav/EventNav.vue";
 
-    export default {
-      name: 'Judge',
-      components: {
-          eventNav
-      },
-      data(){
-        return {
-          dialog: false,
-          signedOut: false,
-          avatar: `${import.meta.env.BASE_URL}no-avatar.jpg`
-        }
-      },
-      methods: {
-        signOut() {
-          $.ajax({
-            url: `${this.$store.getters.appURL}/index.php`,
-            type: 'POST',
-            xhrFields: {
-              withCredentials: true
-            },
-            data: {
-              signOut: this.signedOut
-            },
-            success: (data) => {
-              data = JSON.parse(data);
-              this.$store.commit('auth/setUser', data.user = null);
-              this.$router.push('/');
-            },
-            error: (error) => {
-              alert(`ERROR ${error.status}: ${error.statusText}`);
-            },
-          })
-        }
-      }
+export default {
+  name: 'Technical',
+  components: {
+    eventNav
+  },
+  data() {
+    return {
+      dialog: false,
+      signedOut: false,
+      avatar: `${import.meta.env.BASE_URL}no-avatar.jpg`
     }
+  },
+  methods: {
+    signOut() {
+      $.ajax({
+        url: `${this.$store.getters.appURL}/index.php`,
+        type: 'POST',
+        xhrFields: {
+          withCredentials: true
+        },
+        data: {
+          signOut: this.signedOut
+        },
+        success: (data) => {
+          data = JSON.parse(data);
+          this.$store.commit('auth/setUser', data.user = null);
+          this.$router.push('/');
+        },
+        error: (error) => {
+          alert(`ERROR ${error.status}: ${error.statusText}`);
+        },
+      })
+    }
+  }
+}
 </script>
-
 
 <style scoped>
 
