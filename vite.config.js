@@ -20,6 +20,7 @@ export default ({mode}) => {
             }
         },
         base: undefined,
+        publicDir: 'assets',
         server: {
             host: 'localhost',
             port: 5176,

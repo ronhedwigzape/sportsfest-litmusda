@@ -64,7 +64,7 @@
                 show2: true,
                 username: '',
                 password: '',
-                img: 'assets/foundation-logo.png',
+                img: `${import.meta.env.BASE_URL}foundation-logo.png`,
                 rules: {
                     required: value => !!value || 'Required.',
                 },
