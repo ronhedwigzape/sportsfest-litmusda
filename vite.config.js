@@ -6,7 +6,7 @@ import vuetify from 'vite-plugin-vuetify'
 
 
 // https://vitejs.dev/config/
-export default ({ mode }) => {
+export default ({mode}) => {
     const config = {
         plugins: [
             vue(),
