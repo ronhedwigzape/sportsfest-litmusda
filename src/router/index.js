@@ -1,41 +1,54 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Login from '../views/Login.vue';
-import Admin from "../views/Admin.vue";
-import Judge from "../views/Judge.vue";
+import store from '../store'
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
-  routes: [
-    {
-      path: '/',
-      name: 'Home',
-      component: Login
-    },
-    {
-      path: '/admin',
-      name: 'Admin',
-      component: Admin,
-      beforeEnter: (to, from, next) => {
-        if (to.path === '/admin') {
-          next('/');
-        } else {
-          next();
+    history: createWebHistory(import.meta.env.BASE_URL),
+    routes: [
+        {
+            path: '/',
+            name: 'login',
+            component: () => import('../views/Login.vue'),
+            beforeEnter: (to, from, next) => {
+                const user = store.getters['auth/getUser'];
+                if(user)
+                    next({ name: user.userType });
+                else
+                    next();
+            }
+        },
+        {
+            path: '/admin',
+            name: 'admin',
+            component: () => import('../views/Admin.vue'),
+            beforeEnter: (to, from, next) => {
+                const user = store.getters['auth/getUser'];
+                if(!user)
+                    next({ name: 'login' });
+                else {
+                    if(user.userType !== to.name)
+                        next({ name: user.userType })
+                    else
+                        next();
+                }
+            }
+        },
+        {
+            path: '/judge',
+            name: 'judge',
+            component: () => import('../views/Judge.vue'),
+            beforeEnter: (to, from, next) => {
+                const user = store.getters['auth/getUser'];
+                if(!user)
+                    next({ name: 'login' });
+                else {
+                    if(user.userType !== to.name)
+                        next({ name: user.userType })
+                    else
+                        next();
+                }
+            }
         }
-      },
-    },
-    {
-      path: '/judge',
-      name: 'Judge',
-      component: Judge,
-      beforeEnter: (to, from, next) => {
-        if (to.path === '/judge') {
-          next('/');
-        } else {
-          next();
-        }
-      },
-    }
-  ]
+    ]
 })
 
 export default router
