@@ -27,7 +27,7 @@
       </template>
     </v-navigation-drawer>
 
-    <v-app-bar title="ADMIN" style="background-color: #1e1e1e; color: white;"></v-app-bar>
+    <v-app-bar title="TECHNICAL" style="background-color: #1e1e1e; color: white;"></v-app-bar>
 
     <v-main style="min-height: 300px;"></v-main>
   </v-layout>
@@ -40,7 +40,8 @@ export default {
   name: 'Technical',
   data() {
     return {
-      signedOut: false
+      signedOut: false,
+      avatar: `${import.meta.env.BASE_URL}no-avatar.jpg`
     }
   },
   methods: {
