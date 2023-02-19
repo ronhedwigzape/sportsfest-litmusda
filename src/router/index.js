@@ -14,12 +14,26 @@ const router = createRouter({
     {
       path: '/admin',
       name: 'Admin',
-      component: Admin
+      component: Admin,
+      beforeEnter: (to, from, next) => {
+        if (to.path === '/admin') {
+          next('/');
+        } else {
+          next();
+        }
+      },
     },
     {
       path: '/judge',
       name: 'Judge',
-      component: Judge
+      component: Judge,
+      beforeEnter: (to, from, next) => {
+        if (to.path === '/judge') {
+          next('/');
+        } else {
+          next();
+        }
+      },
     }
   ]
 })

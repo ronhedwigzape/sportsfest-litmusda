@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 18, 2023 at 08:29 AM
+-- Generation Time: Feb 19, 2023 at 05:42 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -1256,50 +1256,30 @@ INSERT INTO `teams` (`id`, `color`, `name`, `logo`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `users_admin`
+-- Table structure for table `users`
 --
 
-CREATE TABLE `users_admin` (
+CREATE TABLE `users` (
   `id` int(10) UNSIGNED NOT NULL,
-  `fullname` varchar(255) NOT NULL,
   `number` int(10) UNSIGNED NOT NULL,
-  `username` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `avatar` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `users_admin`
---
-
-INSERT INTO `users_admin` (`id`, `fullname`, `number`, `username`, `password`, `avatar`) VALUES
-(1, 'ADMIN', 1, 'admin', 'admin', 'image');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `users_judge`
---
-
-CREATE TABLE `users_judge` (
-  `id` int(10) UNSIGNED NOT NULL,
   `fullname` varchar(255) NOT NULL,
   `username` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `number` int(255) UNSIGNED NOT NULL,
-  `avatar` varchar(255) NOT NULL
+  `avatar` varchar(255) NOT NULL,
+  `type` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `users_judge`
+-- Dumping data for table `users`
 --
 
-INSERT INTO `users_judge` (`id`, `fullname`, `username`, `password`, `number`, `avatar`) VALUES
-(1, 'JUDGE01', 'judge01', 'judge01', 1, '0'),
-(2, 'JUDGE02', 'judge02', 'judge02', 2, '0'),
-(3, 'JUDGE03', 'judge03', 'judge03', 3, '0'),
-(4, 'JUDGE04', 'judge04', 'judge04', 4, '0'),
-(5, 'JUDGE05', 'judge05', 'judge05', 5, '0');
+INSERT INTO `users` (`id`, `number`, `fullname`, `username`, `password`, `avatar`, `type`) VALUES
+(0, 0, 'ADMIN', 'admin', 'admin', '0', 'admin'),
+(1, 1, 'JUDGE01', 'judge01', 'judge01', '0', 'judge'),
+(2, 2, 'JUDGE02', 'judge02', 'judge02', '0', 'judge'),
+(3, 3, 'JUDGE03', 'judge03', 'judge03', '0', 'judge'),
+(4, 4, 'JUDGE04', 'judge04', 'judge04', '0', 'judge'),
+(5, 5, 'JUDGE05', 'judge05', 'judge05', '0', 'judge');
 
 --
 -- Indexes for dumped tables
@@ -1478,15 +1458,9 @@ ALTER TABLE `teams`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `users_admin`
+-- Indexes for table `users`
 --
-ALTER TABLE `users_admin`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `users_judge`
---
-ALTER TABLE `users_judge`
+ALTER TABLE `users`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -1632,16 +1606,10 @@ ALTER TABLE `teams`
   MODIFY `id` int(3) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT for table `users_admin`
+-- AUTO_INCREMENT for table `users`
 --
-ALTER TABLE `users_admin`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT for table `users_judge`
---
-ALTER TABLE `users_judge`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+ALTER TABLE `users`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- Constraints for dumped tables
@@ -1652,7 +1620,7 @@ ALTER TABLE `users_judge`
 --
 ALTER TABLE `ratings_acousticband`
   ADD CONSTRAINT `ratings_acousticband_ibfk_1` FOREIGN KEY (`team_id`) REFERENCES `teams` (`id`),
-  ADD CONSTRAINT `ratings_acousticband_ibfk_2` FOREIGN KEY (`judge_id`) REFERENCES `users_judge` (`id`),
+  ADD CONSTRAINT `ratings_acousticband_ibfk_2` FOREIGN KEY (`judge_id`) REFERENCES `users` (`id`),
   ADD CONSTRAINT `ratings_acousticband_ibfk_3` FOREIGN KEY (`criteria_id`) REFERENCES `criteria_acousticband` (`id`);
 
 --
@@ -1660,7 +1628,7 @@ ALTER TABLE `ratings_acousticband`
 --
 ALTER TABLE `ratings_balagtasan`
   ADD CONSTRAINT `ratings_balagtasan_ibfk_1` FOREIGN KEY (`criteria_id`) REFERENCES `criteria_balagtasan` (`id`),
-  ADD CONSTRAINT `ratings_balagtasan_ibfk_2` FOREIGN KEY (`judge_id`) REFERENCES `users_judge` (`id`),
+  ADD CONSTRAINT `ratings_balagtasan_ibfk_2` FOREIGN KEY (`judge_id`) REFERENCES `users` (`id`),
   ADD CONSTRAINT `ratings_balagtasan_ibfk_3` FOREIGN KEY (`team_id`) REFERENCES `teams` (`id`);
 
 --
@@ -1669,21 +1637,21 @@ ALTER TABLE `ratings_balagtasan`
 ALTER TABLE `ratings_cheerdance`
   ADD CONSTRAINT `ratings_cheerdance_ibfk_1` FOREIGN KEY (`team_id`) REFERENCES `teams` (`id`),
   ADD CONSTRAINT `ratings_cheerdance_ibfk_2` FOREIGN KEY (`criteria_id`) REFERENCES `criteria_cheerdance` (`id`),
-  ADD CONSTRAINT `ratings_cheerdance_ibfk_3` FOREIGN KEY (`judge_id`) REFERENCES `users_judge` (`id`);
+  ADD CONSTRAINT `ratings_cheerdance_ibfk_3` FOREIGN KEY (`judge_id`) REFERENCES `users` (`id`);
 
 --
 -- Constraints for table `ratings_hiphop`
 --
 ALTER TABLE `ratings_hiphop`
   ADD CONSTRAINT `ratings_hiphop_ibfk_1` FOREIGN KEY (`team_id`) REFERENCES `teams` (`id`),
-  ADD CONSTRAINT `ratings_hiphop_ibfk_2` FOREIGN KEY (`judge_id`) REFERENCES `users_judge` (`id`),
+  ADD CONSTRAINT `ratings_hiphop_ibfk_2` FOREIGN KEY (`judge_id`) REFERENCES `users` (`id`),
   ADD CONSTRAINT `ratings_hiphop_ibfk_3` FOREIGN KEY (`criteria_id`) REFERENCES `criteria_hiphop` (`id`);
 
 --
 -- Constraints for table `ratings_jazzchant`
 --
 ALTER TABLE `ratings_jazzchant`
-  ADD CONSTRAINT `ratings_jazzchant_ibfk_1` FOREIGN KEY (`judge_id`) REFERENCES `users_judge` (`id`),
+  ADD CONSTRAINT `ratings_jazzchant_ibfk_1` FOREIGN KEY (`judge_id`) REFERENCES `users` (`id`),
   ADD CONSTRAINT `ratings_jazzchant_ibfk_2` FOREIGN KEY (`team_id`) REFERENCES `teams` (`id`),
   ADD CONSTRAINT `ratings_jazzchant_ibfk_3` FOREIGN KEY (`criteria_id`) REFERENCES `criteria_jazzchant` (`id`);
 
@@ -1691,7 +1659,7 @@ ALTER TABLE `ratings_jazzchant`
 -- Constraints for table `ratings_jazzdance`
 --
 ALTER TABLE `ratings_jazzdance`
-  ADD CONSTRAINT `ratings_jazzdance_ibfk_1` FOREIGN KEY (`judge_id`) REFERENCES `users_judge` (`id`),
+  ADD CONSTRAINT `ratings_jazzdance_ibfk_1` FOREIGN KEY (`judge_id`) REFERENCES `users` (`id`),
   ADD CONSTRAINT `ratings_jazzdance_ibfk_2` FOREIGN KEY (`criteria_id`) REFERENCES `criteria_jazzdance` (`id`),
   ADD CONSTRAINT `ratings_jazzdance_ibfk_3` FOREIGN KEY (`team_id`) REFERENCES `teams` (`id`);
 
@@ -1701,21 +1669,21 @@ ALTER TABLE `ratings_jazzdance`
 ALTER TABLE `ratings_oration`
   ADD CONSTRAINT `ratings_oration_ibfk_1` FOREIGN KEY (`criteria_id`) REFERENCES `criteria_oration` (`id`),
   ADD CONSTRAINT `ratings_oration_ibfk_2` FOREIGN KEY (`team_id`) REFERENCES `teams` (`id`),
-  ADD CONSTRAINT `ratings_oration_ibfk_3` FOREIGN KEY (`judge_id`) REFERENCES `users_judge` (`id`);
+  ADD CONSTRAINT `ratings_oration_ibfk_3` FOREIGN KEY (`judge_id`) REFERENCES `users` (`id`);
 
 --
 -- Constraints for table `ratings_tigsik`
 --
 ALTER TABLE `ratings_tigsik`
   ADD CONSTRAINT `ratings_tigsik_ibfk_1` FOREIGN KEY (`team_id`) REFERENCES `teams` (`id`),
-  ADD CONSTRAINT `ratings_tigsik_ibfk_2` FOREIGN KEY (`judge_id`) REFERENCES `users_judge` (`id`),
+  ADD CONSTRAINT `ratings_tigsik_ibfk_2` FOREIGN KEY (`judge_id`) REFERENCES `users` (`id`),
   ADD CONSTRAINT `ratings_tigsik_ibfk_3` FOREIGN KEY (`criteria_id`) REFERENCES `criteria_tigsik` (`id`);
 
 --
 -- Constraints for table `ratings_vocalduet`
 --
 ALTER TABLE `ratings_vocalduet`
-  ADD CONSTRAINT `ratings_vocalduet_ibfk_1` FOREIGN KEY (`judge_id`) REFERENCES `users_judge` (`id`),
+  ADD CONSTRAINT `ratings_vocalduet_ibfk_1` FOREIGN KEY (`judge_id`) REFERENCES `users` (`id`),
   ADD CONSTRAINT `ratings_vocalduet_ibfk_2` FOREIGN KEY (`team_id`) REFERENCES `teams` (`id`),
   ADD CONSTRAINT `ratings_vocalduet_ibfk_3` FOREIGN KEY (`criteria_id`) REFERENCES `criteria_vocalduet` (`id`);
 
@@ -1724,22 +1692,22 @@ ALTER TABLE `ratings_vocalduet`
 --
 ALTER TABLE `ratings_vocalsolofemale`
   ADD CONSTRAINT `ratings_vocalsolofemale_ibfk_1` FOREIGN KEY (`team_id`) REFERENCES `teams` (`id`),
-  ADD CONSTRAINT `ratings_vocalsolofemale_ibfk_2` FOREIGN KEY (`judge_id`) REFERENCES `users_judge` (`id`),
+  ADD CONSTRAINT `ratings_vocalsolofemale_ibfk_2` FOREIGN KEY (`judge_id`) REFERENCES `users` (`id`),
   ADD CONSTRAINT `ratings_vocalsolofemale_ibfk_3` FOREIGN KEY (`criteria_id`) REFERENCES `criteria_vocalsolofemale` (`id`);
 
 --
 -- Constraints for table `ratings_vocalsolomale`
 --
 ALTER TABLE `ratings_vocalsolomale`
-  ADD CONSTRAINT `ratings_vocalsolomale_ibfk_1` FOREIGN KEY (`judge_id`) REFERENCES `users_judge` (`id`),
+  ADD CONSTRAINT `ratings_vocalsolomale_ibfk_1` FOREIGN KEY (`judge_id`) REFERENCES `users` (`id`),
   ADD CONSTRAINT `ratings_vocalsolomale_ibfk_2` FOREIGN KEY (`team_id`) REFERENCES `teams` (`id`),
   ADD CONSTRAINT `ratings_vocalsolomale_ibfk_3` FOREIGN KEY (`criteria_id`) REFERENCES `criteria_vocalsolomale` (`id`);
 
 --
--- Constraints for table `users_judge`
+-- Constraints for table `users`
 --
-ALTER TABLE `users_judge`
-  ADD CONSTRAINT `users_judge_ibfk_1` FOREIGN KEY (`id`) REFERENCES `ratings_oration` (`judge_id`);
+ALTER TABLE `users`
+  ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`id`) REFERENCES `ratings_oration` (`judge_id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
