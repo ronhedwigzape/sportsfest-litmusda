@@ -4,10 +4,10 @@ import { createStore } from 'vuex';
 // MODULES
 import auth from './store-auth.js';
 
-
 export default createStore({
     modules: {
-        auth
+        auth,
+
     },
 
     state: {

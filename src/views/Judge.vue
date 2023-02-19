@@ -10,19 +10,56 @@
             size="150">
           <v-img :src="avatar" />
         </v-avatar>
-
         <h1 class="mt-5">JUDGE_NAME</h1>
       </v-col>
+      <v-col align="center" class="text-h6">
+        Events
+      </v-col>
 
-      <v-list color="transparent">
-        <v-list-item prepend-icon="mdi-view-dashboard" title="Events"></v-list-item>
-      </v-list>
+      <!--  Events-->
+      <event-nav />
 
       <template v-slot:append>
-        <div class="pa-2">
-          <v-btn block @click="signOut">
-            Logout
-          </v-btn>
+        <div class="ma-2 mb-5">
+          <v-row justify="center">
+            <v-dialog
+                v-model="dialog"
+                width="auto"
+            >
+              <template v-slot:activator="{ props }">
+                <v-btn
+                    color="danger"
+                    class="text-red"
+                    v-bind="props"
+                >
+                  log out
+                </v-btn>
+              </template>
+              <v-card class="pa-3">
+                <v-card-title class="text-h5">
+                  Confirm Logout
+                </v-card-title>
+                <v-card-text>Are you sure you want to log out?</v-card-text>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn
+                      color="red-darken-1"
+                      variant="text"
+                      @click="dialog = false"
+                  >
+                    cancel
+                  </v-btn>
+                  <v-btn
+                      color="green-darken-1"
+                      variant="text"
+                      @click="signOut"
+                  >
+                    ok
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
+          </v-row>
         </div>
       </template>
     </v-navigation-drawer>
@@ -36,11 +73,16 @@
 
 <script>
     import $ from "jquery";
+    import eventNav from "../components/EventNav.vue";
 
     export default {
         name: 'Judge',
+      components: {
+        eventNav
+      },
       data(){
         return {
+          dialog: false,
           avatar: `${import.meta.env.BASE_URL}no-avatar.jpg`,
           signedOut: false
         }
