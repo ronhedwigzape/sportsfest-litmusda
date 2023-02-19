@@ -19,7 +19,7 @@ class User extends App
         parent::__construct();
         $this->username = $username;
         $this->password = $password;
-        $this->table    = $userType.'s';
+        $this->table = $userType . 's';
         $this->userType = $userType;
 
         // get other info
@@ -78,7 +78,7 @@ class User extends App
         return [
             'id'       => $this->id,
             'username' => $this->username,
-            'name' => $this->name,
+            'name'     => $this->name,
             'avatar'   => $this->avatar,
             'number'   => $this->number,
             'userType' => $this->userType,
