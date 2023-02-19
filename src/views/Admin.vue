@@ -1,6 +1,5 @@
 <template>
-    <v-layout
-        style="height: 100vh;">
+    <v-layout style="height: 100vh;">
       <v-navigation-drawer
           class="bg-deep-purple-darken-2"
           theme="dark"
@@ -16,12 +15,12 @@
               <v-chip
                 class="ma-2"
                 color="amber"
-            >
+              >
                 <v-icon start icon="mdi-account-circle"></v-icon>
                 SUPER USER
-            </v-chip></h1>
+              </v-chip>
+            </h1>
           </v-col>
-
 
         <template v-slot:append>
           <div class="ma-2 mb-5">
@@ -38,7 +37,7 @@
                     log out
                   </v-btn>
                 </template>
-                <v-card class="pa-3">
+                <v-card class="pa-3 bg-white">
                   <v-card-title class="text-h5">
                     Confirm Logout
                   </v-card-title>

@@ -1,5 +1,6 @@
 <template>
     <v-app>
+
         <v-main>
           <router-view />
         </v-main>
@@ -7,14 +8,11 @@
 </template>
 
 <script>
-    import Login from './views/Login.vue';
+
     import $ from 'jquery';
 
     export default {
         name: 'App',
-        components: {
-            Login
-        },
         data() {
             return {}
         },

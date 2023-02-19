@@ -1,9 +1,9 @@
 <template>
-  <div class="text-left">
+  <div class="text-center">
     <v-menu transition="scroll-y-transition">
       <template v-slot:activator="{ props }">
         <v-btn
-            variant="text"
+            variant="outlined"
             class="ma-2"
             v-bind="props"
             prepend-icon="mdi-vuetify"
@@ -11,61 +11,13 @@
           Cheer dance
         </v-btn>
       </template>
-      <v-list>
-        <v-list-item link>
-          <v-list-item-title v-text="'Event_Name'"></v-list-item-title>
-        </v-list-item>
-        <v-list-item link>
-          <v-list-item-title v-text="'Event_Name'"></v-list-item-title>
-        </v-list-item>
-        <v-list-item link>
-          <v-list-item-title v-text="'Event_Name'"></v-list-item-title>
-        </v-list-item>
-        <v-list-item link>
-          <v-list-item-title v-text="'Event_Name'"></v-list-item-title>
-        </v-list-item>
-        <v-list-item link>
-          <v-list-item-title v-text="'Event_Name'"></v-list-item-title>
-        </v-list-item>
-      </v-list>
     </v-menu>
   </div>
   <div class="text-center">
     <v-menu transition="scroll-y-transition">
       <template v-slot:activator="{ props }">
         <v-btn
-            color="primary"
-            class="ma-2"
-            v-bind="props"
-            prepend-icon="mdi-vuetify"
-        >
-          Sports
-        </v-btn>
-      </template>
-      <v-list>
-        <v-list-item link>
-          <v-list-item-title v-text="'Event_Name'"></v-list-item-title>
-        </v-list-item>
-        <v-list-item link>
-          <v-list-item-title v-text="'Event_Name'"></v-list-item-title>
-        </v-list-item>
-        <v-list-item link>
-          <v-list-item-title v-text="'Event_Name'"></v-list-item-title>
-        </v-list-item>
-        <v-list-item link>
-          <v-list-item-title v-text="'Event_Name'"></v-list-item-title>
-        </v-list-item>
-        <v-list-item link>
-          <v-list-item-title v-text="'Event_Name'"></v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-menu>
-  </div>
-  <div class="text-center">
-    <v-menu transition="scroll-y-transition">
-      <template v-slot:activator="{ props }">
-        <v-btn
-            color="primary"
+            variant="outlined"
             class="ma-2"
             v-bind="props"
             prepend-icon="mdi-vuetify"
@@ -96,7 +48,7 @@
     <v-menu transition="scroll-y-transition">
       <template v-slot:activator="{ props }">
         <v-btn
-            color="primary"
+            variant="outlined"
             class="ma-2"
             v-bind="props"
             prepend-icon="mdi-vuetify"
@@ -127,7 +79,7 @@
     <v-menu transition="scroll-y-transition">
       <template v-slot:activator="{ props }">
         <v-btn
-            color="primary"
+            variant="outlined"
             class="ma-2"
             v-bind="props"
             prepend-icon="mdi-vuetify"

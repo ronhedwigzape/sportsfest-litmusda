@@ -1,8 +1,7 @@
 <template>
-  <v-layout
-      style="height: 100vh;">
+  <v-layout style="height: 100vh;">
     <v-navigation-drawer
-        class="bg-deep-purple"
+        class="bg-deep-purple-darken-2"
         theme="dark"
     >
       <v-col align="center" >
@@ -10,13 +9,25 @@
             size="150">
           <v-img :src="avatar" />
         </v-avatar>
-
-        <h1 class="mt-5">TECHNICAL_NAME</h1>
+        <h1 class="mt-5">
+          TECHNICAL_NAME
+          <v-chip
+              class="ma-2"
+              color="red"
+          >
+            <v-icon start icon="mdi-account-circle"></v-icon>
+            TECHNICAL
+          </v-chip></h1>
       </v-col>
 
-      <v-list color="transparent">
-        <v-list-item prepend-icon="mdi-view-dashboard" title="Events"></v-list-item>
-      </v-list>
+      <v-divider></v-divider>
+
+      <v-col align="center" class="text-h4 mt-2 font-weight-bold">
+        Events
+      </v-col>
+
+      <!--  Events-->
+      <event-nav />
 
       <template v-slot:append>
         <div class="ma-2 mb-5">
@@ -27,15 +38,14 @@
             >
               <template v-slot:activator="{ props }">
                 <v-btn
-                    color="danger"
-                    class="text-red"
+                    class="text-red-darken-3 bg-deep-purple-lighten-4"
                     v-bind="props"
                 >
                   log out
                 </v-btn>
               </template>
-              <v-card class="pa-3">
-                <v-card-title class="text-h5">
+              <v-card class="pa-3 bg-white">
+                <v-card-title class="text-h5 ">
                   Confirm Logout
                 </v-card-title>
                 <v-card-text>Are you sure you want to log out?</v-card-text>
@@ -63,17 +73,19 @@
       </template>
     </v-navigation-drawer>
 
-    <v-app-bar title="TECHNICAL" style="background-color: #1e1e1e; color: white;"></v-app-bar>
+    <v-app-bar title="TECHNICAL" color="deep-purple-darken-3"></v-app-bar>
 
-    <v-main style="min-height: 300px;"></v-main>
   </v-layout>
-
 </template>
 <script>
 import $ from 'jquery';
+import eventNav from "../components/nav/EventNav.vue";
 
 export default {
   name: 'Technical',
+  components: {
+    eventNav
+  },
   data() {
     return {
       dialog: false,
