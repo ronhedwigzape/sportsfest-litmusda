@@ -4,6 +4,10 @@ class App
 {
     protected $conn;
 
+
+    /**
+     *  App constructor
+     */
     public function __construct()
     {
         if(isset($GLOBALS['conn']))
@@ -13,6 +17,13 @@ class App
     }
 
 
+    /**
+     * Return an http error
+     *
+     * @param $header
+     * @param $error
+     * @return void
+     */
     public static function returnError($header, $error)
     {
         header($header);
