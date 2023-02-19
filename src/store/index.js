@@ -13,11 +13,7 @@ export default createStore({
     state: {
         app: {
             backendDir: 'app'
-        },
-        user: {
-            loggedIn: false,
-            username: null,
-        },
+        }
     },
 
     getters: {

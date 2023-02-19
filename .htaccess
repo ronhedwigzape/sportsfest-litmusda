@@ -2,7 +2,7 @@ RewriteEngine On
 RewriteBase /sportsfest-litmusda/
 
 # Exclude assets from rewrite rule
-RewriteCond %{REQUEST_URI} !\.(css|js|svg|jpg|jpeg|png|gif|woff2)$ [NC]
+RewriteCond %{REQUEST_URI} !\.(css|js|svg|jpg|jpeg|png|gif|woff2|ico)$ [NC]
 
 # Redirect all requests to index.html
 RewriteCond %{REQUEST_FILENAME} !-f
