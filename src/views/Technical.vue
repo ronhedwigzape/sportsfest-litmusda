@@ -9,18 +9,26 @@
                     size="150">
                     <v-img :src="avatar"/>
                 </v-avatar>
-
                 <h1 class="mt-5">
-                    ADMIN_NAME
+                    TECHNICAL_NAME
                     <v-chip
                         class="ma-2"
-                        color="amber"
+                        color="red"
                     >
                         <v-icon start icon="mdi-account-circle"></v-icon>
-                        SUPER USER
+                        TECHNICAL
                     </v-chip>
                 </h1>
             </v-col>
+
+            <v-divider></v-divider>
+
+            <v-col align="center" class="text-h4 mt-2 font-weight-bold">
+                Events
+            </v-col>
+
+            <!--  Events-->
+            <event-nav/>
 
             <template v-slot:append>
                 <div class="ma-2 mb-5">
@@ -38,7 +46,7 @@
                                 </v-btn>
                             </template>
                             <v-card class="pa-3 bg-white">
-                                <v-card-title class="text-h5">
+                                <v-card-title class="text-h5 ">
                                     Confirm Logout
                                 </v-card-title>
                                 <v-card-text>Are you sure you want to log out?</v-card-text>
@@ -64,63 +72,21 @@
                     </v-row>
                 </div>
             </template>
-
         </v-navigation-drawer>
 
-        <v-app-bar title="ADMIN" color="deep-purple-darken-3"></v-app-bar>
+        <v-app-bar title="TECHNICAL" color="deep-purple-darken-3"></v-app-bar>
 
-        <v-main style="min-height: 300px;">
-
-            <v-table fixed-header>
-                <thead>
-                <tr>
-                    <th class="text-left">
-                        Team Name
-                    </th>
-                    <th class="text-left">
-                        Scores
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>Hello World!</td>
-                    <td>Hello World!</td>
-                </tr>
-                <tr>
-                    <td>Hello World!</td>
-                    <td>Hello World!</td>
-                </tr>
-                <tr>
-                    <td>Hello World!</td>
-                    <td>Hello World!</td>
-                </tr>
-                <tr>
-                    <td>Hello World!</td>
-                    <td>Hello World!</td>
-                </tr>
-                <tr>
-                    <td>Hello World!</td>
-                    <td>Hello World!</td>
-                </tr>
-                <tr>
-                    <td>Hello World!</td>
-                    <td>Hello World!</td>
-                </tr>
-                <tr>
-                    <td>Hello World!</td>
-                    <td>Hello World!</td>
-                </tr>
-                </tbody>
-            </v-table>
-        </v-main>
     </v-layout>
 </template>
 <script>
     import $ from 'jquery';
+    import eventNav from '../components/nav/EventNav.vue';
 
     export default {
-        name: 'Admin',
+        name: 'Technical',
+        components: {
+            eventNav
+        },
         data() {
             return {
                 dialog: false,
@@ -149,9 +115,6 @@
                     },
                 })
             }
-        },
-        mounted() {
-
         }
     }
 </script>

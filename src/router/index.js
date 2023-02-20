@@ -47,6 +47,22 @@ const router = createRouter({
                         next();
                 }
             }
+        },
+        {
+            path: '/technical',
+            name: 'technical',
+            component: () => import('../views/Technical.vue'),
+            beforeEnter: (to, from, next) => {
+                const user = store.getters['auth/getUser'];
+                if(!user)
+                    next({ name: 'login' });
+                else {
+                    if(user.userType !== to.name)
+                        next({ name: user.userType })
+                    else
+                        next();
+                }
+            }
         }
     ]
 })

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 19, 2023 at 08:36 AM
+-- Generation Time: Feb 19, 2023 at 02:22 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.1.12
 
@@ -29,6 +29,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `admins` (
   `id` tinyint(3) UNSIGNED NOT NULL,
+  `number` tinyint(3) UNSIGNED NOT NULL,
   `name` varchar(255) NOT NULL,
   `avatar` varchar(255) NOT NULL,
   `username` varchar(255) NOT NULL,
@@ -41,8 +42,8 @@ CREATE TABLE `admins` (
 -- Dumping data for table `admins`
 --
 
-INSERT INTO `admins` (`id`, `name`, `avatar`, `username`, `password`, `created_at`, `updated_at`) VALUES
-(1, 'SUPER USER', '', 'admin', 'admin', '2023-02-19 07:36:32', '2023-02-19 07:36:32');
+INSERT INTO `admins` (`id`, `number`, `name`, `avatar`, `username`, `password`, `created_at`, `updated_at`) VALUES
+(1, 1, 'SUPER USER', '', 'admin', 'admin', '2023-02-19 07:36:32', '2023-02-19 13:22:04');
 
 -- --------------------------------------------------------
 
@@ -145,6 +146,7 @@ CREATE TABLE `events` (
 
 CREATE TABLE `judges` (
   `id` tinyint(3) UNSIGNED NOT NULL,
+  `number` tinyint(3) UNSIGNED NOT NULL,
   `name` varchar(255) NOT NULL,
   `avatar` varchar(255) DEFAULT NULL,
   `is_chairman` tinyint(1) NOT NULL DEFAULT 0,
@@ -153,6 +155,15 @@ CREATE TABLE `judges` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `judges`
+--
+
+INSERT INTO `judges` (`id`, `number`, `name`, `avatar`, `is_chairman`, `username`, `password`, `created_at`, `updated_at`) VALUES
+(1, 1, 'JUDGE 01', NULL, 1, 'judge01', 'judge01', '2023-02-19 08:58:05', '2023-02-19 08:58:05'),
+(2, 2, 'JUDGE 02', NULL, 0, 'judge02', 'judge02', '2023-02-19 08:58:16', '2023-02-19 08:58:38'),
+(3, 3, 'JUDGE 03', NULL, 0, 'judge03', 'judge03', '2023-02-19 08:58:32', '2023-02-19 08:58:40');
 
 -- --------------------------------------------------------
 
@@ -215,6 +226,7 @@ INSERT INTO `teams` (`id`, `name`, `color`, `created_at`, `updated_at`) VALUES
 
 CREATE TABLE `technicals` (
   `id` tinyint(3) UNSIGNED NOT NULL,
+  `number` tinyint(3) UNSIGNED NOT NULL,
   `name` varchar(255) NOT NULL,
   `avatar` varchar(255) DEFAULT NULL,
   `username` varchar(255) NOT NULL,
@@ -222,6 +234,13 @@ CREATE TABLE `technicals` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `technicals`
+--
+
+INSERT INTO `technicals` (`id`, `number`, `name`, `avatar`, `username`, `password`, `created_at`, `updated_at`) VALUES
+(1, 1, 'TECHNICAL O1', NULL, 'technical01', 'technical01', '2023-02-19 08:58:58', '2023-02-19 08:59:06');
 
 -- --------------------------------------------------------
 
@@ -370,7 +389,7 @@ ALTER TABLE `events`
 -- AUTO_INCREMENT for table `judges`
 --
 ALTER TABLE `judges`
-  MODIFY `id` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `judge_categories`
@@ -394,7 +413,7 @@ ALTER TABLE `teams`
 -- AUTO_INCREMENT for table `technicals`
 --
 ALTER TABLE `technicals`
-  MODIFY `id` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `technical_categories`
