@@ -22,5 +22,8 @@ $config = [
 
 $conn = new mysqli($config['host'], $config['user'], $config['pass'], $config['dbname']);
 
-if($conn->connect_error)
-    die('connection failed: ' . $this->conn->connect_error);
+if($conn->connect_error) {
+    die(json_encode([
+        'error' => $conn->connect_error
+    ]));
+}
