@@ -16,7 +16,7 @@
 $config = [
     'host'   => 'localhost',
     'user'   => 'root',
-    'pass'   => isset($DB_PASSWORD) ? $DB_PASSWORD : '',
+    'pass'   => '',
     'dbname' => 'sportsfest-litmusda'
 ];
 
