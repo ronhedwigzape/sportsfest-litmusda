@@ -1,4 +1,9 @@
 <template>
+	<v-col align="center" >
+		<p class="text-h4 mt-2 font-weight-bold">Events</p>
+		<p>Categories</p>
+	</v-col>
+
     <div class="text-left mx-4">
         <v-menu transition="scroll-y-transition">
             <template v-slot:activator="{ props }">
@@ -6,7 +11,7 @@
                     variant="text"
                     class="ma-2"
                     v-bind="props"
-                    prepend-icon="mdi-vuetify"
+                    prepend-icon="mdi-dance-ballroom"
                 >
                     Cheer dance
                 </v-btn>
@@ -20,7 +25,7 @@
                     variant="text"
                     class="ma-2"
                     v-bind="props"
-                    prepend-icon="mdi-vuetify"
+                    prepend-icon="mdi-book-open-page-variant"
                 >
                     Literary
                 </v-btn>
@@ -48,7 +53,7 @@
                     variant="text"
                     class="ma-2"
                     v-bind="props"
-                    prepend-icon="mdi-vuetify"
+                    prepend-icon="mdi-music"
                 >
                     Music
                 </v-btn>
@@ -76,7 +81,7 @@
                     variant="text"
                     class="ma-2"
                     v-bind="props"
-                    prepend-icon="mdi-vuetify"
+                    prepend-icon="mdi-human-female-dance"
                 >
                     Dance
                 </v-btn>
@@ -101,7 +106,7 @@
                     variant="text"
                     class="ma-2"
                     v-bind="props"
-                    prepend-icon="mdi-vuetify"
+                    prepend-icon="mdi-tennis-ball"
                 >
                     Ball Games
                 </v-btn>
@@ -132,7 +137,7 @@
                     variant="text"
                     class="ma-2"
                     v-bind="props"
-                    prepend-icon="mdi-vuetify"
+                    prepend-icon="mdi-chess-queen"
                 >
                     Board Games
                 </v-btn>
@@ -163,7 +168,7 @@
                     variant="text"
                     class="ma-2"
                     v-bind="props"
-                    prepend-icon="mdi-vuetify"
+                    prepend-icon="mdi-run-fast"
                 >
                     Athletics
                 </v-btn>

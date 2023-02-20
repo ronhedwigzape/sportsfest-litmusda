@@ -24,8 +24,12 @@
 						<v-btn class="ma-2" icon="mdi-dots-vertical" v-bind="props"></v-btn>
 					</template>
 					<v-list>
-						<v-list-item>Account_Name</v-list-item>
-						<v-list-item v-bind="props" >Log out </v-list-item>
+						<v-list-item
+							v-bind="props"
+							class="text-red-darken-3 text-uppercase"
+							style="font-size: 1rem;"
+							variant="text"
+							><v-icon icon="mdi-logout"/>Logout</v-list-item>
 					</v-list>
 				</v-menu>
 			</template>
@@ -95,6 +99,9 @@ export default {
 	computed: {
 		userName() {
 			return this.$store.getters['auth/getUser'].name
+		},
+		name() {
+			return this.$store.getters['auth/getUser'].userType
 		}
 	},
 	beforeMount() {

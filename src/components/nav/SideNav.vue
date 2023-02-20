@@ -3,9 +3,7 @@
 		class="bg-deep-purple-darken-2"
 		theme="dark"
 	>
-		<v-col align="center" class="text-h4 mt-2 font-weight-bold">
-			Events
-		</v-col>
+
 
 		<v-divider />
 
