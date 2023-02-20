@@ -3,7 +3,7 @@
 		<h3 class="me-5">{{ judgeName }}</h3>
 		<v-chip
 			class="ma-2"
-			color="green"
+			color="amber"
 		>
 			<v-icon start icon="mdi-account-circle"></v-icon>
 			{{ userName }}
@@ -99,14 +99,10 @@ export default {
 	computed: {
 		userName() {
 			return this.$store.getters['auth/getUser'].name
-		},
-		name() {
-			return this.$store.getters['auth/getUser'].userType
 		}
+		
 	},
-	beforeMount() {
 
-	},
 }
 </script>
 
