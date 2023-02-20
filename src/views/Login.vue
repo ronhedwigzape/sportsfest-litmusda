@@ -105,7 +105,17 @@
     background-image: url('assets/bg-img.jpg');
     background-repeat: no-repeat;
     background-attachment: fixed;
-    background-size: 100% 100%;
+    background-size: cover;
+    background-position: center center;
+    height: 100vh;
+    width: 100%;
+}
+
+
+@media (max-width: 768px) {
+    .background-image {
+        background-size: contain;
+    }
 }
 
 .transparent {
