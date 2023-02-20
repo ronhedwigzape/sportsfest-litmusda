@@ -22,6 +22,15 @@
                 </h1>
             </v-col>
 
+            <v-divider />
+
+			<v-col align="center" class="text-h4 mt-2 font-weight-bold">
+				Events
+			</v-col>
+
+			<!--	Events	-->
+			<event-nav/>
+
             <template v-slot:append>
                 <div class="ma-2 mb-5">
                     <v-row justify="center">
@@ -118,9 +127,13 @@
 </template>
 <script>
     import $ from 'jquery';
+	import eventNav from "../components/nav/EventNav.vue";
 
     export default {
         name: 'Admin',
+		components: {
+			eventNav
+		},
         data() {
             return {
                 dialog: false,

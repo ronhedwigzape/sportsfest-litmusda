@@ -1,9 +1,9 @@
 <template>
-    <div class="text-center">
+    <div class="text-left">
         <v-menu transition="scroll-y-transition">
             <template v-slot:activator="{ props }">
                 <v-btn
-                    variant="outlined"
+                    variant="text"
                     class="ma-2"
                     v-bind="props"
                     prepend-icon="mdi-vuetify"
@@ -13,11 +13,11 @@
             </template>
         </v-menu>
     </div>
-    <div class="text-center">
+    <div class="text-left">
         <v-menu transition="scroll-y-transition">
             <template v-slot:activator="{ props }">
                 <v-btn
-                    variant="outlined"
+                    variant="text"
                     class="ma-2"
                     v-bind="props"
                     prepend-icon="mdi-vuetify"
@@ -44,11 +44,11 @@
             </v-list>
         </v-menu>
     </div>
-    <div class="text-center">
+    <div class="text-left">
         <v-menu transition="scroll-y-transition">
             <template v-slot:activator="{ props }">
                 <v-btn
-                    variant="outlined"
+                    variant="text"
                     class="ma-2"
                     v-bind="props"
                     prepend-icon="mdi-vuetify"
@@ -75,11 +75,11 @@
             </v-list>
         </v-menu>
     </div>
-    <div class="text-center">
+    <div class="text-left">
         <v-menu transition="scroll-y-transition">
             <template v-slot:activator="{ props }">
                 <v-btn
-                    variant="outlined"
+                    variant="text"
                     class="ma-2"
                     v-bind="props"
                     prepend-icon="mdi-vuetify"

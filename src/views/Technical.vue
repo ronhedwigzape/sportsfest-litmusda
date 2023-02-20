@@ -9,6 +9,7 @@
                     size="150">
                     <v-img :src="avatar"/>
                 </v-avatar>
+
                 <h1 class="mt-5">
                     TECHNICAL_NAME
                     <v-chip
@@ -21,13 +22,13 @@
                 </h1>
             </v-col>
 
-            <v-divider></v-divider>
+            <v-divider />
 
             <v-col align="center" class="text-h4 mt-2 font-weight-bold">
                 Events
             </v-col>
 
-            <!--  Events-->
+			<!--	Events	-->
             <event-nav/>
 
             <template v-slot:append>
