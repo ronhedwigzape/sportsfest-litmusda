@@ -9,22 +9,31 @@ Here are the steps to set up the development environment for this project:
    [XAMPP](https://www.apachefriends.org/download.html)
    and [NodeJS](https://nodejs.org/en/),
    if you haven't already.
+
 2. Start Apache and MySQL through XAMPP if not already running.
+
 3. Clone or download this repository to your XAMPP **htdocs** folder.
    The final path should be `path_to/xampp/htdocs/sportsfest-litmusda`.
-4. Open the terminal and navigate to the project directory **sportsfest-litmusda**.
-5. Execute the following commands to install the required dependencies:
+
+4. Copy [**`app/config/database.example.php`**](app/config/database.example.php)
+   to **`app/config/database.php`**, then modify the database connection settings in the new file.
+
+5. Open the terminal and navigate to the project directory **sportsfest-litmusda**.
+
+6. Execute the following commands to install the required dependencies:
    ```sh
    npm install
    ```
-6. Compile and run the development server with hot reloading:
+
+7. Compile and run the development server with hot reloading:
    ```sh
    npm run dev
    ```
-7. Inside [phpMyAdmin](http://localhost/phpmyadmin),
+
+8. Inside [phpMyAdmin](http://localhost/phpmyadmin),
    create a MySQL database named `sportsfest-litmusda` and import [sportsfest-litmusda.sql](sportsfest-litmusda.sql) into it.
 
-8. Open your web browser and access <http://localhost:5176/sportsfest-litmusda> to view the application.
+9. Open your web browser and access <http://localhost:5176/sportsfest-litmusda> to view the application.
 
 
 ## Production Deployment
@@ -34,6 +43,7 @@ Here's how to compile the project for production deployment:
    ```sh
    npm run build
    ```
+
 2. Access the application by visiting `http://[host_name]/sportsfest-litmusda`,
    where `host_name` is the **IP address** or **host name** of the server in the network.
    For example:
