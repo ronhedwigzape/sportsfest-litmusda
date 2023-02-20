@@ -4,7 +4,7 @@ require_once 'User.php';
 
 class Judge extends User
 {
-    /**
+    /***************************************************************************
      * Judge constructor
      *
      * @param $username
@@ -16,7 +16,7 @@ class Judge extends User
     }
 
 
-    /**
+    /***************************************************************************
      * Get all judges
      *
      * @return mixed

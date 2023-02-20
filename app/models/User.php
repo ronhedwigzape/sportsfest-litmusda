@@ -14,7 +14,7 @@ class User extends App
     protected $userType;
 
 
-    /**
+    /***************************************************************************
      * User constructor
      *
      * @param $username
@@ -44,7 +44,7 @@ class User extends App
     }
 
 
-    /**
+    /***************************************************************************
      * Get currently signed-in user
      *
      * @return array|null
@@ -68,7 +68,7 @@ class User extends App
     }
 
 
-    /**
+    /***************************************************************************
      * Authenticated or not
      *
      * @return bool
@@ -79,7 +79,7 @@ class User extends App
     }
 
 
-    /**
+    /***************************************************************************
      * Sign in
      *
      * @return $this|false
@@ -95,7 +95,7 @@ class User extends App
     }
 
 
-    /**
+    /***************************************************************************
      * Get user info
      *
      * @return array
