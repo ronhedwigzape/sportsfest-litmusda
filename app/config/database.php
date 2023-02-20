@@ -16,7 +16,7 @@
 $config = [
     'host'   => 'localhost',
     'user'   => 'root',
-    'pass'   => '01234',
+    'pass'   => '',
     'dbname' => 'sportsfest-litmusda'
 ];
 
