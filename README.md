@@ -24,11 +24,6 @@ Here are the steps to set up the development environment for this project:
 7. Inside [phpMyAdmin](http://localhost/phpmyadmin),
    create a MySQL database named `sportsfest-litmusda` and import [sportsfest-litmusda.sql](sportsfest-litmusda.sql) into it.
 
-   **NOTE:** To use a different MySQL password, copy the
-   [**`app/_env.example.php`**](app/_env.example.php) file to **`app/_env.php`**
-   and set the password in the **`$DB_PASSWORD`** variable.
-
-
 8. Open your web browser and access <http://localhost:5176/sportsfest-litmusda> to view the application.
 
 
