@@ -14,6 +14,13 @@ class User extends App
     protected $userType;
 
 
+    /**
+     * User constructor
+     *
+     * @param $username
+     * @param $password
+     * @param $userType
+     */
     public function __construct($username, $password, $userType)
     {
         parent::__construct();
@@ -37,6 +44,11 @@ class User extends App
     }
 
 
+    /**
+     * Get currently signed-in user
+     *
+     * @return array|null
+     */
     public static function getUser()
     {
         $user_info = null;
@@ -56,12 +68,22 @@ class User extends App
     }
 
 
+    /**
+     * Authenticated or not
+     *
+     * @return bool
+     */
     public function authenticated()
     {
         return (bool)$this->id;
     }
 
 
+    /**
+     * Sign in
+     *
+     * @return $this|false
+     */
     public function signIn()
     {
         if($this->authenticated()) {
@@ -73,6 +95,11 @@ class User extends App
     }
 
 
+    /**
+     * Get user info
+     *
+     * @return array
+     */
     public function getInfo()
     {
         return [
