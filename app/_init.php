@@ -4,8 +4,10 @@ header("Access-Control-Allow-Credentials: true");
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
 header('Access-Control-Allow-Headers: Content-Type');
 session_start();
-require_once 'config/database.php';
+if(file_exists('_env.php'))
+    require_once '_env.php';
 
+require_once 'config/database.php';
 
 function denyAccess() {
     require_once 'models/App.php';
