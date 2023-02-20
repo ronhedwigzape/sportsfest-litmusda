@@ -4,7 +4,7 @@ require_once 'User.php';
 
 class Technical extends User
 {
-    /**
+    /***************************************************************************
      * Technical constructor
      *
      * @param $username
@@ -16,7 +16,7 @@ class Technical extends User
     }
 
 
-    /**
+    /***************************************************************************
      * Get all technicals
      *
      * @return mixed
