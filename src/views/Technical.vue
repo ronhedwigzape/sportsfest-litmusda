@@ -1,123 +1,27 @@
 <template>
     <v-layout style="height: 100vh;">
-        <v-navigation-drawer
-            class="bg-deep-purple-darken-2"
-            theme="dark"
-        >
-            <v-col align="center">
-                <v-avatar
-                    size="150">
-                    <v-img :src="avatar"/>
-                </v-avatar>
-
-                <h1 class="mt-5">
-                    TECHNICAL_NAME
-                    <v-chip
-                        class="ma-2"
-                        color="red"
-                    >
-                        <v-icon start icon="mdi-account-circle"></v-icon>
-                        TECHNICAL
-                    </v-chip>
-                </h1>
-            </v-col>
-
-            <v-divider />
-
-            <v-col align="center" class="text-h4 mt-2 font-weight-bold">
-                Events
-            </v-col>
-
-			<!--	Events	-->
-            <event-nav/>
-
-            <template v-slot:append>
-                <div class="ma-2 mb-5">
-                    <v-row justify="center">
-                        <v-dialog
-                            v-model="dialog"
-                            width="auto"
-                        >
-                            <template v-slot:activator="{ props }">
-                                <v-btn
-                                    class="text-red-darken-3 bg-deep-purple-lighten-4"
-                                    v-bind="props"
-                                >
-                                    log out
-                                </v-btn>
-                            </template>
-                            <v-card class="pa-3 bg-white">
-                                <v-card-title class="text-h5 ">
-                                    Confirm Logout
-                                </v-card-title>
-                                <v-card-text>Are you sure you want to log out?</v-card-text>
-                                <v-card-actions>
-                                    <v-spacer></v-spacer>
-                                    <v-btn
-                                        color="red-darken-1"
-                                        variant="text"
-                                        @click="dialog = false"
-                                    >
-                                        cancel
-                                    </v-btn>
-                                    <v-btn
-                                        color="green-darken-1"
-                                        variant="text"
-                                        @click="signOut"
-                                    >
-                                        ok
-                                    </v-btn>
-                                </v-card-actions>
-                            </v-card>
-                        </v-dialog>
-                    </v-row>
-                </div>
-            </template>
-        </v-navigation-drawer>
-
-        <v-app-bar title="TECHNICAL" color="deep-purple-darken-3"></v-app-bar>
+       <side-nav />
+		<top-nav />
 
     </v-layout>
 </template>
 <script>
-    import $ from 'jquery';
-    import eventNav from '../components/nav/EventNav.vue';
+import topNav from "../components/nav/TopNav.vue";
+import sideNav from "../components/nav/SideNav.vue";
 
-    export default {
-        name: 'Technical',
-        components: {
-            eventNav
-        },
-        data() {
-            return {
-                dialog: false,
-                signedOut: false,
-                avatar: `${import.meta.env.BASE_URL}no-avatar.jpg`
-            }
-        },
-        methods: {
-            signOut() {
-                $.ajax({
-                    url: `${this.$store.getters.appURL}/index.php`,
-                    type: 'POST',
-                    xhrFields: {
-                        withCredentials: true
-                    },
-                    data: {
-                        signOut: this.signedOut
-                    },
-                    success: (data) => {
-                        data = JSON.parse(data);
-                        this.$store.commit('auth/setUser', data.user = null);
-                        this.$router.push('/');
-                    },
-                    error: (error) => {
-                        alert(`ERROR ${error.status}: ${error.statusText}`);
-                    },
-                })
-            }
-        }
-    }
+export default {
+	name: 'Judge',
+	components: {
+		topNav,
+		sideNav
+	},
+	data() {
+		return {
+
+		}
+	},
+
+}
 </script>
 
 <style scoped>
