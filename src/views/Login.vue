@@ -86,7 +86,7 @@
                     success: (data) => {
                         data = JSON.parse(data);
                         this.$store.commit('auth/setUser', data.user);
-                        this.$router.replace({ name: data.user.userType });
+                        this.$router.replace({name: data.user.userType});
                     },
                     error: (error) => {
                         alert(`ERROR ${error.status}: ${error.statusText}`);

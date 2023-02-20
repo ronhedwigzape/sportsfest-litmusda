@@ -2,13 +2,12 @@
     <v-app>
 
         <v-main>
-          <router-view />
+            <router-view/>
         </v-main>
     </v-app>
 </template>
 
 <script>
-
     import $ from 'jquery';
 
     export default {
@@ -28,9 +27,9 @@
                 },
                 success: (data) => {
                     data = JSON.parse(data);
-                    if(data.user) {
+                    if (data.user) {
                         this.$store.commit('auth/setUser', data.user);
-                        this.$router.replace({ name: data.user.userType });
+                        this.$router.replace({name: data.user.userType});
                     }
                 },
                 error: (error) => {
