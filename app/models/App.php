@@ -5,7 +5,7 @@ class App
     protected $conn;
 
 
-    /**
+    /***************************************************************************
      *  App constructor
      */
     public function __construct()
@@ -17,7 +17,7 @@ class App
     }
 
 
-    /**
+    /***************************************************************************
      * Return an http error
      *
      * @param $header
@@ -30,5 +30,24 @@ class App
         die(json_encode([
             'error' => $error
         ]));
+    }
+
+
+    /***************************************************************************
+     * Generate slug
+     *
+     * @param $title
+     * @return string
+     */
+    public static function generateSlug($title)
+    {
+        // convert the title to lowercase
+        $slug = strtolower($title);
+
+        // replace any non-alphanumeric characters with hyphens
+        $slug = preg_replace('/[^a-zA-Z0-9]+/', '-', $slug);
+
+        // remove any leading or trailing hyphens
+        return trim($slug, '-');
     }
 }
