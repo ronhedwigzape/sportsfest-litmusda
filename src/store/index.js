@@ -3,11 +3,12 @@ import { createStore } from 'vuex';
 
 // MODULES
 import auth from './store-auth.js';
+import teams from "./store-teams";
 
 export default createStore({
     modules: {
         auth,
-
+        teams
     },
 
     state: {

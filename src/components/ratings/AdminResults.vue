@@ -32,7 +32,6 @@
 				Rank
 			</th>
 		</tr>
-
 		</thead>
 		<tbody>
 		<tr class="">
@@ -113,20 +112,21 @@
 				{{ number }}
 			</td>
 		</tr>
-
 		</tbody>
+		<tfoot>
+		<tr></tr>
+		</tfoot>
 	</v-table>
-
 </template>
 
 <script>
 // import $ from 'jquery';
 
 export default {
-	name: "JudgeScoreSheet",
+	name: "AdminResults",
 	data() {
 		return {
-			number: 5,
+			number: '5',
 			redTeamImg: '',
 			greenTeamImg: '',
 			blueTeamImg: ''
@@ -134,7 +134,7 @@ export default {
 	},
 	// mounted() {
 	// 	// $.ajax({
-	// 	// 	url: `${this.$store.getters.appURL}/judge.php`,
+	// 	// 	url: `${this.$store.getters.appURL}/admin.php`,
 	// 	// 	type: 'GET',
 	// 	// 	xhrFields: {
 	// 	// 		withCredentials: true
