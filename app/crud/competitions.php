@@ -27,27 +27,22 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Add Data</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Add Data </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
 
-                <form action="categories_insert.php" method="POST">
+                <form action="competitions_insert.php" method="POST">
 
                     <div class="modal-body">
                         <div class="form-group">
-                            <label>Competition_ID</label>
-                            <input type="number" min="1" max="2" name="competition_id" class="form-control" placeholder="Select your Competition_ID 1(sports) or 2(litmusda)" autocomplete="off" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Slug</label>
+                            <label> Slug </label>
                             <input type="text" name="slug" class="form-control" placeholder="Enter your Slug" autocomplete="off" required>
                         </div>
 
                         <div class="form-group">
-                            <label>Title</label>
+                            <label> Title </label>
                             <input type="text" name="title" class="form-control" placeholder="Enter your Title" autocomplete="off" required>
                         </div>
 
@@ -68,30 +63,25 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Edit Data</h5>
+                    <h5 class="modal-title" id="exampleModalLabel"> Edit Data </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
 
-                <form action="categories_update.php" method="POST">
+                <form action="competitions_update.php" method="POST">
 
                     <div class="modal-body">
-                    
+
                         <input type="hidden" name="update_id" id="update_id">
 
                         <div class="form-group">
-                            <label>Competition_ID</label>
-                            <input type="number" min="1" max="2" name="competition_id" id="competition_id" class="form-control" placeholder="Select your Competition_ID 1(sports) or 2(litmusda)" autocomplete="off" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Slug</label>
+                            <label> Slug </label>
                             <input type="text" name="slug" id="slug" class="form-control" placeholder="Enter your Slug">
                         </div>
 
                         <div class="form-group">
-                            <label>Title</label>
+                            <label> Title </label>
                             <input type="text" name="title" id="title" class="form-control" placeholder="Enter your Title">
                         </div>
 
@@ -112,19 +102,19 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Delete Data</h5>
+                    <h5 class="modal-title" id="exampleModalLabel"> Delete Data </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
 
-                <form action="categories_delete.php" method="POST">
+                <form action="competitions_delete.php" method="POST">
 
                     <div class="modal-body">
 
                         <input type="hidden" name="delete_id" id="delete_id">
 
-                        <h4>Do you want to Delete this Data ??</h4>
+                        <h4> Do you want to Delete this Data ??</h4>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary" data-dismiss="modal"> NO </button>
@@ -139,33 +129,29 @@
     <div class="container my-3">
         <div class="card">
             <div class="card-body">
-                <h1 style="text-align:center;"><b> Categories </b></h1>
+                <h1 style="text-align:center;"><b> Competitions </b></h1>
                 <button type="button" class="btn btn-primary my-3" data-toggle="modal" data-target="#addmodal">ADD DATA</button>
-                <a href="competitions.php"><button type="button" class="btn btn-secondary"> Go to Competitions </button></a>
+                <a href="categories.php"><button type="button" class="btn btn-secondary"> Go to Categories </button></a>
                 <a href="events.php"><button type="button" class="btn btn-secondary"> Go to Events </button></a>
                 <?php
-                    require_once '../config/database.php';
-                    require_once '../models/Category.php';
-                    
-                    $categories = Category::all();
+                    require_once '../models/Competition.php';
+                    $competitions = Competition::all();
                 ?>
                 <table id="datatableid" class="table table-bordered table-secondary table-hover" style="text-align:center;">
                     <thead class="bg-info">
                         <tr>
                             <th scope="col">ID</th>
-                            <th scope="col">Categories_ID</th>
                             <th scope="col">Slug</th>
                             <th scope="col">Title</th>
                             <th scope="col">Operations</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($categories as $category) { ?>
+                        <?php foreach ($competitions as $competition) { ?>
                             <tr>
-                                <td><?php echo $category->getId(); ?></td>
-                                <td><?php echo $category->getCompetitionId(); ?></td>
-                                <td><?php echo $category->getSlug(); ?></td>
-                                <td><?php echo $category->getTitle(); ?></td>
+                                <td><?php echo $competition->getId(); ?></td>
+                                <td><?php echo $competition->getSlug(); ?></td>
+                                <td><?php echo $competition->getTitle(); ?></td>
                                 <td>
                                     <button type="button" class="btn btn-success editbtn">EDIT</button>
                                     <button type="button" class="btn btn-danger deletebtn">DELETE</button>
@@ -173,7 +159,7 @@
                             </tr>
                         <?php } ?>
                     </tbody>
-                </table>                    
+                </table>
             </div>
         </div>
     </div>
@@ -210,11 +196,10 @@
                 console.log(data);
 
                 $('#update_id').val(data[0]);
-                $('#slug').val(data[2]);
-                $('#title').val(data[3]);
+                $('#slug').val(data[1]);
+                $('#title').val(data[2]);
             });
         });
     </script>
-
 </body>
 </html>
