@@ -49,7 +49,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                        <button type="submit" name="insertdata" class="btn btn-dark">Save Data</button>
+                        <button type="submit" name="insertdata" class="btn btn-primary">Save Data</button>
                     </div>
                 </form>
 
@@ -88,7 +88,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                        <button type="submit" name="updatedata" class="btn btn-dark">Update Data</button>
+                        <button type="submit" name="updatedata" class="btn btn-primary">Update Data</button>
                     </div>
                 </form>
 
@@ -117,8 +117,8 @@
                         <h4> Do you want to Delete this Data ??</h4>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal"> NO </button>
-                        <button type="submit" name="deletedata" class="btn btn-dark"> Yes !! Delete it. </button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal"> NO </button>
+                        <button type="submit" name="deletedata" class="btn btn-danger"> Yes !! Delete it. </button>
                     </div>
                 </form>
 
@@ -130,7 +130,7 @@
         <div class="card">
             <div class="card-body">
                 <h1 style="text-align:center;"><b> Competitions </b></h1>
-                <button type="button" class="btn btn-dark my-3" data-toggle="modal" data-target="#addmodal">ADD DATA</button>
+                <button type="button" class="btn btn-primary my-3" data-toggle="modal" data-target="#addmodal">ADD DATA</button>
                 <?php
                     require_once '../config/database.php';
                     $db = mysqli_select_db($conn, 'sportsfest-litmusda');
@@ -138,8 +138,8 @@
                     $query = "SELECT * FROM competitions";
                     $query_run = mysqli_query($conn, $query);
                 ?>
-                <table id="datatableid" class="table table-bordered table-info" style="text-align:center;">
-                    <thead>
+                <table id="datatableid" class="table table-bordered table-secondary table-hover" style="text-align:center;">
+                    <thead class="bg-info">
                         <tr>
                             <th scope="col"> ID</th>
                             <th scope="col">Slug</th>
@@ -159,7 +159,8 @@
                                         <td> <?php echo $row['slug']; ?> </td>
                                         <td> <?php echo $row['title']; ?> </td>
                                         <td>
-                                            <button type="button" class="btn btn-dark editbtn"> EDIT </button>
+                                            <a href="categories.php"><button type="button" class="btn btn-info viewbtn"> VIEW </button></a>
+                                            <button type="button" class="btn btn-success editbtn"> EDIT </button>
                                             <button type="button" class="btn btn-danger deletebtn"> DELETE </button>
                                         </td>
                                     </tr>
