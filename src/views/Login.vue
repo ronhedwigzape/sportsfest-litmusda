@@ -102,7 +102,7 @@
 
 <style scoped>
 .background-image {
-    background-image: url('assets/bg-img.jpg');
+    background-image: url('/bg-img.jpg');
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: cover;
