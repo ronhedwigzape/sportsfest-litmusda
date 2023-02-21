@@ -41,7 +41,23 @@ class Category extends App
 
 
     /***************************************************************************
-     * Get all categories
+     * Convert category object to array
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        return [
+            'id'             => $this->id,
+            'competition_id' => $this->competition_id,
+            'slug'           => $this->slug,
+            'title'          => $this->title
+        ];
+    }
+
+
+    /***************************************************************************
+     * Get all categories as array of objects
      *
      * @param int $competition_id
      * @return Category[]
@@ -60,8 +76,24 @@ class Category extends App
 
         $result = $stmt->get_result();
         $categories = [];
-        while ($row = $result->fetch_assoc()) {
+        while($row = $result->fetch_assoc()) {
             $categories[] = new Category($row['id']);
+        }
+        return $categories;
+    }
+
+
+    /***************************************************************************
+     * Get all categories as array of arrays
+     *
+     * @param int $competition_id
+     * @return array
+     */
+    public static function rows($competition_id = 0)
+    {
+        $categories = [];
+        foreach(self::all($competition_id) as $category) {
+            $categories[] = $category->toArray();
         }
         return $categories;
     }
@@ -103,7 +135,6 @@ class Category extends App
         $result = $stmt->get_result();
         return ($result->num_rows > 0);
     }
-
 
 
     /***************************************************************************
@@ -256,14 +287,26 @@ class Category extends App
 
 
     /***************************************************************************
-     * Get all events
+     * Get all events as array of objects
      *
      * @return Event[]
      */
-    public function getEvents()
+    public function getAllEvents()
     {
         require_once 'Event.php';
         return Event::all($this->id);
+    }
+
+
+    /***************************************************************************
+     * Get all events as array of arrays
+     *
+     * @return Event[]
+     */
+    public function getRowEvents()
+    {
+        require_once 'Event.php';
+        return Event::rows($this->id);
     }
 
 
