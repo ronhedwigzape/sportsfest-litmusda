@@ -41,7 +41,23 @@ class Event extends App
 
 
     /***************************************************************************
-     * Get all events
+     * Convert event object to array
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        return [
+            'id'          => $this->id,
+            'category_id' => $this->category_id,
+            'slug'        => $this->slug,
+            'title'       => $this->title
+        ];
+    }
+
+
+    /***************************************************************************
+     * Get all events as array of objects
      *
      * @param int $category_id
      * @return Event[]
@@ -60,8 +76,24 @@ class Event extends App
 
         $result = $stmt->get_result();
         $events = [];
-        while ($row = $result->fetch_assoc()) {
+        while($row = $result->fetch_assoc()) {
             $events[] = new Event($row['id']);
+        }
+        return $events;
+    }
+
+
+    /***************************************************************************
+     * Get all events as array of arrays
+     *
+     * @param int $category_id
+     * @return array
+     */
+    public static function rows($category_id = 0)
+    {
+        $events = [];
+        foreach(self::all($category_id) as $event) {
+            $events[] = $event->toArray();
         }
         return $events;
     }
@@ -103,7 +135,6 @@ class Event extends App
         $result = $stmt->get_result();
         return ($result->num_rows > 0);
     }
-
 
 
     /***************************************************************************
