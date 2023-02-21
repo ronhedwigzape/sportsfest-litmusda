@@ -157,12 +157,7 @@ class Category extends App
         if(!$id)
             return false;
 
-        $category = new Category();
-        $stmt = $category->conn->prepare("SELECT id FROM $category->table WHERE id = ?");
-        $stmt->bind_param("i", $id);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        return ($result->num_rows > 0);
+        return (self::findById($id) != false);
     }
 
 
