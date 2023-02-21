@@ -27,22 +27,27 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Add Data </h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Add Data</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
 
-                <form action="insertcode.php" method="POST">
+                <form action="events_insert.php" method="POST">
 
                     <div class="modal-body">
                         <div class="form-group">
-                            <label> Slug </label>
+                            <label>Category_ID</label>
+                            <input type="number" min="3" max="5" name="category_id" id="category_id" class="form-control" placeholder="Select your Categories_ID 3(literary), 4(music) or 5(dance)" autocomplete="off" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Slug</label>
                             <input type="text" name="slug" class="form-control" placeholder="Enter your Slug" autocomplete="off" required>
                         </div>
 
                         <div class="form-group">
-                            <label> Title </label>
+                            <label>Title</label>
                             <input type="text" name="title" class="form-control" placeholder="Enter your Title" autocomplete="off" required>
                         </div>
 
@@ -63,25 +68,30 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel"> Edit Data </h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Edit Data</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
 
-                <form action="updatecode.php" method="POST">
+                <form action="events_update.php" method="POST">
 
                     <div class="modal-body">
-
+                    
                         <input type="hidden" name="update_id" id="update_id">
 
                         <div class="form-group">
-                            <label> Slug </label>
+                            <label>Categories_ID</label>
+                            <input type="number" min="3" max="5" name="category_id" id="category_id" class="form-control" placeholder="Select your Categories_ID 3(literary), 4(music) or 5(dance)" autocomplete="off" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Slug</label>
                             <input type="text" name="slug" id="slug" class="form-control" placeholder="Enter your Slug">
                         </div>
 
                         <div class="form-group">
-                            <label> Title </label>
+                            <label>Title</label>
                             <input type="text" name="title" id="title" class="form-control" placeholder="Enter your Title">
                         </div>
 
@@ -102,19 +112,19 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel"> Delete Data </h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Delete Data</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
 
-                <form action="deletecode.php" method="POST">
+                <form action="events_delete.php" method="POST">
 
                     <div class="modal-body">
 
                         <input type="hidden" name="delete_id" id="delete_id">
 
-                        <h4> Do you want to Delete this Data ??</h4>
+                        <h4>Do you want to Delete this Data ??</h4>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary" data-dismiss="modal"> NO </button>
@@ -129,50 +139,41 @@
     <div class="container my-3">
         <div class="card">
             <div class="card-body">
-                <h1 style="text-align:center;"><b> Competitions </b></h1>
+                <h1 style="text-align:center;"><b> Events </b></h1>
                 <button type="button" class="btn btn-primary my-3" data-toggle="modal" data-target="#addmodal">ADD DATA</button>
+                <a href="competitions.php"><button type="button" class="btn btn-secondary"> Go to Competitions </button></a>
+                <a href="categories.php"><button type="button" class="btn btn-secondary"> Go to Categories </button></a>
                 <?php
                     require_once '../config/database.php';
-                    $db = mysqli_select_db($conn, 'sportsfest-litmusda');
-
-                    $query = "SELECT * FROM competitions";
-                    $query_run = mysqli_query($conn, $query);
+                    require_once '../models/Event.php';
+                    
+                    $events = Event::all();
                 ?>
                 <table id="datatableid" class="table table-bordered table-secondary table-hover" style="text-align:center;">
                     <thead class="bg-info">
                         <tr>
-                            <th scope="col"> ID</th>
+                            <th scope="col">ID</th>
+                            <th scope="col">Categories_ID</th>
                             <th scope="col">Slug</th>
-                            <th scope="col">Title </th>
-                            <th scope="col"> Operations </th>
+                            <th scope="col">Title</th>
+                            <th scope="col">Operations</th>
                         </tr>
                     </thead>
-                    <?php
-                        if($query_run)
-                        {
-                            foreach($query_run as $row)
-                            {
-                                ?>
-                                <tbody>
-                                    <tr>
-                                        <td> <?php echo $row['id']; ?> </td>
-                                        <td> <?php echo $row['slug']; ?> </td>
-                                        <td> <?php echo $row['title']; ?> </td>
-                                        <td>
-                                            <a href="categories.php"><button type="button" class="btn btn-info viewbtn"> VIEW </button></a>
-                                            <button type="button" class="btn btn-success editbtn"> EDIT </button>
-                                            <button type="button" class="btn btn-danger deletebtn"> DELETE </button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                                <?php           
-                        }
-                            }
-                        else {
-                            echo "No Record Found";
-                        }
-                    ?>
-                </table>
+                    <tbody>
+                        <?php foreach ($events as $event) { ?>
+                            <tr>
+                                <td><?php echo $event->getId(); ?></td>
+                                <td><?php echo $event->getCategoryId(); ?></td>
+                                <td><?php echo $event->getSlug(); ?></td>
+                                <td><?php echo $event->getTitle(); ?></td>
+                                <td>
+                                    <button type="button" class="btn btn-success editbtn">EDIT</button>
+                                    <button type="button" class="btn btn-danger deletebtn">DELETE</button>
+                                </td>
+                            </tr>
+                        <?php } ?>
+                    </tbody>
+                </table>                    
             </div>
         </div>
     </div>
@@ -192,6 +193,28 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"></script>
 
     <script src="main.js"></script>
+
+    <script>
+        $(document).ready(function () {
+
+            $('.editbtn').on('click', function () {
+
+                $('#editmodal').modal('show');
+
+                $tr = $(this).closest('tr');
+
+                var data = $tr.children("td").map(function () {
+                    return $(this).text();
+                }).get();
+
+                console.log(data);
+
+                $('#update_id').val(data[0]);
+                $('#slug').val(data[2]);
+                $('#title').val(data[3]);
+            });
+        });
+    </script>
 
 </body>
 </html>
