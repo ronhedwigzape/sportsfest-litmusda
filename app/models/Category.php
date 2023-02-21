@@ -41,6 +41,53 @@ class Category extends App
 
 
     /***************************************************************************
+     * Execute find
+     *
+     * @param $stmt
+     * @return Category|false
+     */
+    private static function executeFind($stmt)
+    {
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if($row = $result->fetch_assoc())
+            return new Category($row['id']);
+        else
+            return false;
+    }
+
+
+    /***************************************************************************
+     * Find category by id
+     *
+     * @param int $id
+     * @return Category|boolean
+     */
+    public static function findById($id)
+    {
+        $category = new Category();
+        $stmt = $category->conn->prepare("SELECT id FROM $category->table WHERE id = ?");
+        $stmt->bind_param("i", $id);
+        return self::executeFind($stmt);
+    }
+
+
+    /***************************************************************************
+     * Find category by slug
+     *
+     * @param string $slug
+     * @return Category|boolean
+     */
+    public static function findBySlug($slug)
+    {
+        $category = new Category();
+        $stmt = $category->conn->prepare("SELECT id FROM $category->table WHERE slug = ?");
+        $stmt->bind_param("s", $slug);
+        return self::executeFind($stmt);
+    }
+
+
+    /***************************************************************************
      * Convert category object to array
      *
      * @return array

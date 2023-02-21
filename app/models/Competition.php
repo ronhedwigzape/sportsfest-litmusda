@@ -39,6 +39,53 @@ class Competition extends App
 
 
     /***************************************************************************
+     * Execute find
+     *
+     * @param $stmt
+     * @return Competition|false
+     */
+    private static function executeFind($stmt)
+    {
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if($row = $result->fetch_assoc())
+            return new Competition($row['id']);
+        else
+            return false;
+    }
+
+
+    /***************************************************************************
+     * Find competition by id
+     *
+     * @param int $id
+     * @return Competition|boolean
+     */
+    public static function findById($id)
+    {
+        $competition = new Competition();
+        $stmt = $competition->conn->prepare("SELECT id FROM $competition->table WHERE id = ?");
+        $stmt->bind_param("i", $id);
+        return self::executeFind($stmt);
+    }
+
+
+    /***************************************************************************
+     * Find competition by slug
+     *
+     * @param string $slug
+     * @return Competition|boolean
+     */
+    public static function findBySlug($slug)
+    {
+        $competition = new Competition();
+        $stmt = $competition->conn->prepare("SELECT id FROM $competition->table WHERE slug = ?");
+        $stmt->bind_param("s", $slug);
+        return self::executeFind($stmt);
+    }
+
+
+    /***************************************************************************
      * Convert competition object to array
      *
      * @return array

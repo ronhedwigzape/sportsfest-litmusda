@@ -41,6 +41,53 @@ class Event extends App
 
 
     /***************************************************************************
+     * Execute find
+     *
+     * @param $stmt
+     * @return Event|false
+     */
+    private static function executeFind($stmt)
+    {
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if($row = $result->fetch_assoc())
+            return new Event($row['id']);
+        else
+            return false;
+    }
+
+
+    /***************************************************************************
+     * Find event by id
+     *
+     * @param int $id
+     * @return Event|boolean
+     */
+    public static function findById($id)
+    {
+        $event = new Event();
+        $stmt = $event->conn->prepare("SELECT id FROM $event->table WHERE id = ?");
+        $stmt->bind_param("i", $id);
+        return self::executeFind($stmt);
+    }
+
+
+    /***************************************************************************
+     * Find event by slug
+     *
+     * @param string $slug
+     * @return Event|boolean
+     */
+    public static function findBySlug($slug)
+    {
+        $event = new Event();
+        $stmt = $event->conn->prepare("SELECT id FROM $event->table WHERE slug = ?");
+        $stmt->bind_param("s", $slug);
+        return self::executeFind($stmt);
+    }
+
+
+    /***************************************************************************
      * Convert event object to array
      *
      * @return array
