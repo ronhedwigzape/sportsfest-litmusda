@@ -34,25 +34,3 @@ $(document).ready(function () {
 
     });
 });
-
-
-$(document).ready(function () {
-
-    $('.editbtn').on('click', function () {
-
-        $('#editmodal').modal('show');
-
-        $tr = $(this).closest('tr');
-
-        var data = $tr.children("td").map(function () {
-            return $(this).text();
-        }).get();
-
-        console.log(data);
-
-        $('#update_id').val(data[0]);
-        $('#fname').val(data[1]);
-        $('#lname').val(data[2]);
-        $('#course').val(data[3]);
-    });
-});
