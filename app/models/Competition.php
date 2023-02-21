@@ -39,7 +39,22 @@ class Competition extends App
 
 
     /***************************************************************************
-     * Get all competitions
+     * Convert competition object to array
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        return [
+            'id'    => $this->id,
+            'slug'  => $this->slug,
+            'title' => $this->title
+        ];
+    }
+
+
+    /***************************************************************************
+     * Get all competitions as array of objects
      *
      * @return Competition[]
      */
@@ -52,8 +67,23 @@ class Competition extends App
 
         $result = $stmt->get_result();
         $competitions = [];
-        while ($row = $result->fetch_assoc()) {
+        while($row = $result->fetch_assoc()) {
             $competitions[] = new Competition($row['id']);
+        }
+        return $competitions;
+    }
+
+
+    /***************************************************************************
+     * Get all competitions as array of arrays
+     *
+     * @return array
+     */
+    public static function rows()
+    {
+        $competitions = [];
+        foreach(self::all() as $competition) {
+            $competitions[] = $competition->toArray();
         }
         return $competitions;
     }
@@ -214,13 +244,25 @@ class Competition extends App
 
 
     /***************************************************************************
-     * Get all categories
+     * Get all categories as array of objects
      *
      * @return Category[]
      */
-    public function getCategories()
+    public function getAllCategories()
     {
         require_once 'Category.php';
         return Category::all($this->id);
+    }
+
+
+    /***************************************************************************
+     * Get all categories as array of arrays
+     *
+     * @return array
+     */
+    public function getRowCategories()
+    {
+        require_once 'Category.php';
+        return Category::rows($this->id);
     }
 }

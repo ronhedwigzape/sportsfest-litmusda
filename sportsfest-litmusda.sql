@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 19, 2023 at 02:22 PM
+-- Generation Time: Feb 21, 2023 at 11:17 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.1.12
 
@@ -108,6 +108,61 @@ CREATE TABLE `criteria` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `criteria`
+--
+
+INSERT INTO `criteria` (`id`, `event_id`, `title`, `percentage`, `created_at`, `updated_at`) VALUES
+(1, 1, 'Delivery', 40, '2023-02-21 04:40:26', '2023-02-21 04:40:26'),
+(2, 1, 'Craftmanship', 30, '2023-02-21 04:40:26', '2023-02-21 04:40:26'),
+(3, 1, 'Personality', 20, '2023-02-21 04:40:26', '2023-02-21 04:40:26'),
+(4, 1, 'Overall Impact', 10, '2023-02-21 04:40:26', '2023-02-21 04:40:26'),
+(5, 2, 'Nilalaman', 30, '2023-02-21 04:46:07', '2023-02-21 04:46:07'),
+(6, 2, 'Paraan ng Pagbigkas', 20, '2023-02-21 04:46:07', '2023-02-21 04:46:07'),
+(7, 2, 'Interpretasyon', 20, '2023-02-21 04:46:07', '2023-02-21 04:52:38'),
+(8, 2, 'Kaangkupan ng Kilos o Galaw', 20, '2023-02-21 04:47:41', '2023-02-21 04:47:41'),
+(9, 2, 'Kasuotan at Props', 10, '2023-02-21 04:47:41', '2023-02-21 04:47:41'),
+(10, 3, 'Nilalaman', 30, '2023-02-21 04:50:29', '2023-02-21 04:50:29'),
+(11, 3, 'Paraan ng Pagbigkas', 20, '2023-02-21 04:50:29', '2023-02-21 04:50:29'),
+(12, 3, 'Interpretasyon', 20, '2023-02-21 04:50:29', '2023-02-21 04:50:29'),
+(13, 3, 'Kaangkupan ng Kilos o Galaw', 20, '2023-02-21 04:50:29', '2023-02-21 04:50:29'),
+(14, 3, 'Kasuotan at Props', 10, '2023-02-21 04:50:29', '2023-02-21 04:50:29'),
+(15, 4, 'Delivery', 30, '2023-02-21 04:57:23', '2023-02-21 04:57:23'),
+(16, 4, 'Stress And Rhythm', 30, '2023-02-21 04:57:23', '2023-02-21 04:57:23'),
+(17, 4, 'Mastery', 20, '2023-02-21 04:57:23', '2023-02-21 04:57:23'),
+(18, 4, 'Choreography', 10, '2023-02-21 04:57:23', '2023-02-21 04:57:23'),
+(19, 4, 'Costume, Props, Sound Effects', 10, '2023-02-21 04:57:23', '2023-02-21 04:57:23'),
+(20, 5, 'Tone Quality', 40, '2023-02-21 05:00:26', '2023-02-21 05:00:26'),
+(21, 5, 'Interpretation, Delivery, Dynamics', 40, '2023-02-21 05:00:26', '2023-02-21 05:00:26'),
+(22, 5, 'Stage Presence', 20, '2023-02-21 05:00:26', '2023-02-21 05:00:26'),
+(26, 6, 'Tone Quality', 40, '2023-02-21 05:04:10', '2023-02-21 05:04:10'),
+(27, 6, 'Interpretation, Delivery, Dynamics', 40, '2023-02-21 05:04:10', '2023-02-21 05:04:10'),
+(28, 6, 'Stage Presence', 20, '2023-02-21 05:04:10', '2023-02-21 05:04:10'),
+(29, 7, 'Tone Quality', 40, '2023-02-21 05:06:02', '2023-02-21 05:06:02'),
+(30, 7, 'Blending and Interpretation/Counterpoint', 40, '2023-02-21 05:06:02', '2023-02-21 05:06:02'),
+(31, 7, 'Stage Presence', 20, '2023-02-21 05:06:02', '2023-02-21 05:06:02'),
+(32, 8, 'Vocal Power', 40, '2023-02-21 05:11:35', '2023-02-21 05:11:35'),
+(33, 8, 'Instrumental', 20, '2023-02-21 05:11:35', '2023-02-21 05:11:35'),
+(34, 8, 'Creativity', 20, '2023-02-21 05:11:35', '2023-02-21 05:11:35'),
+(35, 8, 'Audience Import', 10, '2023-02-21 05:11:35', '2023-02-21 05:11:35'),
+(36, 8, 'Overall', 10, '2023-02-21 05:11:35', '2023-02-21 05:11:35'),
+(37, 9, 'Performance', 30, '2023-02-21 05:12:34', '2023-02-21 05:15:02'),
+(38, 9, 'Choreography', 20, '2023-02-21 05:17:10', '2023-02-21 05:17:10'),
+(39, 9, 'Technique/Style', 20, '2023-02-21 05:17:10', '2023-02-21 05:17:10'),
+(40, 9, 'Rhythm and Timing', 20, '2023-02-21 05:17:10', '2023-02-21 05:17:10'),
+(41, 9, 'Costume/Props', 10, '2023-02-21 05:17:10', '2023-02-21 05:17:10'),
+(42, 10, 'Performance', 30, '2023-02-21 05:20:17', '2023-02-21 05:20:17'),
+(43, 10, 'Choreography and Originality', 20, '2023-02-21 05:20:17', '2023-02-21 05:20:17'),
+(44, 10, 'Technique/Style', 20, '2023-02-21 05:20:17', '2023-02-21 05:20:17'),
+(45, 10, 'Rhythm and Timing', 20, '2023-02-21 05:20:17', '2023-02-21 05:20:17'),
+(46, 10, 'Costume', 10, '2023-02-21 05:20:17', '2023-02-21 05:20:17'),
+(47, 11, 'Choreography', 35, '2023-02-21 05:23:25', '2023-02-21 05:23:25'),
+(48, 11, 'Synchronization and Accuracy', 20, '2023-02-21 05:23:25', '2023-02-21 05:23:25'),
+(49, 11, 'Cheers, Chants, & Yells', 10, '2023-02-21 05:23:25', '2023-02-21 05:23:25'),
+(50, 11, 'Costume & Props', 10, '2023-02-21 05:27:50', '2023-02-21 05:27:50'),
+(51, 11, 'Overall Performance', 15, '2023-02-21 05:27:50', '2023-02-21 05:27:50'),
+(52, 11, 'Audience Impact', 10, '2023-02-21 05:27:50', '2023-02-21 05:27:50');
+
 -- --------------------------------------------------------
 
 --
@@ -138,6 +193,23 @@ CREATE TABLE `events` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `events`
+--
+
+INSERT INTO `events` (`id`, `category_id`, `slug`, `title`, `created_at`, `updated_at`) VALUES
+(1, 3, 'oration', 'Oration', '2023-02-21 02:05:03', '2023-02-21 02:05:03'),
+(2, 3, 'balagtasan', 'Balagtasan', '2023-02-21 02:05:03', '2023-02-21 02:05:03'),
+(3, 3, 'tigsik', 'Tigsik', '2023-02-21 02:16:39', '2023-02-21 02:16:39'),
+(4, 3, 'jazz_chant', 'Jazz Chant', '2023-02-21 02:16:39', '2023-02-21 05:45:38'),
+(5, 4, 'vocal_solo_male', 'Vocal Solo Male', '2023-02-21 02:16:39', '2023-02-21 05:46:15'),
+(6, 4, 'vocal_solo_female', 'Vocal Solo Female', '2023-02-21 02:16:39', '2023-02-21 05:47:02'),
+(7, 4, 'vocal_duet', 'Vocal Duet', '2023-02-21 02:16:39', '2023-02-21 05:47:16'),
+(8, 4, 'acoustic_band', 'Acoustic Band', '2023-02-21 02:16:39', '2023-02-21 05:47:30'),
+(9, 5, 'hip_hop', 'Hip Hop', '2023-02-21 02:16:39', '2023-02-21 05:48:15'),
+(10, 5, 'jazz_dance', 'Jazz Dance', '2023-02-21 02:16:39', '2023-02-21 05:48:05'),
+(11, 5, 'cheerdance', 'Cheer Dance', '2023-02-21 02:16:39', '2023-02-21 02:16:39');
+
 -- --------------------------------------------------------
 
 --
@@ -163,7 +235,9 @@ CREATE TABLE `judges` (
 INSERT INTO `judges` (`id`, `number`, `name`, `avatar`, `is_chairman`, `username`, `password`, `created_at`, `updated_at`) VALUES
 (1, 1, 'JUDGE 01', NULL, 1, 'judge01', 'judge01', '2023-02-19 08:58:05', '2023-02-19 08:58:05'),
 (2, 2, 'JUDGE 02', NULL, 0, 'judge02', 'judge02', '2023-02-19 08:58:16', '2023-02-19 08:58:38'),
-(3, 3, 'JUDGE 03', NULL, 0, 'judge03', 'judge03', '2023-02-19 08:58:32', '2023-02-19 08:58:40');
+(3, 3, 'JUDGE 03', NULL, 0, 'judge03', 'judge03', '2023-02-19 08:58:32', '2023-02-19 08:58:40'),
+(4, 4, 'JUDGE 04', NULL, 0, 'judge04', 'judge04', '2023-02-21 05:32:22', '2023-02-21 05:35:43'),
+(5, 5, 'JUDGE 05', NULL, 0, 'judge05', 'judge05', '2023-02-21 05:32:22', '2023-02-21 05:35:28');
 
 -- --------------------------------------------------------
 
@@ -214,9 +288,9 @@ CREATE TABLE `teams` (
 --
 
 INSERT INTO `teams` (`id`, `name`, `color`, `created_at`, `updated_at`) VALUES
-(1, 'Ferocious Dragons', 'red', '2023-02-19 06:45:06', '2023-02-19 06:45:06'),
-(2, 'Mischievous Elves', 'green', '2023-02-19 06:45:27', '2023-02-19 06:45:27'),
-(3, 'Wicked Wizards', 'blue', '2023-02-19 06:45:42', '2023-02-19 06:45:42');
+(1, 'Fearless Dragons', 'red', '2023-02-19 06:45:06', '2023-02-21 05:56:31'),
+(2, 'Furious  Elves', 'green', '2023-02-19 06:45:27', '2023-02-21 05:57:30'),
+(3, 'Wise Wizards', 'blue', '2023-02-19 06:45:42', '2023-02-21 05:57:52');
 
 -- --------------------------------------------------------
 
@@ -371,7 +445,7 @@ ALTER TABLE `competitions`
 -- AUTO_INCREMENT for table `criteria`
 --
 ALTER TABLE `criteria`
-  MODIFY `id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
 
 --
 -- AUTO_INCREMENT for table `deductions`
@@ -383,13 +457,13 @@ ALTER TABLE `deductions`
 -- AUTO_INCREMENT for table `events`
 --
 ALTER TABLE `events`
-  MODIFY `id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `judges`
 --
 ALTER TABLE `judges`
-  MODIFY `id` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `judge_categories`

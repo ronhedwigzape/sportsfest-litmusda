@@ -1,9 +1,8 @@
 <template>
     <v-layout style="height: 100vh;">
-
 		<side-nav />
 		<top-nav />
-		<v-main style="height: 100vh;">
+		<v-main>
 			<judge-score-sheet />
 		</v-main>
 
@@ -14,7 +13,7 @@
 <script>
 	import topNav from "../components/nav/TopNav.vue";
 	import sideNav from "../components/nav/SideNav.vue";
-	import judgeScoreSheet from "../components/score/JudgeScoreSheet.vue";
+	import judgeScoreSheet from "../components/ratings/JudgeScoreSheet.vue";
 
     export default {
         name: 'Judge',
