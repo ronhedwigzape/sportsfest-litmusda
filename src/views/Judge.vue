@@ -14,7 +14,7 @@
 <script>
 	import topNav from "../components/nav/TopNav.vue";
 	import sideNav from "../components/nav/SideNav.vue";
-	import judgeScoreSheet from "../components/score/JudgeScoreSheet.vue";
+	import judgeScoreSheet from "../components/ratings/JudgeScoreSheet.vue";
 
     export default {
         name: 'Judge',

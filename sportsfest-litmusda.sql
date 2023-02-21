@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 19, 2023 at 02:22 PM
+-- Generation Time: Feb 21, 2023 at 05:01 AM
 -- Server version: 10.4.27-MariaDB
--- PHP Version: 8.1.12
+-- PHP Version: 8.2.0
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -138,6 +138,23 @@ CREATE TABLE `events` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `events`
+--
+
+INSERT INTO `events` (`id`, `category_id`, `slug`, `title`, `created_at`, `updated_at`) VALUES
+(1, 3, 'oration', 'Oration', '2023-02-21 02:05:03', '2023-02-21 02:05:03'),
+(2, 3, 'balagtasan', 'Balagtasan', '2023-02-21 02:05:03', '2023-02-21 02:05:03'),
+(3, 3, 'tigsik', 'Tigsik', '2023-02-21 02:16:39', '2023-02-21 02:16:39'),
+(4, 3, 'jazzchant', 'Jazz Chant', '2023-02-21 02:16:39', '2023-02-21 02:16:39'),
+(5, 4, 'vocalsolomale', 'Vocal Solo Male', '2023-02-21 02:16:39', '2023-02-21 02:16:39'),
+(6, 4, 'vocalsolofemale', 'Vocal Solo Female', '2023-02-21 02:16:39', '2023-02-21 02:16:39'),
+(7, 4, 'vocalduet', 'Vocal Duet', '2023-02-21 02:16:39', '2023-02-21 02:16:39'),
+(8, 4, 'acousticband', 'Acoustic Band', '2023-02-21 02:16:39', '2023-02-21 02:16:39'),
+(9, 5, 'hiphop', 'Hip Hop', '2023-02-21 02:16:39', '2023-02-21 02:16:39'),
+(10, 5, 'jazzdance', 'Jazz Dance', '2023-02-21 02:16:39', '2023-02-21 02:16:39'),
+(11, 5, 'cheerdance', 'Cheer Dance', '2023-02-21 02:16:39', '2023-02-21 02:16:39');
+
 -- --------------------------------------------------------
 
 --
@@ -214,9 +231,9 @@ CREATE TABLE `teams` (
 --
 
 INSERT INTO `teams` (`id`, `name`, `color`, `created_at`, `updated_at`) VALUES
-(1, 'Ferocious Dragons', 'red', '2023-02-19 06:45:06', '2023-02-19 06:45:06'),
-(2, 'Mischievous Elves', 'green', '2023-02-19 06:45:27', '2023-02-19 06:45:27'),
-(3, 'Wicked Wizards', 'blue', '2023-02-19 06:45:42', '2023-02-19 06:45:42');
+(1, 'Fearless Dragons', 'red', '2023-02-19 06:45:06', '2023-02-20 23:59:43'),
+(2, 'Furious Elves', 'green', '2023-02-19 06:45:27', '2023-02-21 00:00:09'),
+(3, 'Wise Wizards', 'blue', '2023-02-19 06:45:42', '2023-02-21 00:00:17');
 
 -- --------------------------------------------------------
 
@@ -383,7 +400,7 @@ ALTER TABLE `deductions`
 -- AUTO_INCREMENT for table `events`
 --
 ALTER TABLE `events`
-  MODIFY `id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `judges`
