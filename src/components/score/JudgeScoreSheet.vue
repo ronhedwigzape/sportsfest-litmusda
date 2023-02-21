@@ -11,16 +11,16 @@
 				Team Name
 			</th>
 			<th class="text-center">
-				Complexity 40%
+				Criteria#1 40%
 			</th>
 			<th class="text-center">
-				Complexity 30%
+				Criteria#2 30%
 			</th>
 			<th class="text-center">
-				Complexity 20%
+				Criteria#3 20%
 			</th>
 			<th class="text-center">
-				Complexity 10%
+				Criteria#4 10%
 			</th>
 			<th class="text-center">
 				Total
@@ -40,7 +40,7 @@
 		</tr>
 		<tr class="">
 			<td class="text-center">
-				Fearless Dragons
+				Team 1
 			</td>
 			<td class="text-center">
 				<v-text-field
@@ -92,31 +92,172 @@
 					{{ number }}
 				</v-text-field>
 			</td>
-
-		</tr>
-		<tr>
-			<td class="text-center pa-3">
-
-				Furious Elves
-			</td>
-			<td class="text-center d-flex align-content-center" >
+			<td class="text-center" >
 				<v-text-field
 					variant="outlined"
 					type="number"
-					class="text-center"
+					class="ma-0 text-center"
+					single-line
+				>
+					{{ number }}
+				</v-text-field>
+			</td>
+			<td class="text-center" >
+				<v-text-field
+					variant="outlined"
+					type="number"
+					class="ma-0 text-center"
+					single-line
 				>
 					{{ number }}
 				</v-text-field>
 			</td>
 		</tr>
-		<tr>
-			<td class="text-center pa-3">
-				Wise Wizards
+		<tr class="">
+			<td class="text-center">
+				Team 2
 			</td>
-			<td class="text-center d-flex align-content-center" >
+			<td class="text-center">
 				<v-text-field
-					type="number"
 					variant="outlined"
+					type="number"
+					class="ma-0 text-center"
+					single-line
+				>
+					{{ number }}
+				</v-text-field>
+			</td>
+			<td class="text-center" >
+				<v-text-field
+					variant="outlined"
+					type="number"
+					class="ma-0 text-center"
+					single-line
+				>
+					{{ number }}
+				</v-text-field>
+			</td>
+			<td class="text-center" >
+				<v-text-field
+					variant="outlined"
+					type="number"
+					class="ma-0 text-center"
+					single-line
+				>
+					{{ number }}
+				</v-text-field>
+			</td>
+			<td class="text-center" >
+				<v-text-field
+					variant="outlined"
+					type="number"
+					class="ma-0 text-center"
+					single-line
+				>
+					{{ number }}
+				</v-text-field>
+			</td>
+			<td class="text-center" >
+				<v-text-field
+					variant="outlined"
+					type="number"
+					class="ma-0 text-center"
+					single-line
+				>
+					{{ number }}
+				</v-text-field>
+			</td>
+			<td class="text-center" >
+				<v-text-field
+					variant="outlined"
+					type="number"
+					class="ma-0 text-center"
+					single-line
+				>
+					{{ number }}
+				</v-text-field>
+			</td>
+			<td class="text-center" >
+				<v-text-field
+					variant="outlined"
+					type="number"
+					class="ma-0 text-center"
+					single-line
+				>
+					{{ number }}
+				</v-text-field>
+			</td>
+		</tr>
+		<tr class="">
+			<td class="text-center">
+				Team 3
+			</td>
+			<td class="text-center">
+				<v-text-field
+					variant="outlined"
+					type="number"
+					class="ma-0 text-center"
+					single-line
+				>
+					{{ number }}
+				</v-text-field>
+			</td>
+			<td class="text-center" >
+				<v-text-field
+					variant="outlined"
+					type="number"
+					class="ma-0 text-center"
+					single-line
+				>
+					{{ number }}
+				</v-text-field>
+			</td>
+			<td class="text-center" >
+				<v-text-field
+					variant="outlined"
+					type="number"
+					class="ma-0 text-center"
+					single-line
+				>
+					{{ number }}
+				</v-text-field>
+			</td>
+			<td class="text-center" >
+				<v-text-field
+					variant="outlined"
+					type="number"
+					class="ma-0 text-center"
+					single-line
+				>
+					{{ number }}
+				</v-text-field>
+			</td>
+			<td class="text-center" >
+				<v-text-field
+					variant="outlined"
+					type="number"
+					class="ma-0 text-center"
+					single-line
+				>
+					{{ number }}
+				</v-text-field>
+			</td>
+			<td class="text-center" >
+				<v-text-field
+					variant="outlined"
+					type="number"
+					class="ma-0 text-center"
+					single-line
+				>
+					{{ number }}
+				</v-text-field>
+			</td>
+			<td class="text-center" >
+				<v-text-field
+					variant="outlined"
+					type="number"
+					class="ma-0 text-center"
+					single-line
 				>
 					{{ number }}
 				</v-text-field>
@@ -125,6 +266,7 @@
 
 		</tbody>
 	</v-table>
+
 </template>
 
 <script>
@@ -132,7 +274,10 @@ export default {
 	name: "JudgeScoreSheet",
 	data() {
 		return {
-			number: 55
+			number: 55,
+			redTeamImg: '',
+			greenTeamImg: '',
+			blueTeamImg: ''
 		}
 	}
 }

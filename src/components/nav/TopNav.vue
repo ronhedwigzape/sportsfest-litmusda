@@ -100,7 +100,7 @@ export default {
 		userName() {
 			return this.$store.getters['auth/getUser'].name
 		}
-		
+
 	},
 
 }
