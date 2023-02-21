@@ -7,13 +7,13 @@
     <div class="text-left mx-4">
         <v-menu transition="scroll-y-transition">
             <template v-slot:activator="{ props }">
-                <v-btn 
+                <v-btn
                     variant="text"
                     class="ma-2"
                     v-bind="props"
                     prepend-icon="mdi-dance-ballroom"
                 >
-                    Cheer dance
+                    Cheerdance
                 </v-btn>
             </template>
         </v-menu>
