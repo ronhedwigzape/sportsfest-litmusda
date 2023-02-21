@@ -1,9 +1,8 @@
 <template>
     <v-layout style="height: 100vh;">
-
 		<side-nav />
 		<top-nav />
-		<v-main style="height: 100vh;">
+		<v-main>
 			<judge-score-sheet />
 		</v-main>
 
