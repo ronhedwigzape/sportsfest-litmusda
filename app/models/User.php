@@ -45,6 +45,24 @@ class User extends App
 
 
     /***************************************************************************
+     * Convert user object to array
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        return [
+            'id'       => $this->id,
+            'number'   => $this->number,
+            'name'     => $this->name,
+            'avatar'   => $this->avatar,
+            'username' => $this->username,
+            'userType' => $this->userType
+        ];
+    }
+
+
+    /***************************************************************************
      * Get currently signed-in user
      *
      * @return array|null
@@ -60,7 +78,7 @@ class User extends App
             ))->signIn();
 
             if($authenticated)
-                $user_info = $authenticated->getInfo();
+                $user_info = $authenticated->toArray();
             else
                 session_destroy();
         }
@@ -87,28 +105,10 @@ class User extends App
     public function signIn()
     {
         if($this->authenticated()) {
-            $_SESSION['user'] = $this->getInfo();
+            $_SESSION['user'] = $this->toArray();
             $_SESSION['pass'] = $this->password;
             return $this;
         }
         return false;
-    }
-
-
-    /***************************************************************************
-     * Get user info
-     *
-     * @return array
-     */
-    public function getInfo()
-    {
-        return [
-            'id'       => $this->id,
-            'username' => $this->username,
-            'name'     => $this->name,
-            'avatar'   => $this->avatar,
-            'number'   => $this->number,
-            'userType' => $this->userType,
-        ];
     }
 }
