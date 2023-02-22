@@ -2,7 +2,9 @@
     <v-layout style="height: 100vh;">
        <side-nav />
 		<top-nav />
+		<v-main  style="min-height: 300px;">
 			<technical-deduction-sheet />
+		</v-main>
     </v-layout>
 </template>
 <script>
