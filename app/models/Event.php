@@ -157,12 +157,7 @@ class Event extends App
         if(!$id)
             return false;
 
-        $event = new Event();
-        $stmt = $event->conn->prepare("SELECT id FROM $event->table WHERE id = ?");
-        $stmt->bind_param("i", $id);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        return ($result->num_rows > 0);
+        return (self::findById($id) != false);
     }
 
 
@@ -222,7 +217,7 @@ class Event extends App
         // check category_id
         require_once 'Category.php';
         if(!Category::exists($this->category_id))
-            App::returnError('HTTP/1.1 500', 'Insert Error: category [id = ' . $this->category_id . '] does not exist.');
+            App::returnError('HTTP/1.1 500', 'Update Error: category [id = ' . $this->category_id . '] does not exist.');
 
         // check slug
         if(self::slugExists($this->slug, $this->id))
@@ -330,6 +325,30 @@ class Event extends App
     public function getTitle()
     {
         return $this->title;
+    }
+
+
+    /***************************************************************************
+     * Get all criteria as array of objects
+     *
+     * @return Criterion[]
+     */
+    public function getAllCriteria()
+    {
+        require_once 'Criterion.php';
+        return Criterion::all($this->id);
+    }
+
+
+    /***************************************************************************
+     * Get all criteria as array of arrays
+     *
+     * @return array
+     */
+    public function getRowCriteria()
+    {
+        require_once 'Criterion.php';
+        return Criterion::rows($this->id);
     }
 
 
