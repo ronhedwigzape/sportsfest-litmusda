@@ -24,20 +24,20 @@
 		<p class="text-h4 mt-2 font-weight-bold">Competitions</p>
 	</v-col>
 	<v-divider />
-    <div class="text-center mx-4">
-        <v-menu transition="scroll-y-transition">
-            <template v-slot:activator="{ props }">
-                <v-btn
-                    variant="text"
+	<div class="text-center mx-4">
+		<v-menu transition="scroll-y-transition">
+			<template v-slot:activator="{ props }">
+				<v-btn
+					variant="text"
 					class="my-2 mx-1 px-11"
-                    v-bind="props"
-                    prepend-icon="mdi-dance-ballroom"
-                >
-                    Cheerdance
-                </v-btn>
-            </template>
-        </v-menu>
-    </div>
+					v-bind="props"
+					prepend-icon="mdi-dance-ballroom"
+				>
+					Cheerdance
+				</v-btn>
+			</template>
+		</v-menu>
+	</div>
     <div class="text-center mx-4">
         <v-menu transition="scroll-y-transition">
             <template class="text-center" v-slot:activator="{ props }">
@@ -50,20 +50,11 @@
                     Literary
                 </v-btn>
             </template>
-            <v-list>
-                <v-list-item @click="" link>
-                    <v-list-item-title v-text="'ORATION IN ENGLISH'"></v-list-item-title>
-                </v-list-item>
-                <v-list-item link>
-                    <v-list-item-title v-text="'BALAGTASAN'"></v-list-item-title>
-                </v-list-item>
-                <v-list-item link>
-                    <v-list-item-title v-text="'TIGSIK'"></v-list-item-title>
-                </v-list-item>
-                <v-list-item link>
-                    <v-list-item-title v-text="'JAZZ CHANT'"></v-list-item-title>
-                </v-list-item>
-            </v-list>
+			<v-list>
+				<v-list-item v-for="literaryEvent in literaryEvents" :key="literaryEvent" link>
+					<v-list-item-title>{{ literaryEvent }}</v-list-item-title>
+				</v-list-item>
+			</v-list>
         </v-menu>
 	</div>
     <div class="text-center mx-4">
@@ -79,18 +70,9 @@
                 </v-btn>
             </template>
             <v-list>
-                <v-list-item link>
-                    <v-list-item-title v-text="'VOCAL SOLO (MALE)'"></v-list-item-title>
-                </v-list-item>
-                <v-list-item link>
-                    <v-list-item-title v-text="'VOCAL SOLO (FEMALE)'"></v-list-item-title>
-                </v-list-item>
-                <v-list-item link>
-                    <v-list-item-title v-text="'VOCAL DUET'"></v-list-item-title>
-                </v-list-item>
-                <v-list-item link>
-                    <v-list-item-title v-text="'ACOUSTIC BAND'"></v-list-item-title>
-                </v-list-item>
+				<v-list-item v-for="musicEvent in musicEvents" :key="musicEvent" link>
+					<v-list-item-title>{{ musicEvent }}</v-list-item-title>
+				</v-list-item>
             </v-list>
         </v-menu>
     </div>
@@ -107,15 +89,9 @@
                 </v-btn>
             </template>
             <v-list>
-                <v-list-item link>
-                    <v-list-item-title v-text="'JAZZ'"></v-list-item-title>
-                </v-list-item>
-                <v-list-item link>
-                    <v-list-item-title v-text="'FOLK DANCE'"></v-list-item-title>
-                </v-list-item>
-                <v-list-item link>
-                    <v-list-item-title v-text="'HIPHOP'"></v-list-item-title>
-                </v-list-item>
+				<v-list-item v-for="danceEvent in danceEvents" :key="danceEvent" link>
+					<v-list-item-title>{{ danceEvent }}</v-list-item-title>
+				</v-list-item>
             </v-list>
         </v-menu>
     </div>
@@ -127,26 +103,15 @@
                     class="my-2 mx-2 px-11"
                     v-bind="props"
                     prepend-icon="mdi-tennis-ball"
+					disabled
                 >
                     Ball Games
                 </v-btn>
             </template>
             <v-list>
-                <v-list-item link>
-                    <v-list-item-title v-text="'BASKETBALL'"></v-list-item-title>
-                </v-list-item>
-                <v-list-item link>
-                    <v-list-item-title v-text="'VOLLEYBALL'"></v-list-item-title>
-                </v-list-item>
-                <v-list-item link>
-                    <v-list-item-title v-text="'TABLE TENNIS'"></v-list-item-title>
-                </v-list-item>
-                <v-list-item link>
-                    <v-list-item-title v-text="'BADMINTON'"></v-list-item-title>
-                </v-list-item>
-                <v-list-item link>
-                    <v-list-item-title v-text="'SEPAK TAKRAW'"></v-list-item-title>
-                </v-list-item>
+				<v-list-item v-for="ballGame in ballGames" :key="ballGame" link>
+					<v-list-item-title>{{ ballGame }}</v-list-item-title>
+				</v-list-item>
             </v-list>
         </v-menu>
     </div>
@@ -158,26 +123,15 @@
                     class="my-2 mx-1 px-10"
                     v-bind="props"
                     prepend-icon="mdi-chess-queen"
+					disabled
                 >
                     Board Games
                 </v-btn>
             </template>
             <v-list>
-                <v-list-item link>
-                    <v-list-item-title v-text="'CHESS'"></v-list-item-title>
-                </v-list-item>
-                <v-list-item link>
-                    <v-list-item-title v-text="'SCIDAMA'"></v-list-item-title>
-                </v-list-item>
-                <v-list-item link>
-                    <v-list-item-title v-text="'GAMES OF THE GENERAL'"></v-list-item-title>
-                </v-list-item>
-                <v-list-item link>
-                    <v-list-item-title v-text="'WORD FACTORY'"></v-list-item-title>
-                </v-list-item>
-                <v-list-item link>
-                    <v-list-item-title v-text="'SUNGKA'"></v-list-item-title>
-                </v-list-item>
+				<v-list-item v-for="boardGame in boardGames" :key="boardGame" link>
+					<v-list-item-title>{{ boardGame }}</v-list-item-title>
+				</v-list-item>
             </v-list>
         </v-menu>
     </div>
@@ -189,26 +143,15 @@
                     class="my-2 mx-2 px-12"
                     v-bind="props"
                     prepend-icon="mdi-run-fast"
+					disabled
                 >
                     Athletics
                 </v-btn>
             </template>
             <v-list>
-                <v-list-item link>
-                    <v-list-item-title v-text="'Event_Name'"></v-list-item-title>
-                </v-list-item>
-                <v-list-item link>
-                    <v-list-item-title v-text="'Event_Name'"></v-list-item-title>
-                </v-list-item>
-                <v-list-item link>
-                    <v-list-item-title v-text="'Event_Name'"></v-list-item-title>
-                </v-list-item>
-                <v-list-item link>
-                    <v-list-item-title v-text="'Event_Name'"></v-list-item-title>
-                </v-list-item>
-                <v-list-item link>
-                    <v-list-item-title v-text="'Event_Name'"></v-list-item-title>
-                </v-list-item>
+				<v-list-item v-for="athleticEvent in athleticEvents" :key="athleticEvent" link>
+					<v-list-item-title>{{ athleticEvent }}</v-list-item-title>
+				</v-list-item>
             </v-list>
         </v-menu>
     </div>
@@ -228,6 +171,27 @@
 			handleChangeEvent() {
 				
 			}
+		},
+		computed: {
+			literaryEvents() {
+				return this.$store.getters['events/getEvents'].literary;
+			},
+			musicEvents() {
+				return this.$store.getters['events/getEvents'].music;
+			},
+			danceEvents() {
+				return this.$store.getters['events/getEvents'].dance;
+			},
+			ballGames() {
+				return this.$store.getters['events/getEvents'].ballGames;
+			},
+			boardGames() {
+				return this.$store.getters['events/getEvents'].boardGames;
+			},
+			athleticEvents() {
+				return this.$store.getters['events/getEvents'].athletics;
+			}
+
 		}
     }
 </script>
