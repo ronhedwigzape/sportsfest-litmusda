@@ -1,5 +1,8 @@
 <template>
-	<v-col align="center" >
+	<v-col align="center">
+    <v-avatar size="130">
+		<img src="/foundation-logo.png" alt="foundation-logo" style="width: 100%; height: 100%;">
+	</v-avatar>
 		<p class="text-h4 mt-2 font-weight-bold">Events</p>
 		<p>Categories</p>
 	</v-col>
@@ -192,6 +195,10 @@
             </v-list>
         </v-menu>
     </div>
+    <br><br>
+    <v-col class="text-center mt-4" cols="12">
+        &copy; <strong>ACLC 2023</strong>
+    </v-col> 
 </template>
 
 

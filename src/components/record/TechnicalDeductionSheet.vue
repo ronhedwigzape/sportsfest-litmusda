@@ -1,5 +1,5 @@
 <template>
-	<v-table>
+	<v-table class="background-image">
 		<thead>
 			<tr>
 				<th colspan="8" class="text-center">
@@ -19,7 +19,10 @@
 		<tbody>
 			<tr class="">
 				<td class="text-center">
-					Team 1
+				<v-avatar size="36">
+					<img src="/blue.png" alt="blue" style="width: 100%; height: 100%;">
+				</v-avatar>
+				Wise Wizards
 				</td>
 				<td class="text-center">
 					<v-text-field>
@@ -30,7 +33,10 @@
 			</tr>
 			<tr class="">
 				<td class="text-center">
-					Team 2
+				<v-avatar size="36">
+					<img src="/red.png" alt="red" style="width: 100%; height: 100%;">
+				</v-avatar>
+				Fearless Dragons
 				</td>
 				<td class="text-center">
 					<v-text-field>
@@ -41,7 +47,10 @@
 			</tr>
 			<tr class="">
 				<td class="text-center">
-					Team 3
+					<v-avatar size="36">
+						<img src="/green.png" alt="green" style="width: 100%; height: 100%;">
+					</v-avatar>
+					Furious Elves
 				</td>
 				<td class="text-center">
 					<v-text-field>
@@ -92,5 +101,23 @@ export default {
 </script>
 
 <style scoped>
+	.background-image {
+    background-image: url('/bg-img.jpg');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: center center;
+    height: 100vh;
+    width: 100%;
+	}
 
+	@media (max-width: 768px) {
+		.background-image {
+			background-size: contain;
+		}
+	}
+
+	.transparent {
+		background-color: transparent;
+	}
 </style>
