@@ -3,15 +3,13 @@
 		class="bg-deep-purple-darken-2"
 		theme="dark"
 	>
-
-
-		<v-divider />
-
 		<!--	Events	-->
 		<event-nav/>
 
 		<template v-slot:append>
-
+			<v-col class="text-center mt-4" cols="12">
+				&copy; <strong>ACLC 2023</strong>
+			</v-col>
 		</template>
 	</v-navigation-drawer>
 </template>

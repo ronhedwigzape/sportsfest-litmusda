@@ -1,13 +1,30 @@
 <template>
 	<v-col align="center">
-    <v-avatar size="130">
-		<img src="/foundation-logo.png" alt="foundation-logo" style="width: 100%; height: 100%;">
-	</v-avatar>
-		<p class="text-h4 mt-2 font-weight-bold">Events</p>
-		<p>Categories</p>
+		<v-img
+			:src="foundationLogo"
+			:lazy-src="foundationLogo"
+			aspect-ratio="1"
+			alt="foundation-logo"
+			height="100"
+			width="100"
+		>
+			<template v-slot:placeholder>
+				<v-row
+					class="fill-height ma-0"
+					align="center"
+					justify="center"
+				>
+					<v-progress-circular
+						indeterminate
+						color="grey-lighten-5"
+					></v-progress-circular>
+				</v-row>
+			</template>
+		</v-img>
+		<p class="text-h4 mt-2 font-weight-bold">Competitions</p>
 	</v-col>
-
-    <div class="text-left mx-4">
+	<v-divider />
+    <div class="text-center mx-4">
         <v-menu transition="scroll-y-transition">
             <template v-slot:activator="{ props }">
                 <v-btn
@@ -21,7 +38,7 @@
             </template>
         </v-menu>
     </div>
-    <div class="text-left mx-4">
+    <div class="text-center mx-4">
         <v-menu transition="scroll-y-transition">
             <template class="text-center" v-slot:activator="{ props }">
                 <v-btn 
@@ -34,7 +51,7 @@
                 </v-btn>
             </template>
             <v-list>
-                <v-list-item link>
+                <v-list-item @click="" link>
                     <v-list-item-title v-text="'ORATION IN ENGLISH'"></v-list-item-title>
                 </v-list-item>
                 <v-list-item link>
@@ -49,7 +66,7 @@
             </v-list>
         </v-menu>
 	</div>
-    <div class="text-left mx-4">
+    <div class="text-center mx-4">
         <v-menu transition="scroll-y-transition">
             <template v-slot:activator="{ props }">
                 <v-btn
@@ -77,7 +94,7 @@
             </v-list>
         </v-menu>
     </div>
-    <div class="text-left mx-4">
+    <div class="text-center mx-4">
         <v-menu transition="scroll-y-transition">
             <template v-slot:activator="{ props }">
                 <v-btn
@@ -102,7 +119,7 @@
             </v-list>
         </v-menu>
     </div>
-    <div class="text-left mx-4">
+    <div class="text-center mx-4">
         <v-menu transition="scroll-y-transition">
             <template v-slot:activator="{ props }">
                 <v-btn
@@ -133,7 +150,7 @@
             </v-list>
         </v-menu>
     </div>
-    <div class="text-left mx-4">
+    <div class="text-center mx-4">
         <v-menu transition="scroll-y-transition">
             <template v-slot:activator="{ props }">
                 <v-btn
@@ -164,7 +181,7 @@
             </v-list>
         </v-menu>
     </div>
-    <div class="text-left mx-4">
+    <div class="text-center mx-4">
         <v-menu transition="scroll-y-transition">
             <template v-slot:activator="{ props }">
                 <v-btn
@@ -195,10 +212,6 @@
             </v-list>
         </v-menu>
     </div>
-    <br><br>
-    <v-col class="text-center mt-4" cols="12">
-        &copy; <strong>ACLC 2023</strong>
-    </v-col> 
 </template>
 
 
@@ -207,7 +220,13 @@
         name: 'EventNav',
 		data() {
 			return {
+				foundationLogo: `${import.meta.env.BASE_URL}foundation-logo.png`,
 				links: ['Event_1','Event_2','Event_3','Event_4']
+			}
+		},
+		methods: {
+			handleChangeEvent() {
+				
 			}
 		}
     }
