@@ -1,6 +1,6 @@
 <template>
 	<v-app-bar :title="appName" color="deep-purple-darken-3">
-		<h3 class="me-5">{{ judgeName }}</h3>
+		<h3 class="me-5">{{ name }}</h3>
 		<v-chip
 			class="ma-2"
 			color="amber"
@@ -70,7 +70,7 @@ export default {
 			dialog: false,
 			avatar: `${import.meta.env.BASE_URL}no-avatar.jpg`,
 			appName: `${this.$store.getters.appName}`,
-			judgeName: '',
+			name: '',
 			signedOut: false
 		}
 	},
