@@ -32,6 +32,7 @@
 				Rank
 			</th>
 		</tr>
+
 		</thead>
 		<tbody>
 		<tr class="">
@@ -39,102 +40,143 @@
 				Team 1
 			</td>
 			<td class="text-center">
-				{{ number }}
+				<v-text-field>
+
+				</v-text-field>
 			</td>
 			<td class="text-center" >
-				{{ number }}
+				<v-text-field>
+
+				</v-text-field>
 			</td>
 			<td class="text-center" >
-				{{ number }}
+				<v-text-field>
+
+				</v-text-field>
 			</td>
 			<td class="text-center" >
-				{{ number }}
+				<v-text-field>
+
+				</v-text-field>
 			</td>
 			<td class="text-center" >
-				{{ number }}
+				<v-text-field>
+
+				</v-text-field>
 			</td>
 			<td class="text-center" >
-				{{ number }}
+				<v-text-field>
+
+				</v-text-field>
 			</td>
 			<td class="text-center" >
-				{{ number }}
+				<v-text-field>
+
+				</v-text-field>
 			</td>
 		</tr>
 		<tr class="">
 			<td class="text-center">
-				Team 1
+				Team 2
 			</td>
 			<td class="text-center">
-				{{ number }}
+				<v-text-field>
+
+				</v-text-field>
 			</td>
 			<td class="text-center" >
-				{{ number }}
+				<v-text-field>
+
+				</v-text-field>
 			</td>
 			<td class="text-center" >
-				{{ number }}
+				<v-text-field>
+
+				</v-text-field>
 			</td>
 			<td class="text-center" >
-				{{ number }}
+				<v-text-field>
+
+				</v-text-field>
 			</td>
 			<td class="text-center" >
-				{{ number }}
+				<v-text-field>
+
+				</v-text-field>
 			</td>
 			<td class="text-center" >
-				{{ number }}
+				<v-text-field>
+
+				</v-text-field>
 			</td>
 			<td class="text-center" >
-				{{ number }}
+				<v-text-field>
+
+				</v-text-field>
 			</td>
 		</tr>
 		<tr class="">
 			<td class="text-center">
-				Team 1
+				Team 3
 			</td>
 			<td class="text-center">
-				{{ number }}
+				<v-text-field>
+
+				</v-text-field>
 			</td>
 			<td class="text-center" >
-				{{ number }}
+				<v-text-field>
+
+				</v-text-field>
 			</td>
 			<td class="text-center" >
-				{{ number }}
+				<v-text-field>
+
+				</v-text-field>
 			</td>
 			<td class="text-center" >
-				{{ number }}
+				<v-text-field>
+
+				</v-text-field>
 			</td>
 			<td class="text-center" >
-				{{ number }}
+				<v-text-field>
+
+				</v-text-field>
 			</td>
 			<td class="text-center" >
-				{{ number }}
+				<v-text-field>
+
+				</v-text-field>
 			</td>
 			<td class="text-center" >
-				{{ number }}
+				<v-text-field>
+
+				</v-text-field>
 			</td>
 		</tr>
+
 		</tbody>
-		<tfoot>
-		<tr></tr>
-		</tfoot>
 	</v-table>
+
 </template>
 
 <script>
 // import $ from 'jquery';
 
 export default {
-	name: "AdminResults",
+	name: "JudgeScoreSheet",
 	data() {
 		return {
-			number: '5',
+			number: 5,
 			redTeamImg: '',
 			greenTeamImg: '',
 			blueTeamImg: ''
 		}
 	},
-	// mounted() {
+	// created() {
 	// 	// $.ajax({
-	// 	// 	url: `${this.$store.getters.appURL}/admin.php`,
+	// 	// 	url: `${this.$store.getters.appURL}/judge.php`,
 	// 	// 	type: 'GET',
 	// 	// 	xhrFields: {
 	// 	// 		withCredentials: true

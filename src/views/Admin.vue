@@ -10,7 +10,7 @@
 <script>
 	import topNav from "../components/nav/TopNav.vue";
 	import sideNav from "../components/nav/SideNav.vue";
-	import adminResults from "../components/ratings/AdminResults.vue";
+	import adminResults from "../components/record/AdminResults.vue";
 
     export default {
         name: 'Admin',
