@@ -256,7 +256,7 @@ CREATE TABLE `judge_categories` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ratings`
+-- Table structure for table `record`
 --
 
 CREATE TABLE `ratings` (
@@ -391,7 +391,7 @@ ALTER TABLE `judge_categories`
   ADD KEY `category_id` (`category_id`);
 
 --
--- Indexes for table `ratings`
+-- Indexes for table `record`
 --
 ALTER TABLE `ratings`
   ADD PRIMARY KEY (`id`),
@@ -472,7 +472,7 @@ ALTER TABLE `judge_categories`
   MODIFY `id` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `ratings`
+-- AUTO_INCREMENT for table `record`
 --
 ALTER TABLE `ratings`
   MODIFY `id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT;
@@ -533,7 +533,7 @@ ALTER TABLE `judge_categories`
   ADD CONSTRAINT `judge_categories_ibfk_2` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `ratings`
+-- Constraints for table `record`
 --
 ALTER TABLE `ratings`
   ADD CONSTRAINT `ratings_ibfk_1` FOREIGN KEY (`criteria_id`) REFERENCES `criteria` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,

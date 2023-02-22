@@ -9,7 +9,7 @@
             <template v-slot:activator="{ props }">
                 <v-btn
                     variant="text"
-                    class="ma-2"
+					class="my-2 mx-1 px-11"
                     v-bind="props"
                     prepend-icon="mdi-dance-ballroom"
                 >
@@ -20,10 +20,10 @@
     </div>
     <div class="text-left mx-4">
         <v-menu transition="scroll-y-transition">
-            <template v-slot:activator="{ props }">
+            <template class="text-center" v-slot:activator="{ props }">
                 <v-btn 
                     variant="text"
-                    class="ma-2"
+                    class="my-2 mx-2 px-14"
                     v-bind="props"
                     prepend-icon="mdi-book-open-page-variant"
                 >
@@ -45,13 +45,13 @@
                 </v-list-item>
             </v-list>
         </v-menu>
-    </div>
+	</div>
     <div class="text-left mx-4">
         <v-menu transition="scroll-y-transition">
             <template v-slot:activator="{ props }">
                 <v-btn
                     variant="text"
-                    class="ma-2"
+                    class="my-2 mx-3 px-16"
                     v-bind="props"
                     prepend-icon="mdi-music"
                 >
@@ -78,8 +78,8 @@
         <v-menu transition="scroll-y-transition">
             <template v-slot:activator="{ props }">
                 <v-btn
-                    variant="text"
-                    class="ma-2"
+                    variant="text "
+                    class="my-2 mx-4 px-15"
                     v-bind="props"
                     prepend-icon="mdi-human-female-dance"
                 >
@@ -104,7 +104,7 @@
             <template v-slot:activator="{ props }">
                 <v-btn
                     variant="text"
-                    class="ma-2"
+                    class="my-2 mx-2 px-11"
                     v-bind="props"
                     prepend-icon="mdi-tennis-ball"
                 >
@@ -135,7 +135,7 @@
             <template v-slot:activator="{ props }">
                 <v-btn
                     variant="text"
-                    class="ma-2"
+                    class="my-2 mx-1 px-10"
                     v-bind="props"
                     prepend-icon="mdi-chess-queen"
                 >
@@ -166,7 +166,7 @@
             <template v-slot:activator="{ props }">
                 <v-btn
                     variant="text"
-                    class="ma-2"
+                    class="my-2 mx-2 px-12"
                     v-bind="props"
                     prepend-icon="mdi-run-fast"
                 >
@@ -197,7 +197,12 @@
 
 <script>
     export default {
-        name: 'EventNav'
+        name: 'EventNav',
+		data() {
+			return {
+				links: ['Event_1','Event_2','Event_3','Event_4']
+			}
+		}
     }
 </script>
 
