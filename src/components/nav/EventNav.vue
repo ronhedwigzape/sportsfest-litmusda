@@ -1,6 +1,6 @@
 <template>
 	<v-col align="center">
-    <v-avatar size="">
+    <v-avatar size="130">
 		<img src="/foundation-logo.png" alt="foundation-logo" style="width: 100%; height: 100%;">
 	</v-avatar>
 		<p class="text-h4 mt-2 font-weight-bold">Events</p>
