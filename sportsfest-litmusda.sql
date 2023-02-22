@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 21, 2023 at 11:17 AM
+-- Generation Time: Feb 22, 2023 at 03:28 AM
 -- Server version: 10.4.27-MariaDB
--- PHP Version: 8.1.12
+-- PHP Version: 8.2.0
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -201,14 +201,14 @@ INSERT INTO `events` (`id`, `category_id`, `slug`, `title`, `created_at`, `updat
 (1, 3, 'oration', 'Oration', '2023-02-21 02:05:03', '2023-02-21 02:05:03'),
 (2, 3, 'balagtasan', 'Balagtasan', '2023-02-21 02:05:03', '2023-02-21 02:05:03'),
 (3, 3, 'tigsik', 'Tigsik', '2023-02-21 02:16:39', '2023-02-21 02:16:39'),
-(4, 3, 'jazz_chant', 'Jazz Chant', '2023-02-21 02:16:39', '2023-02-21 05:45:38'),
-(5, 4, 'vocal_solo_male', 'Vocal Solo Male', '2023-02-21 02:16:39', '2023-02-21 05:46:15'),
-(6, 4, 'vocal_solo_female', 'Vocal Solo Female', '2023-02-21 02:16:39', '2023-02-21 05:47:02'),
-(7, 4, 'vocal_duet', 'Vocal Duet', '2023-02-21 02:16:39', '2023-02-21 05:47:16'),
-(8, 4, 'acoustic_band', 'Acoustic Band', '2023-02-21 02:16:39', '2023-02-21 05:47:30'),
-(9, 5, 'hip_hop', 'Hip Hop', '2023-02-21 02:16:39', '2023-02-21 05:48:15'),
-(10, 5, 'jazz_dance', 'Jazz Dance', '2023-02-21 02:16:39', '2023-02-21 05:48:05'),
-(11, 5, 'cheerdance', 'Cheer Dance', '2023-02-21 02:16:39', '2023-02-21 02:16:39');
+(4, 3, 'jazz-chant', 'Jazz Chant', '2023-02-21 02:16:39', '2023-02-22 02:23:37'),
+(5, 4, 'vocal-solo-male', 'Vocal Solo Male', '2023-02-21 02:16:39', '2023-02-22 02:25:52'),
+(6, 4, 'vocal-solo-female', 'Vocal Solo Female', '2023-02-21 02:16:39', '2023-02-22 02:26:01'),
+(7, 4, 'vocal-duet', 'Vocal Duet', '2023-02-21 02:16:39', '2023-02-22 02:26:07'),
+(8, 4, 'acoustic-band', 'Acoustic Band', '2023-02-21 02:16:39', '2023-02-22 02:26:12'),
+(9, 5, 'hip-hop', 'Hip Hop', '2023-02-21 02:16:39', '2023-02-22 02:26:17'),
+(10, 5, 'jazz-dance', 'Jazz Dance', '2023-02-21 02:16:39', '2023-02-22 02:26:21'),
+(11, 5, 'cheerdance', 'Cheerdance', '2023-02-21 02:16:39', '2023-02-22 02:26:36');
 
 -- --------------------------------------------------------
 
@@ -256,7 +256,7 @@ CREATE TABLE `judge_categories` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `record`
+-- Table structure for table `ratings`
 --
 
 CREATE TABLE `ratings` (
@@ -391,7 +391,7 @@ ALTER TABLE `judge_categories`
   ADD KEY `category_id` (`category_id`);
 
 --
--- Indexes for table `record`
+-- Indexes for table `ratings`
 --
 ALTER TABLE `ratings`
   ADD PRIMARY KEY (`id`),
@@ -472,7 +472,7 @@ ALTER TABLE `judge_categories`
   MODIFY `id` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `record`
+-- AUTO_INCREMENT for table `ratings`
 --
 ALTER TABLE `ratings`
   MODIFY `id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT;
@@ -533,7 +533,7 @@ ALTER TABLE `judge_categories`
   ADD CONSTRAINT `judge_categories_ibfk_2` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `record`
+-- Constraints for table `ratings`
 --
 ALTER TABLE `ratings`
   ADD CONSTRAINT `ratings_ibfk_1` FOREIGN KEY (`criteria_id`) REFERENCES `criteria` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
