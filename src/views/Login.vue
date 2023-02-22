@@ -111,7 +111,6 @@
     width: 100%;
 }
 
-
 @media (max-width: 768px) {
     .background-image {
         background-size: contain;
