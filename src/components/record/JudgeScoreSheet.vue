@@ -73,9 +73,7 @@
 				</v-text-field>
 			</td>
 			<td class="text-center" >
-				<v-text-field>
 
-				</v-text-field>
 			</td>
 		</tr>
 		<tr class="">
@@ -116,9 +114,7 @@
 				</v-text-field>
 			</td>
 			<td class="text-center" >
-				<v-text-field>
 
-				</v-text-field>
 			</td>
 		</tr>
 		<tr class="">
@@ -159,9 +155,7 @@
 				</v-text-field>
 			</td>
 			<td class="text-center" >
-				<v-text-field>
 
-				</v-text-field>
 			</td>
 		</tr>
 
@@ -183,23 +177,6 @@ export default {
 			blueTeamImg: ''
 		}
 	},
-	// created() {
-	// 	// $.ajax({
-	// 	// 	url: `${this.$store.getters.appURL}/judge.php`,
-	// 	// 	type: 'GET',
-	// 	// 	xhrFields: {
-	// 	// 		withCredentials: true
-	// 	// 	},
-	// 	// 	data: {},
-	// 	// 	success: (data) => {
-	// 	// 		data = JSON.parse(data);
-	// 	// 		console.log(data)
-	// 	// 	},
-	// 	// 	error: (error) => {
-	// 	// 		alert(`ERROR ${error.status}: ${error.statusText}`);
-	// 	// 	},
-	// 	// });
-	// },
 	// updated() {
 	//
 	// }
