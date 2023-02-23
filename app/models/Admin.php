@@ -49,21 +49,6 @@ class Admin extends User
 
 
     /***************************************************************************
-     * Find admin by number
-     *
-     * @param int $number
-     * @return Admin|boolean
-     */
-    public static function findByNumber($number)
-    {
-        $admin = new Admin();
-        $stmt = $admin->conn->prepare("SELECT username, password FROM $admin->table WHERE number = ?");
-        $stmt->bind_param("i", $number);
-        return self::executeFind($stmt);
-    }
-
-
-    /***************************************************************************
      * Convert admin object to array
      *
      * @param $append
