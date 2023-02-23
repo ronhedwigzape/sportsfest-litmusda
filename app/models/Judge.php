@@ -67,21 +67,6 @@ class Judge extends User
 
 
     /***************************************************************************
-     * Find judge by number
-     *
-     * @param int $number
-     * @return Judge|boolean
-     */
-    public static function findByNumber($number)
-    {
-        $judge = new Judge();
-        $stmt = $judge->conn->prepare("SELECT username, password FROM $judge->table WHERE number = ?");
-        $stmt->bind_param("i", $number);
-        return self::executeFind($stmt);
-    }
-
-
-    /***************************************************************************
      * Convert judge object to array
      *
      * @param $append
@@ -147,24 +132,6 @@ class Judge extends User
 
 
     /***************************************************************************
-     * Check if judge number exists
-     *
-     * @param int $number
-     * @param int $id
-     * @return bool
-     */
-    public static function numberExists($number, $id = 0)
-    {
-        $judge = new Judge();
-        $stmt = $judge->conn->prepare("SELECT id FROM $judge->table WHERE number = ? AND id != ?");
-        $stmt->bind_param("ii", $number, $id);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        return ($result->num_rows > 0);
-    }
-
-
-    /***************************************************************************
      * Check if judge username exists
      *
      * @param string $username
@@ -189,10 +156,6 @@ class Judge extends User
      */
     public function insert()
     {
-        // check number
-        if(self::numberExists($this->number))
-            App::returnError('HTTP/1.1 500', 'Insert Error: judge [number = ' . $this->number . '] already exists.');
-
         // check username
         if(trim($this->username) == '')
             App::returnError('HTTP/1.1 500', 'Insert Error: judge username is required.');
@@ -222,10 +185,6 @@ class Judge extends User
         // check id
         if(!self::exists($this->id))
             App::returnError('HTTP/1.1 500', 'Update Error: judge [id = ' . $this->id . '] does not exist.');
-
-        // check number
-        if(self::numberExists($this->number, $this->id))
-            App::returnError('HTTP/1.1 500', 'Update Error: judge [number = ' . $this->number . '] already exists.');
 
         // check username
         if(trim($this->username) == '')
