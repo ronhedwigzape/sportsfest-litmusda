@@ -4,6 +4,9 @@ require_once 'User.php';
 
 class Judge extends User
 {
+    // table
+    protected $table_events = 'judge_events';
+
     // properties
     protected $is_chairman;
 
@@ -280,5 +283,105 @@ class Judge extends User
     public function getIsChairman()
     {
         return $this->is_chairman;
+    }
+
+
+    /***************************************************************************
+     * Assign event to judge
+     *
+     * @param Event $event
+     * @return void
+     */
+    public function assignEvent($event)
+    {
+        require_once 'Event.php';
+
+        // check event id
+        $event_id = $event->getId();
+        if(!Event::exists($event_id))
+            App::returnError('HTTP/1.1 500', 'Event Assignment Error: event [id = ' . $event_id . '] does not exist.');
+
+        // proceed with assignment
+        if(!$this->hasEvent($event)) {
+            $stmt = $this->conn->prepare("INSERT INTO $this->table_events(judge_id, event_id) VALUES(?, ?)");
+            $stmt->bind_param("ii", $this->id, $event_id);
+            $stmt->execute();
+        }
+    }
+
+
+    /***************************************************************************
+     * Remove event from judge
+     *
+     * @param Event $event
+     * @return void
+     */
+    public function removeEvent($event)
+    {
+        require_once 'Event.php';
+
+        // check event id
+        $event_id = $event->getId();
+        if(!Event::exists($event_id))
+            App::returnError('HTTP/1.1 500', 'Event Removal Error: event [id = ' . $event_id . '] does not exist.');
+
+        // proceed with removal
+        $stmt = $this->conn->prepare("DELETE FROM $this->table_events WHERE judge_id = ? AND event_id = ?");
+        $stmt->bind_param("ii", $this->id, $event_id);
+        $stmt->execute();
+    }
+
+
+    /***************************************************************************
+     * Check whether the given event is assigned to the judge or not
+     *
+     * @param Event $event
+     * @return bool
+     */
+    public function hasEvent($event)
+    {
+        $event_id = $event->getId();
+
+        foreach($this->getAllEvents() as $e) {
+            if($e->getId() == $event_id)
+                return true;
+        }
+        return false;
+    }
+
+
+    /***************************************************************************
+     * Get all assigned events to judge as array of objects
+     *
+     * @return Event[]
+     */
+    public function getAllEvents()
+    {
+        require_once 'Event.php';
+        $stmt = $this->conn->prepare("SELECT event_id FROM $this->table_events WHERE judge_id = ? ORDER BY event_id");
+        $stmt->bind_param("i", $this->id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $events = [];
+        while($row = $result->fetch_assoc()) {
+            $events[] = new Event($row['event_id']);
+        }
+        return $events;
+    }
+
+
+    /***************************************************************************
+     * Get all assigned events to judge as array of arrays
+     *
+     * @return array
+     */
+    public function getRowEvents()
+    {
+        $events = [];
+        foreach($this->getAllEvents() as $event) {
+            $events[] = $event->toArray();
+        }
+        return $events;
     }
 }
