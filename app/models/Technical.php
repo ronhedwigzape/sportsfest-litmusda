@@ -4,6 +4,10 @@ require_once 'User.php';
 
 class Technical extends User
 {
+    // table
+    protected $table_events = 'technical_events';
+
+
     /***************************************************************************
      * Technical constructor
      *
@@ -49,7 +53,7 @@ class Technical extends User
 
 
     /***************************************************************************
-     * Find judge by number
+     * Find technical by number
      *
      * @param int $number
      * @return Technical|boolean
@@ -220,5 +224,105 @@ class Technical extends User
         $stmt = $this->conn->prepare("UPDATE $this->table SET number = ?, name = ?, avatar = ?, username = ?, password = ? WHERE id = ?");
         $stmt->bind_param("issssi", $this->number, $this->name, $this->avatar, $this->username, $this->password, $this->id);
         $stmt->execute();
+    }
+
+
+    /***************************************************************************
+     * Assign event to technical
+     *
+     * @param Event $event
+     * @return void
+     */
+    public function assignEvent($event)
+    {
+        require_once 'Event.php';
+
+        // check event id
+        $event_id = $event->getId();
+        if(!Event::exists($event_id))
+            App::returnError('HTTP/1.1 500', 'Event Assignment Error: event [id = ' . $event_id . '] does not exist.');
+
+        // proceed with assignment
+        if(!$this->hasEvent($event)) {
+            $stmt = $this->conn->prepare("INSERT INTO $this->table_events(technical_id, event_id) VALUES(?, ?)");
+            $stmt->bind_param("ii", $this->id, $event_id);
+            $stmt->execute();
+        }
+    }
+
+
+    /***************************************************************************
+     * Remove event from technical
+     *
+     * @param Event $event
+     * @return void
+     */
+    public function removeEvent($event)
+    {
+        require_once 'Event.php';
+
+        // check event id
+        $event_id = $event->getId();
+        if(!Event::exists($event_id))
+            App::returnError('HTTP/1.1 500', 'Event Removal Error: event [id = ' . $event_id . '] does not exist.');
+
+        // proceed with removal
+        $stmt = $this->conn->prepare("DELETE FROM $this->table_events WHERE technical_id = ? AND event_id = ?");
+        $stmt->bind_param("ii", $this->id, $event_id);
+        $stmt->execute();
+    }
+
+
+    /***************************************************************************
+     * Check whether the given event is assigned to the technical or not
+     *
+     * @param Event $event
+     * @return bool
+     */
+    public function hasEvent($event)
+    {
+        $event_id = $event->getId();
+
+        foreach($this->getAllEvents() as $e) {
+            if($e->getId() == $event_id)
+                return true;
+        }
+        return false;
+    }
+
+
+    /***************************************************************************
+     * Get all assigned events to technical as array of objects
+     *
+     * @return Event[]
+     */
+    public function getAllEvents()
+    {
+        require_once 'Event.php';
+        $stmt = $this->conn->prepare("SELECT event_id FROM $this->table_events WHERE technical_id = ? ORDER BY event_id");
+        $stmt->bind_param("i", $this->id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $events = [];
+        while($row = $result->fetch_assoc()) {
+            $events[] = new Event($row['event_id']);
+        }
+        return $events;
+    }
+
+
+    /***************************************************************************
+     * Get all assigned events to technical as array of arrays
+     *
+     * @return array
+     */
+    public function getRowEvents()
+    {
+        $events = [];
+        foreach($this->getAllEvents() as $event) {
+            $events[] = $event->toArray();
+        }
+        return $events;
     }
 }
