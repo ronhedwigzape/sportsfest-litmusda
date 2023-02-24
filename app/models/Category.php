@@ -186,6 +186,10 @@ class Category extends App
      */
     public function insert()
     {
+        // check id
+        if(self::exists($this->id))
+            App::returnError('HTTP/1.1 500', 'Insert Error: category [id = ' . $this->id . '] already exists.');
+
         // check competition_id
         require_once 'Competition.php';
         if(!Competition::exists($this->competition_id))

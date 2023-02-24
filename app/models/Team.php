@@ -143,6 +143,10 @@ class Team extends App
      */
     public function insert()
     {
+        // check id
+        if(self::exists($this->id))
+            App::returnError('HTTP/1.1 500', 'Insert Error: team [id = ' . $this->id . '] already exists.');
+
         // proceed with insert
         $stmt = $this->conn->prepare("INSERT INTO $this->table(name, color) VALUES(?, ?)");
         $stmt->bind_param("ss", $this->name, $this->color);

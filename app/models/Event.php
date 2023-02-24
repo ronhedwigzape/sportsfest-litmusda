@@ -186,6 +186,10 @@ class Event extends App
      */
     public function insert()
     {
+        // check id
+        if(self::exists($this->id))
+            App::returnError('HTTP/1.1 500', 'Insert Error: event [id = ' . $this->id . '] already exists.');
+
         // check category_id
         require_once 'Category.php';
         if(!Category::exists($this->category_id))
