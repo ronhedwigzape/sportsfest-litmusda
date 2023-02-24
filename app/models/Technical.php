@@ -140,6 +140,10 @@ class Technical extends User
      */
     public function insert()
     {
+        // check id
+        if(self::exists($this->id))
+            App::returnError('HTTP/1.1 500', 'Insert Error: technical [id = ' . $this->id . '] already exists.');
+
         // check username
         if(trim($this->username) == '')
             App::returnError('HTTP/1.1 500', 'Insert Error: technical username is required.');

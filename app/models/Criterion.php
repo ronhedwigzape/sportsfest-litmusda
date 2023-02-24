@@ -153,6 +153,10 @@ class Criterion extends App
      */
     public function insert()
     {
+        // check id
+        if(self::exists($this->id))
+            App::returnError('HTTP/1.1 500', 'Insert Error: criterion [id = ' . $this->id . '] already exists.');
+
         // check event_id
         require_once 'Event.php';
         if(!Event::exists($this->event_id))

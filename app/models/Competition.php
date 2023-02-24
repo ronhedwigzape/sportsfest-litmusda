@@ -176,6 +176,10 @@ class Competition extends App
      */
     public function insert()
     {
+        // check id
+        if(self::exists($this->id))
+            App::returnError('HTTP/1.1 500', 'Insert Error: competition [id = ' . $this->id . '] already exists.');
+
         // check slug
         if(self::slugExists($this->slug))
             App::returnError('HTTP/1.1 500', 'Insert Error: competition [slug = ' . $this->slug . '] already exists.');
