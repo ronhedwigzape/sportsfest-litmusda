@@ -10,8 +10,8 @@ class Rating extends App
     // properties
     protected $id;
     protected $judge_id;
-    protected $team_id;
     protected $criterion_id;
+    protected $team_id;
     protected $value = 0;
     protected $is_locked;
 
@@ -33,12 +33,12 @@ class Rating extends App
             $result = $stmt->get_result();
             if($result->num_rows > 0) {
                 $row = $result->fetch_assoc();
-                $this->id = $row['id'];
-                $this->judge_id = $row['judge_id'];
-                $this->team_id = $row['team_id'];
+                $this->id           = $row['id'];
+                $this->judge_id     = $row['judge_id'];
                 $this->criterion_id = $row['criteria_id'];
-                $this->value = $row['value'];
-                $this->is_locked = ($row['is_locked'] == 1);
+                $this->team_id      = $row['team_id'];
+                $this->value        = $row['value'];
+                $this->is_locked    = ($row['is_locked'] == 1);
             }
         }
     }
@@ -62,18 +62,18 @@ class Rating extends App
 
 
     /***************************************************************************
-     * Find rating by judge_id, team_id, and criterion_id
+     * Find rating by judge_id, criterion_id, and team_id
      *
      * @param int $judge_id
-     * @param int $team_id
      * @param int $criterion_id
+     * @param int $team_id
      * @return Rating|boolean
      */
-    public static function find($judge_id, $team_id, $criterion_id)
+    public static function find($judge_id, $criterion_id, $team_id)
     {
         $rating = new Rating();
-        $stmt = $rating->conn->prepare("SELECT id FROM $rating->table WHERE judge_id = ? AND team_id = ? AND criteria_id = ?");
-        $stmt->bind_param("iii", $judge_id, $team_id, $criterion_id);
+        $stmt = $rating->conn->prepare("SELECT id FROM $rating->table WHERE judge_id = ? AND criteria_id = ? AND team_id = ?");
+        $stmt->bind_param("iii", $judge_id, $criterion_id, $team_id);
         return self::executeFind($stmt);
     }
 
@@ -103,8 +103,8 @@ class Rating extends App
         return [
             'id'           => $this->id,
             'judge_id'     => $this->judge_id,
-            'team_id'      => $this->team_id,
             'criterion_id' => $this->criterion_id,
+            'team_id'      => $this->team_id,
             'value'        => $this->value,
             'is_locked'    => $this->is_locked,
         ];
@@ -127,19 +127,19 @@ class Rating extends App
 
 
     /***************************************************************************
-     * Check if rating for judge, team, and criterion is already stored
+     * Check if rating for judge, criterion, and team is already stored
      *
      * @param int $judge_id
-     * @param int $team_id
      * @param int $criterion_id
+     * @param int $team_id
      * @return bool
      */
-    public static function stored($judge_id, $team_id, $criterion_id)
+    public static function stored($judge_id, $criterion_id, $team_id)
     {
-        if(!$judge_id || !$team_id || !$criterion_id)
+        if(!$judge_id || !$criterion_id || !$team_id)
             return false;
 
-        return (self::find($judge_id, $team_id, $criterion_id) != false);
+        return (self::find($judge_id, $criterion_id, $team_id) != false);
     }
 
 
@@ -159,15 +159,15 @@ class Rating extends App
         if(!Judge::exists($this->judge_id))
             App::returnError('HTTP/1.1 500', 'Insert Error: judge [id = ' . $this->judge_id . '] does not exist.');
 
-        // check team_id
-        require_once 'Team.php';
-        if(!Team::exists($this->team_id))
-            App::returnError('HTTP/1.1 500', 'Insert Error: team [id = ' . $this->team_id . '] does not exist.');
-
         // check criterion_id
         require_once 'Criterion.php';
         if(!Criterion::exists($this->criterion_id))
             App::returnError('HTTP/1.1 500', 'Insert Error: criterion [id = ' . $this->criterion_id . '] does not exist.');
+
+        // check team_id
+        require_once 'Team.php';
+        if(!Team::exists($this->team_id))
+            App::returnError('HTTP/1.1 500', 'Insert Error: team [id = ' . $this->team_id . '] does not exist.');
 
         // check if judge is allowed to rate
         $criterion = Criterion::findById($this->criterion_id);
@@ -177,7 +177,7 @@ class Rating extends App
             App::returnError('HTTP/1.1 500', 'Insert Error: event [slug = ' . $event->getSlug() . '] is not assigned to judge [id = ' . $this->judge_id . ']');
 
         // proceed with insert if not yet stored
-        if(!self::stored($this->judge_id, $this->team_id, $this->criterion_id)) {
+        if(!self::stored($this->judge_id, $this->criterion_id, $this->team_id)) {
             // check value
             $min = 0;
             $max = $criterion->getPercentage();
@@ -185,8 +185,8 @@ class Rating extends App
                 App::returnError('HTTP/1.1 500', 'Insert Error: criterion [title = "' . $criterion->getTitle() . '"] must be from ' . $min . ' to ' . $max . ', [given = ' . $this->value . '].');
 
             // proceed with insert
-            $stmt = $this->conn->prepare("INSERT INTO $this->table(judge_id, team_id, criteria_id, value) VALUES(?, ?, ?, ?)");
-            $stmt->bind_param("iiid", $this->judge_id, $this->team_id, $this->criterion_id, $this->value);
+            $stmt = $this->conn->prepare("INSERT INTO $this->table(judge_id, criteria_id, team_id, value) VALUES(?, ?, ?, ?)");
+            $stmt->bind_param("iiid", $this->judge_id, $this->criterion_id, $this->team_id, $this->value);
             $stmt->execute();
             $this->id = $this->conn->insert_id;
         }
@@ -209,15 +209,15 @@ class Rating extends App
         if(!Judge::exists($this->judge_id))
             App::returnError('HTTP/1.1 500', 'Update Error: judge [id = ' . $this->judge_id . '] does not exist.');
 
-        // check team_id
-        require_once 'Team.php';
-        if(!Team::exists($this->team_id))
-            App::returnError('HTTP/1.1 500', 'Update Error: team [id = ' . $this->team_id . '] does not exist.');
-
         // check criterion_id
         require_once 'Criterion.php';
         if(!Criterion::exists($this->criterion_id))
             App::returnError('HTTP/1.1 500', 'Update Error: criterion [id = ' . $this->criterion_id . '] does not exist.');
+
+        // check team_id
+        require_once 'Team.php';
+        if(!Team::exists($this->team_id))
+            App::returnError('HTTP/1.1 500', 'Update Error: team [id = ' . $this->team_id . '] does not exist.');
 
         // check if judge is allowed to rate
         $criterion = Criterion::findById($this->criterion_id);
@@ -233,9 +233,9 @@ class Rating extends App
             App::returnError('HTTP/1.1 500', 'Update Error: criterion [title = "' . $criterion->getTitle() . '"] must be from ' . $min . ' to ' . $max . ', [given = ' . $this->value . '].');
 
         // proceed with update
-        $stmt = $this->conn->prepare("UPDATE $this->table SET judge_id = ?, team_id = ?, criteria_id = ?, value = ?, is_locked = ? WHERE id = ?");
+        $stmt = $this->conn->prepare("UPDATE $this->table SET judge_id = ?,  criteria_id = ?, team_id = ?, value = ?, is_locked = ? WHERE id = ?");
         $is_locked = $this->is_locked ? 1 : 0;
-        $stmt->bind_param("iiidii", $this->judge_id, $this->team_id, $this->criterion_id, $this->value, $is_locked, $this->id);
+        $stmt->bind_param("iiidii", $this->judge_id, $this->criterion_id, $this->team_id, $this->value, $is_locked, $this->id);
         $stmt->execute();
     }
 
@@ -286,18 +286,6 @@ class Rating extends App
 
 
     /***************************************************************************
-     * Set team_id
-     *
-     * @param int $team_id
-     * @return void
-     */
-    public function setTeamId($team_id)
-    {
-        $this->team_id = $team_id;
-    }
-
-
-    /***************************************************************************
      * Set criterion_id
      *
      * @param int $criterion_id
@@ -306,6 +294,18 @@ class Rating extends App
     public function setCriterionId($criterion_id)
     {
         $this->criterion_id = $criterion_id;
+    }
+
+
+    /***************************************************************************
+     * Set team_id
+     *
+     * @param int $team_id
+     * @return void
+     */
+    public function setTeamId($team_id)
+    {
+        $this->team_id = $team_id;
     }
 
 
@@ -356,17 +356,6 @@ class Rating extends App
 
 
     /***************************************************************************
-     * Get team_id
-     *
-     * @return int
-     */
-    public function getTeamId()
-    {
-        return $this->team_id;
-    }
-
-
-    /***************************************************************************
      * Get criterion_id
      *
      * @return int
@@ -374,6 +363,17 @@ class Rating extends App
     public function getCriterionId()
     {
         return $this->criterion_id;
+    }
+
+
+    /***************************************************************************
+     * Get team_id
+     *
+     * @return int
+     */
+    public function getTeamId()
+    {
+        return $this->team_id;
     }
 
 
