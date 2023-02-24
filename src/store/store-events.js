@@ -2,7 +2,7 @@ export default {
     namespaced: true,
 
     state: {
-        events: null
+        events: ""
     },
 
     getters: {
