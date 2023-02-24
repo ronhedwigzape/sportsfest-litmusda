@@ -352,19 +352,19 @@ class Judge extends User
     /***************************************************************************
      * Set judge's rating of team based on a given criterion
      *
-     * @param Team $team
      * @param Criterion $criterion
+     * @param Team $team
      * @param float $value
      * @param boolean $is_locked
      * @return void
      */
-    public function setCriterionTeamRating($team, $criterion, $value = 0, $is_locked = false)
+    public function setCriterionTeamRating($criterion, $team, $value = 0, $is_locked = false)
     {
         require_once 'Rating.php';
 
-        // get team_id and criterion_id
-        $team_id = $team->getId();
+        // get criterion_id and team_id
         $criterion_id = $criterion->getId();
+        $team_id = $team->getId();
 
         // check if rating is stored or not
         $stored = Rating::stored($this->id, $team_id, $criterion_id);
@@ -392,17 +392,17 @@ class Judge extends User
     /***************************************************************************
      * Get judge's rating of team based on a given criterion, as object
      *
-     * @param Team $team
      * @param Criterion $criterion
+     * @param Team $team
      * @return Rating
      */
-    public function getCriterionTeamRating($team, $criterion)
+    public function getCriterionTeamRating($criterion, $team)
     {
         require_once 'Rating.php';
 
-        // get team_id and criterion_id
-        $team_id = $team->getId();
+        // get criterion_id and team_id
         $criterion_id = $criterion->getId();
+        $team_id = $team->getId();
 
         // insert rating if not yet stored
         if(!Rating::stored($this->id, $team_id, $criterion_id)) {
@@ -421,29 +421,29 @@ class Judge extends User
     /***************************************************************************
      * Get judge's rating of team based on a given criterion, as array
      *
-     * @param Team $team
      * @param Criterion $criterion
+     * @param Team $team
      * @return array
      */
-    public function getCriterionTeamRatingRow($team, $criterion)
+    public function getCriterionTeamRatingRow($criterion, $team)
     {
-        return ($this->getCriterionTeamRating($team, $criterion))->toArray();
+        return ($this->getCriterionTeamRating($criterion, $team))->toArray();
     }
 
 
     /***************************************************************************
      * Get judge's rating of team based on a given event, as array of objects
      *
-     * @param Team $team
      * @param Event $event
+     * @param Team $team
      * @return array
      */
-    public function getAllEventTeamRatings($team, $event)
+    public function getAllEventTeamRatings($event, $team)
     {
         $ratings = [];
         foreach($event->getAllCriteria() as $criterion) {
             $key = $this->id.'_'.$team->getId().'_'.$criterion->getId();
-            $ratings[$key] = $this->getCriterionTeamRating($team, $criterion);
+            $ratings[$key] = $this->getCriterionTeamRating($criterion, $team);
         }
         return $ratings;
     }
@@ -452,16 +452,16 @@ class Judge extends User
     /***************************************************************************
      * Get judge's rating of team based on a given event, as array of arrays
      *
-     * @param Team $team
      * @param Event $event
+     * @param Team $team
      * @return array
      */
-    public function getRowEventTeamRatings($team, $event)
+    public function getRowEventTeamRatings($event, $team)
     {
         $ratings = [];
         foreach($event->getAllCriteria() as $criterion) {
             $key = $this->id.'_'.$team->getId().'_'.$criterion->getId();
-            $ratings[$key] = $this->getCriterionTeamRatingRow($team, $criterion);
+            $ratings[$key] = $this->getCriterionTeamRatingRow($criterion, $team);
         }
         return $ratings;
     }
@@ -480,7 +480,7 @@ class Judge extends User
         $ratings = [];
         foreach(Team::all() as $team) {
             $key = $event->getSlug().'_'.$team->getId();
-            $ratings[$key] = $this->getAllEventTeamRatings($team, $event);
+            $ratings[$key] = $this->getAllEventTeamRatings($event, $team);
         }
         return $ratings;
     }
@@ -499,7 +499,7 @@ class Judge extends User
         $ratings = [];
         foreach(Team::all() as $team) {
             $key = $event->getSlug().'_'.$team->getId();
-            $ratings[$key] = $this->getRowEventTeamRatings($team, $event);
+            $ratings[$key] = $this->getRowEventTeamRatings($event, $team);
         }
         return $ratings;
     }
