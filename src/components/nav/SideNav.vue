@@ -36,14 +36,14 @@
 				variant="text"
 				class="my-2 mx-1 px-11"
 				prepend-icon="mdi-dance-ballroom"
-				v-for="event in events" :key="event"
+				v-for="eventTitle in eventTitles" :key="eventTitle"
 			>
-				{{ event }}
+				{{ eventTitle }}
 			</v-btn>
 		</div>
 		<template v-slot:append>
 			<v-col class="text-center mt-4" cols="12">
-				&copy; <strong>ACLC 2023</strong>
+				&copy; <strong class="text-uppercase">aclc iriga 2023</strong>
 			</v-col>
 		</template>
 	</v-navigation-drawer>
@@ -56,12 +56,13 @@ export default {
 	name: "SideNav",
 	data() {
 		return {
-			foundationLogo: `${import.meta.env.BASE_URL}foundation-logo.png`,
-			events: []
+			foundationLogo: `${import.meta.env.BASE_URL}foundation-logo.png`
 		}
 	},
 	computed: {
-
+		eventTitles() {
+			return this.$store.getters['events/eventTitles']
+		}
 	},
 	created() {
 		$.ajax({
@@ -76,13 +77,14 @@ export default {
 			success: (data) => {
 				data = JSON.parse(data);
 				const events = data.events.reduce((acc, curr) => {
-					acc[curr.slug] = curr.title;
+					acc[curr.slug] = {
+						id: curr.id,
+						category_id: curr.category_id,
+						title: curr.title
+					};
 					return acc;
 				}, {});
 				this.$store.commit('events/setEvents', events)
-				// this.events = JSON.stringify(data.events)
-				this.events = events
-				console.log(events)
 			},
 			error: (error) => {
 				alert(`ERROR ${error.status}: ${error.statusText}`);
