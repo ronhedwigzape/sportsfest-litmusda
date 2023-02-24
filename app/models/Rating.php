@@ -48,7 +48,7 @@ class Rating extends App
      * Execute find
      *
      * @param $stmt
-     * @return Rating|false
+     * @return Rating|boolean
      */
     private static function executeFind($stmt)
     {
@@ -58,6 +58,23 @@ class Rating extends App
             return new Rating($row['id']);
         else
             return false;
+    }
+
+
+    /***************************************************************************
+     * Find rating by judge_id, team_id, and criterion_id
+     *
+     * @param int $judge_id
+     * @param int $team_id
+     * @param int $criterion_id
+     * @return Rating|boolean
+     */
+    public static function find($judge_id, $team_id, $criterion_id)
+    {
+        $rating = new Rating();
+        $stmt = $rating->conn->prepare("SELECT id FROM $rating->table WHERE judge_id = ? AND team_id = ? AND criteria_id = ?");
+        $stmt->bind_param("iii", $judge_id, $team_id, $criterion_id);
+        return self::executeFind($stmt);
     }
 
 
@@ -119,12 +136,10 @@ class Rating extends App
      */
     public static function stored($judge_id, $team_id, $criterion_id)
     {
-        $rating = new Rating();
-        $stmt = $rating->conn->prepare("SELECT id FROM $rating->table WHERE judge_id = ? AND team_id = ? AND criteria_id = ?");
-        $stmt->bind_param("iii", $judge_id, $team_id, $criterion_id);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        return ($result->num_rows > 0);
+        if(!$judge_id || !$team_id || !$criterion_id)
+            return false;
+
+        return (self::find($judge_id, $team_id, $criterion_id) != false);
     }
 
 
@@ -154,10 +169,16 @@ class Rating extends App
         if(!Criterion::exists($this->criterion_id))
             App::returnError('HTTP/1.1 500', 'Insert Error: criterion [id = ' . $this->criterion_id . '] does not exist.');
 
+        // check if judge is allowed to rate
+        $criterion = Criterion::findById($this->criterion_id);
+        $event = $criterion->getEvent();
+        $judge = Judge::findById($this->judge_id);
+        if(!$judge->hasEvent($event))
+            App::returnError('HTTP/1.1 500', 'Insert Error: event [slug = ' . $event->getSlug() . '] is not assigned to judge [id = ' . $this->judge_id . ']');
+
         // proceed with insert if not yet stored
         if(!self::stored($this->judge_id, $this->team_id, $this->criterion_id)) {
             // check value
-            $criterion = Criterion::findById($this->criterion_id);
             $min = 0;
             $max = $criterion->getPercentage();
             if($this->value < $min || $this->value > $max)
@@ -198,12 +219,18 @@ class Rating extends App
         if(!Criterion::exists($this->criterion_id))
             App::returnError('HTTP/1.1 500', 'Update Error: criterion [id = ' . $this->criterion_id . '] does not exist.');
 
-        // check value
+        // check if judge is allowed to rate
         $criterion = Criterion::findById($this->criterion_id);
+        $event = $criterion->getEvent();
+        $judge = Judge::findById($this->judge_id);
+        if(!$judge->hasEvent($event))
+            App::returnError('HTTP/1.1 500', 'Update Error: event [slug = ' . $event->getSlug() . '] is not assigned to judge [id = ' . $this->judge_id . ']');
+
+        // check value
         $min = 0;
         $max = $criterion->getPercentage();
         if($this->value < $min || $this->value > $max)
-            App::returnError('HTTP/1.1 500', 'Insert Error: criterion [title = "' . $criterion->getTitle() . '"] must be from ' . $min . ' to ' . $max . ', [given = ' . $this->value . '].');
+            App::returnError('HTTP/1.1 500', 'Update Error: criterion [title = "' . $criterion->getTitle() . '"] must be from ' . $min . ' to ' . $max . ', [given = ' . $this->value . '].');
 
         // proceed with update
         $stmt = $this->conn->prepare("UPDATE $this->table SET judge_id = ?, team_id = ?, criteria_id = ?, value = ?, is_locked = ? WHERE id = ?");

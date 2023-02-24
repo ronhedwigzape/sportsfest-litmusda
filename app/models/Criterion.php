@@ -291,4 +291,14 @@ class Criterion extends App
     }
 
 
+    /***************************************************************************
+     * Get event
+     *
+     * @return Event
+     */
+    public function getEvent()
+    {
+        require_once 'Event.php';
+        return new Event($this->event_id);
+    }
 }
