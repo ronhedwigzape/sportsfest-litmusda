@@ -12,11 +12,11 @@ if (isset($_POST['updatedata'])) {
     $slug = $_POST['slug'];
     $title = $_POST['title'];
 
-    $categories = Category::findById($id);
-    $categories->setCompetitionId($competition_id);
-    $categories->setSlug($slug);
-    $categories->setTitle($title);
-    $result = $categories->update();
+    $category = Category::findById($id);
+    $category->setCompetitionId($competition_id);
+    $category->setSlug($slug);
+    $category->setTitle($title);
+    $result = $category->update();
 
 }
 header("location: categories.php");
