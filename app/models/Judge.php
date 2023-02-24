@@ -367,17 +367,17 @@ class Judge extends User
         $team_id = $team->getId();
 
         // check if rating is stored or not
-        $stored = Rating::stored($this->id, $team_id, $criterion_id);
+        $stored = Rating::stored($this->id, $criterion_id, $team_id);
 
         // instantiate rating
         $rating = new Rating();
         if($stored)
-            $rating = Rating::find($this->id, $team_id, $criterion_id);
+            $rating = Rating::find($this->id, $criterion_id, $team_id);
 
         // set properties
         $rating->setJudgeId($this->id);
-        $rating->setTeamId($team_id);
         $rating->setCriterionId($criterion_id);
+        $rating->setTeamId($team_id);
         $rating->setValue($value);
         $rating->setIsLocked($is_locked);
 
@@ -405,16 +405,16 @@ class Judge extends User
         $team_id = $team->getId();
 
         // insert rating if not yet stored
-        if(!Rating::stored($this->id, $team_id, $criterion_id)) {
+        if(!Rating::stored($this->id, $criterion_id, $team_id)) {
             $rating = new Rating();
             $rating->setJudgeId($this->id);
-            $rating->setTeamId($team_id);
             $rating->setCriterionId($criterion_id);
+            $rating->setTeamId($team_id);
             $rating->insert();
         }
 
         // return rating
-        return Rating::find($this->id, $team_id, $criterion_id);
+        return Rating::find($this->id, $criterion_id, $team_id);
     }
 
 

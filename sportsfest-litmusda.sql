@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 23, 2023 at 05:04 PM
+-- Generation Time: Feb 24, 2023 at 09:42 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.1.12
 
@@ -172,8 +172,8 @@ INSERT INTO `criteria` (`id`, `event_id`, `title`, `percentage`, `created_at`, `
 CREATE TABLE `deductions` (
   `id` mediumint(8) UNSIGNED NOT NULL,
   `technical_id` tinyint(3) UNSIGNED NOT NULL,
-  `team_id` tinyint(3) UNSIGNED NOT NULL,
   `event_id` smallint(5) UNSIGNED NOT NULL,
+  `team_id` tinyint(3) UNSIGNED NOT NULL,
   `value` float UNSIGNED NOT NULL DEFAULT 0,
   `is_locked` tinyint(1) NOT NULL DEFAULT 0,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
@@ -264,8 +264,8 @@ CREATE TABLE `judge_events` (
 CREATE TABLE `ratings` (
   `id` mediumint(8) UNSIGNED NOT NULL,
   `judge_id` tinyint(3) UNSIGNED NOT NULL,
-  `team_id` tinyint(3) UNSIGNED NOT NULL,
   `criteria_id` smallint(5) UNSIGNED NOT NULL,
+  `team_id` tinyint(3) UNSIGNED NOT NULL,
   `value` float UNSIGNED NOT NULL DEFAULT 0,
   `is_locked` tinyint(1) NOT NULL DEFAULT 0,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
