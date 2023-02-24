@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 22, 2023 at 03:28 AM
+-- Generation Time: Feb 23, 2023 at 05:04 PM
 -- Server version: 10.4.27-MariaDB
--- PHP Version: 8.2.0
+-- PHP Version: 8.1.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -174,6 +174,8 @@ CREATE TABLE `deductions` (
   `technical_id` tinyint(3) UNSIGNED NOT NULL,
   `team_id` tinyint(3) UNSIGNED NOT NULL,
   `event_id` smallint(5) UNSIGNED NOT NULL,
+  `value` float UNSIGNED NOT NULL DEFAULT 0,
+  `is_locked` tinyint(1) NOT NULL DEFAULT 0,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -242,13 +244,13 @@ INSERT INTO `judges` (`id`, `number`, `name`, `avatar`, `is_chairman`, `username
 -- --------------------------------------------------------
 
 --
--- Table structure for table `judge_categories`
+-- Table structure for table `judge_events`
 --
 
-CREATE TABLE `judge_categories` (
+CREATE TABLE `judge_events` (
   `id` tinyint(3) UNSIGNED NOT NULL,
   `judge_id` tinyint(3) UNSIGNED NOT NULL,
-  `category_id` tinyint(3) UNSIGNED NOT NULL,
+  `event_id` smallint(5) UNSIGNED NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -264,7 +266,8 @@ CREATE TABLE `ratings` (
   `judge_id` tinyint(3) UNSIGNED NOT NULL,
   `team_id` tinyint(3) UNSIGNED NOT NULL,
   `criteria_id` smallint(5) UNSIGNED NOT NULL,
-  `value` float UNSIGNED NOT NULL,
+  `value` float UNSIGNED NOT NULL DEFAULT 0,
+  `is_locked` tinyint(1) NOT NULL DEFAULT 0,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -319,13 +322,13 @@ INSERT INTO `technicals` (`id`, `number`, `name`, `avatar`, `username`, `passwor
 -- --------------------------------------------------------
 
 --
--- Table structure for table `technical_categories`
+-- Table structure for table `technical_events`
 --
 
-CREATE TABLE `technical_categories` (
+CREATE TABLE `technical_events` (
   `id` tinyint(3) UNSIGNED NOT NULL,
   `technical_id` tinyint(3) UNSIGNED NOT NULL,
-  `category_id` tinyint(3) UNSIGNED NOT NULL,
+  `event_id` smallint(5) UNSIGNED NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -383,12 +386,12 @@ ALTER TABLE `judges`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `judge_categories`
+-- Indexes for table `judge_events`
 --
-ALTER TABLE `judge_categories`
+ALTER TABLE `judge_events`
   ADD PRIMARY KEY (`id`),
   ADD KEY `judge_id` (`judge_id`),
-  ADD KEY `category_id` (`category_id`);
+  ADD KEY `event_id` (`event_id`);
 
 --
 -- Indexes for table `ratings`
@@ -412,12 +415,12 @@ ALTER TABLE `technicals`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `technical_categories`
+-- Indexes for table `technical_events`
 --
-ALTER TABLE `technical_categories`
+ALTER TABLE `technical_events`
   ADD PRIMARY KEY (`id`),
   ADD KEY `judge_id` (`technical_id`),
-  ADD KEY `category_id` (`category_id`);
+  ADD KEY `event_id` (`event_id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -466,9 +469,9 @@ ALTER TABLE `judges`
   MODIFY `id` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT for table `judge_categories`
+-- AUTO_INCREMENT for table `judge_events`
 --
-ALTER TABLE `judge_categories`
+ALTER TABLE `judge_events`
   MODIFY `id` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
@@ -490,9 +493,9 @@ ALTER TABLE `technicals`
   MODIFY `id` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT for table `technical_categories`
+-- AUTO_INCREMENT for table `technical_events`
 --
-ALTER TABLE `technical_categories`
+ALTER TABLE `technical_events`
   MODIFY `id` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
@@ -526,11 +529,11 @@ ALTER TABLE `events`
   ADD CONSTRAINT `events_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON UPDATE CASCADE;
 
 --
--- Constraints for table `judge_categories`
+-- Constraints for table `judge_events`
 --
-ALTER TABLE `judge_categories`
-  ADD CONSTRAINT `judge_categories_ibfk_1` FOREIGN KEY (`judge_id`) REFERENCES `judges` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `judge_categories_ibfk_2` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `judge_events`
+  ADD CONSTRAINT `judge_events_ibfk_1` FOREIGN KEY (`judge_id`) REFERENCES `judges` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `judge_events_ibfk_2` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `ratings`
@@ -541,11 +544,11 @@ ALTER TABLE `ratings`
   ADD CONSTRAINT `ratings_ibfk_3` FOREIGN KEY (`judge_id`) REFERENCES `judges` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `technical_categories`
+-- Constraints for table `technical_events`
 --
-ALTER TABLE `technical_categories`
-  ADD CONSTRAINT `technical_categories_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `technical_categories_ibfk_2` FOREIGN KEY (`technical_id`) REFERENCES `technicals` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `technical_events`
+  ADD CONSTRAINT `technical_events_ibfk_2` FOREIGN KEY (`technical_id`) REFERENCES `technicals` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `technical_events_ibfk_3` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

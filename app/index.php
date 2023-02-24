@@ -8,7 +8,6 @@ if(isset($_GET['getUser'])) {
     ]);
 }
 
-
 // user sign-in
 else if(isset($_POST['username']) && isset($_POST['password'])) {
     require_once 'models/Admin.php';

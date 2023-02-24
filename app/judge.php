@@ -12,4 +12,18 @@ else if($authUser['userType'] !== 'judge')
 
 else {
 
+   if (isset($_GET['getEvents']) || isset($_GET['getScoreSheet'])) {
+       require_once 'models/Judge.php';
+
+       $judge = new Judge($authUser['username'], $_SESSION['pass']);
+
+       if(!$judge->authenticated())
+           denyAccess();
+
+       else {
+           echo json_encode([
+               "events" => $judge->getRowEvents()
+           ]);
+       }
+   }
 }

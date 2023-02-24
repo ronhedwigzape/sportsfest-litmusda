@@ -157,12 +157,7 @@ class Category extends App
         if(!$id)
             return false;
 
-        $category = new Category();
-        $stmt = $category->conn->prepare("SELECT id FROM $category->table WHERE id = ?");
-        $stmt->bind_param("i", $id);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        return ($result->num_rows > 0);
+        return (self::findById($id) != false);
     }
 
 
@@ -222,7 +217,7 @@ class Category extends App
         // check competition_id
         require_once 'Competition.php';
         if(!Competition::exists($this->competition_id))
-            App::returnError('HTTP/1.1 500', 'Insert Error: competition [id = ' . $this->competition_id . '] does not exist.');
+            App::returnError('HTTP/1.1 500', 'Update Error: competition [id = ' . $this->competition_id . '] does not exist.');
 
         // check slug
         if(self::slugExists($this->slug, $this->id))
@@ -348,7 +343,7 @@ class Category extends App
     /***************************************************************************
      * Get all events as array of arrays
      *
-     * @return Event[]
+     * @return array
      */
     public function getRowEvents()
     {
