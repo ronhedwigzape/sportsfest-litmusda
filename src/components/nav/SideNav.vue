@@ -31,12 +31,14 @@
 		<v-divider />
 		<!--	Events	-->
 
-		<div class="text-center mx-4">
+		<div class="text-center mt-2 mx-4">
 			<v-btn
 				variant="text"
-				class="my-2 mx-1 px-11"
-				prepend-icon="mdi-dance-ballroom"
-				v-for="eventTitle in eventTitles" :key="eventTitle"
+				class="my-2 mx-1 px-16"
+				v-for="eventTitle in eventTitles"
+				:prepend-icon="getIconForTitle(eventTitle)"
+				:key="eventTitle"
+				@click=""
 			>
 				{{ eventTitle }}
 			</v-btn>
@@ -57,6 +59,27 @@ export default {
 	data() {
 		return {
 			foundationLogo: `${import.meta.env.BASE_URL}foundation-logo.png`
+		}
+	},
+	methods: {
+		getIconForTitle(title) {
+			switch (title) {
+				case "Oration":
+				case "Balagtasan":
+				case "Tigsik":
+					return "mdi-script-text";
+				case "Jazz Chant":
+				case "Vocal Solo Male":
+				case "Vocal Solo Female":
+				case "Vocal Duet":
+				case "Acoustic Band":
+					return "mdi-music";
+				case "Hip Hop":
+				case "Jazz Dance":
+				// Add more cases for other eventTitles
+				default:
+					return "mdi-dance-ballroom";
+			}
 		}
 	},
 	computed: {
