@@ -16,7 +16,7 @@ if (isset($_POST['updatedata'])) {
     $event->setCategoryId($category_id);
     $event->setSlug($slug);
     $event->setTitle($title);
-    $result = $event->update();
+    $event->update();
 
 }
 header("location: events.php");
