@@ -4,7 +4,6 @@ require_once '../config/database.php';
 require_once '../models/Category.php';
 
 
-
 // Insert Data
 if(isset($_POST['insertdata']))
 {
@@ -18,7 +17,6 @@ if(isset($_POST['insertdata']))
     $category->setTitle($title);
     $category->insert();
 }
-
 
 
 // Update Data
@@ -35,7 +33,6 @@ if (isset($_POST['updatedata'])) {
     $category->setSlug($slug);
     $category->setTitle($title);
     $category->update();
-
 }
 
 
