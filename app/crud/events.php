@@ -146,9 +146,13 @@
                 <button type="button" class="btn btn-primary my-3" data-toggle="modal" data-target="#addmodal">ADD DATA</button>
                 <div class="btn-group" role="group" aria-label="Go to">
                     <select onchange="window.location.href=this.value" class="btn btn-secondary">
-                        <option selected value="categories.php">Go to...</option>
+                        <option selected value="events.php">Go to...</option>
                         <option value="competitions.php">Competitions</option>
                         <option value="categories.php">Categories</option>
+                        <option value="criteria.php">Criterion</option>
+                        <option value="teams.php">Teams</option>
+                        <option value="judges.php">Judges</option>
+                        <option value="technicals.php">Technicals</option>
                     </select>
                 </div>
                 <?php
