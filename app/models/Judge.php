@@ -250,6 +250,17 @@ class Judge extends User
 
 
     /***************************************************************************
+     * Get table of assigned events
+     *
+     * @return string
+     */
+    public function getTableEvents()
+    {
+        return $this->table_events;
+    }
+
+
+    /***************************************************************************
      * Assign event to judge
      *
      * @param Event $event
@@ -321,7 +332,7 @@ class Judge extends User
     public function getAllEvents()
     {
         require_once 'Event.php';
-        $stmt = $this->conn->prepare("SELECT event_id FROM $this->table_events WHERE judge_id = ? ORDER BY event_id");
+        $stmt = $this->conn->prepare("SELECT DISTINCT event_id FROM $this->table_events WHERE judge_id = ? ORDER BY event_id");
         $stmt->bind_param("i", $this->id);
         $stmt->execute();
         $result = $stmt->get_result();
