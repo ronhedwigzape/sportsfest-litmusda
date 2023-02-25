@@ -6,7 +6,7 @@
 			color="amber"
 		>
 			<v-icon start icon="mdi-account-circle"></v-icon>
-			{{ userName }}
+			{{ $store.getters['auth/getUser'].name }}
 		</v-chip>
 		<v-avatar
 			size="35">
@@ -97,12 +97,8 @@ export default {
 		}
 	},
 	computed: {
-		userName() {
-			return this.$store.getters['auth/getUser'].name
-		}
 
 	},
-
 }
 </script>
 

@@ -33,7 +33,7 @@ const router = createRouter({
             }
         },
         {
-            path: '/judge',
+            path: '/judge/:eventSlug?',
             name: 'judge',
             component: () => import('../views/Judge.vue'),
             beforeEnter: (to, from, next) => {
