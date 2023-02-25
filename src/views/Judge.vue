@@ -58,7 +58,7 @@
 			<v-table v-if="$route.params.eventSlug" hover>
 				<thead>
 				<tr>
-					<th colspan="7"
+					<th colspan="12"
 						class="text-h5 text-uppercase text-center font-weight-bold"
 					>
 						{{ event.title }}
@@ -152,6 +152,8 @@
 									</v-row>
 								</template>
 							</v-img>
+							<!--	Copy v-img for picture if have more than 3 teams 	-->
+
 						</v-col>
 							<span>{{ teamName(eventTeam) }}</span>
 						</td>
@@ -165,6 +167,12 @@
 								:value="criterion.value"
 							>
 							</v-text-field>
+						</td>
+						<td>
+
+						</td>
+						<td>
+
 						</td>
 					</tr>
 				</tbody>
@@ -233,10 +241,9 @@
 				}
 			},
 			teamName(eventTeam) {
-				return eventTeam.endsWith('_1') ? 'Fearless Dragons' :
-					eventTeam.endsWith('_2') ? 'Furious Elves' :
-					eventTeam.endsWith('_3') ? 'Wise Wizards' :
-					'Unknown Team';
+				const teamId = eventTeam.slice(-1); // get the last character of eventTeam string
+				const team = this.teams.find(team => team.id == teamId); // find the team with matching id
+				return team ? team.name : 'Unknown Team'; // return the team name if found, else return 'Unknown Team'
 			},
 			getIconForTitle(title) {
 				switch (title) {

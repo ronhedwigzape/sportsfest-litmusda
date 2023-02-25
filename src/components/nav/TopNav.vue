@@ -4,6 +4,7 @@
 		<v-chip
 			class="ma-2"
 			color="amber"
+			v-if="$store.getters['auth/getUser'] !== null"
 		>
 			<v-icon start icon="mdi-account-circle"></v-icon>
 			{{ $store.getters['auth/getUser'].name }}
@@ -48,7 +49,7 @@
 						cancel
 					</v-btn>
 					<v-btn
-						:color="{}"
+						color="green-darken-1"
 						variant="text"
 						@click="signOut"
 					>

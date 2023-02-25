@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 24, 2023 at 09:42 AM
+-- Generation Time: Feb 25, 2023 at 12:15 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.1.12
 
@@ -282,6 +282,7 @@ CREATE TABLE `teams` (
   `id` tinyint(3) UNSIGNED NOT NULL,
   `name` varchar(255) NOT NULL,
   `color` varchar(32) NOT NULL,
+  `logo` varchar(255) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -290,10 +291,10 @@ CREATE TABLE `teams` (
 -- Dumping data for table `teams`
 --
 
-INSERT INTO `teams` (`id`, `name`, `color`, `created_at`, `updated_at`) VALUES
-(1, 'Fearless Dragons', 'red', '2023-02-19 06:45:06', '2023-02-21 05:56:31'),
-(2, 'Furious  Elves', 'green', '2023-02-19 06:45:27', '2023-02-21 05:57:30'),
-(3, 'Wise Wizards', 'blue', '2023-02-19 06:45:42', '2023-02-21 05:57:52');
+INSERT INTO `teams` (`id`, `name`, `color`, `logo`, `created_at`, `updated_at`) VALUES
+(1, 'Fearless Dragons', 'red', '', '2023-02-19 06:45:06', '2023-02-21 05:56:31'),
+(2, 'Furious  Elves', 'green', '', '2023-02-19 06:45:27', '2023-02-21 05:57:30'),
+(3, 'Wise Wizards', 'blue', '', '2023-02-19 06:45:42', '2023-02-21 05:57:52');
 
 -- --------------------------------------------------------
 
