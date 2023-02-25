@@ -10,10 +10,10 @@ if(isset($_POST['insertdata']))
     $slug = $_POST['slug'];
     $title = $_POST['title'];
 
-    $categories = new Category();
-    $categories->setCompetitionId($competition_id);
-    $categories->setSlug($slug);
-    $categories->setTitle($title);
-    $categories->insert();
+    $category = new Category();
+    $category->setCompetitionId($competition_id);
+    $category->setSlug($slug);
+    $category->setTitle($title);
+    $category->insert();
 }
 header('location: categories.php');

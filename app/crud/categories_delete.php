@@ -7,8 +7,8 @@ require_once '../models/Category.php';
 if(isset($_POST['deletedata']))
 {
     $id = $_POST['delete_id'];
-    $categories = Category::findById($id);
-    $categories->delete();
+    $category = Category::findById($id);
+    $category->delete();
 }
 
 header('location: categories.php');

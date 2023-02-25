@@ -15,6 +15,9 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.18/css/dataTables.bootstrap4.min.css">
 
+    <!-- For Icon -->
+    <link rel="stylesheet" href="https://kit.fontawesome.com/3142f33457.css" crossorigin="anonymous">
+
     <title>CRUD</title>
 
   </head>
@@ -27,7 +30,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Add Data</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Add Category</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -68,7 +71,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Edit Data</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Edit Category</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -112,7 +115,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Delete Data</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Delete Category</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -124,7 +127,7 @@
 
                         <input type="hidden" name="delete_id" id="delete_id">
 
-                        <h4>Do you want to Delete this Data ??</h4>
+                        <h4>Do you want to Delete this Category ??</h4>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary" data-dismiss="modal"> NO </button>
@@ -139,21 +142,26 @@
     <div class="container my-3">
         <div class="card">
             <div class="card-body">
-                <h1 style="text-align:center;"><b> Categories </b></h1>
+                <h1 style="text-align:center;"><b> <u>Categories</u> </b></h1>
                 <button type="button" class="btn btn-primary my-3" data-toggle="modal" data-target="#addmodal">ADD DATA</button>
-                <a href="competitions.php"><button type="button" class="btn btn-secondary"> Go to Competitions </button></a>
-                <a href="events.php"><button type="button" class="btn btn-secondary"> Go to Events </button></a>
+                <div class="btn-group" role="group" aria-label="Go to">
+                    <select onchange="window.location.href=this.value" class="btn btn-secondary">
+                        <option selected value="categories.php">Go to...</option>
+                        <option value="competitions.php">Competitions</option>
+                        <option value="events.php">Events</option>
+                    </select>
+                </div>
                 <?php
                     require_once '../config/database.php';
                     require_once '../models/Category.php';
                     
                     $categories = Category::all();
                 ?>
-                <table id="datatableid" class="table table-bordered table-secondary table-hover" style="text-align:center;">
-                    <thead class="bg-info">
+                <table id="datatableid" class="table table-bordered table-info table-hover" style="text-align:center;">
+                    <thead class="table-dark">
                         <tr>
-                            <th scope="col">ID</th>
-                            <th scope="col">Categories_ID</th>
+                            <th scope="col" style="display:none;">ID</th>
+                            <th scope="col" style="display:none;">Competition_ID</th>
                             <th scope="col">Slug</th>
                             <th scope="col">Title</th>
                             <th scope="col">Operations</th>
@@ -162,13 +170,13 @@
                     <tbody>
                         <?php foreach ($categories as $category) { ?>
                             <tr>
-                                <td><?php echo $category->getId(); ?></td>
-                                <td><?php echo $category->getCompetitionId(); ?></td>
+                                <td style="display:none;"><?php echo $category->getId(); ?></td>
+                                <td style="display:none;"><?php echo $category->getCompetitionId(); ?></td>
                                 <td><?php echo $category->getSlug(); ?></td>
                                 <td><?php echo $category->getTitle(); ?></td>
                                 <td>
-                                    <button type="button" class="btn btn-success editbtn">EDIT</button>
-                                    <button type="button" class="btn btn-danger deletebtn">DELETE</button>
+                                    <button type="button" class="btn btn-success editbtn"><i class="fa-solid fa-pen-to-square"></i></button>
+                                    <button type="button" class="btn btn-danger deletebtn"><i class="fa-solid fa-trash-can"></i></button>
                                 </td>
                             </tr>
                         <?php } ?>
@@ -185,12 +193,14 @@
 
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
 
-
     <script src="https://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.18/js/dataTables.bootstrap4.min.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"></script>
+
+    <!-- For Icon -->
+    <script src="https://kit.fontawesome.com/3142f33457.js" crossorigin="anonymous"></script>
 
     <script src="main.js"></script>
 

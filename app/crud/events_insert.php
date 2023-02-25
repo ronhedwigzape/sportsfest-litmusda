@@ -10,10 +10,10 @@ if(isset($_POST['insertdata']))
     $slug = $_POST['slug'];
     $title = $_POST['title'];
 
-    $events = new Event();
-    $events->setCategoryId($category_id);
-    $events->setSlug($slug);
-    $events->setTitle($title);
-    $events->insert();
+    $event = new Event();
+    $event->setCategoryId($category_id);
+    $event->setSlug($slug);
+    $event->setTitle($title);
+    $event->insert();
 }
 header('location: events.php');

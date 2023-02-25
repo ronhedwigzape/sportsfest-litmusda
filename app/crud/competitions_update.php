@@ -14,7 +14,7 @@ if (isset($_POST['updatedata'])) {
     $competition = Competition::findById($id);
     $competition->setSlug($slug);
     $competition->setTitle($title);
-    $result = $competition->update();
+    $competition->update();
 
 }
 header("location: competitions.php");
