@@ -191,6 +191,17 @@ class Technical extends User
 
 
     /***************************************************************************
+     * Get table of assigned events
+     *
+     * @return string
+     */
+    public function getTableEvents()
+    {
+        return $this->table_events;
+    }
+
+
+    /***************************************************************************
      * Assign event to technical
      *
      * @param Event $event
