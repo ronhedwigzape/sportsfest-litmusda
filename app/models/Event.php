@@ -366,4 +366,42 @@ class Event extends App
         require_once 'Category.php';
         return new Category($this->category_id);
     }
+
+
+    /***************************************************************************
+     * Get all assigned judges to event as array of objects
+     *
+     * @return Judge[]
+     */
+    public function getAllJudges()
+    {
+        require_once 'Judge.php';
+        $table_events = (new Judge())->getTableEvents();
+
+        $stmt = $this->conn->prepare("SELECT DISTINCT judge_id FROM $table_events WHERE event_id = ? ORDER BY judge_id");
+        $stmt->bind_param("i", $this->id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $judges = [];
+        while($row = $result->fetch_assoc()) {
+            $judges[] = Judge::findById($row['judge_id']);
+        }
+        return $judges;
+    }
+
+
+    /***************************************************************************
+     * Get all assigned judges to event as array of arrays
+     *
+     * @return array
+     */
+    public function getRowJudges()
+    {
+        $judges = [];
+        foreach($this->getAllJudges() as $judge) {
+            $judges[] = $judge->toArray();
+        }
+        return $judges;
+    }
 }
