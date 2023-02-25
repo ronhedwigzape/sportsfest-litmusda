@@ -16,7 +16,7 @@ if (isset($_POST['updatedata'])) {
     $category->setCompetitionId($competition_id);
     $category->setSlug($slug);
     $category->setTitle($title);
-    $result = $category->update();
+    $category->update();
 
 }
 header("location: categories.php");
