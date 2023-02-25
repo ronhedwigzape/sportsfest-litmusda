@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 25, 2023 at 12:15 PM
+-- Generation Time: Feb 25, 2023 at 01:07 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.1.12
 
@@ -272,6 +272,24 @@ CREATE TABLE `ratings` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `ratings`
+--
+
+INSERT INTO `ratings` (`id`, `judge_id`, `criteria_id`, `team_id`, `value`, `is_locked`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, 1, 0, 0, '2023-02-25 12:04:24', '2023-02-25 12:04:24'),
+(2, 1, 2, 1, 0, 0, '2023-02-25 12:04:24', '2023-02-25 12:04:24'),
+(3, 1, 3, 1, 0, 0, '2023-02-25 12:04:24', '2023-02-25 12:04:24'),
+(4, 1, 4, 1, 0, 0, '2023-02-25 12:04:24', '2023-02-25 12:04:24'),
+(5, 1, 1, 2, 0, 0, '2023-02-25 12:04:24', '2023-02-25 12:04:24'),
+(6, 1, 2, 2, 0, 0, '2023-02-25 12:04:24', '2023-02-25 12:04:24'),
+(7, 1, 3, 2, 0, 0, '2023-02-25 12:04:24', '2023-02-25 12:04:24'),
+(8, 1, 4, 2, 0, 0, '2023-02-25 12:04:24', '2023-02-25 12:04:24'),
+(9, 1, 1, 3, 0, 0, '2023-02-25 12:04:24', '2023-02-25 12:04:24'),
+(10, 1, 2, 3, 0, 0, '2023-02-25 12:04:24', '2023-02-25 12:04:24'),
+(11, 1, 3, 3, 0, 0, '2023-02-25 12:04:24', '2023-02-25 12:04:24'),
+(12, 1, 4, 3, 0, 0, '2023-02-25 12:04:24', '2023-02-25 12:04:24');
+
 -- --------------------------------------------------------
 
 --
@@ -292,9 +310,9 @@ CREATE TABLE `teams` (
 --
 
 INSERT INTO `teams` (`id`, `name`, `color`, `logo`, `created_at`, `updated_at`) VALUES
-(1, 'Fearless Dragons', 'red', '', '2023-02-19 06:45:06', '2023-02-21 05:56:31'),
-(2, 'Furious  Elves', 'green', '', '2023-02-19 06:45:27', '2023-02-21 05:57:30'),
-(3, 'Wise Wizards', 'blue', '', '2023-02-19 06:45:42', '2023-02-21 05:57:52');
+(1, 'Fearless Dragons', 'red', 'red.png', '2023-02-19 06:45:06', '2023-02-25 12:02:01'),
+(2, 'Furious  Elves', 'green', 'green.png', '2023-02-19 06:45:27', '2023-02-25 12:02:05'),
+(3, 'Wise Wizards', 'blue', 'blue.png', '2023-02-19 06:45:42', '2023-02-25 12:02:08');
 
 -- --------------------------------------------------------
 
@@ -479,7 +497,7 @@ ALTER TABLE `judge_events`
 -- AUTO_INCREMENT for table `ratings`
 --
 ALTER TABLE `ratings`
-  MODIFY `id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `teams`
