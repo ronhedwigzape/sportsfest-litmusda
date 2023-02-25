@@ -404,4 +404,42 @@ class Event extends App
         }
         return $judges;
     }
+
+
+    /***************************************************************************
+     * Get all assigned technicals to event as array of objects
+     *
+     * @return Technical[]
+     */
+    public function getAllTechnicals()
+    {
+        require_once 'Technical.php';
+        $table_events = (new Technical())->getTableEvents();
+
+        $stmt = $this->conn->prepare("SELECT DISTINCT technical_id FROM $table_events WHERE event_id = ? ORDER BY technical_id");
+        $stmt->bind_param("i", $this->id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $technicals = [];
+        while($row = $result->fetch_assoc()) {
+            $technicals[] = Technical::findById($row['technical_id']);
+        }
+        return $technicals;
+    }
+
+
+    /***************************************************************************
+     * Get all assigned technicals to event as array of arrays
+     *
+     * @return array
+     */
+    public function getRowTechnicals()
+    {
+        $technicals = [];
+        foreach($this->getAllTechnicals() as $technical) {
+            $technicals[] = $technical->toArray();
+        }
+        return $technicals;
+    }
 }
