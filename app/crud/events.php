@@ -36,7 +36,7 @@
                     </button>
                 </div>
 
-                <form action="events_insert.php" method="POST">
+                <form action="events_operation.php" method="POST">
 
                     <div class="modal-body">
                         <div class="form-group">
@@ -77,7 +77,7 @@
                     </button>
                 </div>
 
-                <form action="events_update.php" method="POST">
+                <form action="events_operation.php" method="POST">
 
                     <div class="modal-body">
                     
@@ -121,7 +121,7 @@
                     </button>
                 </div>
 
-                <form action="events_delete.php" method="POST">
+                <form action="events_operation.php" method="POST">
 
                     <div class="modal-body">
 
