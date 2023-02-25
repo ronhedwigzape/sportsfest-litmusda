@@ -11,6 +11,7 @@ class Team extends App
     protected $id;
     protected $name;
     protected $color;
+    protected $logo;
 
 
     /***************************************************************************
@@ -30,9 +31,10 @@ class Team extends App
             $result = $stmt->get_result();
             if($result->num_rows > 0) {
                 $row = $result->fetch_assoc();
-                $this->id = $row['id'];
-                $this->name = $row['name'];
+                $this->id    = $row['id'];
+                $this->name  = $row['name'];
                 $this->color = $row['color'];
+                $this->logo  = $row['logo'];
             }
         }
     }
@@ -80,7 +82,8 @@ class Team extends App
         return [
             'id'    => $this->id,
             'name'  => $this->name,
-            'color' => $this->color
+            'color' => $this->color,
+            'logo'  => $this->logo
         ];
     }
 
@@ -148,8 +151,8 @@ class Team extends App
             App::returnError('HTTP/1.1 500', 'Insert Error: team [id = ' . $this->id . '] already exists.');
 
         // proceed with insert
-        $stmt = $this->conn->prepare("INSERT INTO $this->table(name, color) VALUES(?, ?)");
-        $stmt->bind_param("ss", $this->name, $this->color);
+        $stmt = $this->conn->prepare("INSERT INTO $this->table(name, color, logo) VALUES(?, ?, ?)");
+        $stmt->bind_param("sss", $this->name, $this->color, $this->logo);
         $stmt->execute();
         $this->id = $this->conn->insert_id;
     }
@@ -167,8 +170,8 @@ class Team extends App
             App::returnError('HTTP/1.1 500', 'Update Error: team [id = ' . $this->id . '] does not exist.');
 
         // proceed with update
-        $stmt = $this->conn->prepare("UPDATE $this->table SET name = ?, color = ? WHERE id = ?");
-        $stmt->bind_param("ssi", $this->name, $this->color, $this->id);
+        $stmt = $this->conn->prepare("UPDATE $this->table SET name = ?, color = ?, logo = ? WHERE id = ?");
+        $stmt->bind_param("sssi", $this->name, $this->color, $this->logo, $this->id);
         $stmt->execute();
     }
 
@@ -216,6 +219,18 @@ class Team extends App
 
 
     /***************************************************************************
+     * Set logo
+     *
+     * @param string $logo
+     * @return void
+     */
+    public function setLogo($logo)
+    {
+        $this->logo = $logo;
+    }
+
+
+    /***************************************************************************
      * Get id
      *
      * @return int
@@ -245,5 +260,16 @@ class Team extends App
     public function getColor()
     {
         return $this->color;
+    }
+
+
+    /***************************************************************************
+     * Get logo
+     *
+     * @return string
+     */
+    public function getLogo()
+    {
+        return $this->logo;
     }
 }
