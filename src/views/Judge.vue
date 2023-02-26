@@ -1,6 +1,5 @@
 <template>
-    <v-layout style="height: 100vh;">
-
+	<v-layout style="height: 100vh;">
 		<v-navigation-drawer
 			class="bg-deep-purple-darken-2"
 			theme="dark"
@@ -23,7 +22,8 @@
 							<v-progress-circular
 								indeterminate
 								color="grey-lighten-5"
-							></v-progress-circular>
+							>
+							</v-progress-circular>
 						</v-row>
 					</template>
 				</v-img>
@@ -51,31 +51,28 @@
 				</v-col>
 			</template>
 		</v-navigation-drawer>
+
 		<top-nav />
 
 		<!--	Judge Score Sheet	-->
 		<v-main>
 			<v-table v-if="$route.params.eventSlug" hover>
 				<thead>
-				<tr>
-					<th colspan="12"
-						class="text-h5 text-uppercase text-center font-weight-bold"
-					>
-						{{ event.title }}
-					</th>
-				</tr>
-				<tr>
-					<th class="text-uppercase text-center font-weight-bold"
-					>
-						Team Name
-					</th>
-					<th class="text-uppercase text-center"
-						v-for="criterion in criteria">
-						<b>{{ criterion.title }}</b> ({{ criterion.percentage }}%)
-					</th>
-					<th class="text-uppercase text-center font-weight-bold">Average</th>
-					<th class="text-uppercase text-center font-weight-bold">Rank</th>
-				</tr>
+					<tr>
+						<th colspan="12" class="text-h5 text-uppercase text-center font-weight-bold">
+							{{ event.title }}
+						</th>
+					</tr>
+					<tr>
+						<th class="text-uppercase text-center font-weight-bold">
+							Team Name
+						</th>
+						<th class="text-uppercase text-center" v-for="criterion in criteria">
+							<b>{{ criterion.title }}</b> ({{ criterion.percentage }}%)
+						</th>
+						<th class="text-uppercase text-center font-weight-bold">Average</th>
+						<th class="text-uppercase text-center font-weight-bold">Rank</th>
+					</tr>
 				</thead>
 				<tbody >
 					<tr v-for="team in teams" :key="team.id">
@@ -98,7 +95,8 @@
 											<v-progress-circular
 												indeterminate
 												color="grey-lighten-5"
-											></v-progress-circular>
+											>
+											</v-progress-circular>
 										</v-row>
 									</template>
 								</v-img>
@@ -117,37 +115,43 @@
 						<td></td>
 					</tr>
 				</tbody>
-				<v-btn>
-				</v-btn>
+				<tfoot>
+					<td colspan="12">
+						<v-col align="center" justify="center">
+							<v-btn
+								class="my-5"
+							>
+							submit ratings
+							</v-btn>
+						</v-col>
+					</td>
+				</tfoot>
 			</v-table>
 		</v-main>
-
-    </v-layout>
+	</v-layout>
 </template>
-
 
 <script>
 	import topNav from "../components/nav/TopNav.vue";
 	import $ from "jquery";
 
-    export default {
-        name: 'Judge',
-        components: {
+	export default {
+		name: 'Judge',
+		components: {
 			topNav
-        },
-        data() {
-            return {
+		},
+		data() {
+			return {
 				foundationLogo: `${import.meta.env.BASE_URL}foundation-logo.png`,
 				criteria: [],
 				teams: [],
 				ratings: {},
 				event: {}
-            }
-        },
+			}
+		},
 		watch: {
 			$route: {
 				immediate: true,
-
 				handler(to, from) {
 					this.fetchScoreSheet();
 				}
@@ -223,10 +227,9 @@
 					alert(`ERROR ${error.status}: ${error.statusText}`);
 				},
 			});
-		},
+		}
 	}
 </script>
-
 
 <style scoped>
 
