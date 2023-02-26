@@ -9,6 +9,7 @@ require_once '../config/database.php';
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="logo.png">
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css">
@@ -37,7 +38,6 @@ require_once '../config/database.php';
             </div>
 
             <form action="criteria_operation.php" method="POST">
-
                 <div class="modal-body">
                     <div class="form-group">
                         <label> Event_ID </label>
@@ -53,14 +53,13 @@ require_once '../config/database.php';
                         <label> Percentage </label>
                         <input type="number" name="percentage" class="form-control" min="1" max="100" placeholder="Enter your Percentage from 1 to 100" autocomplete="off" required>
                     </div>
-
                 </div>
+
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                     <button type="submit" name="insertdata" class="btn btn-primary">Save Data</button>
                 </div>
             </form>
-
         </div>
     </div>
 </div>
@@ -78,31 +77,29 @@ require_once '../config/database.php';
             </div>
 
             <form action="criteria_operation.php" method="POST">
-
                 <div class="modal-body">
                     <input type="hidden" name="update_id" id="update_id">
                     <div class="form-group">
                         <label> Event_ID </label>
-                        <input type="number" name="event_id" class="form-control" min="1" max="6" placeholder="Enter your Event_ID from 1 to 6" autocomplete="off" required>
+                        <input type="number" name="event_id" id="event_id" class="form-control" min="1" max="6" placeholder="Enter your Event_ID from 1 to 6" autocomplete="off" required>
                     </div>
 
                     <div class="form-group">
                         <label> Title </label>
-                        <input type="text" name="title" class="form-control" placeholder="Enter your Title" autocomplete="off" required>
+                        <input type="text" name="title" id="title" class="form-control" placeholder="Enter your Title" autocomplete="off" required>
                     </div>
 
                     <div class="form-group">
                         <label> Percentage </label>
-                        <input type="number" name="percentage" class="form-control" min="1" max="100" placeholder="Enter your Percentage from 1 to 100" autocomplete="off" required>
+                        <input type="number" name="percentage" id="percentage" class="form-control" min="1" max="100" placeholder="Enter your Percentage from 1 to 100" autocomplete="off" required>
                     </div>
-
                 </div>
+
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                     <button type="submit" name="updatedata" class="btn btn-primary">Update Data</button>
                 </div>
             </form>
-
         </div>
     </div>
 </div>
@@ -120,19 +117,16 @@ require_once '../config/database.php';
             </div>
 
             <form action="criteria_operation.php" method="POST">
-
                 <div class="modal-body">
-
                     <input type="hidden" name="delete_id" id="delete_id">
-
                     <h4> Do you want to Delete this Criteria ??</h4>
                 </div>
+
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" data-dismiss="modal"> NO </button>
                     <button type="submit" name="deletedata" class="btn btn-danger"> Yes !! Delete it. </button>
                 </div>
             </form>
-
         </div>
     </div>
 </div>
@@ -140,18 +134,31 @@ require_once '../config/database.php';
 <div class="container my-3">
     <div class="card">
         <div class="card-body">
-            <h1 style="text-align:center;"><b> <u>Criteria</u> </b></h1>
-            <button type="button" class="btn btn-primary my-3" data-toggle="modal" data-target="#addmodal">ADD DATA</button>
-            <div class="btn-group" role="group" aria-label="Go to">
-                <select onchange="window.location.href=this.value" class="btn btn-secondary">
-                    <option selected value="criteria.php">Go to...</option>
-                    <option value="competitions.php">Competitions</option>
-                    <option value="categories.php">Categories</option>
-                    <option value="events.php">Events</option>
-                    <option value="teams.php">Teams</option>
-                    <option value="judges.php">Judges</option>
-                    <option value="technicals.php">Technicals</option>
-                </select>
+            <h1 class="text-center"><b> <u>Criteria</u> </b></h1>
+            <div class="d-flex align-items-center">
+                <button type="button" class="btn btn-primary mr-3 my-3" data-toggle="modal" data-target="#addmodal">ADD DATA</button>
+                <div class="btn-group" role="group" aria-label="Go to">
+                    <select onchange="window.location.href=this.value" class="btn btn-secondary">
+                        <option selected value="">Go to...</option>
+                        <option value="competitions.php">Competitions</option>
+                        <option value="categories.php">Categories</option>
+                        <option value="events.php">Events</option>
+                        <option value="teams.php">Teams</option>
+                        <option value="judges.php">Judges</option>
+                        <option value="technicals.php">Technicals</option>
+                    </select>
+                </div>
+                <div class="btn-group ml-auto" role="group" aria-label="Go to">
+                    <select onchange="window.location.href=this.value" class="btn btn-dark">
+                        <option selected value="">Go to...</option>
+                        <option value="">Oration</option>
+                        <option value="">Balagtasan</option>
+                        <option value="">Tigsik</option>
+                        <option value="">Jazz-chant</option>
+                        <option value="">Vocal-solo-Male</option>
+                        <option value="">Vocal-solo-Female</option>
+                    </select>
+                </div>
             </div>
             <?php
 
@@ -159,11 +166,11 @@ require_once '../config/database.php';
 
                 $criteria = Criterion::all();
             ?>
-            <table id="datatableid" class="table table-bordered table-info table-hover" style="text-align:center;">
+            <table id="datatableid" class="table table-bordered table-info table-hover text-center">
                 <thead class="table-dark">
                 <tr>
-                    <th scope="col" style="display:none;">ID</th>
-                    <th scope="col" style="display:none;">Event_ID</th>
+                    <th scope="col" class="d-none">ID</th>
+                    <th scope="col" class="d-none">Event_ID</th>
                     <th scope="col">Title</th>
                     <th scope="col">Percentage</th>
                     <th scope="col">Operations</th>
@@ -172,8 +179,8 @@ require_once '../config/database.php';
                 <tbody>
                 <?php foreach ($criteria as $criterion) { ?>
                     <tr>
-                        <td style="display:none;"><?php echo $criterion->getId(); ?></td>
-                        <td style="display:none;"><?php echo $criterion->getEventId(); ?></td>
+                        <td class="d-none"><?php echo $criterion->getId(); ?></td>
+                        <td class="d-none"><?php echo $criterion->getEventId(); ?></td>
                         <td><?php echo $criterion->getTitle(); ?></td>
                         <td><?php echo $criterion->getPercentage(); ?></td>
                         <td>

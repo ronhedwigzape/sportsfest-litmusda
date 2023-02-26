@@ -3,10 +3,9 @@
 require_once '../config/database.php';
 require_once '../models/Competition.php';
 
-
 // Insert Data
-if(isset($_POST['insertdata']))
-{
+if(isset($_POST['insertdata'])) {
+
     $slug = $_POST['slug'];
     $title = $_POST['title'];
 
@@ -16,12 +15,10 @@ if(isset($_POST['insertdata']))
     $competition->insert();
 }
 
-
 // Update Data
 if (isset($_POST['updatedata'])) {
 
     $id = $_POST['update_id'];
-
     $slug = $_POST['slug'];
     $title = $_POST['title'];
 
@@ -29,13 +26,11 @@ if (isset($_POST['updatedata'])) {
     $competition->setSlug($slug);
     $competition->setTitle($title);
     $competition->update();
-
 }
 
-
 // Delete Data
-if(isset($_POST['deletedata']))
-{
+if(isset($_POST['deletedata'])) {
+
     $id = $_POST['delete_id'];
     $competition = Competition::findById($id);
     $competition->delete();

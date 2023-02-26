@@ -3,10 +3,9 @@
 require_once '../config/database.php';
 require_once '../models/Category.php';
 
-
 // Insert Data
-if(isset($_POST['insertdata']))
-{
+if(isset($_POST['insertdata'])) {
+
     $competition_id = $_POST['competition_id'];
     $slug = $_POST['slug'];
     $title = $_POST['title'];
@@ -17,7 +16,6 @@ if(isset($_POST['insertdata']))
     $category->setTitle($title);
     $category->insert();
 }
-
 
 // Update Data
 if (isset($_POST['updatedata'])) {
@@ -35,10 +33,9 @@ if (isset($_POST['updatedata'])) {
     $category->update();
 }
 
-
 // Delete Data
-if(isset($_POST['deletedata']))
-{
+if(isset($_POST['deletedata'])) {
+
     $id = $_POST['delete_id'];
     $category = Category::findById($id);
     $category->delete();

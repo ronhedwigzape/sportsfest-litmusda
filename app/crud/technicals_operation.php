@@ -1,19 +1,22 @@
 <?php
 
 require_once '../config/database.php';
-require_once '../models/Team.php';
+require_once '../models/Technical.php';
 
 // Insert Data
 if(isset($_POST['insertdata'])) {
 
+    $number = $_POST['number'];
     $name = $_POST['name'];
-    $color = $_POST['color'];
     $file_name = '';
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+
 
     // Handle file upload
-    if(isset($_FILES['logo'])) {
-        $file_name = $_FILES['logo']['name'];
-        $file_tmp = $_FILES['logo']['tmp_name'];
+    if(isset($_FILES['avatar'])) {
+        $file_name = $_FILES['avatar']['name'];
+        $file_tmp = $_FILES['avatar']['tmp_name'];
         $arr_filename = explode('.', $file_name);
         $file_ext = strtolower(end($arr_filename));
         $extensions = array("jpeg", "jpg", "png");
@@ -25,26 +28,29 @@ if(isset($_POST['insertdata'])) {
         move_uploaded_file($file_tmp, "uploads/" . $file_name);
     }
 
-    $team = new Team();
-    $team->setName($name);
-    $team->setColor($color);
-    $team->setLogo($file_name);
-    $team->insert();
+    $technical = new Technical();
+    $technical->setNumber($number);
+    $technical->setName($name);
+    $technical->setAvatar($file_name);
+    $technical->setUsername($username);
+    $technical->setPassword($password);
+    $technical->insert();
 }
-
 
 // Update Data
 if (isset($_POST['updatedata'])) {
 
     $id = $_POST['update_id'];
+    $number = $_POST['number'];
     $name = $_POST['name'];
-    $color = $_POST['color'];
     $file_name = '';
+    $username = $_POST['username'];
+    $password = $_POST['password'];
 
     // Handle file upload
-    if(isset($_FILES['logo']) && $_FILES['logo']['error'] !== UPLOAD_ERR_NO_FILE) {
-        $file_name = $_FILES['logo']['name'];
-        $file_tmp = $_FILES['logo']['tmp_name'];
+    if(isset($_FILES['avatar']) && $_FILES['avatar']['error'] !== UPLOAD_ERR_NO_FILE) {
+        $file_name = $_FILES['avatar']['name'];
+        $file_tmp = $_FILES['avatar']['tmp_name'];
         $arr_filename = explode('.', $file_name);
         $file_ext = strtolower(end($arr_filename));
         $extensions = array("jpeg", "jpg", "png");
@@ -55,15 +61,17 @@ if (isset($_POST['updatedata'])) {
         $file_name = time() . '_' . $file_name; // add timestamp to prevent same file names
         move_uploaded_file($file_tmp, "uploads/" . $file_name);
     } else {
-        $team = Team::findById($id);
-        $file_name = $team->getLogo();
+        $judge = Technical::findById($id);
+        $file_name = $judge->getAvatar();
     }
 
-    $team = Team::findById($id);
-    $team->setName($name);
-    $team->setColor($color);
-    $team->setLogo($file_name);
-    $team->update();
+    $technical = Technical::findById($id);
+    $technical->setNumber($number);
+    $technical->setName($name);
+    $technical->setAvatar($file_name);
+    $technical->setUsername($username);
+    $technical->setPassword($password);
+    $technical->update();
 }
 
 
@@ -71,8 +79,8 @@ if (isset($_POST['updatedata'])) {
 if(isset($_POST['deletedata'])) {
 
     $id = $_POST['delete_id'];
-    $team = Team::findById($id);
-    $team->delete();
+    $technical = Technical::findById($id);
+    $technical->delete();
 }
 
-header('location: teams.php');
+header('location: technicals.php');
