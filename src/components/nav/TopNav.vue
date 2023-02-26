@@ -1,5 +1,5 @@
 <template>
-	<v-app-bar :title="appName" color="deep-purple-darken-3">
+	<v-app-bar :title="`${$store.getters.appName}`" color="deep-purple-darken-3">
 		<h3 class="me-5">{{ name }}</h3>
 		<v-chip
 			class="ma-2"
@@ -11,7 +11,7 @@
 		</v-chip>
 		<v-avatar
 			size="35">
-			<v-img :src="avatar"/>
+			<v-img :src="`${$store.getters.appURL}/crud/uploads/${$store.getters['auth/getUser'].avatar}`"/>
 		</v-avatar>
 
 		<!--	Sign out	-->
@@ -69,8 +69,6 @@ export default {
 	data() {
 		return {
 			dialog: false,
-			avatar: `${import.meta.env.BASE_URL}no-avatar.jpg`,
-			appName: `${this.$store.getters.appName}`,
 			name: '',
 			signedOut: false
 		}

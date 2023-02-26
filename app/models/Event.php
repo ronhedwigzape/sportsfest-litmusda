@@ -442,4 +442,19 @@ class Event extends App
         }
         return $technicals;
     }
+
+
+    /***************************************************************************
+     * Get total criteria percentage
+     *
+     * @return float
+     */
+    public function getTotalCriteriaPercentage()
+    {
+        $total = 0;
+        foreach($this->getAllCriteria() as $criterion) {
+            $total += $criterion->getPercentage();
+        }
+        return $total;
+    }
 }

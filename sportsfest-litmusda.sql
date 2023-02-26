@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 26, 2023 at 07:06 AM
+-- Generation Time: Feb 26, 2023 at 08:45 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.1.12
 
@@ -333,24 +333,6 @@ CREATE TABLE `ratings` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `ratings`
---
-
-INSERT INTO `ratings` (`id`, `judge_id`, `criteria_id`, `team_id`, `value`, `is_locked`, `created_at`, `updated_at`) VALUES
-(1, 1, 1, 1, 0, 0, '2023-02-25 12:04:24', '2023-02-25 12:04:24'),
-(2, 1, 2, 1, 0, 0, '2023-02-25 12:04:24', '2023-02-25 12:04:24'),
-(3, 1, 3, 1, 0, 0, '2023-02-25 12:04:24', '2023-02-25 12:04:24'),
-(4, 1, 4, 1, 0, 0, '2023-02-25 12:04:24', '2023-02-25 12:04:24'),
-(5, 1, 1, 2, 0, 0, '2023-02-25 12:04:24', '2023-02-25 12:04:24'),
-(6, 1, 2, 2, 0, 0, '2023-02-25 12:04:24', '2023-02-25 12:04:24'),
-(7, 1, 3, 2, 0, 0, '2023-02-25 12:04:24', '2023-02-25 12:04:24'),
-(8, 1, 4, 2, 0, 0, '2023-02-25 12:04:24', '2023-02-25 12:04:24'),
-(9, 1, 1, 3, 0, 0, '2023-02-25 12:04:24', '2023-02-25 12:04:24'),
-(10, 1, 2, 3, 0, 0, '2023-02-25 12:04:24', '2023-02-25 12:04:24'),
-(11, 1, 3, 3, 0, 0, '2023-02-25 12:04:24', '2023-02-25 12:04:24'),
-(12, 1, 4, 3, 0, 0, '2023-02-25 12:04:24', '2023-02-25 12:04:24');
-
 -- --------------------------------------------------------
 
 --
@@ -575,7 +557,7 @@ ALTER TABLE `judge_events`
 -- AUTO_INCREMENT for table `ratings`
 --
 ALTER TABLE `ratings`
-  MODIFY `id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `teams`
