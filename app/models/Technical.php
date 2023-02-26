@@ -191,6 +191,24 @@ class Technical extends User
 
 
     /***************************************************************************
+     * Delete technical
+     *
+     * @return void
+     */
+    public function delete()
+    {
+        // check id
+        if(!self::exists($this->id))
+            App::returnError('HTTP/1.1 500', 'Delete Error: technical [id = ' . $this->id . '] does not exist.');
+
+        // proceed with delete
+        $stmt = $this->conn->prepare("DELETE FROM $this->table WHERE id = ?");
+        $stmt->bind_param("i", $this->id);
+        $stmt->execute();
+    }
+
+
+    /***************************************************************************
      * Get table of assigned events
      *
      * @return string
