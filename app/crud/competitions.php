@@ -75,9 +75,7 @@
                 <form action="competitions_operation.php" method="POST">
 
                     <div class="modal-body">
-
                         <input type="hidden" name="update_id" id="update_id">
-
                         <div class="form-group">
                             <label> Slug </label>
                             <input type="text" name="slug" id="slug" class="form-control" placeholder="Enter your Slug">
@@ -139,6 +137,10 @@
                         <option selected value="competitions.php">Go to...</option>
                         <option value="categories.php">Categories</option>
                         <option value="events.php">Events</option>
+                        <option value="criterion.php">Criterion</option>
+                        <option value="teams.php">Teams</option>
+                        <option value="judges.php">Judges</option>
+                        <option value="technicals.php">Technicals</option>
                     </select>
                 </div>
                 <?php

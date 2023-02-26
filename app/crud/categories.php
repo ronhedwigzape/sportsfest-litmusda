@@ -149,6 +149,10 @@
                         <option selected value="categories.php">Go to...</option>
                         <option value="competitions.php">Competitions</option>
                         <option value="events.php">Events</option>
+                        <option value="criteria.php">Criterion</option>
+                        <option value="teams.php">Teams</option>
+                        <option value="judges.php">Judges</option>
+                        <option value="technicals.php">Technicals</option>
                     </select>
                 </div>
                 <?php
