@@ -9,12 +9,14 @@ if(isset($_POST['insertdata']))
 {
     $name = $_POST['name'];
     $color = $_POST['color'];
+    $file_name = '';
 
     // Handle file upload
     if(isset($_FILES['logo'])) {
         $file_name = $_FILES['logo']['name'];
         $file_tmp = $_FILES['logo']['tmp_name'];
-        $file_ext = strtolower(end(explode('.', $_FILES['logo']['name'])));
+        $arr_filename = explode('.', $file_name);
+        $file_ext = strtolower(end($arr_filename));
         $extensions = array("jpeg", "jpg", "png");
         if(in_array($file_ext, $extensions) === false) {
             echo "File type not allowed, please choose a JPEG or PNG file.";
@@ -38,12 +40,14 @@ if (isset($_POST['updatedata'])) {
     $id = $_POST['update_id'];
     $name = $_POST['name'];
     $color = $_POST['color'];
+    $file_name = '';
 
     // Handle file upload
     if(isset($_FILES['logo']) && $_FILES['logo']['error'] !== UPLOAD_ERR_NO_FILE) {
         $file_name = $_FILES['logo']['name'];
         $file_tmp = $_FILES['logo']['tmp_name'];
-        $file_ext = strtolower(end(explode('.', $_FILES['logo']['name'])));
+        $arr_filename = explode('.', $file_name);
+        $file_ext = strtolower(end($arr_filename));
         $extensions = array("jpeg", "jpg", "png");
         if(in_array($file_ext, $extensions) === false) {
             echo "File type not allowed, please choose a JPEG or PNG file.";
