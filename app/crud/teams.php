@@ -78,7 +78,7 @@ require_once '../config/database.php';
                 </button>
             </div>
 
-            <form action="teams_operation.php" method="POST">
+            <form action="teams_operation.php" method="POST" enctype="multipart/form-data">
 
                 <div class="modal-body">
                     <input type="hidden" name="update_id" id="update_id">
