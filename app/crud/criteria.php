@@ -9,6 +9,7 @@ require_once '../config/database.php';
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="logo.png">
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css">
@@ -155,8 +156,8 @@ require_once '../config/database.php';
             <table id="datatableid" class="table table-bordered table-info table-hover" style="text-align:center;">
                 <thead class="table-dark">
                 <tr>
-                    <th scope="col" style="display:none;">ID</th>
-                    <th scope="col" style="display:none;">Event_ID</th>
+                    <th scope="col" class="d-none">ID</th>
+                    <th scope="col" class="d-none">Event_ID</th>
                     <th scope="col">Title</th>
                     <th scope="col">Percentage</th>
                     <th scope="col">Operations</th>
@@ -165,8 +166,8 @@ require_once '../config/database.php';
                 <tbody>
                 <?php foreach ($criteria as $criterion) { ?>
                     <tr>
-                        <td style="display:none;"><?php echo $criterion->getId(); ?></td>
-                        <td style="display:none;"><?php echo $criterion->getEventId(); ?></td>
+                        <td class="d-none"><?php echo $criterion->getId(); ?></td>
+                        <td class="d-none"><?php echo $criterion->getEventId(); ?></td>
                         <td><?php echo $criterion->getTitle(); ?></td>
                         <td><?php echo $criterion->getPercentage(); ?></td>
                         <td>

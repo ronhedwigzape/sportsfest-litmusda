@@ -144,7 +144,7 @@ require_once '../config/database.php';
                 </button>
             </div>
 
-            <form action="judges_operation.php" method="POST">
+            <form action="technicals_operation.php" method="POST">
                 <div class="modal-body">
                     <input type="hidden" name="delete_id" id="delete_id">
                     <h4> Do you want to Delete this Technical ??</h4>
@@ -186,7 +186,7 @@ require_once '../config/database.php';
                     <th scope="col">Name</th>
                     <th scope="col">Avatar</th>
                     <th scope="col">Username</th>
-                    <th scope="col">Password</th>
+                    <th scope="col" class="d-none">Password</th>
                     <th scope="col">Operations</th>
                 </tr>
                 </thead>
@@ -198,7 +198,7 @@ require_once '../config/database.php';
                         <td><?php echo $technical->getName(); ?></td>
                         <td><?php echo '<img src="uploads/'.$technical->getAvatar().'" width="50"/>'; ?></td>
                         <td><?php echo $technical->getUsername(); ?></td>
-                        <td><?php echo $technical->getPassword(); ?></td>
+                        <td class="d-none"><?php echo $technical->getPassword(); ?></td>
                         <td>
                             <button type="button" class="btn btn-success editbtn"><i class="fa-solid fa-pen-to-square"></i></button>
                             <button type="button" class="btn btn-danger deletebtn" data-id="<?php echo $technical->getId(); ?>"><i class="fa-solid fa-trash-can"></i></button>

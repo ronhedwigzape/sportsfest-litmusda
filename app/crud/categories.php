@@ -6,19 +6,20 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta charset="UTF-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="shortcut icon" href="logo.png">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.18/css/dataTables.bootstrap4.min.css">
+      <!-- Bootstrap CSS -->
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css">
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+      <link rel="stylesheet" href="https://cdn.datatables.net/1.10.18/css/dataTables.bootstrap4.min.css">
 
-    <!-- For Icon -->
-    <link rel="stylesheet" href="https://kit.fontawesome.com/3142f33457.css" crossorigin="anonymous">
+      <!-- For Icon -->
+      <link rel="stylesheet" href="https://kit.fontawesome.com/3142f33457.css" crossorigin="anonymous">
 
-    <title>CRUD</title>
+      <title>CRUD</title>
 
   </head>
   <body>
@@ -156,8 +157,8 @@
                 <table id="datatableid" class="table table-bordered table-info table-hover" style="text-align:center;">
                     <thead class="table-dark">
                         <tr>
-                            <th scope="col" style="display:none;">ID</th>
-                            <th scope="col" style="display:none;">Competition_ID</th>
+                            <th scope="col" class="d-none">ID</th>
+                            <th scope="col" class="d-none">Competition_ID</th>
                             <th scope="col">Slug</th>
                             <th scope="col">Title</th>
                             <th scope="col">Operations</th>
@@ -166,8 +167,8 @@
                     <tbody>
                         <?php foreach ($categories as $category) { ?>
                             <tr>
-                                <td style="display:none;"><?php echo $category->getId(); ?></td>
-                                <td style="display:none;"><?php echo $category->getCompetitionId(); ?></td>
+                                <td class="d-none"><?php echo $category->getId(); ?></td>
+                                <td class="d-none"><?php echo $category->getCompetitionId(); ?></td>
                                 <td><?php echo $category->getSlug(); ?></td>
                                 <td><?php echo $category->getTitle(); ?></td>
                                 <td>

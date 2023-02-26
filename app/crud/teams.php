@@ -9,6 +9,7 @@ require_once '../config/database.php';
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="logo.png">
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css">
@@ -139,11 +140,11 @@ require_once '../config/database.php';
             <button type="button" class="btn btn-primary my-3" data-toggle="modal" data-target="#addmodal">ADD DATA</button>
             <div class="btn-group" role="group" aria-label="Go to">
                 <select onchange="window.location.href=this.value" class="btn btn-secondary">
-                    <option selected value="competitions.php">Go to...</option>
+                    <option selected value="teams.php">Go to...</option>
+                    <option value="competitions.php">Competitions</option>
                     <option value="categories.php">Categories</option>
                     <option value="events.php">Events</option>
                     <option value="criteria.php">Criterion</option>
-                    <option value="teams.php">Teams</option>
                     <option value="judges.php">Judges</option>
                     <option value="technicals.php">Technicals</option>
                 </select>
@@ -155,7 +156,7 @@ require_once '../config/database.php';
             <table id="datatableid" class="table table-bordered table-info table-hover" style="text-align:center;">
                 <thead class="table-dark">
                 <tr>
-                    <th scope="col" style="display:none;">ID</th>
+                    <th scope="col" class="d-none">ID</th>
                     <th scope="col">Name</th>
                     <th scope="col">Color</th>
                     <th scope="col">Logo</th>
@@ -165,7 +166,7 @@ require_once '../config/database.php';
                 <tbody>
                 <?php foreach ($teams as $team) { ?>
                     <tr>
-                        <td style="display:none;"><?php echo $team->getId(); ?></td>
+                        <td class="d-none"><?php echo $team->getId(); ?></td>
                         <td><?php echo $team->getName(); ?></td>
                         <td><?php echo $team->getColor(); ?></td>
                         <td><?php echo '<img src="uploads/'.$team->getLogo().'" width="50"/>'; ?></td>

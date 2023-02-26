@@ -9,6 +9,7 @@ require_once '../config/database.php';
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="logo.png">
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css">
@@ -194,13 +195,13 @@ require_once '../config/database.php';
             <table id="datatableid" class="table table-bordered table-info table-hover" style="text-align:center;">
                 <thead class="table-dark">
                 <tr>
-                    <th scope="col" style="display:none;">ID</th>
+                    <th scope="col" class="d-none">ID</th>
                     <th scope="col">Number</th>
                     <th scope="col">Name</th>
                     <th scope="col">Avatar</th>
                     <th scope="col">is_chairman</th>
                     <th scope="col">Username</th>
-                    <th scope="col">Password</th>
+                    <th scope="col" class="d-none">Password</th>
                     <th scope="col">Operations</th>
                 </tr>
                 </thead>
@@ -213,7 +214,7 @@ require_once '../config/database.php';
                         <td><?php echo '<img src="uploads/'.$judge->getAvatar().'" width="50"/>'; ?></td>
                         <td><?php echo $judge->getIsChairman(); ?></td>
                         <td><?php echo $judge->getUsername(); ?></td>
-                        <td><?php echo $judge->getPassword(); ?></td>
+                        <td class="d-none"><?php echo $judge->getPassword(); ?></td>
                         <td>
                             <button type="button" class="btn btn-success editbtn"><i class="fa-solid fa-pen-to-square"></i></button>
                             <button type="button" class="btn btn-danger deletebtn" data-id="<?php echo $judge->getId(); ?>"><i class="fa-solid fa-trash-can"></i></button>
