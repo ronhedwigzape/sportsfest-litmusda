@@ -250,6 +250,17 @@ class Judge extends User
 
 
     /***************************************************************************
+     * Get table of assigned events
+     *
+     * @return string
+     */
+    public function getTableEvents()
+    {
+        return $this->table_events;
+    }
+
+
+    /***************************************************************************
      * Assign event to judge
      *
      * @param Event $event
@@ -321,7 +332,7 @@ class Judge extends User
     public function getAllEvents()
     {
         require_once 'Event.php';
-        $stmt = $this->conn->prepare("SELECT event_id FROM $this->table_events WHERE judge_id = ? ORDER BY event_id");
+        $stmt = $this->conn->prepare("SELECT DISTINCT event_id FROM $this->table_events WHERE judge_id = ? ORDER BY event_id");
         $stmt->bind_param("i", $this->id);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -442,7 +453,7 @@ class Judge extends User
     {
         $ratings = [];
         foreach($event->getAllCriteria() as $criterion) {
-            $key = $this->id.'_'.$team->getId().'_'.$criterion->getId();
+            $key = $this->id.'_'.$criterion->getId().'_'.$team->getId();
             $ratings[$key] = $this->getCriterionTeamRating($criterion, $team);
         }
         return $ratings;
@@ -460,7 +471,7 @@ class Judge extends User
     {
         $ratings = [];
         foreach($event->getAllCriteria() as $criterion) {
-            $key = $this->id.'_'.$team->getId().'_'.$criterion->getId();
+            $key = $this->id.'_'.$criterion->getId().'_'.$team->getId();
             $ratings[$key] = $this->getCriterionTeamRatingRow($criterion, $team);
         }
         return $ratings;
