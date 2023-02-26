@@ -3,10 +3,9 @@
 require_once '../config/database.php';
 require_once '../models/Team.php';
 
-
 // Insert Data
-if(isset($_POST['insertdata']))
-{
+if(isset($_POST['insertdata'])) {
+
     $name = $_POST['name'];
     $color = $_POST['color'];
     $file_name = '';
@@ -65,13 +64,12 @@ if (isset($_POST['updatedata'])) {
     $team->setColor($color);
     $team->setLogo($file_name);
     $team->update();
-
 }
 
 
 // Delete Data
-if(isset($_POST['deletedata']))
-{
+if(isset($_POST['deletedata'])) {
+
     $id = $_POST['delete_id'];
     $team = Team::findById($id);
     $team->delete();
