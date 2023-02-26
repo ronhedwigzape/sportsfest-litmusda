@@ -56,7 +56,7 @@
 		<top-nav />
 
 		<!--	Judge Score Sheet	-->
-		<v-main>
+		<v-main v-if="$store.getters['auth/getUser'] !== null">
 			<v-table v-if="$route.params.eventSlug" density="comfortable" hover>
 				<thead>
 					<tr class="mt-5">
