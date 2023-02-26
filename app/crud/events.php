@@ -134,18 +134,28 @@
     <div class="container my-3">
         <div class="card">
             <div class="card-body">
-                <h1 style="text-align:center;"><b> <u>Events</u> </b></h1>
-                <button type="button" class="btn btn-primary my-3" data-toggle="modal" data-target="#addmodal">ADD DATA</button>
-                <div class="btn-group" role="group" aria-label="Go to">
-                    <select onchange="window.location.href=this.value" class="btn btn-secondary">
-                        <option selected value="events.php">Go to...</option>
-                        <option value="competitions.php">Competitions</option>
-                        <option value="categories.php">Categories</option>
-                        <option value="criteria.php">Criterion</option>
-                        <option value="teams.php">Teams</option>
-                        <option value="judges.php">Judges</option>
-                        <option value="technicals.php">Technicals</option>
-                    </select>
+                <h1 class="text-center"><b> <u>Events</u> </b></h1>
+                <div class="d-flex align-items-center">
+                    <button type="button" class="btn btn-primary mr-3 my-3" data-toggle="modal" data-target="#addmodal">ADD DATA</button>
+                    <div class="btn-group" role="group" aria-label="Go to">
+                        <select onchange="window.location.href=this.value" class="btn btn-secondary">
+                            <option selected value="">Go to...</option>
+                            <option value="competitions.php">Competitions</option>
+                            <option value="categories.php">Categories</option>
+                            <option value="criteria.php">Criterion</option>
+                            <option value="teams.php">Teams</option>
+                            <option value="judges.php">Judges</option>
+                            <option value="technicals.php">Technicals</option>
+                        </select>
+                    </div>
+                    <div class="btn-group ml-auto" role="group" aria-label="Go to">
+                        <select onchange="window.location.href=this.value" class="btn btn-dark">
+                            <option selected value="">Go to...</option>
+                            <option value="">Literary</option>
+                            <option value="">Music</option>
+                            <option value="">Dance</option>
+                        </select>
+                    </div>
                 </div>
                 <?php
                     require_once '../config/database.php';
@@ -153,7 +163,7 @@
                     
                     $events = Event::all();
                 ?>
-                <table id="datatableid" class="table table-bordered table-info table-hover" style="text-align:center;">
+                <table id="datatableid" class="table table-bordered table-info table-hover text-center">
                     <thead class="table-dark">
                         <tr>
                             <th scope="col" class="d-none">ID</th>

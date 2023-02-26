@@ -136,11 +136,11 @@ require_once '../config/database.php';
 <div class="container my-3">
     <div class="card">
         <div class="card-body">
-            <h1 style="text-align:center;"><b> <u>Teams</u> </b></h1>
+            <h1 class="text-center"><b> <u>Teams</u> </b></h1>
             <button type="button" class="btn btn-primary my-3" data-toggle="modal" data-target="#addmodal">ADD DATA</button>
             <div class="btn-group" role="group" aria-label="Go to">
                 <select onchange="window.location.href=this.value" class="btn btn-secondary">
-                    <option selected value="teams.php">Go to...</option>
+                    <option selected value="">Go to...</option>
                     <option value="competitions.php">Competitions</option>
                     <option value="categories.php">Categories</option>
                     <option value="events.php">Events</option>
@@ -153,7 +153,7 @@ require_once '../config/database.php';
                 require_once '../models/Team.php';
                 $teams = Team::all();
             ?>
-            <table id="datatableid" class="table table-bordered table-info table-hover" style="text-align:center;">
+            <table id="datatableid" class="table table-bordered table-info table-hover text-center" >
                 <thead class="table-dark">
                 <tr>
                     <th scope="col" class="d-none">ID</th>
