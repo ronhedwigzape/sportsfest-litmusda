@@ -24,12 +24,6 @@ else {
             echo json_encode([
                 "events" => $judge->getRowEvents()
             ]);
-
-            /***************************************************************************
-             * TODO: next will be... dapat ma-render mo yung scoresheet. display the teams and criteria for the selected event
-             *        kung ano nakalagay na criteria sa database, yun ang mag-render
-             *        Pati yung teams ron, di dapat siya hard-coded.lahat from database.
-             */
         }
 
         // get scoresheet of the passed event
