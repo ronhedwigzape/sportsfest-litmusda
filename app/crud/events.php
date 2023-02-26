@@ -37,11 +37,10 @@
                 </div>
 
                 <form action="events_operation.php" method="POST">
-
                     <div class="modal-body">
                         <div class="form-group">
                             <label>Category_ID</label>
-                            <input type="number" min="3" max="5" name="category_id" id="category_id" class="form-control" placeholder="Select your Categories_ID 3(literary), 4(music) or 5(dance)" autocomplete="off" required>
+                            <input type="number" name="category_id" id="category_id" class="form-control" placeholder="Select your Categories_ID 3(literary), 4(music) or 5(dance)"  min="3" max="5" autocomplete="off" required>
                         </div>
 
                         <div class="form-group">
@@ -53,14 +52,13 @@
                             <label>Title</label>
                             <input type="text" name="title" class="form-control" placeholder="Enter your Title" autocomplete="off" required>
                         </div>
-
                     </div>
+
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                         <button type="submit" name="insertdata" class="btn btn-primary">Save Data</button>
                     </div>
                 </form>
-
             </div>
         </div>
     </div>
@@ -78,14 +76,11 @@
                 </div>
 
                 <form action="events_operation.php" method="POST">
-
                     <div class="modal-body">
-                    
                         <input type="hidden" name="update_id" id="update_id">
-
                         <div class="form-group">
                             <label>Categories_ID</label>
-                            <input type="number" min="3" max="5" name="category_id" id="category_id" class="form-control" placeholder="Select your Categories_ID 3(literary), 4(music) or 5(dance)" autocomplete="off" required>
+                            <input type="number" name="category_id" id="category_id" class="form-control" placeholder="Select your Categories_ID 3(literary), 4(music) or 5(dance)" min="3" max="5" autocomplete="off" required>
                         </div>
 
                         <div class="form-group">
@@ -97,14 +92,13 @@
                             <label>Title</label>
                             <input type="text" name="title" id="title" class="form-control" placeholder="Enter your Title">
                         </div>
-
                     </div>
+
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                         <button type="submit" name="updatedata" class="btn btn-primary">Update Data</button>
                     </div>
                 </form>
-
             </div>
         </div>
     </div>
@@ -122,19 +116,16 @@
                 </div>
 
                 <form action="events_operation.php" method="POST">
-
                     <div class="modal-body">
-
                         <input type="hidden" name="delete_id" id="delete_id">
-
                         <h4>Do you want to Delete this Event ??</h4>
                     </div>
+
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary" data-dismiss="modal"> NO </button>
                         <button type="submit" name="deletedata" class="btn btn-danger"> Yes !! Delete it. </button>
                     </div>
                 </form>
-
             </div>
         </div>
     </div>
@@ -225,6 +216,7 @@
                 console.log(data);
 
                 $('#update_id').val(data[0]);
+                $('#category_id').val(data[1]);
                 $('#slug').val(data[2]);
                 $('#title').val(data[3]);
             });
