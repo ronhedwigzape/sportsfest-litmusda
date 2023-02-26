@@ -197,7 +197,7 @@
 						criterionId: rating.criterion_id,
 						teamId: rating.team_id,
 						value: rating.value,
-						isLocked: false
+						isLocked: rating.is_locked
 					},
 					success: (data) => {
 						console.log(data)

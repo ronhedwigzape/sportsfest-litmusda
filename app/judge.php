@@ -50,7 +50,7 @@ else {
             $criterion_id = $_POST['criterionId'];
             $team_id = $_POST['teamId'];
             $value = $_POST['value'];
-            $isLocked = $_POST['isLocked'];
+            $isLocked = filter_var($_POST['isLocked'], FILTER_VALIDATE_BOOLEAN);
 
             $criterion = Criterion::findById($criterion_id);
             $team = Team::findById($team_id);
