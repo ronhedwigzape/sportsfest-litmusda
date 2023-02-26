@@ -196,13 +196,21 @@ class Rating extends App
     /***************************************************************************
      * Update rating
      *
+     * @param bool $toggle_lock
      * @return void
      */
-    public function update()
+    public function update($toggle_lock = false)
     {
         // check id
         if(!self::exists($this->id))
             App::returnError('HTTP/1.1 500', 'Update Error: rating [id = ' . $this->id . '] does not exist.');
+
+        // check is_locked
+        if(!$toggle_lock) {
+            $stored_rating = self::findById($this->id);
+            if($stored_rating->is_locked)
+                App::returnError('HTTP/1.1 500', 'Update Error: rating [id = ' . $this->id . '] is already locked.');
+        }
 
         // check judge_id
         require_once 'Judge.php';
@@ -269,7 +277,7 @@ class Rating extends App
     {
         $this->is_locked = $is_locked;
         if($update)
-            $this->update();
+            $this->update(true);
     }
 
 
