@@ -194,10 +194,7 @@
 						withCredentials: true
 					},
 					data: {
-						criterionId: rating.criterion_id,
-						teamId: rating.team_id,
-						value: rating.value,
-						isLocked: rating.is_locked
+						rating
 					},
 					success: (data) => {
 						console.log(data)
