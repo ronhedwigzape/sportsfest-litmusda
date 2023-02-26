@@ -103,10 +103,11 @@
 							</v-col>
 							{{ team.name }}
 						</td>
-						<td	v-for="criterion in criteria">
+						<td	v-for="criterion in criteria" :key="criterion.id">
 							<v-text-field
 								type="number"
 								variant="outlined"
+								@change="save(ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`])"
 								v-model="ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value"
 							>
 							</v-text-field>
@@ -177,12 +178,34 @@
 							this.teams = data.teams
 							this.ratings = data.ratings
 							this.event = data.event
+
 						},
 						error: (error) => {
 							alert(`ERROR ${error.status}: ${error.statusText}`);
 						},
 					});
 				}
+			},
+			save(rating) {
+				$.ajax({
+					url: `${this.$store.getters.appURL}/judge.php`,
+					type: 'POST',
+					xhrFields: {
+						withCredentials: true
+					},
+					data: {
+						criterionId: rating.criterion_id,
+						teamId: rating.team_id,
+						value: rating.value,
+						isLocked: false
+					},
+					success: (data) => {
+						console.log(data)
+					},
+					error: (error) => {
+						alert(`ERROR ${error.status}: ${error.statusText}`);
+					},
+				});
 			},
 			getIconForEvent(title) {
 				switch (title) {
