@@ -36,7 +36,7 @@ require_once '../config/database.php';
                 </button>
             </div>
 
-            <form action="teams_operation.php" method="POST">
+            <form action="teams_operation.php" method="POST" enctype="multipart/form-data">
 
                 <div class="modal-body">
                     <div class="form-group">
