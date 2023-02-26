@@ -37,7 +37,6 @@ require_once '../config/database.php';
             </div>
 
             <form action="teams_operation.php" method="POST" enctype="multipart/form-data">
-
                 <div class="modal-body">
                     <div class="form-group">
                         <label> Name </label>
@@ -54,14 +53,13 @@ require_once '../config/database.php';
                         <input type="file" name="logo" id="logo" class="form-control" accept="image/*">
                         <small class="form-text text-muted">Select an image file to upload.</small>
                     </div>
-
                 </div>
+
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                     <button type="submit" name="insertdata" class="btn btn-primary">Save Data</button>
                 </div>
             </form>
-
         </div>
     </div>
 </div>
@@ -79,17 +77,16 @@ require_once '../config/database.php';
             </div>
 
             <form action="teams_operation.php" method="POST" enctype="multipart/form-data">
-
                 <div class="modal-body">
                     <input type="hidden" name="update_id" id="update_id">
                     <div class="form-group">
                         <label> Name </label>
-                        <input type="text" name="name" class="form-control" placeholder="Enter your Name" autocomplete="off" required>
+                        <input type="text" name="name" id="name" class="form-control" placeholder="Enter your Name" autocomplete="off" required>
                     </div>
 
                     <div class="form-group">
                         <label> Color </label>
-                        <input type="text" name="color" class="form-control" placeholder="Enter your Color" autocomplete="off" required>
+                        <input type="text" name="color" id="color" class="form-control" placeholder="Enter your Color" autocomplete="off" required>
                     </div>
 
                     <div class="form-group">
@@ -97,14 +94,13 @@ require_once '../config/database.php';
                         <input type="file" name="logo" id="logo" class="form-control" accept="image/*">
                         <small class="form-text text-muted">Select an image file to upload.</small>
                     </div>
-
                 </div>
+
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                     <button type="submit" name="updatedata" class="btn btn-primary">Update Data</button>
                 </div>
             </form>
-
         </div>
     </div>
 </div>
@@ -122,19 +118,16 @@ require_once '../config/database.php';
             </div>
 
             <form action="teams_operation.php" method="POST">
-
                 <div class="modal-body">
-
                     <input type="hidden" name="delete_id" id="delete_id">
-
                     <h4> Do you want to Delete this Team ??</h4>
                 </div>
+
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" data-dismiss="modal"> NO </button>
                     <button type="submit" name="deletedata" class="btn btn-danger"> Yes !! Delete it. </button>
                 </div>
             </form>
-
         </div>
     </div>
 </div>
