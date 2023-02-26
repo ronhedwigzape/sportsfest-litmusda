@@ -3,14 +3,20 @@
 		<h3 class="me-5">{{ name }}</h3>
 		<v-chip
 			class="ma-2"
-			color="amber"
+			:color="$store.getters['auth/getUser'] !== null ?
+					$store.getters['auth/getUser'].userType === 'admin' ? 'amber' :
+					$store.getters['auth/getUser'].userType === 'judge' ? 'green-lighten-2' :
+					'red-lighten-2' : ''"
 			v-if="$store.getters['auth/getUser'] !== null"
 		>
-			<v-icon start icon="mdi-account-circle"></v-icon>
+			<v-icon start icon="mdi-account-circle" />
 			{{ $store.getters['auth/getUser'].name }}
 		</v-chip>
+
 		<v-avatar
-			size="35">
+			size="35"
+			v-if="$store.getters['auth/getUser'] !== null"
+		>
 			<v-img :src="`${$store.getters.appURL}/crud/uploads/${$store.getters['auth/getUser'].avatar}`"/>
 		</v-avatar>
 
@@ -93,11 +99,8 @@ export default {
 					alert(`ERROR ${error.status}: ${error.statusText}`);
 				},
 			})
-		}
-	},
-	computed: {
-
-	},
+		},
+	}
 }
 </script>
 

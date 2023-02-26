@@ -27,24 +27,25 @@
 						</v-row>
 					</template>
 				</v-img>
-				<h1 class="mt-2 font-weight-bold">Competitions</h1>
+				<h2 class="font-weight-bold">Competitions</h2>
 			</v-col>
 
 			<v-divider />
 			<!--	Events	-->
 
-			<div class="text-center mt-2 mx-4">
-				<v-btn
-					variant="text"
-					class="my-2 mx-1 px-16"
-					v-for="event in $store.getters['events/getEvents']"
-					:prepend-icon="getIconForEvent(event.title)"
-					:key="event.id"
-					@click="handleEventChange(event)"
-				>
-					{{ event.title }}
-				</v-btn>
-			</div>
+			<v-col align="center">
+				<v-list nav active-class="bg-primary">
+					<v-list-item
+						class="text-uppercase text-button text-left"
+						v-for="event in $store.getters['events/getEvents']"
+						:prepend-icon="getIconForEvent(event.title)"
+						:key="event.id"
+						@click="handleEventChange(event)"
+					>
+						{{ event.title }}
+					</v-list-item>
+				</v-list>
+			</v-col>
 			<template v-slot:append>
 				<v-col class="text-center mt-4" cols="12">
 					&copy; <strong class="text-uppercase">aclc iriga 2023</strong>
@@ -56,9 +57,9 @@
 
 		<!--	Judge Score Sheet	-->
 		<v-main>
-			<v-table v-if="$route.params.eventSlug" hover>
+			<v-table v-if="$route.params.eventSlug" density="comfortable" hover>
 				<thead>
-					<tr>
+					<tr class="mt-5">
 						<th colspan="12" class="text-h5 text-uppercase text-center font-weight-bold">
 							{{ event.title }}
 						</th>
@@ -70,7 +71,7 @@
 						<th class="text-uppercase text-center" v-for="criterion in criteria">
 							<b>{{ criterion.title }}</b> ({{ criterion.percentage }}%)
 						</th>
-						<th class="text-uppercase text-center font-weight-bold">Average</th>
+						<th class="text-uppercase text-center font-weight-bold">Total</th>
 						<th class="text-uppercase text-center font-weight-bold">Rank</th>
 					</tr>
 				</thead>
@@ -116,18 +117,47 @@
 						<td></td>
 					</tr>
 				</tbody>
+				<!--	Dialog	  -->
 				<tfoot>
 					<td colspan="12">
 						<v-col align="center" justify="center">
 							<v-btn
 								class="my-5"
+								color="deep-purple-darken-1"
+								@click="dialog = true"
 							>
 							submit ratings
 							</v-btn>
+							<v-dialog
+								v-model="dialog"
+								persistent
+								width="auto"
+							>
+								<v-card class="pa-2">
+									<v-card-title>
+										Submit Ratings
+									</v-card-title>
+									<v-card-text>
+										Please confirm that you wish to finalize the ratings for {{ event.title }}. This action cannot be undone.
+									</v-card-text>
+									<v-card-actions>
+										<v-spacer></v-spacer>
+										<v-btn color="primary" @click="dialog = false">Close</v-btn>
+										<v-btn color="primary"  @click="">Submit</v-btn>
+									</v-card-actions>
+								</v-card>
+							</v-dialog>
 						</v-col>
 					</td>
 				</tfoot>
 			</v-table>
+<!--			<v-col align="center" justify="center" style="height: 100vh; margin-top: 30vh;">-->
+<!--				<v-progress-circular-->
+<!--					:size="160"-->
+<!--					color="deep-purple-darken-2"-->
+<!--					indeterminate-->
+<!--				/>-->
+<!--			</v-col>-->
 		</v-main>
 	</v-layout>
 </template>
@@ -144,6 +174,7 @@
 		data() {
 			return {
 				foundationLogo: `${import.meta.env.BASE_URL}foundation-logo.png`,
+				dialog: false,
 				criteria: [],
 				teams: [],
 				ratings: {},
