@@ -37,7 +37,6 @@ require_once '../config/database.php';
             </div>
 
             <form action="criteria_operation.php" method="POST">
-
                 <div class="modal-body">
                     <div class="form-group">
                         <label> Event_ID </label>
@@ -53,14 +52,13 @@ require_once '../config/database.php';
                         <label> Percentage </label>
                         <input type="number" name="percentage" class="form-control" min="1" max="100" placeholder="Enter your Percentage from 1 to 100" autocomplete="off" required>
                     </div>
-
                 </div>
+
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                     <button type="submit" name="insertdata" class="btn btn-primary">Save Data</button>
                 </div>
             </form>
-
         </div>
     </div>
 </div>
@@ -78,31 +76,29 @@ require_once '../config/database.php';
             </div>
 
             <form action="criteria_operation.php" method="POST">
-
                 <div class="modal-body">
                     <input type="hidden" name="update_id" id="update_id">
                     <div class="form-group">
                         <label> Event_ID </label>
-                        <input type="number" name="event_id" class="form-control" min="1" max="6" placeholder="Enter your Event_ID from 1 to 6" autocomplete="off" required>
+                        <input type="number" name="event_id" id="event_id" class="form-control" min="1" max="6" placeholder="Enter your Event_ID from 1 to 6" autocomplete="off" required>
                     </div>
 
                     <div class="form-group">
                         <label> Title </label>
-                        <input type="text" name="title" class="form-control" placeholder="Enter your Title" autocomplete="off" required>
+                        <input type="text" name="title" id="title" class="form-control" placeholder="Enter your Title" autocomplete="off" required>
                     </div>
 
                     <div class="form-group">
                         <label> Percentage </label>
-                        <input type="number" name="percentage" class="form-control" min="1" max="100" placeholder="Enter your Percentage from 1 to 100" autocomplete="off" required>
+                        <input type="number" name="percentage" id="percentage" class="form-control" min="1" max="100" placeholder="Enter your Percentage from 1 to 100" autocomplete="off" required>
                     </div>
-
                 </div>
+
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                     <button type="submit" name="updatedata" class="btn btn-primary">Update Data</button>
                 </div>
             </form>
-
         </div>
     </div>
 </div>
@@ -120,19 +116,16 @@ require_once '../config/database.php';
             </div>
 
             <form action="criteria_operation.php" method="POST">
-
                 <div class="modal-body">
-
                     <input type="hidden" name="delete_id" id="delete_id">
-
                     <h4> Do you want to Delete this Criteria ??</h4>
                 </div>
+
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" data-dismiss="modal"> NO </button>
                     <button type="submit" name="deletedata" class="btn btn-danger"> Yes !! Delete it. </button>
                 </div>
             </form>
-
         </div>
     </div>
 </div>
