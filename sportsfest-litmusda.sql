@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 25, 2023 at 01:12 PM
+-- Generation Time: Feb 26, 2023 at 07:06 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.1.12
 
@@ -43,7 +43,7 @@ CREATE TABLE `admins` (
 --
 
 INSERT INTO `admins` (`id`, `number`, `name`, `avatar`, `username`, `password`, `created_at`, `updated_at`) VALUES
-(1, 1, 'SUPER USER', '', 'admin', 'admin', '2023-02-19 07:36:32', '2023-02-19 13:22:04');
+(1, 1, 'SUPER USER', 'no-avatar.jpg', 'admin', 'admin', '2023-02-19 07:36:32', '2023-02-26 06:05:06');
 
 -- --------------------------------------------------------
 
@@ -235,11 +235,11 @@ CREATE TABLE `judges` (
 --
 
 INSERT INTO `judges` (`id`, `number`, `name`, `avatar`, `is_chairman`, `username`, `password`, `created_at`, `updated_at`) VALUES
-(1, 1, 'JUDGE 01', NULL, 1, 'judge01', 'judge01', '2023-02-19 08:58:05', '2023-02-19 08:58:05'),
-(2, 2, 'JUDGE 02', NULL, 0, 'judge02', 'judge02', '2023-02-19 08:58:16', '2023-02-19 08:58:38'),
-(3, 3, 'JUDGE 03', NULL, 0, 'judge03', 'judge03', '2023-02-19 08:58:32', '2023-02-19 08:58:40'),
-(4, 4, 'JUDGE 04', NULL, 0, 'judge04', 'judge04', '2023-02-21 05:32:22', '2023-02-21 05:35:43'),
-(5, 5, 'JUDGE 05', NULL, 0, 'judge05', 'judge05', '2023-02-21 05:32:22', '2023-02-21 05:35:28');
+(1, 1, 'JUDGE 01', 'no-avatar.jpg', 1, 'judge01', 'judge01', '2023-02-19 08:58:05', '2023-02-26 06:04:23'),
+(2, 2, 'JUDGE 02', 'no-avatar.jpg', 0, 'judge02', 'judge02', '2023-02-19 08:58:16', '2023-02-26 06:04:26'),
+(3, 3, 'JUDGE 03', 'no-avatar.jpg', 0, 'judge03', 'judge03', '2023-02-19 08:58:32', '2023-02-26 06:04:28'),
+(4, 4, 'JUDGE 04', 'no-avatar.jpg', 0, 'judge04', 'judge04', '2023-02-21 05:32:22', '2023-02-26 06:04:31'),
+(5, 5, 'JUDGE 05', 'no-avatar.jpg', 0, 'judge05', 'judge05', '2023-02-21 05:32:22', '2023-02-26 06:04:33');
 
 -- --------------------------------------------------------
 
@@ -397,7 +397,7 @@ CREATE TABLE `technicals` (
 --
 
 INSERT INTO `technicals` (`id`, `number`, `name`, `avatar`, `username`, `password`, `created_at`, `updated_at`) VALUES
-(1, 1, 'TECHNICAL O1', NULL, 'technical01', 'technical01', '2023-02-19 08:58:58', '2023-02-19 08:59:06');
+(1, 1, 'TECHNICAL O1', 'no-avatar.jpg', 'technical01', 'technical01', '2023-02-19 08:58:58', '2023-02-26 06:04:50');
 
 -- --------------------------------------------------------
 
