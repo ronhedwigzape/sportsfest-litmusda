@@ -38,7 +38,7 @@
 					variant="text"
 					class="my-2 mx-1 px-16"
 					v-for="event in $store.getters['events/getEvents']"
-					:prepend-icon="getIconForTitle(event.title)"
+					:prepend-icon="getIconForEvent(event.title)"
 					:key="event.id"
 					@click="handleEventChange(event)"
 				>
@@ -78,104 +78,47 @@
 				</tr>
 				</thead>
 				<tbody >
-					<tr
-						v-for="(eventRating, eventTeam) in ratings"
-						:key="eventTeam"
-					>
-						<td
-							class="text-uppercase text-center font-weight-bold"
-						>
-						<v-col align="center">
-							<v-img
-								v-if="eventTeam.endsWith('_1')"
-								:src="redTeamLogo"
-								:lazy-src="redTeamLogo"
-								aspect-ratio="1"
-								alt="Fearless-Dragons-Logo"
-								height="100"
-								width="100"
-							>
-								<template v-slot:placeholder>
-									<v-row
-										class="fill-height ma-0"
-										align="center"
-										justify="center"
-									>
-										<v-progress-circular
-											indeterminate
-											color="grey-lighten-5"
-										></v-progress-circular>
-									</v-row>
-								</template>
-							</v-img>
-							<v-img
-								v-else-if="eventTeam.endsWith('_2')"
-								:src="greenTeamLogo"
-								:lazy-src="greenTeamLogo"
-								aspect-ratio="1"
-								alt="Furious-Elves-Logo"
-								height="100"
-								width="100"
-							>
-								<template v-slot:placeholder>
-									<v-row
-										class="fill-height ma-0"
-										align="center"
-										justify="center"
-									>
-										<v-progress-circular
-											indeterminate
-											color="grey-lighten-5"
-										></v-progress-circular>
-									</v-row>
-								</template>
-							</v-img>
-							<v-img
-								v-else-if="eventTeam.endsWith('_3')"
-								:src="blueTeamLogo"
-								:lazy-src="blueTeamLogo"
-								aspect-ratio="1"
-								alt="Wise-Wizards-Logo"
-								height="100"
-								width="100"
-							>
-								<template v-slot:placeholder>
-									<v-row
-										class="fill-height ma-0"
-										align="center"
-										justify="center"
-									>
-										<v-progress-circular
-											indeterminate
-											color="grey-lighten-5"
-										></v-progress-circular>
-									</v-row>
-								</template>
-							</v-img>
-							<!--	Copy v-img for picture if have more than 3 teams 	-->
-
-						</v-col>
-							<span>{{ teamName(eventTeam) }}</span>
+					<tr v-for="team in teams" :key="team.id">
+						<td class="text-uppercase text-center font-weight-bold">
+							<v-col align="center">
+								<v-img
+									:src="`${$store.getters.appURL}/crud/uploads/${team.logo}`"
+									:lazy-src="`${$store.getters.appURL}/crud/uploads/${team.logo}`"
+									aspect-ratio="1"
+									:alt="`${team.name} Logo`"
+									height="100"
+									width="100"
+								>
+									<template v-slot:placeholder>
+										<v-row
+											class="fill-height ma-0"
+											align="center"
+											justify="center"
+										>
+											<v-progress-circular
+												indeterminate
+												color="grey-lighten-5"
+											></v-progress-circular>
+										</v-row>
+									</template>
+								</v-img>
+							</v-col>
+							{{ team.name }}
 						</td>
-						<td
-							v-for="criterion in eventRating"
-							:key="criterion.id"
-						>
+						<td	v-for="criterion in criteria">
 							<v-text-field
 								type="number"
 								variant="outlined"
-								:value="criterion.value"
+								v-model="ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value"
 							>
 							</v-text-field>
 						</td>
-						<td>
-
-						</td>
-						<td>
-
-						</td>
+						<td></td>
+						<td></td>
 					</tr>
 				</tbody>
+				<v-btn>
+				</v-btn>
 			</v-table>
 		</v-main>
 
@@ -216,7 +159,7 @@
 		methods: {
 			fetchScoreSheet() {
 				// fetch scoresheet from backend
-				if(this.$route.params.eventSlug) {
+				if (this.$route.params.eventSlug) {
 					$.ajax({
 						url: `${this.$store.getters.appURL}/judge.php`,
 						type: 'GET',
@@ -231,7 +174,7 @@
 							console.log(data)
 							this.criteria = data.criteria
 							this.teams = data.teams
-							this.ratings  = data.ratings
+							this.ratings = data.ratings
 							this.event = data.event
 						},
 						error: (error) => {
@@ -240,12 +183,7 @@
 					});
 				}
 			},
-			teamName(eventTeam) {
-				const teamId = eventTeam.slice(-1); // get the last character of eventTeam string
-				const team = this.teams.find(team => team.id == teamId); // find the team with matching id
-				return team ? team.name : 'Unknown Team'; // return the team name if found, else return 'Unknown Team'
-			},
-			getIconForTitle(title) {
+			getIconForEvent(title) {
 				switch (title) {
 					case "Oration":
 					case "Balagtasan":
