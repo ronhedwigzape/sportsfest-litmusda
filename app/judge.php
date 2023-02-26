@@ -42,6 +42,22 @@ else {
             ]);
         }
 
+        // set criterion rating for teams
+        else if (isset($_POST['value'])) {
+            require_once 'models/Criterion.php';
+            require_once 'models/Team.php';
+
+            $criterion_id = $_POST['criterionId'];
+            $team_id = $_POST['teamId'];
+            $value = $_POST['value'];
+            $isLocked = filter_var($_POST['isLocked'], FILTER_VALIDATE_BOOLEAN);
+
+            $criterion = Criterion::findById($criterion_id);
+            $team = Team::findById($team_id);
+
+            $judge->setCriterionTeamRating($criterion, $team, $value);
+        }
+
         else
            denyAccess();
     }
