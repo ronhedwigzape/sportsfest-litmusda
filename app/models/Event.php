@@ -186,6 +186,10 @@ class Event extends App
      */
     public function insert()
     {
+        // check id
+        if(self::exists($this->id))
+            App::returnError('HTTP/1.1 500', 'Insert Error: event [id = ' . $this->id . '] already exists.');
+
         // check category_id
         require_once 'Category.php';
         if(!Category::exists($this->category_id))
@@ -361,5 +365,81 @@ class Event extends App
     {
         require_once 'Category.php';
         return new Category($this->category_id);
+    }
+
+
+    /***************************************************************************
+     * Get all assigned judges to event as array of objects
+     *
+     * @return Judge[]
+     */
+    public function getAllJudges()
+    {
+        require_once 'Judge.php';
+        $table_events = (new Judge())->getTableEvents();
+
+        $stmt = $this->conn->prepare("SELECT DISTINCT judge_id FROM $table_events WHERE event_id = ? ORDER BY judge_id");
+        $stmt->bind_param("i", $this->id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $judges = [];
+        while($row = $result->fetch_assoc()) {
+            $judges[] = Judge::findById($row['judge_id']);
+        }
+        return $judges;
+    }
+
+
+    /***************************************************************************
+     * Get all assigned judges to event as array of arrays
+     *
+     * @return array
+     */
+    public function getRowJudges()
+    {
+        $judges = [];
+        foreach($this->getAllJudges() as $judge) {
+            $judges[] = $judge->toArray();
+        }
+        return $judges;
+    }
+
+
+    /***************************************************************************
+     * Get all assigned technicals to event as array of objects
+     *
+     * @return Technical[]
+     */
+    public function getAllTechnicals()
+    {
+        require_once 'Technical.php';
+        $table_events = (new Technical())->getTableEvents();
+
+        $stmt = $this->conn->prepare("SELECT DISTINCT technical_id FROM $table_events WHERE event_id = ? ORDER BY technical_id");
+        $stmt->bind_param("i", $this->id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $technicals = [];
+        while($row = $result->fetch_assoc()) {
+            $technicals[] = Technical::findById($row['technical_id']);
+        }
+        return $technicals;
+    }
+
+
+    /***************************************************************************
+     * Get all assigned technicals to event as array of arrays
+     *
+     * @return array
+     */
+    public function getRowTechnicals()
+    {
+        $technicals = [];
+        foreach($this->getAllTechnicals() as $technical) {
+            $technicals[] = $technical->toArray();
+        }
+        return $technicals;
     }
 }

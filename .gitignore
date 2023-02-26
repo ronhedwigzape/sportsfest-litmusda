@@ -18,6 +18,10 @@ public
 app/_test.php
 app/_env.php
 app/config/database.php
+app/crud/uploads
+!app/crud/uploads/red.png
+!app/crud/uploads/green.png
+!app/crud/uploads/blue.png
 
 /cypress/videos/
 /cypress/screenshots/

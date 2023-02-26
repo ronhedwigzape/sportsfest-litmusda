@@ -156,6 +156,10 @@ class Judge extends User
      */
     public function insert()
     {
+        // check id
+        if(self::exists($this->id))
+            App::returnError('HTTP/1.1 500', 'Insert Error: judge [id = ' . $this->id . '] already exists.');
+
         // check username
         if(trim($this->username) == '')
             App::returnError('HTTP/1.1 500', 'Insert Error: judge username is required.');
@@ -246,6 +250,17 @@ class Judge extends User
 
 
     /***************************************************************************
+     * Get table of assigned events
+     *
+     * @return string
+     */
+    public function getTableEvents()
+    {
+        return $this->table_events;
+    }
+
+
+    /***************************************************************************
      * Assign event to judge
      *
      * @param Event $event
@@ -317,7 +332,7 @@ class Judge extends User
     public function getAllEvents()
     {
         require_once 'Event.php';
-        $stmt = $this->conn->prepare("SELECT event_id FROM $this->table_events WHERE judge_id = ? ORDER BY event_id");
+        $stmt = $this->conn->prepare("SELECT DISTINCT event_id FROM $this->table_events WHERE judge_id = ? ORDER BY event_id");
         $stmt->bind_param("i", $this->id);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -342,5 +357,161 @@ class Judge extends User
             $events[] = $event->toArray();
         }
         return $events;
+    }
+
+
+    /***************************************************************************
+     * Set judge's rating of team based on a given criterion
+     *
+     * @param Criterion $criterion
+     * @param Team $team
+     * @param float $value
+     * @param boolean $is_locked
+     * @return void
+     */
+    public function setCriterionTeamRating($criterion, $team, $value = 0, $is_locked = false)
+    {
+        require_once 'Rating.php';
+
+        // get criterion_id and team_id
+        $criterion_id = $criterion->getId();
+        $team_id = $team->getId();
+
+        // check if rating is stored or not
+        $stored = Rating::stored($this->id, $criterion_id, $team_id);
+
+        // instantiate rating
+        $rating = new Rating();
+        if($stored)
+            $rating = Rating::find($this->id, $criterion_id, $team_id);
+
+        // set properties
+        $rating->setJudgeId($this->id);
+        $rating->setCriterionId($criterion_id);
+        $rating->setTeamId($team_id);
+        $rating->setValue($value);
+        $rating->setIsLocked($is_locked);
+
+        // update or insert
+        if($stored)
+            $rating->update();
+        else
+            $rating->insert();
+    }
+
+
+    /***************************************************************************
+     * Get judge's rating of team based on a given criterion, as object
+     *
+     * @param Criterion $criterion
+     * @param Team $team
+     * @return Rating
+     */
+    public function getCriterionTeamRating($criterion, $team)
+    {
+        require_once 'Rating.php';
+
+        // get criterion_id and team_id
+        $criterion_id = $criterion->getId();
+        $team_id = $team->getId();
+
+        // insert rating if not yet stored
+        if(!Rating::stored($this->id, $criterion_id, $team_id)) {
+            $rating = new Rating();
+            $rating->setJudgeId($this->id);
+            $rating->setCriterionId($criterion_id);
+            $rating->setTeamId($team_id);
+            $rating->insert();
+        }
+
+        // return rating
+        return Rating::find($this->id, $criterion_id, $team_id);
+    }
+
+
+    /***************************************************************************
+     * Get judge's rating of team based on a given criterion, as array
+     *
+     * @param Criterion $criterion
+     * @param Team $team
+     * @return array
+     */
+    public function getCriterionTeamRatingRow($criterion, $team)
+    {
+        return ($this->getCriterionTeamRating($criterion, $team))->toArray();
+    }
+
+
+    /***************************************************************************
+     * Get judge's rating of team based on a given event, as array of objects
+     *
+     * @param Event $event
+     * @param Team $team
+     * @return array
+     */
+    public function getAllEventTeamRatings($event, $team)
+    {
+        $ratings = [];
+        foreach($event->getAllCriteria() as $criterion) {
+            $key = $this->id.'_'.$criterion->getId().'_'.$team->getId();
+            $ratings[$key] = $this->getCriterionTeamRating($criterion, $team);
+        }
+        return $ratings;
+    }
+
+
+    /***************************************************************************
+     * Get judge's rating of team based on a given event, as array of arrays
+     *
+     * @param Event $event
+     * @param Team $team
+     * @return array
+     */
+    public function getRowEventTeamRatings($event, $team)
+    {
+        $ratings = [];
+        foreach($event->getAllCriteria() as $criterion) {
+            $key = $this->id.'_'.$criterion->getId().'_'.$team->getId();
+            $ratings[$key] = $this->getCriterionTeamRatingRow($criterion, $team);
+        }
+        return $ratings;
+    }
+
+
+    /***************************************************************************
+     * Get judge's ratings on a given event, as array of objects
+     * 
+     * @param Event $event
+     * @return array
+     */
+    public function getAllEventRatings($event)
+    {
+        require_once 'Team.php';
+
+        $ratings = [];
+        foreach(Team::all() as $team) {
+            $key = $event->getSlug().'_'.$team->getId();
+            $ratings[$key] = $this->getAllEventTeamRatings($event, $team);
+        }
+        return $ratings;
+    }
+
+
+    /***************************************************************************
+     * Get judge's ratings on a given event, as array of arrays
+     *
+     * @param Event $event
+     * @return array
+     */
+    public function getRowEventRatings($event)
+    {
+        require_once 'Team.php';
+
+        $ratings = [];
+        foreach(Team::all() as $team) {
+            $key = $event->getSlug().'_'.$team->getId();
+            $ratings[$key] = $this->getRowEventTeamRatings($event, $team);
+        }
+        return $ratings;
     }
 }

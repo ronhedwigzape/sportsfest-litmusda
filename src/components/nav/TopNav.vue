@@ -4,9 +4,10 @@
 		<v-chip
 			class="ma-2"
 			color="amber"
+			v-if="$store.getters['auth/getUser'] !== null"
 		>
 			<v-icon start icon="mdi-account-circle"></v-icon>
-			{{ userName }}
+			{{ $store.getters['auth/getUser'].name }}
 		</v-chip>
 		<v-avatar
 			size="35">
@@ -48,7 +49,7 @@
 						cancel
 					</v-btn>
 					<v-btn
-						:color="{}"
+						color="green-darken-1"
 						variant="text"
 						@click="signOut"
 					>
@@ -97,12 +98,8 @@ export default {
 		}
 	},
 	computed: {
-		userName() {
-			return this.$store.getters['auth/getUser'].name
-		}
 
 	},
-
 }
 </script>
 

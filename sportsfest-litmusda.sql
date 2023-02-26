@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 23, 2023 at 05:04 PM
+-- Generation Time: Feb 25, 2023 at 01:12 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.1.12
 
@@ -172,8 +172,8 @@ INSERT INTO `criteria` (`id`, `event_id`, `title`, `percentage`, `created_at`, `
 CREATE TABLE `deductions` (
   `id` mediumint(8) UNSIGNED NOT NULL,
   `technical_id` tinyint(3) UNSIGNED NOT NULL,
-  `team_id` tinyint(3) UNSIGNED NOT NULL,
   `event_id` smallint(5) UNSIGNED NOT NULL,
+  `team_id` tinyint(3) UNSIGNED NOT NULL,
   `value` float UNSIGNED NOT NULL DEFAULT 0,
   `is_locked` tinyint(1) NOT NULL DEFAULT 0,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
@@ -255,6 +255,67 @@ CREATE TABLE `judge_events` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `judge_events`
+--
+
+INSERT INTO `judge_events` (`id`, `judge_id`, `event_id`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(2, 1, 2, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(3, 1, 3, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(4, 1, 4, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(5, 1, 5, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(6, 1, 6, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(7, 1, 7, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(8, 1, 8, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(9, 1, 9, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(10, 1, 10, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(11, 1, 11, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(12, 2, 1, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(13, 2, 2, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(14, 2, 3, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(15, 2, 4, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(16, 2, 5, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(17, 2, 6, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(18, 2, 7, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(19, 2, 8, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(20, 2, 9, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(21, 2, 10, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(22, 2, 11, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(23, 3, 1, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(24, 3, 2, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(25, 3, 3, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(26, 3, 4, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(27, 3, 5, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(28, 3, 6, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(29, 3, 7, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(30, 3, 8, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(31, 3, 9, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(32, 3, 10, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(33, 3, 11, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(34, 4, 1, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(35, 4, 2, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(36, 4, 3, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(37, 4, 4, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(38, 4, 5, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(39, 4, 6, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(40, 4, 7, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(41, 4, 8, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(42, 4, 9, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(43, 4, 10, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(44, 4, 11, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(45, 5, 1, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(46, 5, 2, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(47, 5, 3, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(48, 5, 4, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(49, 5, 5, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(50, 5, 6, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(51, 5, 7, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(52, 5, 8, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(53, 5, 9, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(54, 5, 10, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(55, 5, 11, '2023-02-25 12:10:05', '2023-02-25 12:10:05');
+
 -- --------------------------------------------------------
 
 --
@@ -264,13 +325,31 @@ CREATE TABLE `judge_events` (
 CREATE TABLE `ratings` (
   `id` mediumint(8) UNSIGNED NOT NULL,
   `judge_id` tinyint(3) UNSIGNED NOT NULL,
-  `team_id` tinyint(3) UNSIGNED NOT NULL,
   `criteria_id` smallint(5) UNSIGNED NOT NULL,
+  `team_id` tinyint(3) UNSIGNED NOT NULL,
   `value` float UNSIGNED NOT NULL DEFAULT 0,
   `is_locked` tinyint(1) NOT NULL DEFAULT 0,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `ratings`
+--
+
+INSERT INTO `ratings` (`id`, `judge_id`, `criteria_id`, `team_id`, `value`, `is_locked`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, 1, 0, 0, '2023-02-25 12:04:24', '2023-02-25 12:04:24'),
+(2, 1, 2, 1, 0, 0, '2023-02-25 12:04:24', '2023-02-25 12:04:24'),
+(3, 1, 3, 1, 0, 0, '2023-02-25 12:04:24', '2023-02-25 12:04:24'),
+(4, 1, 4, 1, 0, 0, '2023-02-25 12:04:24', '2023-02-25 12:04:24'),
+(5, 1, 1, 2, 0, 0, '2023-02-25 12:04:24', '2023-02-25 12:04:24'),
+(6, 1, 2, 2, 0, 0, '2023-02-25 12:04:24', '2023-02-25 12:04:24'),
+(7, 1, 3, 2, 0, 0, '2023-02-25 12:04:24', '2023-02-25 12:04:24'),
+(8, 1, 4, 2, 0, 0, '2023-02-25 12:04:24', '2023-02-25 12:04:24'),
+(9, 1, 1, 3, 0, 0, '2023-02-25 12:04:24', '2023-02-25 12:04:24'),
+(10, 1, 2, 3, 0, 0, '2023-02-25 12:04:24', '2023-02-25 12:04:24'),
+(11, 1, 3, 3, 0, 0, '2023-02-25 12:04:24', '2023-02-25 12:04:24'),
+(12, 1, 4, 3, 0, 0, '2023-02-25 12:04:24', '2023-02-25 12:04:24');
 
 -- --------------------------------------------------------
 
@@ -282,6 +361,7 @@ CREATE TABLE `teams` (
   `id` tinyint(3) UNSIGNED NOT NULL,
   `name` varchar(255) NOT NULL,
   `color` varchar(32) NOT NULL,
+  `logo` varchar(255) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -290,10 +370,10 @@ CREATE TABLE `teams` (
 -- Dumping data for table `teams`
 --
 
-INSERT INTO `teams` (`id`, `name`, `color`, `created_at`, `updated_at`) VALUES
-(1, 'Fearless Dragons', 'red', '2023-02-19 06:45:06', '2023-02-21 05:56:31'),
-(2, 'Furious  Elves', 'green', '2023-02-19 06:45:27', '2023-02-21 05:57:30'),
-(3, 'Wise Wizards', 'blue', '2023-02-19 06:45:42', '2023-02-21 05:57:52');
+INSERT INTO `teams` (`id`, `name`, `color`, `logo`, `created_at`, `updated_at`) VALUES
+(1, 'Fearless Dragons', 'red', 'red.png', '2023-02-19 06:45:06', '2023-02-25 12:02:01'),
+(2, 'Furious  Elves', 'green', 'green.png', '2023-02-19 06:45:27', '2023-02-25 12:02:05'),
+(3, 'Wise Wizards', 'blue', 'blue.png', '2023-02-19 06:45:42', '2023-02-25 12:02:08');
 
 -- --------------------------------------------------------
 
@@ -332,6 +412,23 @@ CREATE TABLE `technical_events` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `technical_events`
+--
+
+INSERT INTO `technical_events` (`id`, `technical_id`, `event_id`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, '2023-02-25 12:11:34', '2023-02-25 12:11:34'),
+(2, 1, 2, '2023-02-25 12:11:34', '2023-02-25 12:11:34'),
+(3, 1, 3, '2023-02-25 12:11:34', '2023-02-25 12:11:34'),
+(4, 1, 4, '2023-02-25 12:11:34', '2023-02-25 12:11:34'),
+(5, 1, 5, '2023-02-25 12:11:35', '2023-02-25 12:11:35'),
+(6, 1, 6, '2023-02-25 12:11:35', '2023-02-25 12:11:35'),
+(7, 1, 7, '2023-02-25 12:11:35', '2023-02-25 12:11:35'),
+(8, 1, 8, '2023-02-25 12:11:35', '2023-02-25 12:11:35'),
+(9, 1, 9, '2023-02-25 12:11:35', '2023-02-25 12:11:35'),
+(10, 1, 10, '2023-02-25 12:11:35', '2023-02-25 12:11:35'),
+(11, 1, 11, '2023-02-25 12:11:35', '2023-02-25 12:11:35');
 
 --
 -- Indexes for dumped tables
@@ -472,13 +569,13 @@ ALTER TABLE `judges`
 -- AUTO_INCREMENT for table `judge_events`
 --
 ALTER TABLE `judge_events`
-  MODIFY `id` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
 
 --
 -- AUTO_INCREMENT for table `ratings`
 --
 ALTER TABLE `ratings`
-  MODIFY `id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `teams`
@@ -496,7 +593,7 @@ ALTER TABLE `technicals`
 -- AUTO_INCREMENT for table `technical_events`
 --
 ALTER TABLE `technical_events`
-  MODIFY `id` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- Constraints for dumped tables

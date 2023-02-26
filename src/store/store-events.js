@@ -2,7 +2,7 @@ export default {
     namespaced: true,
 
     state: {
-        events: ""
+        events: []
     },
 
     getters: {
@@ -12,9 +12,6 @@ export default {
         getEvent: (state) => (eventKey) => {
             return state.events[eventKey];
         },
-        eventTitles: state => {
-            return Object.values(state.events).map(event => event.title);
-        }
     },
     mutations: {
         setEvents(state, payload) {
