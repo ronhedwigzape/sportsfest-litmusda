@@ -138,9 +138,6 @@
         data() {
             return {
 				foundationLogo: `${import.meta.env.BASE_URL}foundation-logo.png`,
-				redTeamLogo: `${import.meta.env.BASE_URL}red.png`,
-				greenTeamLogo: `${import.meta.env.BASE_URL}green.png`,
-				blueTeamLogo: `${import.meta.env.BASE_URL}blue.png`,
 				criteria: [],
 				teams: [],
 				ratings: {},
