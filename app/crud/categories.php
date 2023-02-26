@@ -37,7 +37,6 @@
                 </div>
 
                 <form action="categories_operation.php" method="POST">
-
                     <div class="modal-body">
                         <div class="form-group">
                             <label>Competition_ID</label>
@@ -53,14 +52,13 @@
                             <label>Title</label>
                             <input type="text" name="title" class="form-control" placeholder="Enter your Title" autocomplete="off" required>
                         </div>
-
                     </div>
+
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                         <button type="submit" name="insertdata" class="btn btn-primary">Save Data</button>
                     </div>
                 </form>
-
             </div>
         </div>
     </div>
@@ -78,11 +76,8 @@
                 </div>
 
                 <form action="categories_operation.php" method="POST">
-
                     <div class="modal-body">
-                    
                         <input type="hidden" name="update_id" id="update_id">
-
                         <div class="form-group">
                             <label>Competition_ID</label>
                             <input type="number" min="1" max="2" name="competition_id" id="competition_id" class="form-control" placeholder="Select your Competition_ID 1(sports) or 2(litmusda)" autocomplete="off" required>
@@ -97,14 +92,13 @@
                             <label>Title</label>
                             <input type="text" name="title" id="title" class="form-control" placeholder="Enter your Title">
                         </div>
-
                     </div>
+
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                         <button type="submit" name="updatedata" class="btn btn-primary">Update Data</button>
                     </div>
                 </form>
-
             </div>
         </div>
     </div>
@@ -122,13 +116,11 @@
                 </div>
 
                 <form action="categories_operation.php" method="POST">
-
                     <div class="modal-body">
-
                         <input type="hidden" name="delete_id" id="delete_id">
-
                         <h4>Do you want to Delete this Category ??</h4>
                     </div>
+
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary" data-dismiss="modal"> NO </button>
                         <button type="submit" name="deletedata" class="btn btn-danger"> Yes !! Delete it. </button>
@@ -224,6 +216,7 @@
                 console.log(data);
 
                 $('#update_id').val(data[0]);
+                $('#competition_id').val(data[1]);
                 $('#slug').val(data[2]);
                 $('#title').val(data[3]);
             });
