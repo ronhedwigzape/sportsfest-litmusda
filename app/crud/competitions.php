@@ -37,7 +37,6 @@
                 </div>
 
                 <form action="competitions_operation.php" method="POST">
-
                     <div class="modal-body">
                         <div class="form-group">
                             <label> Slug </label>
@@ -50,12 +49,12 @@
                         </div>
 
                     </div>
+
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                         <button type="submit" name="insertdata" class="btn btn-primary">Save Data</button>
                     </div>
                 </form>
-
             </div>
         </div>
     </div>
@@ -73,7 +72,6 @@
                 </div>
 
                 <form action="competitions_operation.php" method="POST">
-
                     <div class="modal-body">
                         <input type="hidden" name="update_id" id="update_id">
                         <div class="form-group">
@@ -87,12 +85,12 @@
                         </div>
 
                     </div>
+
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                         <button type="submit" name="updatedata" class="btn btn-primary">Update Data</button>
                     </div>
                 </form>
-
             </div>
         </div>
     </div>
@@ -110,19 +108,16 @@
                 </div>
 
                 <form action="competitions_operation.php" method="POST">
-
                     <div class="modal-body">
-
                         <input type="hidden" name="delete_id" id="delete_id">
-
                         <h4> Do you want to Delete this Competition ??</h4>
                     </div>
+
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary" data-dismiss="modal"> NO </button>
                         <button type="submit" name="deletedata" class="btn btn-danger"> Yes !! Delete it. </button>
                     </div>
                 </form>
-
             </div>
         </div>
     </div>
