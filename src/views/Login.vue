@@ -45,7 +45,6 @@
                                 type="submit"
 								:loading="loading"
 								:disabled="loading"
-								:error="error"
                             >
                                 log in
                             </v-btn>
@@ -67,7 +66,6 @@
         data() {
             return {
 				loading: false,
-				error: false,
                 show1: false,
                 show2: true,
                 username: '',
@@ -80,6 +78,7 @@
         },
         methods: {
             async handleSubmit() {
+				this.loading = true;
                 await $.ajax({
                     url: `${this.$store.getters.appURL}/index.php`,
                     type: 'POST',
@@ -91,7 +90,7 @@
                         password: this.password,
                     },
                     success: (data) => {
-						this.loading = true;
+						this.loading = false;
                         data = JSON.parse(data);
                         this.$store.commit('auth/setUser', data.user);
                         this.$router.replace({name: data.user.userType});
