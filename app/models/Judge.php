@@ -453,7 +453,7 @@ class Judge extends User
     {
         $ratings = [];
         foreach($event->getAllCriteria() as $criterion) {
-            $key = $this->id.'_'.$team->getId().'_'.$criterion->getId();
+            $key = $this->id.'_'.$criterion->getId().'_'.$team->getId();
             $ratings[$key] = $this->getCriterionTeamRating($criterion, $team);
         }
         return $ratings;
@@ -471,7 +471,7 @@ class Judge extends User
     {
         $ratings = [];
         foreach($event->getAllCriteria() as $criterion) {
-            $key = $this->id.'_'.$team->getId().'_'.$criterion->getId();
+            $key = $this->id.'_'.$criterion->getId().'_'.$team->getId();
             $ratings[$key] = $this->getCriterionTeamRatingRow($criterion, $team);
         }
         return $ratings;
