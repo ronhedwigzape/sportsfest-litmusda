@@ -59,14 +59,14 @@
 		<v-main v-if="$store.getters['auth/getUser'] !== null">
 			<v-table v-if="$route.params.eventSlug" density="comfortable" hover>
 				<thead>
-					<tr class="mt-5">
+					<tr>
 						<th colspan="12" class="text-h5 text-uppercase text-center font-weight-bold">
 							{{ event.title }}
 						</th>
 					</tr>
 					<tr>
 						<th class="text-uppercase text-center font-weight-bold">
-							Team Name
+							Teams
 						</th>
 						<th class="text-uppercase text-center" v-for="criterion in criteria">
 							<b>{{ criterion.title }}</b> ({{ criterion.percentage }}%)
@@ -104,16 +104,45 @@
 							</v-col>
 							{{ team.name }}
 						</td>
-						<td	v-for="criterion in criteria" :key="criterion.id">
+						<td	v-for="criterion in criteria" 
+							:key="criterion.id"
+						>
 							<v-text-field
+								id="ratings"
 								type="number"
+								class="font-weight-bold"
 								variant="outlined"
+								hide-details
+								single-line
 								@change="save(ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`])"
-								v-model="ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value"
+								@input="
+									ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value < 0 ?
+									ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value = 0 :
+									ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value > criterion.percentage ?
+									ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value = criterion.percentage : ''
+								"
+								v-model.number="ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value"
+								:class="{
+									'text-error font-weight-bold': (
+										ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value < 0 ||
+										ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value > criterion.percentage
+									),
+									'text-grey-darken-4': ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value === 0
+								}"
+								:error="(
+									  ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value.toString().trim() === ''
+								   || ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value < 0
+								   || ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value > criterion.percentage
+							   )"
 							>
 							</v-text-field>
 						</td>
-						<td></td>
+						<td>
+							<v-text-field
+
+							>
+							</v-text-field>
+						</td>
 						<td></td>
 					</tr>
 				</tbody>
@@ -154,7 +183,7 @@
 <!--			<v-col align="center" justify="center" style="height: 100vh; margin-top: 30vh;">-->
 <!--				<v-progress-circular-->
 <!--					:size="160"-->
-<!--					color="deep-purple-darken-2"-->
+<!--					color="deep-purple-darken-1"-->
 <!--					indeterminate-->
 <!--				/>-->
 <!--			</v-col>-->
@@ -175,6 +204,7 @@
 			return {
 				foundationLogo: `${import.meta.env.BASE_URL}foundation-logo.png`,
 				dialog: false,
+				loading: false,
 				criteria: [],
 				teams: [],
 				ratings: {},
@@ -218,6 +248,7 @@
 				}
 			},
 			save(rating) {
+				this.loading = true
 				$.ajax({
 					url: `${this.$store.getters.appURL}/judge.php`,
 					type: 'POST',
@@ -228,6 +259,7 @@
 						rating
 					},
 					success: (data) => {
+						this.loading = false
 						console.log(data)
 					},
 					error: (error) => {
@@ -272,16 +304,20 @@
 				success: (data) => {
 					data = JSON.parse(data);
 					this.$store.commit('events/setEvents', data.events)
-					console.log(data)
 				},
 				error: (error) => {
 					alert(`ERROR ${error.status}: ${error.statusText}`);
 				},
 			});
-		}
+		},
 	}
 </script>
 
 <style scoped>
-
+tbody td {
+	height: 64px !important;
+}
+input{
+	text-align: center !important;
+}
 </style>
