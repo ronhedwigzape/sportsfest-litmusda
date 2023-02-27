@@ -94,4 +94,215 @@ class Admin extends User
         }
         return $admins;
     }
+
+
+    /***************************************************************************
+     * Tabulate an event
+     *
+     * @param Event $event
+     * @return array
+     */
+    public function tabulate($event)
+    {
+        // initialize $result
+        $result = [
+            'technicals' => [],
+            'judges'     => [],
+            'teams'      => []
+        ];
+
+        // get all teams
+        require_once 'Team.php';
+        $teams = Team::all();
+
+        // get all technicals for this event
+        $technicals = $event->getAllTechnicals();
+        $technicals_total = sizeof($technicals);
+
+        // get all judges for this event
+        $judges = $event->getAllJudges();
+        $judges_total = sizeof($judges);
+
+        // get $judge_ranks for the event
+        $judge_ranks = [];
+        foreach($judges as $judge) {
+            $key_judge = 'judge_' . $judge->getId();
+            $judge_ranks[$key_judge] = $judge->getEventRanks($event);
+        }
+
+        // prepare $unique_total_fractional_ranks and $unique_final_adjustments
+        $unique_total_fractional_ranks = [];
+        $unique_final_adjustments = [];
+
+        foreach($teams as $team) {
+            $key_team = 'team_' . $team->getId();
+
+            // initialize $team_row
+            $team_row = $team->toArray();
+
+            // =================================================================
+            // get team deductions
+            $team_row['deductions'] = [
+                'inputs'  => [],
+                'total'   => 0,
+                'average' => 0
+            ];
+
+            foreach($technicals as $technical) {
+                $key_technical = 'technical_' . $technical->getId();
+
+                // append $technical to $result['technicals']
+                $result['technicals'][$key_technical] = $technical->toArray();
+
+                // get technical's total team deductions
+                $technical_total = ($technical->getEventTeamDeduction($event, $team))->getValue();
+                $team_row['deductions']['inputs'][$key_technical] = $technical_total;
+
+                // increment deductions total
+                $team_row['deductions']['total'] += $technical_total;
+            }
+
+            // compute for deductions average
+            if($technicals_total > 0)
+                $team_row['deductions']['average'] = $team_row['deductions']['total'] / $technicals_total;
+
+            // =================================================================
+            // get team ratings
+            $team_row['ratings'] = [
+                'inputs'  => [],
+                'total'   => 0,
+                'average' => 0
+            ];
+
+            $rank_total = [
+                'dense'      => 0,
+                'fractional' => 0
+            ];
+            foreach($judges as $judge) {
+                $key_judge = 'judge_' . $judge->getId();
+
+                // append $judge to $result['judges']
+                $result['judges'][$key_judge] = $judge->toArray();
+
+                // get judge's total team ratings and ranks
+                $judge_total = $judge->getEventTeamRating($event, $team);
+                $judge_rank = $judge_ranks[$key_judge][$key_team];
+                $team_row['ratings']['inputs'][$key_judge] = [
+                    'final' => $judge_total,
+                    'rank'  => $judge_rank
+                ];
+
+                // increment ratings total
+                $team_row['ratings']['total'] += $judge_total['deducted'];
+
+                // increment $rank_total
+                $rank_total['dense'] += $judge_rank['dense'];
+                $rank_total['fractional'] += $judge_rank['fractional'];
+            }
+
+            // compute for ratings average
+            if($judges_total > 0)
+                $team_row['ratings']['average'] = $team_row['ratings']['total'] / $judges_total;
+
+
+            // =================================================================
+            // store team rank
+
+            $team_row['rank'] = [
+                'total'   => $rank_total,
+                'initial' => [
+                    'dense'      => 0,
+                    'fractional' => 0
+                ],
+                'final'   => [
+                    'adjustment' => 0,
+                    'dense'      => 0,
+                    'fractional' => 0
+                ]
+            ];
+
+            // push $team_row to $result['teams']
+            $result['teams'][$key_team] = $team_row;
+
+            // push to $unique_total_fractional_ranks
+            if(!in_array($rank_total['fractional'], $unique_total_fractional_ranks))
+                $unique_total_fractional_ranks[] = $rank_total['fractional'];
+        }
+
+        // sort $unique_total_fractional_ranks
+        sort($unique_total_fractional_ranks);
+
+        // gather $rank_group (for getting fractional rank)
+        $rank_group = [];
+        foreach($result['teams'] as $key => $team) {
+            // get dense rank
+            $dense_rank = 1 + array_search($result['teams'][$key]['rank']['total']['fractional'], $unique_total_fractional_ranks);
+            $result['teams'][$key]['rank']['initial']['dense'] = $dense_rank;
+
+            // push $key to $rank_group
+            $key_rank = 'rank_' . $dense_rank;
+            if(!isset($rank_group[$key_rank]))
+                $rank_group[$key_rank] = [];
+            $rank_group[$key_rank][] = $key;
+        }
+
+        // get initial fractional rank
+        $ctr = 0;
+        for($i = 0; $i < sizeof($unique_total_fractional_ranks); $i++) {
+            $key = 'rank_' . ($i + 1);
+            $group = $rank_group[$key];
+            $size = sizeof($group);
+            $fractional_rank = $ctr + ((($size * ($size + 1)) / 2) / $size);
+
+            // write $fractional_rank to $group members
+            for($j = 0; $j < $size; $j++) {
+                $result['teams'][$group[$j]]['rank']['initial']['fractional'] = $fractional_rank;
+
+                // compute final average
+                $final_adjustment = $fractional_rank - ($result['teams'][$group[$j]]['ratings']['average'] * 0.01);
+                $result['teams'][$group[$j]]['rank']['final']['adjustment'] = $final_adjustment;
+
+                // push to $unique_final_adjustments
+                if(!in_array($final_adjustment, $unique_final_adjustments))
+                    $unique_final_adjustments[] = $final_adjustment;
+            }
+
+            $ctr += $size;
+        }
+
+        // sort $unique_final_adjustments
+        sort($unique_final_adjustments);
+        // gather $rank_group (for getting fractional rank)
+        $rank_group = [];
+        foreach($result['teams'] as $key => $team) {
+            // get dense rank
+            $dense_rank = 1 + array_search($result['teams'][$key]['rank']['final']['adjustment'], $unique_final_adjustments);
+            $result['teams'][$key]['rank']['final']['dense'] = $dense_rank;
+
+            // push $key to $rank_group
+            $key_rank = 'rank_' . $dense_rank;
+            if(!isset($rank_group[$key_rank]))
+                $rank_group[$key_rank] = [];
+            $rank_group[$key_rank][] = $key;
+        }
+
+        // get final fractional rank
+        $ctr = 0;
+        for($i = 0; $i < sizeof($unique_final_adjustments); $i++) {
+            $key = 'rank_' . ($i + 1);
+            $group = $rank_group[$key];
+            $size = sizeof($group);
+            $fractional_rank = $ctr + ((($size * ($size + 1)) / 2) / $size);
+
+            // write $fractional_rank to $group members
+            for($j = 0; $j < $size; $j++) {
+                $result['teams'][$group[$j]]['rank']['final']['fractional'] = $fractional_rank;
+            }
+
+            $ctr += $size;
+        }
+
+        // return $result
+        return $result;
+    }
 }
