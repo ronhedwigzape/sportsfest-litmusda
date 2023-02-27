@@ -23,6 +23,7 @@ app/crud/uploads/*
 !app/crud/uploads/green.png
 !app/crud/uploads/blue.png
 !app/crud/uploads/no-avatar.jpg
+!app/crud/dist
 
 /cypress/videos/
 /cypress/screenshots/
