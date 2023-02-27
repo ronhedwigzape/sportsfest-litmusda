@@ -170,9 +170,9 @@ class Rating extends App
             App::returnError('HTTP/1.1 500', 'Insert Error: team [id = ' . $this->team_id . '] does not exist.');
 
         // check if judge is allowed to rate
-        $criterion = Criterion::findById($this->criterion_id);
+        $criterion = $this->getCriterion();
         $event = $criterion->getEvent();
-        $judge = Judge::findById($this->judge_id);
+        $judge = $this->getJudge();
         if(!$judge->hasEvent($event))
             App::returnError('HTTP/1.1 500', 'Insert Error: event [slug = ' . $event->getSlug() . '] is not assigned to judge [id = ' . $this->judge_id . ']');
 
@@ -228,9 +228,9 @@ class Rating extends App
             App::returnError('HTTP/1.1 500', 'Update Error: team [id = ' . $this->team_id . '] does not exist.');
 
         // check if judge is allowed to rate
-        $criterion = Criterion::findById($this->criterion_id);
+        $criterion = $this->getCriterion();
         $event = $criterion->getEvent();
-        $judge = Judge::findById($this->judge_id);
+        $judge = $this->getJudge();
         if(!$judge->hasEvent($event))
             App::returnError('HTTP/1.1 500', 'Update Error: event [slug = ' . $event->getSlug() . '] is not assigned to judge [id = ' . $this->judge_id . ']');
 
@@ -404,5 +404,41 @@ class Rating extends App
     public function getIsLocked()
     {
         return $this->is_locked;
+    }
+
+
+    /***************************************************************************
+     * Get judge
+     *
+     * @return Judge|bool
+     */
+    public function getJudge()
+    {
+        require_once 'Judge.php';
+        return Judge::findById($this->judge_id);
+    }
+
+
+    /***************************************************************************
+     * Get criterion
+     *
+     * @return Criterion
+     */
+    public function getCriterion()
+    {
+        require_once 'Criterion.php';
+        return new Criterion($this->criterion_id);
+    }
+
+
+    /***************************************************************************
+     * Get team
+     *
+     * @return Team
+     */
+    public function getTeam()
+    {
+        require_once 'Team.php';
+        return new Team($this->team_id);
     }
 }
