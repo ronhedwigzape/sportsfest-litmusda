@@ -170,8 +170,8 @@ class Deduction extends App
             App::returnError('HTTP/1.1 500', 'Insert Error: team [id = ' . $this->team_id . '] does not exist.');
 
         // check if technical is allowed to deduct
-        $event     = Event::findById($this->event_id);
-        $technical = Technical::findById($this->technical_id);
+        $event     = $this->getEvent();
+        $technical = $this->getTechnical();
         if(!$technical->hasEvent($event))
             App::returnError('HTTP/1.1 500', 'Insert Error: event [slug = ' . $event->getSlug() . '] is not assigned to technical [id = ' . $this->technical_id . ']');
 
@@ -227,8 +227,8 @@ class Deduction extends App
             App::returnError('HTTP/1.1 500', 'Update Error: team [id = ' . $this->team_id . '] does not exist.');
 
         // check if technical is allowed to deduct
-        $event     = Event::findById($this->event_id);
-        $technical = Technical::findById($this->technical_id);
+        $event     = $this->getEvent();
+        $technical = $this->getTechnical();
         if(!$technical->hasEvent($event))
             App::returnError('HTTP/1.1 500', 'Insert Error: event [slug = ' . $event->getSlug() . '] is not assigned to technical [id = ' . $this->technical_id . ']');
 
@@ -402,5 +402,41 @@ class Deduction extends App
     public function getIsLocked()
     {
         return $this->is_locked;
+    }
+
+
+    /***************************************************************************
+     * Get technical
+     *
+     * @return Technical|bool
+     */
+    public function getTechnical()
+    {
+        require_once 'Technical.php';
+        return Technical::findById($this->technical_id);
+    }
+
+
+    /***************************************************************************
+     * Get event
+     *
+     * @return Event
+     */
+    public function getEvent()
+    {
+        require_once 'Event.php';
+        return new Event($this->event_id);
+    }
+
+
+    /***************************************************************************
+     * Get team
+     *
+     * @return Team
+     */
+    public function getTeam()
+    {
+        require_once 'Team.php';
+        return new Team($this->team_id);
     }
 }
