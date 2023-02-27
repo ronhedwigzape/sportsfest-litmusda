@@ -457,4 +457,47 @@ class Event extends App
         }
         return $total;
     }
+
+
+    /***************************************************************************
+     * Get all event points as array of objects
+     *
+     * @return Point[]
+     */
+    public function getAllPoints()
+    {
+        require_once 'Point.php';
+        $ranks = Point::ranks();
+
+        $points = [];
+        foreach($ranks as $rank) {
+            // insert point if not yet stored
+            if(!Point::stored($this->id, $rank)) {
+                $point = new Point();
+                $point->setEventId($this->id);
+                $point->setRank($rank);
+                $point->insert();
+            }
+
+            $key = $this->slug.'_rank-'.$rank;
+            $points[$key] = Point::find($this->id, $rank);
+        }
+        return $points;
+    }
+
+
+    /***************************************************************************
+     * Get all event points as array of arrays
+     *
+     * @return array
+     */
+    public function getRowPoints()
+    {
+        $points = [];
+        foreach($this->getAllPoints() as $point) {
+            $key = $this->slug.'_rank-'.$point->getRank();
+            $points[$key] = $point->toArray();
+        }
+        return $points;
+    }
 }
