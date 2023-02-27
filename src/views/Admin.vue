@@ -34,24 +34,26 @@
         data() {
             return {
                 event: null,
-                results: {}
+                results: {},
+                timer: null
             }
         },
         watch: {
             $route: {
                 immediate: true,
                 handler(to, from) {
+                    this.event = null;
+                    if(this.timer)
+                        clearTimeout(this.timer);
                     this.tabulate();
                 }
             }
         },
         methods: {
-            tabulate() {
-                this.event = null;
-
+            async tabulate() {
                 // tabulate selected event
                 if (this.$route.params.eventSlug) {
-                    $.ajax({
+                    await $.ajax({
                         url: `${this.$store.getters.appURL}/admin.php`,
                         type: 'GET',
                         xhrFields: {
@@ -64,6 +66,13 @@
                             data = JSON.parse(data);
                             this.event = data.event;
                             this.results = data.results;
+
+                            // request again
+                            if(data.event.slug === this.$route.params.eventSlug) {
+                                this.timer = setTimeout(() => {
+                                    this.tabulate();
+                                }, 2400);
+                            }
                         },
                         error: (error) => {
                             alert(`ERROR ${error.status}: ${error.statusText}`);
