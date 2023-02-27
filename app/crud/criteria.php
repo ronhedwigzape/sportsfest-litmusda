@@ -12,9 +12,7 @@ require_once '../config/database.php';
     <link rel="shortcut icon" href="logo.png">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.18/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="dist/bootstrap-4.2.1/css/bootstrap.min.css">
 
     <!-- For Icon -->
     <link rel="stylesheet" href="https://kit.fontawesome.com/3142f33457.css" crossorigin="anonymous">
@@ -196,19 +194,11 @@ require_once '../config/database.php';
 </div>
 
 <!-- Bootstrap Javascript -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
-
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
-
-<script src="https://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.10.18/js/dataTables.bootstrap4.min.js"></script>
-
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"></script>
+<script src="dist/ajax/libs/jquery-3.3.1/jquery.min.js"></script>
+<script src="dist/bootstrap-4.2.1/js/bootstrap.min.js"></script>
 
 <!-- For Icon -->
-<script src="https://kit.fontawesome.com/3142f33457.js" crossorigin="anonymous"></script>
+<script src="dist/fontawesome/icon.js"></script>
 
 <script src="main.js"></script>
 
