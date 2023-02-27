@@ -230,13 +230,13 @@ class Deduction extends App
         $event     = $this->getEvent();
         $technical = $this->getTechnical();
         if(!$technical->hasEvent($event))
-            App::returnError('HTTP/1.1 500', 'Insert Error: event [slug = ' . $event->getSlug() . '] is not assigned to technical [id = ' . $this->technical_id . ']');
+            App::returnError('HTTP/1.1 500', 'Update Error: event [slug = ' . $event->getSlug() . '] is not assigned to technical [id = ' . $this->technical_id . ']');
 
         // check value
         $min = 0;
         $max = $event->getTotalCriteriaPercentage();
         if($this->value < $min || $this->value > $max)
-            App::returnError('HTTP/1.1 500', 'Insert Error: deduction for event [slug = ' . $event->getSlug() . '] must be from ' . $min . ' to ' . $max . ', [given = ' . $this->value . '].');
+            App::returnError('HTTP/1.1 500', 'Update Error: deduction for event [slug = ' . $event->getSlug() . '] must be from ' . $min . ' to ' . $max . ', [given = ' . $this->value . '].');
 
         // proceed with update
         $stmt = $this->conn->prepare("UPDATE $this->table SET technical_id = ?,  event_id = ?, team_id = ?, value = ?, is_locked = ? WHERE id = ?");
