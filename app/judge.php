@@ -38,7 +38,8 @@ else {
                 'event'    => $event->toArray(),
                 'criteria' => $event->getRowCriteria(),
                 'teams'    => Team::rows(),
-                'ratings'  => $judge->getRowEventRatings($event)
+                'ratings'  => $judge->getRowEventRatings($event),
+                'ranks'    => $judge->getEventRanks($event)
             ]);
         }
 

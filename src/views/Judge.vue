@@ -96,7 +96,7 @@
 							>
 							</v-text-field>
 						</td>
-						<td></td>
+						<td> {{ ranks[`team_${team.id}`].fractional }}</td>
 					</tr>
 				</tbody>
 				<!--	Dialog	  -->
@@ -162,10 +162,11 @@
 			return {
 				dialog: false,
 				loading: false,
-				criteria: [],
 				event: null,
 				timer: null,
 				teams: [],
+				criteria: [],
+				ranks: [],
 				ratings: {}
 			}
 		},
@@ -200,6 +201,7 @@
 							this.teams = data.teams
 							this.ratings = data.ratings
 							this.event = data.event
+							this.ranks = data.ranks
 						},
 						error: (error) => {
 							alert(`ERROR ${error.status}: ${error.statusText}`);
