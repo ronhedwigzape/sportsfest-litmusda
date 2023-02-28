@@ -79,7 +79,7 @@
 										ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value < 0 ||
 										ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value > criterion.percentage
 									),
-									'text-grey-darken-4': ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value === 0
+									'text-grey-darken-2': ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value === 0
 								}"
 								:error="(
 									  ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value.toString().trim() === ''
@@ -200,14 +200,6 @@
 							this.teams = data.teams
 							this.ratings = data.ratings
 							this.event = data.event
-
-							// request again
-							if(data.event.slug === this.$route.params.eventSlug) {
-								this.timer = setTimeout(() => {
-									this.fetchScoreSheet();
-								}, 2400);
-							}
-
 						},
 						error: (error) => {
 							alert(`ERROR ${error.status}: ${error.statusText}`);
@@ -222,24 +214,22 @@
 				else if (rating.value > percentage) {
 					return rating.value = percentage;
 				}
-				else {
-					$.ajax({
-						url: `${this.$store.getters.appURL}/judge.php`,
-						type: 'POST',
-						xhrFields: {
-							withCredentials: true
-						},
-						data: {
-							rating
-						},
-						success: (data) => {
-							console.log(data)
-						},
-						error: (error) => {
-							alert(`ERROR ${error.status}: ${error.statusText}`);
-						},
-					});
-				}
+				$.ajax({
+					url: `${this.$store.getters.appURL}/judge.php`,
+					type: 'POST',
+					xhrFields: {
+						withCredentials: true
+					},
+					data: {
+						rating
+					},
+					success: (data) => {
+						console.log(data)
+					},
+					error: (error) => {
+						alert(`ERROR ${error.status}: ${error.statusText}`);
+					},
+				});
 			},
 			getIconForEvent(title) {
 				switch (title) {
