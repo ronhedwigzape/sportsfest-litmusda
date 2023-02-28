@@ -6,7 +6,12 @@
 
 		<!--	Judge Score Sheet	-->
 		<v-main v-if="$store.getters['auth/getUser'] !== null">
-			<v-table v-if="$route.params.eventSlug && event" density="comfortable" hover>
+			<v-table
+				v-if="$route.params.eventSlug && event"
+				density="comfortable"
+				fixed-header
+				hover
+			>
 				<thead>
 					<tr>
 						<th colspan="12" class="text-h5 text-uppercase text-center font-weight-bold text-deep-purple-darken-2">
@@ -87,6 +92,7 @@
 						<td>
 							<v-text-field
 								variant="outlined"
+								loading
 							>
 							</v-text-field>
 						</td>
@@ -198,7 +204,7 @@
 							// request again
 							if(data.event.slug === this.$route.params.eventSlug) {
 								this.timer = setTimeout(() => {
-									this.tabulate();
+									this.fetchScoreSheet();
 								}, 2400);
 							}
 
@@ -210,6 +216,13 @@
 				}
 			},
 			save(rating, value, percentage) {
+				if (value < 0) {
+					return value = 0;
+				}
+				else if (value > percentage) {
+					return value = percentage;
+				}
+
 				$.ajax({
 					url: `${this.$store.getters.appURL}/judge.php`,
 					type: 'POST',
@@ -221,13 +234,6 @@
 					},
 					success: (data) => {
 						console.log(data)
-
-						if (value < 0) {
-							value = 0;
-						}
-						else if (value > percentage) {
-							value = percentage;
-						}
 					},
 					error: (error) => {
 						alert(`ERROR ${error.status}: ${error.statusText}`);
