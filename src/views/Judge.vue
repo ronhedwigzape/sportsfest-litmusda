@@ -6,7 +6,7 @@
 
 		<!--	Judge Score Sheet	-->
 		<v-main v-if="$store.getters['auth/getUser'] !== null">
-			<v-container v-if="event">
+			<v-container v-if="event" fluid>
 				<v-table v-if="$route.params.eventSlug" density="comfortable" hover>
 					<thead>
 						<tr>
@@ -157,13 +157,17 @@
 				criteria: [],
 				teams: [],
 				ratings: {},
-				event: {}
+				event: null,
+				timer: null
 			}
 		},
 		watch: {
 			$route: {
 				immediate: true,
 				handler(to, from) {
+					this.event = null;
+					if(this.timer)
+						clearTimeout(this.timer)
 					this.fetchScoreSheet();
 				}
 			}
@@ -189,6 +193,13 @@
 							this.ratings = data.ratings
 							this.event = data.event
 
+							// request again
+							if(data.event.slug === this.$route.params.eventSlug) {
+								this.timer = setTimeout(() => {
+									this.tabulate();
+								}, 2400);
+							}
+
 						},
 						error: (error) => {
 							alert(`ERROR ${error.status}: ${error.statusText}`);
@@ -197,7 +208,6 @@
 				}
 			},
 			save(rating, value, percentage) {
-				this.loading = true
 				$.ajax({
 					url: `${this.$store.getters.appURL}/judge.php`,
 					type: 'POST',
@@ -208,7 +218,6 @@
 						rating
 					},
 					success: (data) => {
-						this.loading = false
 						console.log(data)
 
 						if (value < 0) {
@@ -228,8 +237,8 @@
 					case "Oration":
 					case "Balagtasan":
 					case "Tigsik":
-						return "mdi-script-text";
 					case "Jazz Chant":
+						return "mdi-script-text";
 					case "Vocal Solo Male":
 					case "Vocal Solo Female":
 					case "Vocal Duet":
