@@ -1,17 +1,23 @@
 <template>
-	<v-app-bar :title="appName" color="deep-purple-darken-3">
+	<v-app-bar :title="`${$store.getters.appName}`" color="deep-purple-darken-3">
 		<h3 class="me-5">{{ name }}</h3>
 		<v-chip
 			class="ma-2"
-			color="amber"
+			:color="$store.getters['auth/getUser'] !== null ?
+					$store.getters['auth/getUser'].userType === 'admin' ? 'amber' :
+					$store.getters['auth/getUser'].userType === 'judge' ? 'green-lighten-2' :
+					'red-lighten-2' : ''"
 			v-if="$store.getters['auth/getUser'] !== null"
 		>
-			<v-icon start icon="mdi-account-circle"></v-icon>
+			<v-icon start icon="mdi-account-circle" />
 			{{ $store.getters['auth/getUser'].name }}
 		</v-chip>
+
 		<v-avatar
-			size="35">
-			<v-img :src="avatar"/>
+			size="35"
+			v-if="$store.getters['auth/getUser'] !== null"
+		>
+			<v-img :src="`${$store.getters.appURL}/crud/uploads/${$store.getters['auth/getUser'].avatar}`"/>
 		</v-avatar>
 
 		<!--	Sign out	-->
@@ -22,7 +28,7 @@
 			<template v-slot:activator="{ props }">
 				<v-menu>
 					<template v-slot:activator="{ props }">
-						<v-btn class="ma-2" icon="mdi-dots-vertical" v-bind="props"></v-btn>
+						<v-btn class="ma-3" icon="mdi-dots-vertical" v-bind="props"></v-btn>
 					</template>
 					<v-list>
 						<v-list-item
@@ -30,7 +36,9 @@
 							class="text-red-darken-3 text-uppercase"
 							style="font-size: 1rem;"
 							variant="text"
-							><v-icon icon="mdi-logout"/>Logout</v-list-item>
+							><v-icon icon="mdi-logout"/>
+								Logout
+						</v-list-item>
 					</v-list>
 				</v-menu>
 			</template>
@@ -69,8 +77,6 @@ export default {
 	data() {
 		return {
 			dialog: false,
-			avatar: `${import.meta.env.BASE_URL}no-avatar.jpg`,
-			appName: `${this.$store.getters.appName}`,
 			name: '',
 			signedOut: false
 		}
@@ -95,11 +101,8 @@ export default {
 					alert(`ERROR ${error.status}: ${error.statusText}`);
 				},
 			})
-		}
-	},
-	computed: {
-
-	},
+		},
+	}
 }
 </script>
 

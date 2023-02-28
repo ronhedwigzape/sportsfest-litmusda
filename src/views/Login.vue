@@ -43,6 +43,8 @@
                             <v-btn
                                 class="mt-4 bg-amber-darken-1"
                                 type="submit"
+								:loading="loading"
+								:disabled="loading"
                             >
                                 log in
                             </v-btn>
@@ -63,6 +65,7 @@
         name: 'Login',
         data() {
             return {
+				loading: false,
                 show1: false,
                 show2: true,
                 username: '',
@@ -75,6 +78,7 @@
         },
         methods: {
             async handleSubmit() {
+				this.loading = true;
                 await $.ajax({
                     url: `${this.$store.getters.appURL}/index.php`,
                     type: 'POST',
@@ -86,6 +90,7 @@
                         password: this.password,
                     },
                     success: (data) => {
+						this.loading = false;
                         data = JSON.parse(data);
                         this.$store.commit('auth/setUser', data.user);
                         this.$router.replace({name: data.user.userType});

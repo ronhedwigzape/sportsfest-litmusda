@@ -42,6 +42,20 @@ else {
             ]);
         }
 
+        // auto save criterion rating for teams
+        else if (isset($_POST['rating'])) {
+            require_once 'models/Criterion.php';
+            require_once 'models/Team.php';
+
+            $rating = $_POST['rating'];
+
+            $judge->setCriterionTeamRating(
+                Criterion::findById($rating['criterion_id']),
+                Team::findById($rating['team_id']),
+                floatval($rating['value'])
+            );
+        }
+
         else
            denyAccess();
     }

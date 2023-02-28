@@ -442,4 +442,121 @@ class Event extends App
         }
         return $technicals;
     }
+
+
+    /***************************************************************************
+     * Get total criteria percentage
+     *
+     * @return float
+     */
+    public function getTotalCriteriaPercentage()
+    {
+        $total = 0;
+        foreach($this->getAllCriteria() as $criterion) {
+            $total += $criterion->getPercentage();
+        }
+        return $total;
+    }
+
+
+    /***************************************************************************
+     * Set event point on a given rank
+     *
+     * @param int $rank
+     * @param float $value
+     * @return void
+     */
+    public function setRankPoint($rank, $value)
+    {
+        require_once 'Point.php';
+
+        // check if point is stored or not
+        $stored = Point::stored($this->id, $rank);
+
+        // instantiate point
+        $point = new Point();
+        if($stored)
+            $point = Point::find($this->id, $rank);
+
+        // set properties
+        $point->setEventId($this->id);
+        $point->setRank($rank);
+        $point->setValue($value);
+
+        // update or insert
+        if($stored)
+            $point->update();
+        else
+            $point->insert();
+    }
+
+
+    /***************************************************************************
+     * Get event point of given rank, as object
+     *
+     * @param int $rank
+     * @return bool|Point
+     */
+    public function getRankPoint($rank)
+    {
+        require_once 'Point.php';
+
+        // insert point if not yet stored
+        if(!Point::stored($this->id, $rank)) {
+            $point = new Point();
+            $point->setEventId($this->id);
+            $point->setRank($rank);
+            $point->insert();
+        }
+
+        // return point
+        return Point::find($this->id, $rank);
+    }
+
+
+    /***************************************************************************
+     * Get event point of given rank, as array
+     *
+     * @param $rank
+     * @return array
+     */
+    public function getRankPointRow($rank)
+    {
+        return ($this->getRankPoint($rank))->toArray();
+    }
+
+
+    /***************************************************************************
+     * Get all event points as array of objects
+     *
+     * @return Point[]
+     */
+    public function getAllPoints()
+    {
+        require_once 'Point.php';
+        $ranks = Point::ranks();
+
+        $points = [];
+        foreach($ranks as $rank) {
+            $key = $this->slug.'_rank-'.$rank;
+            $points[$key] = $this->getRankPoint($rank);
+        }
+        return $points;
+    }
+
+
+    /***************************************************************************
+     * Get all event points as array of arrays
+     *
+     * @return array
+     */
+    public function getRowPoints()
+    {
+        $points = [];
+        foreach($this->getAllPoints() as $point) {
+            $key = $this->slug.'_rank-'.$point->getRank();
+            $points[$key] = $this->getRankPointRow($point->getRank());
+        }
+        return $points;
+    }
 }

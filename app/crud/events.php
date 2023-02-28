@@ -9,11 +9,10 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="logo.png">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.18/css/dataTables.bootstrap4.min.css">
+      <!-- Bootstrap CSS -->
+      <link rel="stylesheet" href="dist/bootstrap-4.2.1/css/bootstrap.min.css">
 
     <!-- For Icon -->
     <link rel="stylesheet" href="https://kit.fontawesome.com/3142f33457.css" crossorigin="anonymous">
@@ -37,11 +36,10 @@
                 </div>
 
                 <form action="events_operation.php" method="POST">
-
                     <div class="modal-body">
                         <div class="form-group">
                             <label>Category_ID</label>
-                            <input type="number" min="3" max="5" name="category_id" id="category_id" class="form-control" placeholder="Select your Categories_ID 3(literary), 4(music) or 5(dance)" autocomplete="off" required>
+                            <input type="number" name="category_id" id="category_id" class="form-control" placeholder="Select your Categories_ID 3(literary), 4(music) or 5(dance)"  min="3" max="5" autocomplete="off" required>
                         </div>
 
                         <div class="form-group">
@@ -53,14 +51,13 @@
                             <label>Title</label>
                             <input type="text" name="title" class="form-control" placeholder="Enter your Title" autocomplete="off" required>
                         </div>
-
                     </div>
+
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                         <button type="submit" name="insertdata" class="btn btn-primary">Save Data</button>
                     </div>
                 </form>
-
             </div>
         </div>
     </div>
@@ -78,14 +75,11 @@
                 </div>
 
                 <form action="events_operation.php" method="POST">
-
                     <div class="modal-body">
-                    
                         <input type="hidden" name="update_id" id="update_id">
-
                         <div class="form-group">
                             <label>Categories_ID</label>
-                            <input type="number" min="3" max="5" name="category_id" id="category_id" class="form-control" placeholder="Select your Categories_ID 3(literary), 4(music) or 5(dance)" autocomplete="off" required>
+                            <input type="number" name="category_id" id="category_id" class="form-control" placeholder="Select your Categories_ID 3(literary), 4(music) or 5(dance)" min="3" max="5" autocomplete="off" required>
                         </div>
 
                         <div class="form-group">
@@ -97,14 +91,13 @@
                             <label>Title</label>
                             <input type="text" name="title" id="title" class="form-control" placeholder="Enter your Title">
                         </div>
-
                     </div>
+
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                         <button type="submit" name="updatedata" class="btn btn-primary">Update Data</button>
                     </div>
                 </form>
-
             </div>
         </div>
     </div>
@@ -122,19 +115,16 @@
                 </div>
 
                 <form action="events_operation.php" method="POST">
-
                     <div class="modal-body">
-
                         <input type="hidden" name="delete_id" id="delete_id">
-
                         <h4>Do you want to Delete this Event ??</h4>
                     </div>
+
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary" data-dismiss="modal"> NO </button>
                         <button type="submit" name="deletedata" class="btn btn-danger"> Yes !! Delete it. </button>
                     </div>
                 </form>
-
             </div>
         </div>
     </div>
@@ -142,18 +132,28 @@
     <div class="container my-3">
         <div class="card">
             <div class="card-body">
-                <h1 style="text-align:center;"><b> <u>Events</u> </b></h1>
-                <button type="button" class="btn btn-primary my-3" data-toggle="modal" data-target="#addmodal">ADD DATA</button>
-                <div class="btn-group" role="group" aria-label="Go to">
-                    <select onchange="window.location.href=this.value" class="btn btn-secondary">
-                        <option selected value="events.php">Go to...</option>
-                        <option value="competitions.php">Competitions</option>
-                        <option value="categories.php">Categories</option>
-                        <option value="criteria.php">Criterion</option>
-                        <option value="teams.php">Teams</option>
-                        <option value="judges.php">Judges</option>
-                        <option value="technicals.php">Technicals</option>
-                    </select>
+                <h1 class="text-center"><b> <u>Events</u> </b></h1>
+                <div class="d-flex align-items-center">
+                    <button type="button" class="btn btn-primary mr-3 my-3" data-toggle="modal" data-target="#addmodal">ADD DATA</button>
+                    <div class="btn-group" role="group" aria-label="Go to">
+                        <select onchange="window.location.href=this.value" class="btn btn-secondary">
+                            <option selected value="">Go to...</option>
+                            <option value="competitions.php">Competitions</option>
+                            <option value="categories.php">Categories</option>
+                            <option value="criteria.php">Criterion</option>
+                            <option value="teams.php">Teams</option>
+                            <option value="judges.php">Judges</option>
+                            <option value="technicals.php">Technicals</option>
+                        </select>
+                    </div>
+                    <div class="btn-group ml-auto" role="group" aria-label="Go to">
+                        <select onchange="window.location.href=this.value" class="btn btn-dark">
+                            <option selected value="">Go to...</option>
+                            <option value="">Literary</option>
+                            <option value="">Music</option>
+                            <option value="">Dance</option>
+                        </select>
+                    </div>
                 </div>
                 <?php
                     require_once '../config/database.php';
@@ -161,11 +161,11 @@
                     
                     $events = Event::all();
                 ?>
-                <table id="datatableid" class="table table-bordered table-info table-hover" style="text-align:center;">
+                <table id="datatableid" class="table table-bordered table-info table-hover text-center">
                     <thead class="table-dark">
                         <tr>
-                            <th scope="col" style="display:none;">ID</th>
-                            <th scope="col" style="display:none;">Categories_ID</th>
+                            <th scope="col" class="d-none">ID</th>
+                            <th scope="col" class="d-none">Categories_ID</th>
                             <th scope="col">Slug</th>
                             <th scope="col">Title</th>
                             <th scope="col">Operations</th>
@@ -174,8 +174,8 @@
                     <tbody>
                         <?php foreach ($events as $event) { ?>
                             <tr>
-                                <td style="display:none;"><?php echo $event->getId(); ?></td>
-                                <td style="display:none;"><?php echo $event->getCategoryId(); ?></td>
+                                <td class="d-none"><?php echo $event->getId(); ?></td>
+                                <td class="d-none"><?php echo $event->getCategoryId(); ?></td>
                                 <td><?php echo $event->getSlug(); ?></td>
                                 <td><?php echo $event->getTitle(); ?></td>
                                 <td>
@@ -190,22 +190,12 @@
         </div>
     </div>
 
-
     <!-- Bootstrap Javascript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
-
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
-
-
-    <script src="https://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.18/js/dataTables.bootstrap4.min.js"></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"></script>
+    <script src="dist/ajax/libs/jquery-3.3.1/jquery.min.js"></script>
+    <script src="dist/bootstrap-4.2.1/js/bootstrap.min.js"></script>
 
     <!-- For Icon -->
-    <script src="https://kit.fontawesome.com/3142f33457.js" crossorigin="anonymous"></script>
+    <script src="dist/fontawesome/icon.js"></script>
 
     <script src="main.js"></script>
 
@@ -225,6 +215,7 @@
                 console.log(data);
 
                 $('#update_id').val(data[0]);
+                $('#category_id').val(data[1]);
                 $('#slug').val(data[2]);
                 $('#title').val(data[3]);
             });

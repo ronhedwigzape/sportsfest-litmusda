@@ -3,10 +3,9 @@
 require_once '../config/database.php';
 require_once '../models/Event.php';
 
-
 // Insert Data
-if(isset($_POST['insertdata']))
-{
+if(isset($_POST['insertdata'])) {
+
     $category_id = $_POST['category_id'];
     $slug = $_POST['slug'];
     $title = $_POST['title'];
@@ -18,12 +17,10 @@ if(isset($_POST['insertdata']))
     $event->insert();
 }
 
-
 // Update Data
 if (isset($_POST['updatedata'])) {
 
     $id = $_POST['update_id'];
-
     $category_id = $_POST['category_id'];
     $slug = $_POST['slug'];
     $title = $_POST['title'];
@@ -33,13 +30,11 @@ if (isset($_POST['updatedata'])) {
     $event->setSlug($slug);
     $event->setTitle($title);
     $event->update();
-
 }
 
-
 // Delete Data
-if(isset($_POST['deletedata']))
-{
+if(isset($_POST['deletedata'])) {
+
     $id = $_POST['delete_id'];
     $event = Event::findById($id);
     $event->delete();

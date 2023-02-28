@@ -2,22 +2,22 @@
 
 require_once 'App.php';
 
-class Rating extends App
+class Deduction extends App
 {
     // table
-    protected $table = 'ratings';
+    protected $table = 'deductions';
 
     // properties
     protected $id;
-    protected $judge_id;
-    protected $criterion_id;
+    protected $technical_id;
+    protected $event_id;
     protected $team_id;
     protected $value = 0;
     protected $is_locked;
 
 
     /***************************************************************************
-     * Rating constructor
+     * Deduction constructor
      *
      * @param int $id
      */
@@ -33,12 +33,12 @@ class Rating extends App
             $result = $stmt->get_result();
             if($result->num_rows > 0) {
                 $row = $result->fetch_assoc();
-                $this->id           = $row['id'];
-                $this->judge_id     = $row['judge_id'];
-                $this->criterion_id = $row['criteria_id'];
-                $this->team_id      = $row['team_id'];
-                $this->value        = $row['value'];
-                $this->is_locked    = ($row['is_locked'] == 1);
+                $this->id = $row['id'];
+                $this->technical_id = $row['technical_id'];
+                $this->event_id = $row['event_id'];
+                $this->team_id = $row['team_id'];
+                $this->value = $row['value'];
+                $this->is_locked = ($row['is_locked'] == 1);
             }
         }
     }
@@ -48,53 +48,53 @@ class Rating extends App
      * Execute find
      *
      * @param $stmt
-     * @return Rating|boolean
+     * @return Deduction|boolean
      */
     private static function executeFind($stmt)
     {
         $stmt->execute();
         $result = $stmt->get_result();
         if($row = $result->fetch_assoc())
-            return new Rating($row['id']);
+            return new Deduction($row['id']);
         else
             return false;
     }
 
 
     /***************************************************************************
-     * Find rating by judge_id, criterion_id, and team_id
+     * Find deduction by technical_id, event_id, and team_id
      *
-     * @param int $judge_id
-     * @param int $criterion_id
+     * @param int $technical_id
+     * @param int $event_id
      * @param int $team_id
-     * @return Rating|boolean
+     * @return Deduction|boolean
      */
-    public static function find($judge_id, $criterion_id, $team_id)
+    public static function find($technical_id, $event_id, $team_id)
     {
-        $rating = new Rating();
-        $stmt = $rating->conn->prepare("SELECT id FROM $rating->table WHERE judge_id = ? AND criteria_id = ? AND team_id = ?");
-        $stmt->bind_param("iii", $judge_id, $criterion_id, $team_id);
+        $deduction = new Deduction();
+        $stmt = $deduction->conn->prepare("SELECT id FROM $deduction->table WHERE technical_id = ? AND event_id = ? AND team_id = ?");
+        $stmt->bind_param("iii", $technical_id, $event_id, $team_id);
         return self::executeFind($stmt);
     }
 
 
     /***************************************************************************
-     * Find rating by id
+     * Find deduction by id
      *
      * @param int $id
-     * @return Rating|boolean
+     * @return Deduction|boolean
      */
     public static function findById($id)
     {
-        $rating = new Rating();
-        $stmt = $rating->conn->prepare("SELECT id FROM $rating->table WHERE id = ?");
+        $deduction = new Deduction();
+        $stmt = $deduction->conn->prepare("SELECT id FROM $deduction->table WHERE id = ?");
         $stmt->bind_param("i", $id);
         return self::executeFind($stmt);
     }
 
 
     /***************************************************************************
-     * Convert rating object to array
+     * Convert deduction object to array
      *
      * @return array
      */
@@ -102,8 +102,8 @@ class Rating extends App
     {
         return [
             'id'           => $this->id,
-            'judge_id'     => $this->judge_id,
-            'criterion_id' => $this->criterion_id,
+            'technical_id' => $this->technical_id,
+            'event_id'     => $this->event_id,
             'team_id'      => $this->team_id,
             'value'        => $this->value,
             'is_locked'    => $this->is_locked,
@@ -112,7 +112,7 @@ class Rating extends App
 
 
     /***************************************************************************
-     * Check if rating id exists
+     * Check if deduction id exists
      *
      * @param int $id
      * @return bool
@@ -127,24 +127,24 @@ class Rating extends App
 
 
     /***************************************************************************
-     * Check if rating for judge, criterion, and team is already stored
+     * Check if deduction for technical, event, and team is already stored
      *
-     * @param int $judge_id
-     * @param int $criterion_id
+     * @param int $technical_id
+     * @param int $event_id
      * @param int $team_id
      * @return bool
      */
-    public static function stored($judge_id, $criterion_id, $team_id)
+    public static function stored($technical_id, $event_id, $team_id)
     {
-        if(!$judge_id || !$criterion_id || !$team_id)
+        if(!$technical_id || !$event_id || !$team_id)
             return false;
 
-        return (self::find($judge_id, $criterion_id, $team_id) != false);
+        return (self::find($technical_id, $event_id, $team_id) != false);
     }
 
 
     /***************************************************************************
-     * Insert rating
+     * Insert deduction
      *
      * @return void
      */
@@ -152,41 +152,40 @@ class Rating extends App
     {
         // check id
         if(self::exists($this->id))
-            App::returnError('HTTP/1.1 500', 'Insert Error: rating [id = ' . $this->id . '] already exists.');
+            App::returnError('HTTP/1.1 500', 'Insert Error: deduction [id = ' . $this->id . '] already exists.');
 
-        // check judge_id
-        require_once 'Judge.php';
-        if(!Judge::exists($this->judge_id))
-            App::returnError('HTTP/1.1 500', 'Insert Error: judge [id = ' . $this->judge_id . '] does not exist.');
+        // check technical_id
+        require_once 'Technical.php';
+        if(!Technical::exists($this->technical_id))
+            App::returnError('HTTP/1.1 500', 'Insert Error: technical [id = ' . $this->technical_id . '] does not exist.');
 
-        // check criterion_id
-        require_once 'Criterion.php';
-        if(!Criterion::exists($this->criterion_id))
-            App::returnError('HTTP/1.1 500', 'Insert Error: criterion [id = ' . $this->criterion_id . '] does not exist.');
+        // check event_id
+        require_once 'Event.php';
+        if(!Event::exists($this->event_id))
+            App::returnError('HTTP/1.1 500', 'Insert Error: event [id = ' . $this->event_id . '] does not exist.');
 
         // check team_id
         require_once 'Team.php';
         if(!Team::exists($this->team_id))
             App::returnError('HTTP/1.1 500', 'Insert Error: team [id = ' . $this->team_id . '] does not exist.');
 
-        // check if judge is allowed to rate
-        $criterion = $this->getCriterion();
-        $event = $criterion->getEvent();
-        $judge = $this->getJudge();
-        if(!$judge->hasEvent($event))
-            App::returnError('HTTP/1.1 500', 'Insert Error: event [slug = ' . $event->getSlug() . '] is not assigned to judge [id = ' . $this->judge_id . ']');
+        // check if technical is allowed to deduct
+        $event     = $this->getEvent();
+        $technical = $this->getTechnical();
+        if(!$technical->hasEvent($event))
+            App::returnError('HTTP/1.1 500', 'Insert Error: event [slug = ' . $event->getSlug() . '] is not assigned to technical [id = ' . $this->technical_id . ']');
 
         // proceed with insert if not yet stored
-        if(!self::stored($this->judge_id, $this->criterion_id, $this->team_id)) {
+        if(!self::stored($this->technical_id, $this->event_id, $this->team_id)) {
             // check value
             $min = 0;
-            $max = $criterion->getPercentage();
+            $max = $event->getTotalCriteriaPercentage();
             if($this->value < $min || $this->value > $max)
-                App::returnError('HTTP/1.1 500', 'Insert Error: criterion [title = "' . $criterion->getTitle() . '"] must be from ' . $min . ' to ' . $max . ', [given = ' . $this->value . '].');
+                App::returnError('HTTP/1.1 500', 'Insert Error: deduction for event [slug = ' . $event->getSlug() . '] must be from ' . $min . ' to ' . $max . ', [given = ' . $this->value . '].');
 
             // proceed with insert
-            $stmt = $this->conn->prepare("INSERT INTO $this->table(judge_id, criteria_id, team_id, value) VALUES(?, ?, ?, ?)");
-            $stmt->bind_param("iiid", $this->judge_id, $this->criterion_id, $this->team_id, $this->value);
+            $stmt = $this->conn->prepare("INSERT INTO $this->table(technical_id, event_id, team_id, value) VALUES(?, ?, ?, ?)");
+            $stmt->bind_param("iiid", $this->technical_id, $this->event_id, $this->team_id, $this->value);
             $stmt->execute();
             $this->id = $this->conn->insert_id;
         }
@@ -194,7 +193,7 @@ class Rating extends App
 
 
     /***************************************************************************
-     * Update rating
+     * Update deduction
      *
      * @param bool $toggle_lock
      * @return void
@@ -203,53 +202,52 @@ class Rating extends App
     {
         // check id
         if(!self::exists($this->id))
-            App::returnError('HTTP/1.1 500', 'Update Error: rating [id = ' . $this->id . '] does not exist.');
+            App::returnError('HTTP/1.1 500', 'Update Error: deduction [id = ' . $this->id . '] does not exist.');
 
         // check is_locked
         if(!$toggle_lock) {
-            $stored_rating = self::findById($this->id);
-            if($stored_rating->is_locked)
-                App::returnError('HTTP/1.1 500', 'Update Error: rating [id = ' . $this->id . '] is already locked.');
+            $stored_deduction = self::findById($this->id);
+            if($stored_deduction->is_locked)
+                App::returnError('HTTP/1.1 500', 'Update Error: deduction [id = ' . $this->id . '] is already locked.');
         }
 
-        // check judge_id
-        require_once 'Judge.php';
-        if(!Judge::exists($this->judge_id))
-            App::returnError('HTTP/1.1 500', 'Update Error: judge [id = ' . $this->judge_id . '] does not exist.');
+        // check technical_id
+        require_once 'Technical.php';
+        if(!Technical::exists($this->technical_id))
+            App::returnError('HTTP/1.1 500', 'Update Error: technical [id = ' . $this->technical_id . '] does not exist.');
 
-        // check criterion_id
-        require_once 'Criterion.php';
-        if(!Criterion::exists($this->criterion_id))
-            App::returnError('HTTP/1.1 500', 'Update Error: criterion [id = ' . $this->criterion_id . '] does not exist.');
+        // check event_id
+        require_once 'Event.php';
+        if(!Event::exists($this->event_id))
+            App::returnError('HTTP/1.1 500', 'Update Error: event [id = ' . $this->event_id . '] does not exist.');
 
         // check team_id
         require_once 'Team.php';
         if(!Team::exists($this->team_id))
             App::returnError('HTTP/1.1 500', 'Update Error: team [id = ' . $this->team_id . '] does not exist.');
 
-        // check if judge is allowed to rate
-        $criterion = $this->getCriterion();
-        $event = $criterion->getEvent();
-        $judge = $this->getJudge();
-        if(!$judge->hasEvent($event))
-            App::returnError('HTTP/1.1 500', 'Update Error: event [slug = ' . $event->getSlug() . '] is not assigned to judge [id = ' . $this->judge_id . ']');
+        // check if technical is allowed to deduct
+        $event     = $this->getEvent();
+        $technical = $this->getTechnical();
+        if(!$technical->hasEvent($event))
+            App::returnError('HTTP/1.1 500', 'Update Error: event [slug = ' . $event->getSlug() . '] is not assigned to technical [id = ' . $this->technical_id . ']');
 
         // check value
         $min = 0;
-        $max = $criterion->getPercentage();
+        $max = $event->getTotalCriteriaPercentage();
         if($this->value < $min || $this->value > $max)
-            App::returnError('HTTP/1.1 500', 'Update Error: criterion [title = "' . $criterion->getTitle() . '"] must be from ' . $min . ' to ' . $max . ', [given = ' . $this->value . '].');
+            App::returnError('HTTP/1.1 500', 'Update Error: deduction for event [slug = ' . $event->getSlug() . '] must be from ' . $min . ' to ' . $max . ', [given = ' . $this->value . '].');
 
         // proceed with update
-        $stmt = $this->conn->prepare("UPDATE $this->table SET judge_id = ?,  criteria_id = ?, team_id = ?, value = ?, is_locked = ? WHERE id = ?");
+        $stmt = $this->conn->prepare("UPDATE $this->table SET technical_id = ?,  event_id = ?, team_id = ?, value = ?, is_locked = ? WHERE id = ?");
         $is_locked = $this->is_locked ? 1 : 0;
-        $stmt->bind_param("iiidii", $this->judge_id, $this->criterion_id, $this->team_id, $this->value, $is_locked, $this->id);
+        $stmt->bind_param("iiidii", $this->technical_id, $this->event_id, $this->team_id, $this->value, $is_locked, $this->id);
         $stmt->execute();
     }
 
 
     /***************************************************************************
-     * Delete rating
+     * Delete deduction
      *
      * @return void
      */
@@ -257,7 +255,7 @@ class Rating extends App
     {
         // check id
         if(!self::exists($this->id))
-            App::returnError('HTTP/1.1 500', 'Delete Error: rating [id = ' . $this->id . '] does not exist.');
+            App::returnError('HTTP/1.1 500', 'Delete Error: deduction [id = ' . $this->id . '] does not exist.');
 
         // proceed with delete
         $stmt = $this->conn->prepare("DELETE FROM $this->table WHERE id = ?");
@@ -267,7 +265,7 @@ class Rating extends App
 
 
     /***************************************************************************
-     * Lock or Unlock rating
+     * Lock or Unlock deduction
      *
      * @param bool $is_locked
      * @param bool $update
@@ -282,26 +280,26 @@ class Rating extends App
 
 
     /***************************************************************************
-     * Set judge_id
+     * Set technical_id
      *
-     * @param int $judge_id
+     * @param int $technical_id
      * @return void
      */
-    public function setJudgeId($judge_id)
+    public function setTechnicalId($technical_id)
     {
-        $this->judge_id = $judge_id;
+        $this->technical_id = $technical_id;
     }
 
 
     /***************************************************************************
-     * Set criterion_id
+     * Set event_id
      *
-     * @param int $criterion_id
+     * @param int $event_id
      * @return void
      */
-    public function setCriterionId($criterion_id)
+    public function setEventId($event_id)
     {
-        $this->criterion_id = $criterion_id;
+        $this->event_id = $event_id;
     }
 
 
@@ -353,24 +351,24 @@ class Rating extends App
 
 
     /***************************************************************************
-     * Get judge_id
+     * Get technical_id
      *
      * @return int
      */
-    public function getJudgeId()
+    public function getTechnicalId()
     {
-        return $this->judge_id;
+        return $this->technical_id;
     }
 
 
     /***************************************************************************
-     * Get criterion_id
+     * Get event_id
      *
      * @return int
      */
-    public function getCriterionId()
+    public function getEventId()
     {
-        return $this->criterion_id;
+        return $this->event_id;
     }
 
 
@@ -408,26 +406,26 @@ class Rating extends App
 
 
     /***************************************************************************
-     * Get judge
+     * Get technical
      *
-     * @return Judge|bool
+     * @return Technical|bool
      */
-    public function getJudge()
+    public function getTechnical()
     {
-        require_once 'Judge.php';
-        return Judge::findById($this->judge_id);
+        require_once 'Technical.php';
+        return Technical::findById($this->technical_id);
     }
 
 
     /***************************************************************************
-     * Get criterion
+     * Get event
      *
-     * @return Criterion
+     * @return Event
      */
-    public function getCriterion()
+    public function getEvent()
     {
-        require_once 'Criterion.php';
-        return new Criterion($this->criterion_id);
+        require_once 'Event.php';
+        return new Event($this->event_id);
     }
 
 
