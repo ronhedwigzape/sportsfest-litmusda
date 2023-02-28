@@ -63,7 +63,6 @@
 							:key="criterion.id"
 						>
 							<v-text-field
-								id="ratings"
 								type="number"
 								class="font-weight-bold"
 								variant="underlined"
@@ -88,7 +87,11 @@
 						</td>
 						<td>
 							<v-text-field
+								type="number"
+								class="font-weight-bold"
 								variant="outlined"
+								hide-details
+								single-line
 								loading
 							>
 							</v-text-field>
