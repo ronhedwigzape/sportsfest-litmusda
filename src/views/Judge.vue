@@ -9,23 +9,26 @@
 			<v-table v-if="$route.params.eventSlug && event" density="comfortable" hover>
 				<thead>
 					<tr>
-						<th colspan="12" class="text-h5 text-uppercase text-center font-weight-bold">
+						<th colspan="12" class="text-h5 text-uppercase text-center font-weight-bold text-deep-purple-darken-2">
 							{{ event.title }}
 						</th>
 					</tr>
 					<tr>
-						<th class="text-uppercase text-center font-weight-bold">
+						<th colspan="2" class="text-uppercase text-center font-weight-bold text-deep-purple-darken-2">
 							Teams
 						</th>
-						<th class="text-uppercase text-center" v-for="criterion in criteria">
+						<th class="text-uppercase text-center text-deep-purple-darken-2" v-for="criterion in criteria">
 							<b>{{ criterion.title }}</b> ({{ criterion.percentage }}%)
 						</th>
-						<th class="text-uppercase text-center font-weight-bold">Total</th>
-						<th class="text-uppercase text-center font-weight-bold">Rank</th>
+						<th class="text-uppercase text-center font-weight-bold text-deep-purple-darken-2">Total</th>
+						<th class="text-uppercase text-center font-weight-bold text-deep-purple-darken-2">Rank</th>
 					</tr>
 				</thead>
 				<tbody >
 					<tr v-for="team in teams" :key="team.id">
+						<td class="text-uppercase text-center text-h5 font-weight-bold text-deep-purple-darken-2">
+							{{ team.id }}
+						</td>
 						<td class="text-uppercase text-center font-weight-bold">
 							<v-col align="center">
 								<v-img
@@ -255,7 +258,7 @@
 </script>
 
 <style scoped>
-	tbody td {
+	tbody td, th {
 		height: 64px !important;
 	}
 	input{
