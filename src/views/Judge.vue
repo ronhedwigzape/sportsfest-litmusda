@@ -17,8 +17,9 @@
 						<th colspan="2" class="text-uppercase text-center font-weight-bold text-deep-purple-darken-2">
 							Teams
 						</th>
-						<th class="text-uppercase text-center text-deep-purple-darken-2" v-for="criterion in criteria">
-							<b>{{ criterion.title }}</b> ({{ criterion.percentage }}%)
+						<th class="text-center" v-for="criterion in criteria">
+							<p class="text-uppercase text-deep-purple-lighten-1">{{ criterion.title }}</p>
+							<b class="text-deep-purple-darken-2">({{ criterion.percentage }}%)</b>
 						</th>
 						<th class="text-uppercase text-center font-weight-bold text-deep-purple-darken-2">Total</th>
 						<th class="text-uppercase text-center font-weight-bold text-deep-purple-darken-2">Rank</th>
@@ -97,7 +98,7 @@
 					<td colspan="12">
 						<v-col align="center" justify="center">
 							<v-btn
-								class="my-5"
+								class="px-16"
 								color="deep-purple-darken-1"
 								@click="dialog = true"
 							>
@@ -260,9 +261,6 @@
 <style scoped>
 	tbody td, th {
 		height: 64px !important;
-	}
-	input{
-		text-align: center !important;
 	}
 	tbody td {
 		border-bottom: 1px solid #ddd;
