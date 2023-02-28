@@ -66,6 +66,8 @@
                             data = JSON.parse(data);
                             this.event = data.event;
                             this.results = data.results;
+							console.log(data.event)
+							console.log(data.results)
 
                             // request again
                             if(data.event.slug === this.$route.params.eventSlug) {
