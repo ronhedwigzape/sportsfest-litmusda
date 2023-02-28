@@ -69,6 +69,7 @@
 								hide-details
 								single-line
 								@change="save(ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`], criterion.percentage)"
+								@blur="save(ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`], criterion.percentage)"
 								v-model.number="ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value"
 								:class="{
 									'text-error font-weight-bold': (
@@ -166,7 +167,7 @@
 				timer: null,
 				teams: [],
 				criteria: [],
-				ranks: [],
+				ranks: {},
 				ratings: {}
 			}
 		},
@@ -211,10 +212,12 @@
 			},
 			save(rating, percentage) {
 				if (rating.value < 0) {
-					return rating.value = 0;
+					rating.value = 0;
+					return rating.value
 				}
 				else if (rating.value > percentage) {
-					return rating.value = percentage;
+					rating.value = percentage;
+					return rating.value
 				}
 				$.ajax({
 					url: `${this.$store.getters.appURL}/judge.php`,
@@ -225,8 +228,8 @@
 					data: {
 						rating
 					},
-					success: (data) => {
-						console.log(data)
+					success: (data, textStatus, jqXHR) => {
+						console.log(textStatus)
 					},
 					error: (error) => {
 						alert(`ERROR ${error.status}: ${error.statusText}`);
