@@ -261,7 +261,7 @@
 	input{
 		text-align: center !important;
 	}
-	th, td {
-		border: 1px solid #ddd;
+	tbody td {
+		border-bottom: 1px solid #ddd;
 	}
 </style>
