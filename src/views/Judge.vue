@@ -213,11 +213,11 @@
 			save(rating, percentage) {
 				if (rating.value < 0) {
 					rating.value = 0;
-					return rating.value
+					return rating.value;
 				}
 				else if (rating.value > percentage) {
 					rating.value = percentage;
-					return rating.value
+					return rating.value;
 				}
 				$.ajax({
 					url: `${this.$store.getters.appURL}/judge.php`,
@@ -229,7 +229,7 @@
 						rating
 					},
 					success: (data, textStatus, jqXHR) => {
-						console.log(textStatus)
+						console.log(`${jqXHR.status}: ${jqXHR.statusText}`);
 					},
 					error: (error) => {
 						alert(`ERROR ${error.status}: ${error.statusText}`);
