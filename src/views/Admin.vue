@@ -3,83 +3,81 @@
     <top-nav />
     <v-main>
         <!-- results -->
-        <v-container v-if="event" fluid>
-			<v-table v-if="$route.params.eventSlug" density="comfortable" :bordered="true" hover>
-				<thead>
-					<tr>
-						<th colspan="20" class="text-h5 text-uppercase text-center font-weight-bold">
-							{{ event.title }}
-						</th>
-					</tr>
-					<tr>
-						<td colspan="2" class="text-center">Teams</td>
-						<td>Deduct</td>
-						<template v-for="judge in judges" :key="judge.id">
-							<td>Judge {{ judge.id }}</td>
-							<td>Judge {{ judge.id}} Rank</td>
-						</template>
-						<td>Total</td>
-						<td>Average</td>
-						<td>Total Rank</td>
-						<td>Initial Rank</td>
-						<td>Final Rank</td>
-					</tr>
-				</thead>
-				<tbody>
-				<tr v-for="team in teams">
-					<td>{{ team.id }}</td>
-					<td>{{ team.name }}</td>
-					<td>{{ team.deductions.total }}</td>
-					<template v-for="judge in judges" :key="judge.id">
-						<td>
-							{{ team.ratings.inputs[`judge_${judge.id}`].final.original }}
-						</td>
-						<td>
-							{{ team.ratings.inputs[`judge_${judge.id}`].rank.fractional }}
-						</td>
-					</template>
-					<td>{{ team.ratings.total }}</td>
-					<td>{{ team.ratings.average }}</td>
-					<td>{{ team.rank.total.fractional }}</td>
-					<td>{{ team.rank.initial.fractional }}</td>
-					<td>{{ team.rank.final.fractional }}</td>
+		<v-table v-if="$route.params.eventSlug && event" density="comfortable" :bordered="true" hover>
+			<thead>
+				<tr>
+					<th colspan="20" class="text-h5 text-uppercase text-center font-weight-bold">
+						{{ event.title }}
+					</th>
 				</tr>
-				</tbody>
-				<tfoot>
-					<tr>
-						<td colspan="20">
-							<v-row>
-								<template v-for="technical in technicals" :key="technical.id">
-									<v-col>
-										<v-card class="text-center mb-5" flat>
-											<v-card-title class="pt-16 font-weight-bold">
-												{{ technical.name }}
-											</v-card-title>
-											<v-card-text class="text-center">
-												Technical Judge {{ technical.number }}
-											</v-card-text>
-										</v-card>
-									</v-col>
-								</template>
+				<tr>
+					<td colspan="2" class="text-center">Teams</td>
+					<td>Deduct</td>
+					<template v-for="judge in judges" :key="judge.id">
+						<td>Judge {{ judge.id }}</td>
+						<td>Judge {{ judge.id}} Rank</td>
+					</template>
+					<td>Total</td>
+					<td>Average</td>
+					<td>Total Rank</td>
+					<td>Initial Rank</td>
+					<td>Final Rank</td>
+				</tr>
+			</thead>
+			<tbody>
+			<tr v-for="team in teams">
+				<td>{{ team.id }}</td>
+				<td>{{ team.name }}</td>
+				<td>{{ team.deductions.total }}</td>
+				<template v-for="judge in judges" :key="judge.id">
+					<td>
+						{{ team.ratings.inputs[`judge_${judge.id}`].final.original }}
+					</td>
+					<td>
+						{{ team.ratings.inputs[`judge_${judge.id}`].rank.fractional }}
+					</td>
+				</template>
+				<td>{{ team.ratings.total }}</td>
+				<td>{{ team.ratings.average }}</td>
+				<td>{{ team.rank.total.fractional }}</td>
+				<td>{{ team.rank.initial.fractional }}</td>
+				<td>{{ team.rank.final.fractional }}</td>
+			</tr>
+			</tbody>
+			<tfoot>
+				<tr>
+					<td colspan="20">
+						<v-row>
+							<template v-for="technical in technicals" :key="technical.id">
+								<v-col>
+									<v-card class="text-center mb-5" flat>
+										<v-card-title class="pt-16 font-weight-bold">
+											{{ technical.name }}
+										</v-card-title>
+										<v-card-text class="text-center">
+											Technical Judge {{ technical.number }}
+										</v-card-text>
+									</v-card>
+								</v-col>
+							</template>
 
-								<template v-for="judge in judges" :key="judge.id">
-									<v-col>
-										<v-card class="text-center mb-5" flat>
-											<v-card-title class="pt-16 font-weight-bold">
-												{{ judge.name }}
-											</v-card-title>
-											<v-card-text class="text-center">
-												Judge {{ judge.number }} <template v-if="judge.is_chairman == 1">(Chairman)</template>
-											</v-card-text>
-										</v-card>
-									</v-col>
-								</template>
-							</v-row>
-						</td>
-					</tr>
-				</tfoot>
-			</v-table>
-        </v-container>
+							<template v-for="judge in judges" :key="judge.id">
+								<v-col>
+									<v-card class="text-center mb-5" flat>
+										<v-card-title class="pt-16 font-weight-bold">
+											{{ judge.name }}
+										</v-card-title>
+										<v-card-text class="text-center">
+											Judge {{ judge.number }} <template v-if="judge.is_chairman == 1">(Chairman)</template>
+										</v-card-text>
+									</v-card>
+								</v-col>
+							</template>
+						</v-row>
+					</td>
+				</tr>
+			</tfoot>
+		</v-table>
 
         <!-- loader -->
         <div v-else-if="this.$route.params.eventSlug" class="d-flex justify-center align-center" style="height: 100vh;">
@@ -162,5 +160,7 @@
 </script>
 
 <style scoped>
-
+th, td {
+	border: 1px solid #ddd;
+}
 </style>
