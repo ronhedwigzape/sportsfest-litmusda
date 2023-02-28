@@ -72,7 +72,7 @@
 								variant="underlined"
 								hide-details
 								single-line
-								@change="save(ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`], ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value, criterion.percentage)"
+								@change="save(ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`], criterion.percentage)"
 								v-model.number="ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value"
 								:class="{
 									'text-error font-weight-bold': (
@@ -215,30 +215,31 @@
 					});
 				}
 			},
-			save(rating, value, percentage) {
-				if (value < 0) {
-					return value = 0;
+			save(rating, percentage) {
+				if (rating.value < 0) {
+					return rating.value = 0;
 				}
-				else if (value > percentage) {
-					return value = percentage;
+				else if (rating.value > percentage) {
+					return rating.value = percentage;
 				}
-
-				$.ajax({
-					url: `${this.$store.getters.appURL}/judge.php`,
-					type: 'POST',
-					xhrFields: {
-						withCredentials: true
-					},
-					data: {
-						rating
-					},
-					success: (data) => {
-						console.log(data)
-					},
-					error: (error) => {
-						alert(`ERROR ${error.status}: ${error.statusText}`);
-					},
-				});
+				else {
+					$.ajax({
+						url: `${this.$store.getters.appURL}/judge.php`,
+						type: 'POST',
+						xhrFields: {
+							withCredentials: true
+						},
+						data: {
+							rating
+						},
+						success: (data) => {
+							console.log(data)
+						},
+						error: (error) => {
+							alert(`ERROR ${error.status}: ${error.statusText}`);
+						},
+					});
+				}
 			},
 			getIconForEvent(title) {
 				switch (title) {
