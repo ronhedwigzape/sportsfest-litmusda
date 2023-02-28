@@ -11,16 +11,13 @@
 				density="comfortable"
 				fixed-header
 				hover
+				:height="680"
 			>
 				<thead>
 					<tr>
-						<th colspan="12" class="text-h5 text-uppercase text-center font-weight-bold text-deep-purple-darken-2">
-							{{ event.title }}
-						</th>
-					</tr>
-					<tr>
-						<th colspan="2" class="text-uppercase text-center font-weight-bold text-deep-purple-darken-2">
-							Teams
+						<th class="text-uppercase text-center font-weight-bold text-deep-purple-darken-2">#</th>
+						<th class="text-uppercase text-center font-weight-bold text-deep-purple-darken-2">
+							{{ event.title }} Teams
 						</th>
 						<th class="text-center" v-for="criterion in criteria">
 							<p class="text-uppercase text-deep-purple-lighten-1">{{ criterion.title }}</p>
@@ -104,7 +101,7 @@
 					<td colspan="12">
 						<v-col align="center" justify="center">
 							<v-btn
-								class="px-16"
+								class="px-16 mt-5 mb-10"
 								color="deep-purple-darken-1"
 								@click="dialog = true"
 							>
@@ -163,10 +160,10 @@
 				dialog: false,
 				loading: false,
 				criteria: [],
-				teams: [],
-				ratings: {},
 				event: null,
-				timer: null
+				timer: null,
+				teams: [],
+				ratings: {}
 			}
 		},
 		watch: {
@@ -231,26 +228,26 @@
 					},
 				});
 			},
-			getIconForEvent(title) {
-				switch (title) {
-					case "Oration":
-					case "Balagtasan":
-					case "Tigsik":
-					case "Jazz Chant":
-						return "mdi-script-text";
-					case "Vocal Solo Male":
-					case "Vocal Solo Female":
-					case "Vocal Duet":
-					case "Acoustic Band":
-						return "mdi-music";
-					case "Hip Hop":
-					case "Jazz Dance":
-
-					// Add more cases for other eventTitles
-					default:
-						return "mdi-dance-ballroom";
-				}
-			},
+			// getIconForEvent(title) {
+			// 	switch (title) {
+			// 		case "Oration":
+			// 		case "Balagtasan":
+			// 		case "Tigsik":
+			// 		case "Jazz Chant":
+			// 			return "mdi-script-text";
+			// 		case "Vocal Solo Male":
+			// 		case "Vocal Solo Female":
+			// 		case "Vocal Duet":
+			// 		case "Acoustic Band":
+			// 			return "mdi-music";
+			// 		case "Hip Hop":
+			// 		case "Jazz Dance":
+			//
+			// 		// Add more cases for other eventTitles
+			// 		default:
+			// 			return "mdi-dance-ballroom";
+			// 	}
+			// },
 		}
 	}
 </script>
