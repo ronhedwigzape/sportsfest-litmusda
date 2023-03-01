@@ -108,19 +108,8 @@
 
 <style scoped>
 .background-image {
-    background-image: url('/bg-img.png');
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-size: cover;
-    background-position: center center;
+    background: url('/bg-img.png') no-repeat center fixed !important;
     height: 100vh;
-    width: 100%;
-}
-
-@media (max-width: 768px) {
-    .background-image {
-        background-size: contain;
-    }
 }
 
 </style>
