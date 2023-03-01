@@ -18,7 +18,7 @@
                     </template>
                 </v-img>
 
-                <v-card class="mx-10 my-3 pa-10 elevation-5">
+                <v-card class="mx-10 my-3 pa-10 elevation-10">
                     <v-form @submit.prevent="handleSubmit">
                         <v-text-field
                             v-model="username"
@@ -108,7 +108,7 @@
 
 <style scoped>
 .background-image {
-    background-image: url('/bg-img.jpg');
+    background-image: url('/bg-img.png');
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: cover;
