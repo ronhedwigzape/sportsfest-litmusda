@@ -59,9 +59,7 @@
 							</v-col>
 							{{ team.name }}
 						</td>
-						<td	v-for="criterion in criteria"
-							:key="criterion.id"
-						>
+						<td v-for="criterion in criteria" :key="criterion.id">
 							<v-text-field
 								type="number"
 								class="font-weight-bold"
@@ -93,11 +91,15 @@
 								variant="outlined"
 								hide-details
 								single-line
-								loading
+								:loading="loading"
+								v-model.number="total"
+								:min="$store.state.rating.min"
+								:max="$store.state.rating.max"
+								@change="teamsTotalScores(team)"
 							>
 							</v-text-field>
 						</td>
-						<td> {{ ranks[`team_${team.id}`].fractional }}</td>
+						<td> </td>
 					</tr>
 				</tbody>
 				<!--	Dialog	  -->
@@ -167,8 +169,9 @@
 				timer: null,
 				teams: [],
 				criteria: [],
-				ranks: {},
-				ratings: {}
+				ranks: [],
+				ratings: {},
+				total: 0
 			}
 		},
 		watch: {
@@ -197,12 +200,10 @@
 						},
 						success: (data) => {
 							data = JSON.parse(data);
-							console.log(data)
 							this.criteria = data.criteria
 							this.teams = data.teams
 							this.ratings = data.ratings
 							this.event = data.event
-							this.ranks = data.ranks
 						},
 						error: (error) => {
 							alert(`ERROR ${error.status}: ${error.statusText}`);
@@ -211,7 +212,8 @@
 				}
 			},
 			save(rating, percentage) {
-				if (rating.value < 0) {
+				this.loading = true
+				if (rating.value < 0 || rating.value === '') {
 					rating.value = 0;
 					return rating.value;
 				}
@@ -229,6 +231,11 @@
 						rating
 					},
 					success: (data, textStatus, jqXHR) => {
+						if(this.loading) {
+							setTimeout(() => {
+								this.loading = false;
+							}, 1000);
+						}
 						console.log(`${jqXHR.status}: ${jqXHR.statusText}`);
 					},
 					error: (error) => {
@@ -236,26 +243,54 @@
 					},
 				});
 			},
-			// getIconForEvent(title) {
-			// 	switch (title) {
-			// 		case "Oration":
-			// 		case "Balagtasan":
-			// 		case "Tigsik":
-			// 		case "Jazz Chant":
-			// 			return "mdi-script-text";
-			// 		case "Vocal Solo Male":
-			// 		case "Vocal Solo Female":
-			// 		case "Vocal Duet":
-			// 		case "Acoustic Band":
-			// 			return "mdi-music";
-			// 		case "Hip Hop":
-			// 		case "Jazz Dance":
-			//
-			// 		// Add more cases for other eventTitles
-			// 		default:
-			// 			return "mdi-dance-ballroom";
-			// 	}
-			// },
+			test(){
+				console.log()
+			},
+			teamsTotalScores(team) {
+				if (this.total < 0 || this.total === '') {
+					this.total = this.$store.state.rating.min;
+				}
+				else if (this.total > 100) {
+					this.total = this.$store.state.rating.max;
+				}
+
+				let total_scores = 0
+				for (let criterion of this.criteria) {
+					const rating = this.ratings[`${this.event.slug}_${team.id}`][`${this.$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`];
+					rating.value = this.total * (criterion.percentage / 100);
+					total_scores += rating.value
+					this.save(rating, criterion.percentage)
+				}
+				this.total = total_scores
+				console.log(total_scores)
+			}
+		},
+		computed: {
+			/*******************************************************************************
+			 *	I. Get dense rank:
+			 *	1. Gather all unique total ratings U.
+			 *	2. Sort U.
+			 *	3. Scan the individual total ratings again, and find their (index + 1) in U.
+			 *
+			 *	example:
+			 *	total_ratings = [12, 10, 5, 10, 6]
+			 *
+			 *	U = [12, 10, 5, 6]
+			 *
+			 *	sorted U = [5, 6, 10, 12]
+			 *
+			 *	total_ratings_rank = [4, 3, 1, 3, 2]
+			 */
+			ranks() {
+				const total_ratings = []
+				for(let team of this.teams) {
+					for (let criterion of this.criteria) {
+						const rating = this.ratings[`${this.event.slug}_${team.id}`][`${this.$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value;
+						console.log(rating)
+					}
+				}
+
+			}
 		}
 	}
 </script>
