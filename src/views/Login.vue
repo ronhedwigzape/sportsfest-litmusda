@@ -17,7 +17,8 @@
                         </v-row>
                     </template>
                 </v-img>
-                <v-card class="transparent mx-10 my-3 pa-10 elevation-5">
+
+                <v-card class="mx-10 my-3 pa-10 elevation-10">
                     <v-form @submit.prevent="handleSubmit">
                         <v-text-field
                             v-model="username"
@@ -39,7 +40,7 @@
                             required
                             @click:appendInner="show1 = !show1"
                         ></v-text-field>
-                        <v-code class="transparent" align="right">
+                        <v-code class="transparent bg-white" align="right">
                             <v-btn
                                 class="mt-4 bg-amber-darken-1"
                                 type="submit"
@@ -107,22 +108,8 @@
 
 <style scoped>
 .background-image {
-    background-image: url('/bg-img.jpg');
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-size: cover;
-    background-position: center center;
+    background: url('/bg-img.png') no-repeat center fixed !important;
     height: 100vh;
-    width: 100%;
 }
 
-@media (max-width: 768px) {
-    .background-image {
-        background-size: contain;
-    }
-}
-
-.transparent {
-    background-color: transparent;
-}
 </style>

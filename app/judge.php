@@ -38,6 +38,7 @@ else {
                 'criteria' => $event->getRowCriteria(),
                 'teams'    => $event->getRowTeams(),
                 'ratings'  => $judge->getRowEventRatings($event)
+                'ranks'    => $judge->getEventRanks($event)
             ]);
         }
 

@@ -28,20 +28,20 @@
 			<tr v-for="team in teams">
 				<td>{{ team.id }}</td>
 				<td>{{ team.name }}</td>
-				<td>{{ team.deductions.total }}</td>
+				<td>{{ team.deductions.total.toFixed(2) }}</td>
 				<template v-for="judge in judges" :key="judge.id">
 					<td>
-						{{ team.ratings.inputs[`judge_${judge.id}`].final.original }}
+						{{ team.ratings.inputs[`judge_${judge.id}`].final.original.toFixed(2) }}
 					</td>
 					<td>
-						{{ team.ratings.inputs[`judge_${judge.id}`].rank.fractional }}
+						{{ team.ratings.inputs[`judge_${judge.id}`].rank.fractional.toFixed(2) }}
 					</td>
 				</template>
-				<td>{{ team.ratings.total }}</td>
-				<td>{{ team.ratings.average }}</td>
-				<td>{{ team.rank.total.fractional }}</td>
-				<td>{{ team.rank.initial.fractional }}</td>
-				<td>{{ team.rank.final.fractional }}</td>
+				<td>{{ team.ratings.total.toFixed(2) }}</td>
+				<td>{{ team.ratings.average.toFixed(2) }}</td>
+				<td>{{ team.rank.total.fractional.toFixed(2) }}</td>
+				<td>{{ team.rank.initial.fractional.toFixed(2) }}</td>
+				<td>{{ team.rank.final.fractional.toFixed(2) }}</td>
 			</tr>
 			</tbody>
 			<tfoot>
