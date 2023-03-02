@@ -559,4 +559,28 @@ class Event extends App
         }
         return $points;
     }
+
+
+    /***************************************************************************
+     * Get sorted teams for event, as array of objects
+     *
+     * @return Team[]
+     */
+    public function getAllTeams()
+    {
+        require_once 'Team.php';
+        return Team::all($this->getId());
+    }
+
+
+    /***************************************************************************
+     * Get sorted teams for event, as array of arrays
+     *
+     * @return array
+     */
+    public function getRowTeams()
+    {
+        require_once 'Team.php';
+        return Team::rows($this->getId());
+    }
 }
