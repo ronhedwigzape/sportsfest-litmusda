@@ -29,7 +29,6 @@ else {
         // get scoresheet of the passed event
         else if (isset($_GET['getScoreSheet'])) {
             require_once 'models/Event.php';
-            require_once 'models/Team.php';
 
             $event_slug = trim($_GET['getScoreSheet']);
             $event    = Event::findBySlug($event_slug);
@@ -37,8 +36,8 @@ else {
             echo json_encode([
                 'event'    => $event->toArray(),
                 'criteria' => $event->getRowCriteria(),
-                'teams'    => Team::rows(),
-                'ratings'  => $judge->getRowEventRatings($event),
+                'teams'    => $event->getRowTeams(),
+                'ratings'  => $judge->getRowEventRatings($event)
                 'ranks'    => $judge->getEventRanks($event)
             ]);
         }
