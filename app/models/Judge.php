@@ -521,7 +521,7 @@ class Judge extends User
         require_once 'Team.php';
 
         $ratings = [];
-        foreach(Team::all() as $team) {
+        foreach($event->getAllTeams() as $team) {
             $key = $event->getSlug() . '_' . $team->getId();
             $ratings[$key] = $this->getAllEventTeamRatings($event, $team);
         }
@@ -540,7 +540,7 @@ class Judge extends User
         require_once 'Team.php';
 
         $ratings = [];
-        foreach(Team::all() as $team) {
+        foreach($event->getAllTeams() as $team) {
             $key = $event->getSlug() . '_' . $team->getId();
             $ratings[$key] = $this->getRowEventTeamRatings($event, $team);
         }
@@ -557,7 +557,7 @@ class Judge extends User
     public function getEventRanks($event)
     {
         require_once 'Team.php';
-        $team_rows = Team::rows();
+        $team_rows = $event->getRowTeams();
 
         // prepare $ranks
         $ranks = [];
