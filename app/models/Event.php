@@ -562,6 +562,40 @@ class Event extends App
 
 
     /***************************************************************************
+     * Set team arrangement order
+     *
+     * @param Team $team
+     * @param int $order
+     * @return void
+     */
+    public function setTeamOrder($team, $order)
+    {
+        // get team_id
+        $team_id = $team->getId();
+
+        // check if arrangement is stored or not
+        require_once 'Arrangement.php';
+        $stored = Arrangement::stored($this->id, $team_id);
+
+        // instantiate arrangement
+        $arrangement = new Arrangement();
+        if($stored)
+            $arrangement = Arrangement::find($this->id, $team_id);
+
+        // set properties
+        $arrangement->setEventId($this->id);
+        $arrangement->setTeamId($team_id);
+        $arrangement->setOrder($order);
+
+        // update or insert
+        if($stored)
+            $arrangement->update();
+        else
+            $arrangement->insert();
+    }
+
+
+    /***************************************************************************
      * Get sorted teams for event, as array of objects
      *
      * @return Team[]
