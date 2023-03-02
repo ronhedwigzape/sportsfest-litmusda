@@ -113,7 +113,7 @@ class Admin extends User
 
         // get all teams
         require_once 'Team.php';
-        $teams = Team::all();
+        $teams = $event->getAllTeams();
 
         // get all technicals for this event
         $technicals = $event->getAllTechnicals();
