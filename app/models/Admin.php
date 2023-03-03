@@ -113,7 +113,7 @@ class Admin extends User
 
         // get all teams
         require_once 'Team.php';
-        $teams = Team::all();
+        $teams = $event->getAllTeams();
 
         // get all technicals for this event
         $technicals = $event->getAllTechnicals();
@@ -220,6 +220,7 @@ class Admin extends User
                     'fractional' => 0
                 ]
             ];
+            $team_row['points'] = 0;
 
             // push $team_row to $result['teams']
             $result['teams'][$key_team] = $team_row;
@@ -286,7 +287,7 @@ class Admin extends User
             $rank_group[$key_rank][] = $key;
         }
 
-        // get final fractional rank
+        // get final fractional rank and points
         $ctr = 0;
         for($i = 0; $i < sizeof($unique_final_adjustments); $i++) {
             $key = 'rank_' . ($i + 1);
@@ -294,9 +295,19 @@ class Admin extends User
             $size = sizeof($group);
             $fractional_rank = $ctr + ((($size * ($size + 1)) / 2) / $size);
 
-            // write $fractional_rank to $group members
+            // write $fractional_rank to $group members and accumulate points
+            $points = 0;
             for($j = 0; $j < $size; $j++) {
                 $result['teams'][$group[$j]]['rank']['final']['fractional'] = $fractional_rank;
+
+                if($point = $event->getRankPoint($ctr + $j + 1))
+                    $points += $point->getValue();
+            }
+
+            // assign points to $group members
+            $points = $points / $size;
+            for($j = 0; $j < $size; $j++) {
+                $result['teams'][$group[$j]]['points'] = $points;
             }
 
             $ctr += $size;

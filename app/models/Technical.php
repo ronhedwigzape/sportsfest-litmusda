@@ -412,7 +412,7 @@ class Technical extends User
         require_once 'Team.php';
 
         $deductions = [];
-        foreach(Team::all() as $team) {
+        foreach($event->getAllTeams() as $team) {
             $key = $event->getSlug().'_'.$team->getId();
             $deductions[$key] = $this->getEventTeamDeduction($event, $team);
         }
@@ -431,7 +431,7 @@ class Technical extends User
         require_once 'Team.php';
 
         $deductions = [];
-        foreach(Team::all() as $team) {
+        foreach($event->getAllTeams() as $team) {
             $key = $event->getSlug().'_'.$team->getId();
             $deductions[$key] = $this->getEventTeamDeductionRow($event, $team);
         }
