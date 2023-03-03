@@ -141,6 +141,7 @@
                 </div>
                 <?php
                     require_once '../models/Competition.php';
+
                     $competitions = Competition::all();
                 ?>
                 <table id="datatableid" class="table table-bordered table-info table-hover text-center">
