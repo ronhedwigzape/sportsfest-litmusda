@@ -318,4 +318,63 @@ class Team extends App
     {
         return $this->logo;
     }
+
+
+    /***************************************************************************
+     * Add team participant for an event
+     *
+     * @param Event $event
+     * @param int $number
+     * @param string $first_name
+     * @param string $middle_name
+     * @param string $last_name
+     * @param string $gender
+     * @return void
+     */
+    public function addParticipant($event, $number, $first_name, $middle_name, $last_name, $gender)
+    {
+        require_once 'Participant.php';
+        $participant = new Participant();
+        $participant->setTeamId($this->id);
+        $participant->setEventId($event->getId());
+        $participant->setNumber($number);
+        $participant->setFirstName($first_name);
+        $participant->setMiddleName($middle_name);
+        $participant->setLastName($last_name);
+        $participant->setGender($gender);
+        $participant->insert();
+    }
+
+
+    /***************************************************************************
+     * Get all team participants for an event as array of objects
+     *
+     * @param Event $event
+     * @return Participant[]
+     */
+    public function getAllParticipants($event)
+    {
+        require_once 'Participant.php';
+        $participants = [];
+        foreach(Participant::all($this->id, $event->getId()) as $participant) {
+            $participants[] = $participant;
+        }
+        return $participants;
+    }
+
+
+    /***************************************************************************
+     * Get all team participants for an event as array of arrays
+     *
+     * @param Event $event
+     * @return Participant[]
+     */
+    public function getRowParticipants($event)
+    {
+        $participants = [];
+        foreach(self::getAllParticipants($event) as $participant) {
+            $participants[] = $participant->toArray();
+        }
+        return $participants;
+    }
 }
