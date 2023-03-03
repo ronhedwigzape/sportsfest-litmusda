@@ -173,8 +173,9 @@ require_once '../config/database.php';
                 </select>
             </div>
             <?php
-            require_once '../models/Technical.php';
-            $technicals = Technical::all();
+                require_once '../models/Technical.php';
+
+                $technicals = Technical::all();
             ?>
             <table id="datatableid" class="table table-bordered table-info table-hover text-center">
                 <thead class="table-dark">
