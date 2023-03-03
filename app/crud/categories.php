@@ -150,8 +150,8 @@
                     <div class="btn-group ml-auto" role="group" aria-label="Go to">
                         <select onchange="window.location.href=this.value" class="btn btn-dark">
                             <option selected value="">Go to...</option>
-                            <option value="">Sports</option>
-                            <option value="">Litmusda</option>
+                            <option value="sports.php">Sports</option>
+                            <option value="litmusda.php">Litmusda</option>
                         </select>
                     </div>
                 </div>
