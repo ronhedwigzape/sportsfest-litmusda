@@ -149,6 +149,7 @@ require_once '../config/database.php';
             </div>
             <?php
                 require_once '../models/Team.php';
+
                 $teams = Team::all();
             ?>
             <table id="datatableid" class="table table-bordered table-info table-hover text-center" >
