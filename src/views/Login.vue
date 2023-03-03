@@ -91,13 +91,23 @@
                         password: this.password,
                     },
                     success: (data) => {
-						this.loading = false;
+						if(this.loading) {
+							setTimeout(() => {
+								this.loading = false;
+							}, 1000);
+						}
                         data = JSON.parse(data);
                         this.$store.commit('auth/setUser', data.user);
                         this.$router.replace({name: data.user.userType});
                     },
                     error: (error) => {
-                        alert(`ERROR ${error.status}: ${error.statusText}`);
+						if(this.loading) {
+							setTimeout(() => {
+								this.loading = false;
+								alert(`ERROR ${error.status}: ${error.statusText}`);
+							}, 500);
+						}
+
                     },
                 });
             },
