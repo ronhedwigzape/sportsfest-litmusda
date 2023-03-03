@@ -106,7 +106,6 @@
 				<tfoot>
 					<td colspan="12">
 						<v-col align="center" justify="center">
-							<v-btn @click.prevent="test">Test</v-btn>
 							<v-btn
 								class="px-16 mt-5 mb-10"
 								color="deep-purple-darken-1"
@@ -244,11 +243,6 @@
 					},
 				});
 			},
-			test() {
-				for (const team in this.teams) {
-					console.log(this.total[team.id-1])
-				}
-			},
 			teamsTotalScores(team) {
 
 				if (this.$store.state.total[team.id] < 0 || this.$store.state.total[team.id] === '') {
@@ -283,13 +277,11 @@
 			 */
 			ranks() {
 				const total_ratings = []
-				for(let team of this.teams) {
-					for (let criterion of this.criteria) {
-						const rating = this.ratings[`${this.event.slug}_${team.id}`][`${this.$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value;
-						console.log(rating)
-					}
-				}
 
+				for (const total_rating in this.$store.state.total) {
+					total_ratings.push(total_rating)
+					console.log(total_ratings)
+				}
 			}
 		}
 	}
