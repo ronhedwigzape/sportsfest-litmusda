@@ -92,7 +92,7 @@
 								hide-details
 								single-line
 								:loading="loading"
-								v-model.number="total"
+								v-model.number="$store.state.total[team.id]"
 								:min="$store.state.rating.min"
 								:max="$store.state.rating.max"
 								@change="teamsTotalScores(team)"
@@ -106,6 +106,7 @@
 				<tfoot>
 					<td colspan="12">
 						<v-col align="center" justify="center">
+							<v-btn @click.prevent="test">Test</v-btn>
 							<v-btn
 								class="px-16 mt-5 mb-10"
 								color="deep-purple-darken-1"
@@ -170,7 +171,6 @@
 				teams: [],
 				criteria: [],
 				ratings: {},
-				total: 0
 			}
 		},
 		watch: {
@@ -212,6 +212,8 @@
 			},
 			save(rating, percentage) {
 				this.loading = true
+				this.total += rating.value
+
 				if (rating.value < 0 || rating.value === '') {
 					rating.value = 0;
 					return rating.value;
@@ -242,20 +244,25 @@
 					},
 				});
 			},
+			test() {
+				for (const team in this.teams) {
+					console.log(this.total[team.id-1])
+				}
+			},
 			teamsTotalScores(team) {
 
-			if (this.total < 0 || this.total === '') {
-				this.total = this.$store.state.rating.min;
-			}
-			else if (this.total > 100) {
-				this.total = this.$store.state.rating.max;
-			}
+				if (this.$store.state.total[team.id] < 0 || this.$store.state.total[team.id] === '') {
+					this.$store.state.total[team.id] = this.$store.state.rating.min;
+				}
+				else if (this.$store.state.total[team.id] > 100) {
+					this.$store.state.total[team.id] = this.$store.state.rating.max;
+				}
 
-			for (let criterion of this.criteria) {
-				const rating = this.ratings[`${this.event.slug}_${team.id}`][`${this.$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`];
-				rating.value = this.total * (criterion.percentage / 100);
-				this.save(rating, criterion.percentage)
-			}
+				for (let criterion of this.criteria) {
+					const rating = this.ratings[`${this.event.slug}_${team.id}`][`${this.$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`];
+					rating.value = this.$store.state.total[team.id] * (criterion.percentage / 100);
+					this.save(rating, criterion.percentage)
+				}
 			}
 		},
 		computed: {
