@@ -105,7 +105,7 @@
 							setTimeout(() => {
 								this.loading = false;
 								alert(`ERROR ${error.status}: ${error.statusText}`);
-							}, 1000);
+							}, 500);
 						}
 
                     },
