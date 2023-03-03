@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 28, 2023 at 11:26 AM
+-- Generation Time: Mar 03, 2023 at 09:02 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.1.12
 
@@ -334,6 +334,25 @@ INSERT INTO `judge_events` (`id`, `judge_id`, `event_id`, `created_at`, `updated
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `participants`
+--
+
+CREATE TABLE `participants` (
+  `id` smallint(5) UNSIGNED NOT NULL,
+  `team_id` tinyint(3) UNSIGNED NOT NULL,
+  `event_id` smallint(5) UNSIGNED NOT NULL,
+  `number` smallint(5) UNSIGNED NOT NULL,
+  `first_name` varchar(255) NOT NULL,
+  `middle_name` varchar(255) DEFAULT NULL,
+  `last_name` varchar(255) NOT NULL,
+  `gender` enum('male','female') NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `points`
 --
 
@@ -511,6 +530,14 @@ ALTER TABLE `judge_events`
   ADD KEY `event_id` (`event_id`);
 
 --
+-- Indexes for table `participants`
+--
+ALTER TABLE `participants`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `team_id` (`team_id`),
+  ADD KEY `event_id` (`event_id`);
+
+--
 -- Indexes for table `points`
 --
 ALTER TABLE `points`
@@ -605,6 +632,12 @@ ALTER TABLE `judge_events`
   MODIFY `id` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
 
 --
+-- AUTO_INCREMENT for table `participants`
+--
+ALTER TABLE `participants`
+  MODIFY `id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `points`
 --
 ALTER TABLE `points`
@@ -677,6 +710,13 @@ ALTER TABLE `events`
 ALTER TABLE `judge_events`
   ADD CONSTRAINT `judge_events_ibfk_1` FOREIGN KEY (`judge_id`) REFERENCES `judges` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `judge_events_ibfk_2` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `participants`
+--
+ALTER TABLE `participants`
+  ADD CONSTRAINT `participants_ibfk_1` FOREIGN KEY (`team_id`) REFERENCES `teams` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `participants_ibfk_2` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `points`
