@@ -187,8 +187,9 @@ require_once '../config/database.php';
                 </select>
             </div>
             <?php
-            require_once '../models/Judge.php';
-            $judges = Judge::all();
+                require_once '../models/Judge.php';
+
+                $judges = Judge::all();
             ?>
             <table id="datatableid" class="table table-bordered table-info table-hover text-center">
                 <thead class="table-dark">
