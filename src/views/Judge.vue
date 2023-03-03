@@ -169,7 +169,6 @@
 				timer: null,
 				teams: [],
 				criteria: [],
-				ranks: [],
 				ratings: {},
 				total: 0
 			}
@@ -243,26 +242,20 @@
 					},
 				});
 			},
-			test(){
-				console.log()
-			},
 			teamsTotalScores(team) {
-				if (this.total < 0 || this.total === '') {
-					this.total = this.$store.state.rating.min;
-				}
-				else if (this.total > 100) {
-					this.total = this.$store.state.rating.max;
-				}
 
-				let total_scores = 0
-				for (let criterion of this.criteria) {
-					const rating = this.ratings[`${this.event.slug}_${team.id}`][`${this.$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`];
-					rating.value = this.total * (criterion.percentage / 100);
-					total_scores += rating.value
-					this.save(rating, criterion.percentage)
-				}
-				this.total = total_scores
-				console.log(total_scores)
+			if (this.total < 0 || this.total === '') {
+				this.total = this.$store.state.rating.min;
+			}
+			else if (this.total > 100) {
+				this.total = this.$store.state.rating.max;
+			}
+
+			for (let criterion of this.criteria) {
+				const rating = this.ratings[`${this.event.slug}_${team.id}`][`${this.$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`];
+				rating.value = this.total * (criterion.percentage / 100);
+				this.save(rating, criterion.percentage)
+			}
 			}
 		},
 		computed: {
