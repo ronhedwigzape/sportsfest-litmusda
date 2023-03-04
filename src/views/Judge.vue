@@ -92,7 +92,7 @@
 								hide-details
 								single-line
 								:loading="loading"
-								v-model.number="total"
+								v-model.number="$store.state.total[team.id]"
 								:min="$store.state.rating.min"
 								:max="$store.state.rating.max"
 								@change="teamsTotalScores(team)"
@@ -169,9 +169,7 @@
 				timer: null,
 				teams: [],
 				criteria: [],
-				ranks: [],
 				ratings: {},
-				total: 0
 			}
 		},
 		watch: {
@@ -213,6 +211,8 @@
 			},
 			save(rating, percentage) {
 				this.loading = true
+				this.total += rating.value
+
 				if (rating.value < 0 || rating.value === '') {
 					rating.value = 0;
 					return rating.value;
@@ -243,26 +243,20 @@
 					},
 				});
 			},
-			test(){
-				console.log()
-			},
 			teamsTotalScores(team) {
-				if (this.total < 0 || this.total === '') {
-					this.total = this.$store.state.rating.min;
+
+				if (this.$store.state.total[team.id] < 0 || this.$store.state.total[team.id] === '') {
+					this.$store.state.total[team.id] = this.$store.state.rating.min;
 				}
-				else if (this.total > 100) {
-					this.total = this.$store.state.rating.max;
+				else if (this.$store.state.total[team.id] > 100) {
+					this.$store.state.total[team.id] = this.$store.state.rating.max;
 				}
 
-				let total_scores = 0
 				for (let criterion of this.criteria) {
 					const rating = this.ratings[`${this.event.slug}_${team.id}`][`${this.$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`];
-					rating.value = this.total * (criterion.percentage / 100);
-					total_scores += rating.value
+					rating.value = this.$store.state.total[team.id] * (criterion.percentage / 100);
 					this.save(rating, criterion.percentage)
 				}
-				this.total = total_scores
-				console.log(total_scores)
 			}
 		},
 		computed: {
@@ -283,13 +277,11 @@
 			 */
 			ranks() {
 				const total_ratings = []
-				for(let team of this.teams) {
-					for (let criterion of this.criteria) {
-						const rating = this.ratings[`${this.event.slug}_${team.id}`][`${this.$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value;
-						console.log(rating)
-					}
-				}
 
+				for (const total_rating in this.$store.state.total) {
+					total_ratings.push(total_rating)
+					console.log(total_ratings)
+				}
 			}
 		}
 	}
