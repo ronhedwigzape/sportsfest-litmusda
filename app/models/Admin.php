@@ -102,7 +102,7 @@ class Admin extends User
      * @param Event $event
      * @return array
      */
-    public function tabulate($event)
+    private function tabulateEvent($event)
     {
         // initialize $result
         $result = [
@@ -315,5 +315,33 @@ class Admin extends User
 
         // return $result
         return $result;
+    }
+
+
+    /***************************************************************************
+     * Tabulate
+     *
+     * @param Competition|Category|Event $entity
+     * @return array
+     */
+    public function tabulate($entity = null)
+    {
+        // tabulate event
+        require_once 'Event.php';
+        if($entity instanceof Event)
+            return $this->tabulateEvent($entity);
+
+        // tabulate category
+        require_once 'Category.php';
+        if($entity instanceof Category)
+            return [];
+
+        // tabulate competition
+        require_once 'Competition.php';
+        if($entity instanceof Competition)
+            return [];
+
+        // tabulate all
+        return [];
     }
 }
