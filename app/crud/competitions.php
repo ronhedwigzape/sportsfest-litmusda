@@ -29,7 +29,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Add Competition </h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Add Data </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -64,7 +64,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel"> Edit Competition </h5>
+                    <h5 class="modal-title" id="exampleModalLabel"> Edit Data </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -100,7 +100,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel"> Delete Competition </h5>
+                    <h5 class="modal-title" id="exampleModalLabel"> Delete Data </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -109,7 +109,7 @@
                 <form action="competitions_operation.php" method="POST">
                     <div class="modal-body">
                         <input type="hidden" name="delete_id" id="delete_id">
-                        <h4> Do you want to Delete this Competition ??</h4>
+                        <h4> Do you want to Delete this Data ??</h4>
                     </div>
 
                     <div class="modal-footer">
@@ -136,6 +136,13 @@
                             <option value="teams.php">Teams</option>
                             <option value="judges.php">Judges</option>
                             <option value="technicals.php">Technicals</option>
+                        </select>
+                    </div>
+                    <div class="btn-group ml-auto" role="group" aria-label="Go to">
+                        <select onchange="window.location.href=this.value" class="btn btn-dark">
+                            <option selected value="">Go to...</option>
+                            <option value="sports.php">Sports</option>
+                            <option value="litmusda.php">Litmusda</option>
                         </select>
                     </div>
                 </div>

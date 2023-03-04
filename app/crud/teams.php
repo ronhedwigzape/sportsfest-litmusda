@@ -29,7 +29,7 @@ require_once '../config/database.php';
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Add Team </h5>
+                <h5 class="modal-title" id="exampleModalLabel">Add Data </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -69,7 +69,7 @@ require_once '../config/database.php';
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel"> Edit Team </h5>
+                <h5 class="modal-title" id="exampleModalLabel"> Edit Data </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -110,7 +110,7 @@ require_once '../config/database.php';
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel"> Delete Team </h5>
+                <h5 class="modal-title" id="exampleModalLabel"> Delete Data </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -119,7 +119,7 @@ require_once '../config/database.php';
             <form action="teams_operation.php" method="POST">
                 <div class="modal-body">
                     <input type="hidden" name="delete_id" id="delete_id">
-                    <h4> Do you want to Delete this Team ??</h4>
+                    <h4> Do you want to Delete this Data ??</h4>
                 </div>
 
                 <div class="modal-footer">

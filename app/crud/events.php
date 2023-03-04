@@ -29,7 +29,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Add Event</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Add Data</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -68,7 +68,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Edit Event</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Edit Data</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -108,7 +108,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Delete Event</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Delete Data</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -117,7 +117,7 @@
                 <form action="events_operation.php" method="POST">
                     <div class="modal-body">
                         <input type="hidden" name="delete_id" id="delete_id">
-                        <h4>Do you want to Delete this Event ??</h4>
+                        <h4>Do you want to Delete this Data ??</h4>
                     </div>
 
                     <div class="modal-footer">
@@ -144,14 +144,6 @@
                             <option value="teams.php">Teams</option>
                             <option value="judges.php">Judges</option>
                             <option value="technicals.php">Technicals</option>
-                        </select>
-                    </div>
-                    <div class="btn-group ml-auto" role="group" aria-label="Go to">
-                        <select onchange="window.location.href=this.value" class="btn btn-dark">
-                            <option selected value="">Go to...</option>
-                            <option value="literary.php">Literary</option>
-                            <option value="music.php">Music</option>
-                            <option value="dance.php">Dance</option>
                         </select>
                     </div>
                 </div>

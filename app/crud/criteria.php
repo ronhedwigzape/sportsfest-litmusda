@@ -29,7 +29,7 @@ require_once '../config/database.php';
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Add Criteria </h5>
+                <h5 class="modal-title" id="exampleModalLabel">Add Data </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -68,7 +68,7 @@ require_once '../config/database.php';
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel"> Edit Criteria </h5>
+                <h5 class="modal-title" id="exampleModalLabel"> Edit Data </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -108,7 +108,7 @@ require_once '../config/database.php';
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel"> Delete Criteria </h5>
+                <h5 class="modal-title" id="exampleModalLabel"> Delete Data </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -117,7 +117,7 @@ require_once '../config/database.php';
             <form action="criteria_operation.php" method="POST">
                 <div class="modal-body">
                     <input type="hidden" name="delete_id" id="delete_id">
-                    <h4> Do you want to Delete this Criteria ??</h4>
+                    <h4> Do you want to Delete this Data ??</h4>
                 </div>
 
                 <div class="modal-footer">
@@ -149,8 +149,8 @@ require_once '../config/database.php';
                 <div class="btn-group ml-auto" role="group" aria-label="Go to">
                     <select onchange="window.location.href=this.value" class="btn btn-dark">
                         <option selected value="">Go to...</option>
-                        <option value="">Oration</option>
-                        <option value="">Balagtasan</option>
+                        <option value="oration.php">Oration</option>
+                        <option value="balagtasan.php">Balagtasan</option>
                         <option value="">Tigsik</option>
                         <option value="">Jazz-chant</option>
                         <option value="">Vocal-solo-Male</option>
@@ -159,7 +159,6 @@ require_once '../config/database.php';
                 </div>
             </div>
             <?php
-
                 require_once '../models/Criterion.php';
 
                 $criteria = Criterion::all();
