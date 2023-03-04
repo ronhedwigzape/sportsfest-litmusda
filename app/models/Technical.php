@@ -409,8 +409,6 @@ class Technical extends User
      */
     public function getAllEventDeductions($event)
     {
-        require_once 'Team.php';
-
         $deductions = [];
         foreach($event->getAllTeams() as $team) {
             $key = $event->getSlug().'_'.$team->getId();
@@ -428,8 +426,6 @@ class Technical extends User
      */
     public function getRowEventDeductions($event)
     {
-        require_once 'Team.php';
-
         $deductions = [];
         foreach($event->getAllTeams() as $team) {
             $key = $event->getSlug().'_'.$team->getId();
