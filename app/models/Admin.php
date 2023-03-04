@@ -102,7 +102,7 @@ class Admin extends User
      * @param Event $event
      * @return array
      */
-    public function tabulate($event)
+    private function tabulateEvent($event)
     {
         // initialize $result
         $result = [
@@ -112,7 +112,6 @@ class Admin extends User
         ];
 
         // get all teams
-        require_once 'Team.php';
         $teams = $event->getAllTeams();
 
         // get all technicals for this event
@@ -315,5 +314,286 @@ class Admin extends User
 
         // return $result
         return $result;
+    }
+
+
+    /***************************************************************************
+     * Tabulate a category
+     *
+     * @param Category $category
+     * @return array
+     */
+    private function tabulateCategory($category)
+    {
+        // initialize $result
+        $result = [
+            'teams' => []
+        ];
+
+        // get all teams
+        require_once 'Team.php';
+        $teams = Team::all();
+        foreach($teams as $team) {
+            $key_team = 'team_' . $team->getId();
+            $arr_team = $team->toArray();
+            $arr_team['rank'] = [
+                'dense'      => 0,
+                'fractional' => 0
+            ];
+            $arr_team['points'] = 0;
+            $result['teams'][$key_team] = $arr_team;
+        }
+
+        // tabulate each event in category
+        foreach($category->getAllEvents() as $event) {
+            $tabulated_event = $this->tabulateEvent($event);
+
+            // accumulate team points
+            foreach($teams as $team) {
+                $key_team = 'team_' . $team->getId();
+                $team_points = $tabulated_event['teams'][$key_team]['points'];
+                $result['teams'][$key_team]['points'] += $team_points;
+            }
+        }
+
+        // gather $unique_team_points
+        $unique_team_points = [];
+        foreach($result['teams'] as $result_team) {
+            if(!in_array($result_team['points'], $unique_team_points))
+                $unique_team_points[] = $result_team['points'];
+        }
+
+        // sort $unique_team_points
+        rsort($unique_team_points);
+
+        // gather $rank_group (for getting fractional rank)
+        $rank_group = [];
+        foreach($result['teams'] as $key => $team) {
+            // get dense rank
+            $dense_rank = 1 + array_search($result['teams'][$key]['points'], $unique_team_points);
+            $result['teams'][$key]['rank']['dense'] = $dense_rank;
+
+            // push $key to $rank_group
+            $key_rank = 'rank_' . $dense_rank;
+            if(!isset($rank_group[$key_rank]))
+                $rank_group[$key_rank] = [];
+            $rank_group[$key_rank][] = $key;
+        }
+
+        // get final fractional rank and points
+        $ctr = 0;
+        for($i = 0; $i < sizeof($unique_team_points); $i++) {
+            $key = 'rank_' . ($i + 1);
+            $group = $rank_group[$key];
+            $size = sizeof($group);
+            $fractional_rank = $ctr + ((($size * ($size + 1)) / 2) / $size);
+
+            // write $fractional_rank to $group members
+            for($j = 0; $j < $size; $j++) {
+                $result['teams'][$group[$j]]['rank']['fractional'] = $fractional_rank;
+            }
+
+            $ctr += $size;
+        }
+
+        // return $result
+        return $result;
+    }
+
+
+    /***************************************************************************
+     * Tabulate a competition
+     *
+     * @param Competition $competition
+     * @return array
+     */
+    private function tabulateCompetition($competition)
+    {
+        // initialize $result
+        $result = [
+            'teams' => []
+        ];
+
+        // get all teams
+        require_once 'Team.php';
+        $teams = Team::all();
+        foreach($teams as $team) {
+            $key_team = 'team_' . $team->getId();
+            $arr_team = $team->toArray();
+            $arr_team['rank'] = [
+                'dense'      => 0,
+                'fractional' => 0
+            ];
+            $arr_team['points'] = 0;
+            $result['teams'][$key_team] = $arr_team;
+        }
+
+        // tabulate each category in competition
+        foreach($competition->getAllCategories() as $category) {
+            $tabulated_category = $this->tabulateCategory($category);
+
+            // accumulate team points
+            foreach($teams as $team) {
+                $key_team = 'team_' . $team->getId();
+                $team_points = $tabulated_category['teams'][$key_team]['points'];
+                $result['teams'][$key_team]['points'] += $team_points;
+            }
+        }
+
+        // gather $unique_team_points
+        $unique_team_points = [];
+        foreach($result['teams'] as $result_team) {
+            if(!in_array($result_team['points'], $unique_team_points))
+                $unique_team_points[] = $result_team['points'];
+        }
+
+        // sort $unique_team_points
+        rsort($unique_team_points);
+
+        // gather $rank_group (for getting fractional rank)
+        $rank_group = [];
+        foreach($result['teams'] as $key => $team) {
+            // get dense rank
+            $dense_rank = 1 + array_search($result['teams'][$key]['points'], $unique_team_points);
+            $result['teams'][$key]['rank']['dense'] = $dense_rank;
+
+            // push $key to $rank_group
+            $key_rank = 'rank_' . $dense_rank;
+            if(!isset($rank_group[$key_rank]))
+                $rank_group[$key_rank] = [];
+            $rank_group[$key_rank][] = $key;
+        }
+
+        // get final fractional rank and points
+        $ctr = 0;
+        for($i = 0; $i < sizeof($unique_team_points); $i++) {
+            $key = 'rank_' . ($i + 1);
+            $group = $rank_group[$key];
+            $size = sizeof($group);
+            $fractional_rank = $ctr + ((($size * ($size + 1)) / 2) / $size);
+
+            // write $fractional_rank to $group members
+            for($j = 0; $j < $size; $j++) {
+                $result['teams'][$group[$j]]['rank']['fractional'] = $fractional_rank;
+            }
+
+            $ctr += $size;
+        }
+
+        // return $result
+        return $result;
+    }
+
+
+    /***************************************************************************
+     * Tabulate all
+     *
+     * @return array
+     */
+    private function tabulateAll()
+    {
+        // initialize $result
+        $result = [
+            'teams' => []
+        ];
+
+        // get all teams
+        require_once 'Team.php';
+        $teams = Team::all();
+        foreach($teams as $team) {
+            $key_team = 'team_' . $team->getId();
+            $arr_team = $team->toArray();
+            $arr_team['rank'] = [
+                'dense'      => 0,
+                'fractional' => 0
+            ];
+            $arr_team['points'] = 0;
+            $result['teams'][$key_team] = $arr_team;
+        }
+
+
+        // tabulate each competition
+        require_once 'Competition.php';
+        foreach(Competition::all() as $competition) {
+            $tabulated_competition = $this->tabulateCompetition($competition);
+
+            // accumulate team points
+            foreach($teams as $team) {
+                $key_team = 'team_' . $team->getId();
+                $team_points = $tabulated_competition['teams'][$key_team]['points'];
+                $result['teams'][$key_team]['points'] += $team_points;
+            }
+        }
+
+        // gather $unique_team_points
+        $unique_team_points = [];
+        foreach($result['teams'] as $result_team) {
+            if(!in_array($result_team['points'], $unique_team_points))
+                $unique_team_points[] = $result_team['points'];
+        }
+
+        // sort $unique_team_points
+        rsort($unique_team_points);
+
+        // gather $rank_group (for getting fractional rank)
+        $rank_group = [];
+        foreach($result['teams'] as $key => $team) {
+            // get dense rank
+            $dense_rank = 1 + array_search($result['teams'][$key]['points'], $unique_team_points);
+            $result['teams'][$key]['rank']['dense'] = $dense_rank;
+
+            // push $key to $rank_group
+            $key_rank = 'rank_' . $dense_rank;
+            if(!isset($rank_group[$key_rank]))
+                $rank_group[$key_rank] = [];
+            $rank_group[$key_rank][] = $key;
+        }
+
+        // get final fractional rank and points
+        $ctr = 0;
+        for($i = 0; $i < sizeof($unique_team_points); $i++) {
+            $key = 'rank_' . ($i + 1);
+            $group = $rank_group[$key];
+            $size = sizeof($group);
+            $fractional_rank = $ctr + ((($size * ($size + 1)) / 2) / $size);
+
+            // write $fractional_rank to $group members
+            for($j = 0; $j < $size; $j++) {
+                $result['teams'][$group[$j]]['rank']['fractional'] = $fractional_rank;
+            }
+
+            $ctr += $size;
+        }
+
+        // return $result
+        return $result;
+    }
+
+
+    /***************************************************************************
+     * Tabulate
+     *
+     * @param Competition|Category|Event $entity
+     * @return array
+     */
+    public function tabulate($entity = null)
+    {
+        // tabulate event
+        require_once 'Event.php';
+        if($entity instanceof Event)
+            return $this->tabulateEvent($entity);
+
+        // tabulate category
+        require_once 'Category.php';
+        if($entity instanceof Category)
+            return $this->tabulateCategory($entity);
+
+        // tabulate competition
+        require_once 'Competition.php';
+        if($entity instanceof Competition)
+            return $this->tabulateCompetition($entity);
+
+        // tabulate all
+        return $this->tabulateAll();
     }
 }
