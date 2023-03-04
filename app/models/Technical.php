@@ -191,6 +191,35 @@ class Technical extends User
 
 
     /***************************************************************************
+     * Delete technical
+     *
+     * @return void
+     */
+    public function delete()
+    {
+        // check id
+        if(!self::exists($this->id))
+            App::returnError('HTTP/1.1 500', 'Delete Error: technical [id = ' . $this->id . '] does not exist.');
+
+        // proceed with delete
+        $stmt = $this->conn->prepare("DELETE FROM $this->table WHERE id = ?");
+        $stmt->bind_param("i", $this->id);
+        $stmt->execute();
+    }
+
+
+    /***************************************************************************
+     * Get table of assigned events
+     *
+     * @return string
+     */
+    public function getTableEvents()
+    {
+        return $this->table_events;
+    }
+
+
+    /***************************************************************************
      * Assign event to technical
      *
      * @param Event $event
@@ -262,7 +291,7 @@ class Technical extends User
     public function getAllEvents()
     {
         require_once 'Event.php';
-        $stmt = $this->conn->prepare("SELECT event_id FROM $this->table_events WHERE technical_id = ? ORDER BY event_id");
+        $stmt = $this->conn->prepare("SELECT DISTINCT event_id FROM $this->table_events WHERE technical_id = ? ORDER BY event_id");
         $stmt->bind_param("i", $this->id);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -287,5 +316,125 @@ class Technical extends User
             $events[] = $event->toArray();
         }
         return $events;
+    }
+
+
+    /***************************************************************************
+     * Set technical's deduction of team based on a given event
+     *
+     * @param Event $event
+     * @param Team $team
+     * @param float $value
+     * @param boolean $is_locked
+     * @return void
+     */
+    public function setEventTeamDeduction($event, $team, $value = 0, $is_locked = false)
+    {
+        require_once 'Deduction.php';
+
+        // get event_id and team_id
+        $event_id = $event->getId();
+        $team_id  = $team->getId();
+
+        // check if deduction is stored or not
+        $stored = Deduction::stored($this->id, $event_id, $team_id);
+
+        // instantiate deduction
+        $deduction = new Deduction();
+        if($stored)
+            $deduction = Deduction::find($this->id, $event_id, $team_id);
+
+        // set properties
+        $deduction->setTechnicalId($this->id);
+        $deduction->setEventId($event_id);
+        $deduction->setTeamId($team_id);
+        $deduction->setValue($value);
+        $deduction->setIsLocked($is_locked);
+
+        // update or insert
+        if($stored)
+            $deduction->update();
+        else
+            $deduction->insert();
+    }
+
+
+    /***************************************************************************
+     * Get technical's deduction of team based on a given event, as object
+     *
+     * @param Event $event
+     * @param Team $team
+     * @return Deduction
+     */
+    public function getEventTeamDeduction($event, $team)
+    {
+        require_once 'Deduction.php';
+
+        // get event_id and team_id
+        $event_id = $event->getId();
+        $team_id  = $team->getId();
+
+        // insert deduction if not yet stored
+        if(!Deduction::stored($this->id, $event_id, $team_id)) {
+            $deduction = new Deduction();
+            $deduction->setTechnicalId($this->id);
+            $deduction->setEventId($event_id);
+            $deduction->setTeamId($team_id);
+            $deduction->insert();
+        }
+
+        // return deduction
+        return Deduction::find($this->id, $event_id, $team_id);
+    }
+
+
+    /***************************************************************************
+     * Get technical's deduction of team based on a given event, as array
+     *
+     * @param Event $event
+     * @param Team $team
+     * @return array
+     */
+    public function getEventTeamDeductionRow($event, $team)
+    {
+        return ($this->getEventTeamDeduction($event, $team))->toArray();
+    }
+
+
+    /***************************************************************************
+     * Get technical's deductions on a given event, as array of objects
+     *
+     * @param Event $event
+     * @return array
+     */
+    public function getAllEventDeductions($event)
+    {
+        require_once 'Team.php';
+
+        $deductions = [];
+        foreach($event->getAllTeams() as $team) {
+            $key = $event->getSlug().'_'.$team->getId();
+            $deductions[$key] = $this->getEventTeamDeduction($event, $team);
+        }
+        return $deductions;
+    }
+
+
+    /***************************************************************************
+     * Get technical's deductions on a given event, as array of arrays
+     *
+     * @param Event $event
+     * @return array
+     */
+    public function getRowEventDeductions($event)
+    {
+        require_once 'Team.php';
+
+        $deductions = [];
+        foreach($event->getAllTeams() as $team) {
+            $key = $event->getSlug().'_'.$team->getId();
+            $deductions[$key] = $this->getEventTeamDeductionRow($event, $team);
+        }
+        return $deductions;
     }
 }

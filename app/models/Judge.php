@@ -250,6 +250,17 @@ class Judge extends User
 
 
     /***************************************************************************
+     * Get table of assigned events
+     *
+     * @return string
+     */
+    public function getTableEvents()
+    {
+        return $this->table_events;
+    }
+
+
+    /***************************************************************************
      * Assign event to judge
      *
      * @param Event $event
@@ -321,7 +332,7 @@ class Judge extends User
     public function getAllEvents()
     {
         require_once 'Event.php';
-        $stmt = $this->conn->prepare("SELECT event_id FROM $this->table_events WHERE judge_id = ? ORDER BY event_id");
+        $stmt = $this->conn->prepare("SELECT DISTINCT event_id FROM $this->table_events WHERE judge_id = ? ORDER BY event_id");
         $stmt->bind_param("i", $this->id);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -442,7 +453,7 @@ class Judge extends User
     {
         $ratings = [];
         foreach($event->getAllCriteria() as $criterion) {
-            $key = $this->id.'_'.$team->getId().'_'.$criterion->getId();
+            $key = $this->id . '_' . $criterion->getId() . '_' . $team->getId();
             $ratings[$key] = $this->getCriterionTeamRating($criterion, $team);
         }
         return $ratings;
@@ -460,7 +471,7 @@ class Judge extends User
     {
         $ratings = [];
         foreach($event->getAllCriteria() as $criterion) {
-            $key = $this->id.'_'.$team->getId().'_'.$criterion->getId();
+            $key = $this->id . '_' . $criterion->getId() . '_' . $team->getId();
             $ratings[$key] = $this->getCriterionTeamRatingRow($criterion, $team);
         }
         return $ratings;
@@ -468,8 +479,40 @@ class Judge extends User
 
 
     /***************************************************************************
+     * Get judge's total rating of team based on a given event
+     *
+     * @param Event $event
+     * @param Team $team
+     * @return array
+     */
+    public function getEventTeamRating($event, $team)
+    {
+        $total = ['original' => 0];
+
+        foreach($event->getAllCriteria() as $criterion) {
+            $rating = $this->getCriterionTeamRating($criterion, $team);
+            $total['original'] += $rating->getValue();
+        }
+
+        // apply technicals' average deduction when judge is chairman
+        $total['deducted'] = $total['original'];
+        if($this->is_chairman) {
+            $technicals = $event->getAllTechnicals();
+            $deduction_total = 0;
+            foreach($technicals as $technical) {
+                $deduction_total += ($technical->getEventTeamDeduction($event, $team))->getValue();
+            }
+            $deduction_average = $deduction_total / sizeof($technicals);
+            $total['deducted'] -= $deduction_average;
+        }
+
+        return $total;
+    }
+
+
+    /***************************************************************************
      * Get judge's ratings on a given event, as array of objects
-     * 
+     *
      * @param Event $event
      * @return array
      */
@@ -478,8 +521,8 @@ class Judge extends User
         require_once 'Team.php';
 
         $ratings = [];
-        foreach(Team::all() as $team) {
-            $key = $event->getSlug().'_'.$team->getId();
+        foreach($event->getAllTeams() as $team) {
+            $key = $event->getSlug() . '_' . $team->getId();
             $ratings[$key] = $this->getAllEventTeamRatings($event, $team);
         }
         return $ratings;
@@ -497,10 +540,79 @@ class Judge extends User
         require_once 'Team.php';
 
         $ratings = [];
-        foreach(Team::all() as $team) {
-            $key = $event->getSlug().'_'.$team->getId();
+        foreach($event->getAllTeams() as $team) {
+            $key = $event->getSlug() . '_' . $team->getId();
             $ratings[$key] = $this->getRowEventTeamRatings($event, $team);
         }
         return $ratings;
+    }
+
+
+    /***************************************************************************
+     * Get judge's final rank of teams based on a given event
+     *
+     * @param Event $event
+     * @return array
+     */
+    public function getEventRanks($event)
+    {
+        require_once 'Team.php';
+        $team_rows = $event->getRowTeams();
+
+        // prepare $ranks
+        $ranks = [];
+
+        // gather unique ratings
+        $unique_ratings = [];
+        for($i = 0; $i < sizeof($team_rows); $i++) {
+            $t_rating = ($this->getEventTeamRating($event, new Team($team_rows[$i]['id'])))['deducted'];
+            $team_rows[$i]['rating'] = $t_rating;
+            $team_rows[$i]['rank'] = [
+                'dense'      => 0,
+                'fractional' => 0
+            ];
+
+            if(!in_array($t_rating, $unique_ratings))
+                $unique_ratings[] = $t_rating;
+        }
+
+        // sort $unique_ratings in descending order
+        rsort($unique_ratings);
+
+        // gather $rank_group (for getting fractional rank)
+        $rank_group = [];
+        for($i = 0; $i < sizeof($team_rows); $i++) {
+            // get dense rank
+            $dense_rank = 1 + array_search($team_rows[$i]['rating'], $unique_ratings);
+            $team_rows[$i]['rank']['dense'] = $dense_rank;
+
+            // push $i to $rank_group
+            $key_rank = 'rank_' . $dense_rank;
+            if(!isset($rank_group[$key_rank]))
+                $rank_group[$key_rank] = [];
+            $rank_group[$key_rank][] = $i;
+        }
+
+        // get fractional rank
+        $ctr = 0;
+        for($i = 0; $i < sizeof($unique_ratings); $i++) {
+            $key   = 'rank_' . ($i + 1);
+            $group = $rank_group[$key];
+            $size  = sizeof($group);
+            $fractional_rank = $ctr + ((($size * ($size + 1)) / 2) / $size);
+
+            // write $fractional_rank to $group members
+            for($j=0; $j<$size; $j++) {
+                $team_row = $team_rows[$group[$j]];
+                $team_row['rank']['fractional'] = $fractional_rank;
+
+                // append to $ranks
+                $ranks['team_'.$team_row['id']] = $team_row['rank'];
+            }
+            $ctr += $size;
+        }
+
+        // return $ranks
+        return $ranks;
     }
 }

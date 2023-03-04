@@ -1,8 +1,6 @@
 <template>
     <v-app>
-        <v-main>
-            <router-view/>
-        </v-main>
+        <router-view/>
     </v-app>
 </template>
 
@@ -15,6 +13,7 @@
             return {}
         },
         created() {
+            // check for authenticated user
             $.ajax({
                 url: `${this.$store.getters.appURL}/index.php`,
                 type: 'GET',
@@ -28,7 +27,9 @@
                     data = JSON.parse(data);
                     if (data.user) {
                         this.$store.commit('auth/setUser', data.user);
-                        this.$router.replace({name: data.user.userType});
+                        this.$router.replace({
+                            name: data.user.userType
+                        });
                     }
                 },
                 error: (error) => {

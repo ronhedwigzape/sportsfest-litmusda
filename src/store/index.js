@@ -2,19 +2,26 @@ import { createStore } from 'vuex';
 
 // MODULES
 import auth from './store-auth.js';
-import teams from "./store-teams";
 import events from "./store-events";
 
 export default createStore({
     modules: {
         auth,
-        teams,
         events
     },
 
     state: {
         app: {
             backendDir: 'app'
+        },
+        total: {
+            1: 0,
+            2: 0,
+            3: 0
+        },
+        rating: {
+            min: 0,
+            max: 100
         }
     },
 

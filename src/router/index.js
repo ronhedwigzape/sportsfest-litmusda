@@ -17,7 +17,7 @@ const router = createRouter({
             }
         },
         {
-            path: '/admin',
+            path: '/admin/:eventSlug?',
             name: 'admin',
             component: () => import('../views/Admin.vue'),
             beforeEnter: (to, from, next) => {

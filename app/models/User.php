@@ -12,7 +12,7 @@ class User extends App
     protected $username;
     protected $password;
     protected $name;
-    protected $avatar;
+    protected $avatar = 'no-avatar.jpg';
     protected $number;
     protected $userType;
 

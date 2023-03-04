@@ -366,4 +366,255 @@ class Event extends App
         require_once 'Category.php';
         return new Category($this->category_id);
     }
+
+
+    /***************************************************************************
+     * Get all assigned judges to event as array of objects
+     *
+     * @return Judge[]
+     */
+    public function getAllJudges()
+    {
+        require_once 'Judge.php';
+        $table_events = (new Judge())->getTableEvents();
+
+        $stmt = $this->conn->prepare("SELECT DISTINCT judge_id FROM $table_events WHERE event_id = ? ORDER BY judge_id");
+        $stmt->bind_param("i", $this->id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $judges = [];
+        while($row = $result->fetch_assoc()) {
+            $judges[] = Judge::findById($row['judge_id']);
+        }
+        return $judges;
+    }
+
+
+    /***************************************************************************
+     * Get all assigned judges to event as array of arrays
+     *
+     * @return array
+     */
+    public function getRowJudges()
+    {
+        $judges = [];
+        foreach($this->getAllJudges() as $judge) {
+            $judges[] = $judge->toArray();
+        }
+        return $judges;
+    }
+
+
+    /***************************************************************************
+     * Get all assigned technicals to event as array of objects
+     *
+     * @return Technical[]
+     */
+    public function getAllTechnicals()
+    {
+        require_once 'Technical.php';
+        $table_events = (new Technical())->getTableEvents();
+
+        $stmt = $this->conn->prepare("SELECT DISTINCT technical_id FROM $table_events WHERE event_id = ? ORDER BY technical_id");
+        $stmt->bind_param("i", $this->id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $technicals = [];
+        while($row = $result->fetch_assoc()) {
+            $technicals[] = Technical::findById($row['technical_id']);
+        }
+        return $technicals;
+    }
+
+
+    /***************************************************************************
+     * Get all assigned technicals to event as array of arrays
+     *
+     * @return array
+     */
+    public function getRowTechnicals()
+    {
+        $technicals = [];
+        foreach($this->getAllTechnicals() as $technical) {
+            $technicals[] = $technical->toArray();
+        }
+        return $technicals;
+    }
+
+
+    /***************************************************************************
+     * Get total criteria percentage
+     *
+     * @return float
+     */
+    public function getTotalCriteriaPercentage()
+    {
+        $total = 0;
+        foreach($this->getAllCriteria() as $criterion) {
+            $total += $criterion->getPercentage();
+        }
+        return $total;
+    }
+
+
+    /***************************************************************************
+     * Set event point on a given rank
+     *
+     * @param int $rank
+     * @param float $value
+     * @return void
+     */
+    public function setRankPoint($rank, $value)
+    {
+        require_once 'Point.php';
+
+        // check if point is stored or not
+        $stored = Point::stored($this->id, $rank);
+
+        // instantiate point
+        $point = new Point();
+        if($stored)
+            $point = Point::find($this->id, $rank);
+
+        // set properties
+        $point->setEventId($this->id);
+        $point->setRank($rank);
+        $point->setValue($value);
+
+        // update or insert
+        if($stored)
+            $point->update();
+        else
+            $point->insert();
+    }
+
+
+    /***************************************************************************
+     * Get event point of given rank, as object
+     *
+     * @param int $rank
+     * @return bool|Point
+     */
+    public function getRankPoint($rank)
+    {
+        require_once 'Point.php';
+
+        // insert point if not yet stored
+        if(!Point::stored($this->id, $rank)) {
+            $point = new Point();
+            $point->setEventId($this->id);
+            $point->setRank($rank);
+            $point->insert();
+        }
+
+        // return point
+        return Point::find($this->id, $rank);
+    }
+
+
+    /***************************************************************************
+     * Get event point of given rank, as array
+     *
+     * @param $rank
+     * @return array
+     */
+    public function getRankPointRow($rank)
+    {
+        return ($this->getRankPoint($rank))->toArray();
+    }
+
+
+    /***************************************************************************
+     * Get all event points as array of objects
+     *
+     * @return Point[]
+     */
+    public function getAllPoints()
+    {
+        require_once 'Point.php';
+        $ranks = Point::ranks();
+
+        $points = [];
+        foreach($ranks as $rank) {
+            $key = $this->slug.'_rank-'.$rank;
+            $points[$key] = $this->getRankPoint($rank);
+        }
+        return $points;
+    }
+
+
+    /***************************************************************************
+     * Get all event points as array of arrays
+     *
+     * @return array
+     */
+    public function getRowPoints()
+    {
+        $points = [];
+        foreach($this->getAllPoints() as $point) {
+            $key = $this->slug.'_rank-'.$point->getRank();
+            $points[$key] = $this->getRankPointRow($point->getRank());
+        }
+        return $points;
+    }
+
+
+    /***************************************************************************
+     * Set team arrangement order
+     *
+     * @param Team $team
+     * @param int $order
+     * @return void
+     */
+    public function setTeamOrder($team, $order)
+    {
+        // get team_id
+        $team_id = $team->getId();
+
+        // check if arrangement is stored or not
+        require_once 'Arrangement.php';
+        $stored = Arrangement::stored($this->id, $team_id);
+
+        // instantiate arrangement
+        $arrangement = new Arrangement();
+        if($stored)
+            $arrangement = Arrangement::find($this->id, $team_id);
+
+        // set properties
+        $arrangement->setEventId($this->id);
+        $arrangement->setTeamId($team_id);
+        $arrangement->setOrder($order);
+
+        // update or insert
+        if($stored)
+            $arrangement->update();
+        else
+            $arrangement->insert();
+    }
+
+
+    /***************************************************************************
+     * Get sorted teams for event, as array of objects
+     *
+     * @return Team[]
+     */
+    public function getAllTeams()
+    {
+        require_once 'Team.php';
+        return Team::all($this->getId());
+    }
+
+
+    /***************************************************************************
+     * Get sorted teams for event, as array of arrays
+     *
+     * @return array
+     */
+    public function getRowTeams()
+    {
+        require_once 'Team.php';
+        return Team::rows($this->getId());
+    }
 }

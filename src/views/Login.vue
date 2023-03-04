@@ -17,7 +17,8 @@
                         </v-row>
                     </template>
                 </v-img>
-                <v-card class="transparent mx-10 my-3 pa-10 elevation-5">
+
+                <v-card class="mx-10 my-3 pa-10 elevation-10">
                     <v-form @submit.prevent="handleSubmit">
                         <v-text-field
                             v-model="username"
@@ -39,10 +40,12 @@
                             required
                             @click:appendInner="show1 = !show1"
                         ></v-text-field>
-                        <v-code class="transparent" align="right">
+                        <v-code class="transparent bg-white" align="right">
                             <v-btn
                                 class="mt-4 bg-amber-darken-1"
                                 type="submit"
+								:loading="loading"
+								:disabled="loading"
                             >
                                 log in
                             </v-btn>
@@ -63,6 +66,7 @@
         name: 'Login',
         data() {
             return {
+				loading: false,
                 show1: false,
                 show2: true,
                 username: '',
@@ -75,6 +79,7 @@
         },
         methods: {
             async handleSubmit() {
+				this.loading = true;
                 await $.ajax({
                     url: `${this.$store.getters.appURL}/index.php`,
                     type: 'POST',
@@ -86,12 +91,23 @@
                         password: this.password,
                     },
                     success: (data) => {
+						if(this.loading) {
+							setTimeout(() => {
+								this.loading = false;
+							}, 1000);
+						}
                         data = JSON.parse(data);
                         this.$store.commit('auth/setUser', data.user);
                         this.$router.replace({name: data.user.userType});
                     },
                     error: (error) => {
-                        alert(`ERROR ${error.status}: ${error.statusText}`);
+						if(this.loading) {
+							setTimeout(() => {
+								this.loading = false;
+								alert(`ERROR ${error.status}: ${error.statusText}`);
+							}, 500);
+						}
+
                     },
                 });
             },
@@ -102,22 +118,8 @@
 
 <style scoped>
 .background-image {
-    background-image: url('/bg-img.jpg');
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-size: cover;
-    background-position: center center;
+    background: url('/bg-img.png') no-repeat center fixed !important;
     height: 100vh;
-    width: 100%;
 }
 
-@media (max-width: 768px) {
-    .background-image {
-        background-size: contain;
-    }
-}
-
-.transparent {
-    background-color: transparent;
-}
 </style>
