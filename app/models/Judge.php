@@ -518,8 +518,6 @@ class Judge extends User
      */
     public function getAllEventRatings($event)
     {
-        require_once 'Team.php';
-
         $ratings = [];
         foreach($event->getAllTeams() as $team) {
             $key = $event->getSlug() . '_' . $team->getId();
@@ -537,8 +535,6 @@ class Judge extends User
      */
     public function getRowEventRatings($event)
     {
-        require_once 'Team.php';
-
         $ratings = [];
         foreach($event->getAllTeams() as $team) {
             $key = $event->getSlug() . '_' . $team->getId();
