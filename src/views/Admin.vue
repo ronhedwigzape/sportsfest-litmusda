@@ -11,17 +11,22 @@
 					</th>
 				</tr>
 				<tr>
-					<td colspan="2" class="text-center">Teams</td>
-					<td>Deduct</td>
+					<td colspan="2" rowspan="2" class="text-center" >Teams</td>
+					<td rowspan="2" class="text-center">Deduct</td>
 					<template v-for="judge in judges" :key="judge.id">
-						<td>Judge {{ judge.id }}</td>
-						<td>Judge {{ judge.id}} Rank</td>
+						<td colspan="2" class="text-center">Judge {{ judge.id }}</td>
 					</template>
-					<td>Total</td>
-					<td>Average</td>
-					<td>Total Rank</td>
-					<td>Initial Rank</td>
-					<td>Final Rank</td>
+					<td rowspan="2" class="text-center">Total</td>
+					<td rowspan="2" class="text-center">Average</td>
+					<td rowspan="2" class="text-center">Total Rank</td>
+					<td rowspan="2" class="text-center">Initial Rank</td>
+					<td rowspan="2" class="text-center">Final Rank</td>
+				</tr>
+				<tr>
+					<template v-for="judge in judges" :key="judge.id">
+						<td>Total</td>
+						<td>Rank</td>
+					</template>
 				</tr>
 			</thead>
 			<tbody>
