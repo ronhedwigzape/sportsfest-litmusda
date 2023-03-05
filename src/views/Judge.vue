@@ -66,8 +66,7 @@
 								variant="underlined"
 								hide-details
 								single-line
-								@change="save(ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`], criterion.percentage)"
-								@blur="save(ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`], criterion.percentage)"
+								@change="save(ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`], criterion.percentage, team.id)"
 								v-model.number="ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value"
 								:class="{
 									'text-error font-weight-bold': (
@@ -209,17 +208,14 @@
 					});
 				}
 			},
-			save(rating, percentage) {
+			save(rating, percentage, teamId) {
 				this.loading = true
-				this.total += rating.value
 
 				if (rating.value < 0 || rating.value === '') {
 					rating.value = 0;
-					return rating.value;
 				}
 				else if (rating.value > percentage) {
 					rating.value = percentage;
-					return rating.value;
 				}
 				$.ajax({
 					url: `${this.$store.getters.appURL}/judge.php`,
@@ -231,6 +227,7 @@
 						rating
 					},
 					success: (data, textStatus, jqXHR) => {
+						this.$store.state.total[teamId] += rating.value
 						if(this.loading) {
 							setTimeout(() => {
 								this.loading = false;
@@ -276,12 +273,7 @@
 			 *	total_ratings_rank = [4, 3, 1, 3, 2]
 			 */
 			ranks() {
-				const total_ratings = []
-
-				for (const total_rating in this.$store.state.total) {
-					total_ratings.push(total_rating)
-					console.log(total_ratings)
-				}
+				console.log(Object.values(this.$store.state.total).filter(value => !isNaN(value)))
 			}
 		}
 	}
