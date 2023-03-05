@@ -11,37 +11,42 @@
 					</th>
 				</tr>
 				<tr>
-					<td colspan="2" class="text-center">Teams</td>
-					<td>Deduct</td>
+					<td colspan="2" rowspan="2" class="text-center" >Teams</td>
+					<td rowspan="2" class="text-center">Deduct</td>
 					<template v-for="judge in judges" :key="judge.id">
-						<td>Judge {{ judge.id }}</td>
-						<td>Judge {{ judge.id}} Rank</td>
+						<td colspan="2" class="text-center">Judge {{ judge.id }}</td>
 					</template>
-					<td>Total</td>
-					<td>Average</td>
-					<td>Total Rank</td>
-					<td>Initial Rank</td>
-					<td>Final Rank</td>
+					<td rowspan="2" class="text-center">Total</td>
+					<td rowspan="2" class="text-center">Average</td>
+					<td rowspan="2" class="text-center">Total Rank</td>
+					<td rowspan="2" class="text-center">Initial Rank</td>
+					<td rowspan="2" class="text-center">Final Rank</td>
+				</tr>
+				<tr>
+					<template v-for="judge in judges" :key="judge.id">
+						<td class="text-center">Total</td>
+						<td class="text-center">Rank</td>
+					</template>
 				</tr>
 			</thead>
 			<tbody>
 			<tr v-for="team in teams">
-				<td>{{ team.id }}</td>
-				<td>{{ team.name }}</td>
-				<td>{{ team.deductions.total.toFixed(2) }}</td>
+				<td class="text-center">{{ team.id }}</td>
+				<td class="text-center">{{ team.name }}</td>
+				<td class="text-center">{{ team.deductions.total.toFixed(2) }}</td>
 				<template v-for="judge in judges" :key="judge.id">
-					<td>
+					<td class="text-center">
 						{{ team.ratings.inputs[`judge_${judge.id}`].final.original.toFixed(2) }}
 					</td>
-					<td>
+					<td class="text-center">
 						{{ team.ratings.inputs[`judge_${judge.id}`].rank.fractional.toFixed(2) }}
 					</td>
 				</template>
-				<td>{{ team.ratings.total.toFixed(2) }}</td>
-				<td>{{ team.ratings.average.toFixed(2) }}</td>
-				<td>{{ team.rank.total.fractional.toFixed(2) }}</td>
-				<td>{{ team.rank.initial.fractional.toFixed(2) }}</td>
-				<td>{{ team.rank.final.fractional.toFixed(2) }}</td>
+				<td class="text-center">{{ team.ratings.total.toFixed(2) }}</td>
+				<td class="text-center">{{ team.ratings.average.toFixed(2) }}</td>
+				<td class="text-center">{{ team.rank.total.fractional.toFixed(2) }}</td>
+				<td class="text-center">{{ team.rank.initial.fractional.toFixed(2) }}</td>
+				<td class="text-center">{{ team.rank.final.fractional.toFixed(2) }}</td>
 			</tr>
 			</tbody>
 			<tfoot>
