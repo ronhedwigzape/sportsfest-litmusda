@@ -146,12 +146,38 @@
                             <option value="technicals.php">Technicals</option>
                         </select>
                     </div>
+                    <div class="btn-group ml-auto" role="group" aria-label="Go to">
+                        <?php require_once '../models/Category.php'; ?>
+                        <select onchange="window.location = `${window.location.pathname}${this.value !== '' ? '?category=' + this.value : ''}`" class="btn btn-dark">
+                            <option selected value="">All Categories</option>
+                            <?php foreach(Category::rows() as $category) { ?>
+                                <option value="<?= $category['slug'] ?>"
+                                    <?php
+                                    if(isset($_GET['category'])) {
+                                        if(strtolower(trim($_GET['category'])) == $category['slug'])
+                                            echo " selected";
+                                    }
+                                    ?>
+                                ><?= $category['title'] ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
                 </div>
                 <?php
                     require_once '../config/database.php';
                     require_once '../models/Event.php';
-                    
-                    $events = Event::all();
+                    require_once '../models/Category.php';
+
+                    $events = [];
+                    if(isset($_GET['category'])) {
+                        $category = Category::findBySlug($_GET['category']);
+                        if($category)
+                            $events = $category->getAllEvents();
+                        else
+                            $events = Event::all();
+                    }
+                    else
+                        $events = Event::all();
                 ?>
                 <table id="datatableid" class="table table-bordered table-info table-hover text-center">
                     <thead class="table-dark">
