@@ -147,12 +147,38 @@
                             <option value="technicals.php">Technicals</option>
                         </select>
                     </div>
+                    <div class="btn-group ml-auto" role="group" aria-label="Go to">
+                        <?php require_once '../models/Competition.php'; ?>
+                        <select onchange="window.location = `${window.location.pathname}${this.value !== '' ? '?competition=' + this.value : ''}`" class="btn btn-dark">
+                            <option selected value="">All Competition</option>
+                            <?php foreach(Competition::rows() as $competition) { ?>
+                                <option value="<?= $competition['slug'] ?>"
+                                    <?php
+                                    if(isset($_GET['competition'])) {
+                                        if(strtolower(trim($_GET['competition'])) == $competition['slug'])
+                                            echo " selected";
+                                    }
+                                    ?>
+                                ><?= $competition['title'] ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
                 </div>
                 <?php
                     require_once '../config/database.php';
                     require_once '../models/Category.php';
-                    
-                    $categories = Category::all();
+                    require_once '../models/Competition.php';
+
+                    $categories = [];
+                    if(isset($_GET['competition'])) {
+                        $competition = Competition::findBySlug($_GET['competition']);
+                        if($competition)
+                            $categories = $competition->getAllCategories();
+                        else
+                            $categories = Category::all();
+                    }
+                    else
+                        $categories = Category::all();
                 ?>
                 <table id="datatableid" class="table table-bordered table-info table-hover text-center">
                     <thead class="table-dark">
