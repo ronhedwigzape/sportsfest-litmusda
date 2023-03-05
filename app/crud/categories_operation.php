@@ -41,4 +41,5 @@ if(isset($_POST['deletedata'])) {
     $category->delete();
 }
 
-header('location: categories.php');
+$url = $_SERVER['HTTP_REFERER'];
+header("location: $url");
