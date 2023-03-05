@@ -28,9 +28,9 @@
 					</tr>
 				</thead>
 				<tbody >
-					<tr v-for="team in teams" :key="team.id">
+					<tr v-for="(team, teamIndex) in teams" :key="team.id">
 						<td class="text-uppercase text-center text-h5 font-weight-bold text-deep-purple-darken-2">
-							{{ team.id }}
+							{{ teamIndex + 1 }}
 						</td>
 						<td class="text-uppercase text-center font-weight-bold">
 							<v-col align="center">
