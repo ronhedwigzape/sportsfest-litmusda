@@ -25,6 +25,14 @@
 				v-for="event in $store.getters['events/getEvents']"
 				:key="event.id"
 				@click="handleEventChange(event)"
+				:prepend-icon="
+					event.category_id === 1 ? 'mdi-tennis-ball' :
+					event.category_id === 2 ? 'mdi-chess-king' :
+					event.category_id === 3 ? 'mdi-book-open-page-variant' :
+					event.category_id === 4 ? 'mdi-music' :
+					event.category_id === 5 ? 'mdi-dance-ballroom' :
+					''
+				"
 			>
 				{{ event.title }}
 			</v-btn>

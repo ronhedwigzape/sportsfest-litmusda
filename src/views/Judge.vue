@@ -9,22 +9,28 @@
 			<v-table
 				v-if="$route.params.eventSlug && event"
 				density="comfortable"
-				fixed-header
+				fix-header
 				hover
 				:height="680"
 			>
-				<thead>
+				<thead class="position-relative">
 					<tr>
-						<th class="text-uppercase text-center font-weight-bold text-deep-purple-darken-2">#</th>
-						<th class="text-uppercase text-center font-weight-bold text-deep-purple-darken-2">
+						<th rowspan="2" class="text-uppercase text-center font-weight-bold text-deep-purple-darken-2">#</th>
+						<th rowspan="2" class="text-uppercase text-center font-weight-bold text-deep-purple-darken-2">
 							{{ event.title }} Teams
 						</th>
-						<th class="text-center" v-for="criterion in criteria">
-							<p class="text-uppercase text-deep-purple-lighten-1">{{ criterion.title }}</p>
-							<b class="text-deep-purple-darken-2">({{ criterion.percentage }}%)</b>
-						</th>
-						<th class="text-uppercase text-center font-weight-bold text-deep-purple-darken-2">Total</th>
-						<th class="text-uppercase text-center font-weight-bold text-deep-purple-darken-2">Rank</th>
+						<template v-for="criterion in criteria">
+							<th class="text-center font-weight-bold text-uppercase text-deep-purple-lighten-1">
+								{{ criterion.title }}
+							</th>
+						</template>
+						<th rowspan="2" class="text-uppercase text-center font-weight-bold text-deep-purple-darken-2">Total</th>
+						<th rowspan="2" class="text-uppercase text-center font-weight-bold text-deep-purple-darken-2">Rank</th>
+					</tr>
+					<tr>
+						<template v-for="criterion in criteria">
+						<th class="text-center font-weight-bold text-deep-purple-darken-2">{{ criterion.percentage }}%</th>
+						</template>
 					</tr>
 				</thead>
 				<tbody >
@@ -84,6 +90,7 @@
 							</v-text-field>
 						</td>
 						<td>
+							<keep-alive>
 							<v-text-field
 								type="number"
 								class="font-weight-bold"
@@ -91,14 +98,30 @@
 								hide-details
 								single-line
 								:loading="loading"
-								v-model.number="$store.state.total[team.id]"
+								v-model.number="total[team.id]"
 								:min="$store.state.rating.min"
 								:max="$store.state.rating.max"
 								@change="teamsTotalScores(team)"
+								:class="{
+									'text-error font-weight-bold': (
+										total[team.id] < $store.state.rating.min
+									|| total[team.id] > $store.state.rating.max
+									),
+									'text-success font-weight-bold': (
+										total[team.id] >= $store.state.rating.min
+									&& total[team.id] <= $store.state.rating.max
+									)
+								}"
+								:error="(
+									  total[team.id].toString().trim() === ''
+								   || total[team.id] < $store.state.rating.min
+								   || total[team.id] > $store.state.rating.max
+							   )"
 							>
 							</v-text-field>
+							</keep-alive>
 						</td>
-						<td> </td>
+						<td class="text-center text-deep-purple-darken-1"> {{ ranks[team.id].toFixed(2) }}</td>
 					</tr>
 				</tbody>
 				<!--	Dialog	  -->
@@ -150,11 +173,11 @@
 </template>
 
 <script>
-	import topNav from "../components/nav/TopNav.vue";
-	import sideNav from "../components/nav/SideNav.vue";
-	import $ from "jquery";
+import topNav from "../components/nav/TopNav.vue";
+import sideNav from "../components/nav/SideNav.vue";
+import $ from "jquery";
 
-	export default {
+export default {
 		name: 'Judge',
 		components: {
 			topNav,
@@ -169,6 +192,12 @@
 				teams: [],
 				criteria: [],
 				ratings: {},
+				ranking: {},
+				total: {
+					1: 0,
+					2: 0,
+					3: 0
+				}
 			}
 		},
 		watch: {
@@ -201,6 +230,7 @@
 							this.teams = data.teams
 							this.ratings = data.ratings
 							this.event = data.event
+							console.log(data)
 						},
 						error: (error) => {
 							alert(`ERROR ${error.status}: ${error.statusText}`);
@@ -227,7 +257,7 @@
 						rating
 					},
 					success: (data, textStatus, jqXHR) => {
-						this.$store.state.total[teamId] += rating.value
+						this.total[teamId] += rating.value
 						if(this.loading) {
 							setTimeout(() => {
 								this.loading = false;
@@ -242,38 +272,87 @@
 			},
 			teamsTotalScores(team) {
 
-				if (this.$store.state.total[team.id] < 0 || this.$store.state.total[team.id] === '') {
-					this.$store.state.total[team.id] = this.$store.state.rating.min;
+				if (this.total[team.id] < 50 || this.total[team.id] === '') {
+					this.total[team.id] = this.$store.state.rating.min;
 				}
-				else if (this.$store.state.total[team.id] > 100) {
-					this.$store.state.total[team.id] = this.$store.state.rating.max;
+				else if (this.total[team.id] > 100) {
+					this.total[team.id] = this.$store.state.rating.max;
 				}
 
 				for (let criterion of this.criteria) {
 					const rating = this.ratings[`${this.event.slug}_${team.id}`][`${this.$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`];
-					rating.value = this.$store.state.total[team.id] * (criterion.percentage / 100);
+					rating.value = this.total[team.id] * (criterion.percentage / 100);
 					this.save(rating, criterion.percentage)
 				}
 			}
 		},
 		computed: {
-			/*******************************************************************************
-			 *	I. Get dense rank:
-			 *	1. Gather all unique total ratings U.
-			 *	2. Sort U.
-			 *	3. Scan the individual total ratings again, and find their (index + 1) in U.
-			 *
-			 *	example:
-			 *	total_ratings = [12, 10, 5, 10, 6]
-			 *
-			 *	U = [12, 10, 5, 6]
-			 *
-			 *	sorted U = [5, 6, 10, 12]
-			 *
-			 *	total_ratings_rank = [4, 3, 1, 3, 2]
-			 */
 			ranks() {
-				console.log(Object.values(this.$store.state.total).filter(value => !isNaN(value)))
+				// Dense rank function
+				const getDenseRank = (totals) => {
+
+					// Get total ratings
+					const total_ratings = Object.values(totals);
+
+					// Gather all unique total ratings U.
+					const U = [...new Set(total_ratings)];
+
+					// Sort U.
+					const sortedU = U.sort((a, b) => b - a);
+
+					// Scan the individual total ratings and find their (index + 1) in U.
+					const totalRatingsRank = total_ratings.map((rating) =>
+						sortedU.indexOf(rating) + 1
+					);
+
+					// Assign dense rank to team id's keys
+					const total_ratings_rank = {};
+					Object.keys(totals).forEach((id, index) => {
+						total_ratings_rank[id] = totalRatingsRank[index];
+					});
+
+					// return total ratings rank
+					return total_ratings_rank;
+				}
+
+				// Fractional rank function
+				const getFractionalRank = (totals) => {
+
+					// Get dense rank
+					const denseRank = getDenseRank(totals);
+
+					// Calculate fractional rank
+					const fractionalRank = {};
+					Object.entries(totals).forEach(([id, value]) => {
+						const count = Object.values(totals).filter((x) => x === value).length;
+						const ordinalRank = denseRank[id];
+						fractionalRank[id] = ordinalRank + (count - 1) / 2;
+					});
+
+					// Return fractional rank with team id as keys
+					const result = {};
+					Object.keys(totals).forEach((key, index) => {
+						result[key] = fractionalRank[key];
+					});
+
+					// Return result
+					return result;
+				}
+
+				// Filter Object if `NaN` and `undefined` is present
+				const filterObject = (obj) => {
+					// Remove NaN and undefined in the Object
+					const filteredArray = Object.entries(obj).filter((value) => {
+						return value !== undefined && !Number.isNaN(value);
+					});
+					return Object.fromEntries(filteredArray);
+				}
+
+				// Call fractional rank function
+				const fractional_rank = getFractionalRank(this.total)
+
+				// Return ranks
+				return filterObject(fractional_rank);
 			}
 		}
 	}
@@ -285,5 +364,6 @@
 	}
 	tbody td {
 		border-bottom: 1px solid #ddd;
+		padding-bottom: 1rem !important;
 	}
 </style>
