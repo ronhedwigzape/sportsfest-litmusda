@@ -1,5 +1,5 @@
 <template>
-	<v-app-bar :title="`${$store.getters.appName}`" color="deep-purple-darken-3">
+	<v-app-bar :title="`${$store.getters.appName}`" color="deep-purple-darken-3" flat>
 		<h3 class="me-5">{{ name }}</h3>
 		<v-chip
 			class="ma-2"
@@ -28,7 +28,7 @@
 			<template v-slot:activator="{ props }">
 				<v-menu>
 					<template v-slot:activator="{ props }">
-						<v-btn class="ma-2" icon="mdi-dots-vertical" v-bind="props"></v-btn>
+						<v-btn class="ma-3" icon="mdi-dots-vertical" v-bind="props"></v-btn>
 					</template>
 					<v-list>
 						<v-list-item
@@ -36,7 +36,9 @@
 							class="text-red-darken-3 text-uppercase"
 							style="font-size: 1rem;"
 							variant="text"
-							><v-icon icon="mdi-logout"/>Logout</v-list-item>
+							><v-icon icon="mdi-logout"/>
+								Logout
+						</v-list-item>
 					</v-list>
 				</v-menu>
 			</template>

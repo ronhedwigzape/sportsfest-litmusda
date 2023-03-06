@@ -40,4 +40,6 @@ if(isset($_POST['deletedata'])) {
     $event->delete();
 }
 
-header('location: events.php');
+$url = $_SERVER['HTTP_REFERER'];
+header("location: $url");
+

@@ -29,7 +29,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Add Category</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Add Data</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -68,7 +68,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Edit Category</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Edit Data</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -108,7 +108,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Delete Category</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Delete Data</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -117,7 +117,7 @@
                 <form action="categories_operation.php" method="POST">
                     <div class="modal-body">
                         <input type="hidden" name="delete_id" id="delete_id">
-                        <h4>Do you want to Delete this Category ??</h4>
+                        <h4>Do you want to Delete this Data ??</h4>
                     </div>
 
                     <div class="modal-footer">
@@ -148,18 +148,37 @@
                         </select>
                     </div>
                     <div class="btn-group ml-auto" role="group" aria-label="Go to">
-                        <select onchange="window.location.href=this.value" class="btn btn-dark">
-                            <option selected value="">Go to...</option>
-                            <option value="">Sports</option>
-                            <option value="">Litmusda</option>
+                        <?php require_once '../models/Competition.php'; ?>
+                        <select onchange="window.location = `${window.location.pathname}${this.value !== '' ? '?competition=' + this.value : ''}`" class="btn btn-dark">
+                            <option selected value="">All Competition</option>
+                            <?php foreach(Competition::rows() as $competition) { ?>
+                                <option value="<?= $competition['slug'] ?>"
+                                    <?php
+                                    if(isset($_GET['competition'])) {
+                                        if(strtolower(trim($_GET['competition'])) == $competition['slug'])
+                                            echo " selected";
+                                    }
+                                    ?>
+                                ><?= $competition['title'] ?></option>
+                            <?php } ?>
                         </select>
                     </div>
                 </div>
                 <?php
                     require_once '../config/database.php';
                     require_once '../models/Category.php';
-                    
-                    $categories = Category::all();
+                    require_once '../models/Competition.php';
+
+                    $categories = [];
+                    if(isset($_GET['competition'])) {
+                        $competition = Competition::findBySlug($_GET['competition']);
+                        if($competition)
+                            $categories = $competition->getAllCategories();
+                        else
+                            $categories = Category::all();
+                    }
+                    else
+                        $categories = Category::all();
                 ?>
                 <table id="datatableid" class="table table-bordered table-info table-hover text-center">
                     <thead class="table-dark">

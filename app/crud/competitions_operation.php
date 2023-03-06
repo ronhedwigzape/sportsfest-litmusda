@@ -36,4 +36,5 @@ if(isset($_POST['deletedata'])) {
     $competition->delete();
 }
 
-header('location: competitions.php');
+$url = $_SERVER['HTTP_REFERER'];
+header("location: $url");
