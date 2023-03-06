@@ -37,19 +37,29 @@
 
                 <form action="events_operation.php" method="POST">
                     <div class="modal-body">
+                        <?php
+                        require_once '../models/Category.php';
+
+                        $page_url = $_SERVER['REQUEST_URI'];
+                        $entity_category = '';
+                        $categories = Category::all();
+                        foreach ($categories as $category) {
+                            $category_url = strtolower(str_replace(' ', '-', $category->getSlug()));
+                            if (strpos($page_url, $category_url) !== false) {
+                                $entity_category = $category->getTitle();
+                                break;
+                            }
+                        }
+
+                        ?>
                         <div class="form-group">
                             <label>Category</label>
-                            <select name="category_id" class="form-control" required>
+                            <select name="category_id" class="form-control" required <?php if (!empty($entity_category)) echo 'disabled'; ?>>
                                 <option value="">Select Category</option>
-                                <?php
-                                require_once '../models/Category.php';
-
-                                $categories = Category::all();
-
-                                foreach ($categories as $category) {
-                                    echo "<option value={$category->getId()}>{$category->getTitle()}</option>";
-                                }
-                                ?>
+                                <?php foreach ($categories as $category) {
+                                    $selected = ($category->getTitle() == $entity_category) ? 'selected' : '';
+                                    echo "<option value={$category->getId()} $selected>{$category->getSlug()}</option>";
+                                } ?>
                             </select>
                         </div>
 
