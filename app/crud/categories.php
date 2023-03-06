@@ -26,7 +26,7 @@
      <!-- ADD POP UP FORM (Bootstrap MODAL) -->
      <div class="modal fade" id="addmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Add Data</h5>
@@ -38,8 +38,19 @@
                 <form action="categories_operation.php" method="POST">
                     <div class="modal-body">
                         <div class="form-group">
-                            <label>Competition_ID</label>
-                            <input type="number" min="1" max="2" name="competition_id" class="form-control" placeholder="Select your Competition_ID 1(sports) or 2(litmusda)" autocomplete="off" required>
+                            <label>Competition</label>
+                            <select name="competition_id" class="form-control" required>
+                                <option value="">Select Competition</option>
+                                <?php
+                                    require_once '../models/Competition.php';
+
+                                    $competitions = Competition::all();
+
+                                    foreach ($competitions as $competition) {
+                                        echo "<option value={$competition->getId()}>{$competition->getTitle()}</option>";
+                                    }
+                                ?>
+                            </select>
                         </div>
 
                         <div class="form-group">
@@ -65,7 +76,7 @@
     <!-- EDIT POP UP FORM (Bootstrap MODAL) -->
     <div class="modal fade" id="editmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Edit Data</h5>
@@ -78,8 +89,19 @@
                     <div class="modal-body">
                         <input type="hidden" name="update_id" id="update_id">
                         <div class="form-group">
-                            <label>Competition_ID</label>
-                            <input type="number" min="1" max="2" name="competition_id" id="competition_id" class="form-control" placeholder="Select your Competition_ID 1(sports) or 2(litmusda)" autocomplete="off" required>
+                            <label>Competition</label>
+                            <select name="competition_id" id="competition_id" class="form-control" required>
+                                <option value="">Select Competition</option>
+                                <?php
+                                require_once '../models/Competition.php';
+
+                                $competitions = Competition::all();
+
+                                foreach ($competitions as $competition) {
+                                    echo "<option value={$competition->getId()}>{$competition->getSlug()}</option>";
+                                }
+                                ?>
+                            </select>
                         </div>
 
                         <div class="form-group">

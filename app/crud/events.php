@@ -26,7 +26,7 @@
      <!-- ADD POP UP FORM (Bootstrap MODAL) -->
      <div class="modal fade" id="addmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Add Data</h5>
@@ -38,8 +38,19 @@
                 <form action="events_operation.php" method="POST">
                     <div class="modal-body">
                         <div class="form-group">
-                            <label>Category_ID</label>
-                            <input type="number" name="category_id" id="category_id" class="form-control" placeholder="Select your Categories_ID 3(literary), 4(music) or 5(dance)"  min="3" max="5" autocomplete="off" required>
+                            <label>Category</label>
+                            <select name="category_id" class="form-control" required>
+                                <option value="">Select Category</option>
+                                <?php
+                                require_once '../models/Category.php';
+
+                                $categories = Category::all();
+
+                                foreach ($categories as $category) {
+                                    echo "<option value={$category->getId()}>{$category->getTitle()}</option>";
+                                }
+                                ?>
+                            </select>
                         </div>
 
                         <div class="form-group">
@@ -65,7 +76,7 @@
     <!-- EDIT POP UP FORM (Bootstrap MODAL) -->
     <div class="modal fade" id="editmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Edit Data</h5>
@@ -78,8 +89,19 @@
                     <div class="modal-body">
                         <input type="hidden" name="update_id" id="update_id">
                         <div class="form-group">
-                            <label>Categories_ID</label>
-                            <input type="number" name="category_id" id="category_id" class="form-control" placeholder="Select your Categories_ID 3(literary), 4(music) or 5(dance)" min="3" max="5" autocomplete="off" required>
+                            <label>Category</label>
+                            <select name="category_id" id="category_id" class="form-control" required>
+                                <option value="">Select Category</option>
+                                <?php
+                                require_once '../models/Category.php';
+
+                                $categories = Category::all();
+
+                                foreach ($categories as $category) {
+                                    echo "<option value={$category->getId()}>{$category->getTitle()}</option>";
+                                }
+                                ?>
+                            </select>
                         </div>
 
                         <div class="form-group">

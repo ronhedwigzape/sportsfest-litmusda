@@ -174,17 +174,19 @@ require_once '../config/database.php';
             <div class="card">
                 <div class="card-body">
                     <h1 class="text-center"><b> <u>Judges</u> </b></h1>
-                    <button type="button" class="btn btn-primary mr-3 my-3" data-toggle="modal" data-target="#addmodal">ADD DATA</button>
-                    <div class="btn-group" role="group" aria-label="Go to">
-                        <select onchange="window.location.href=this.value" class="btn btn-secondary">
-                            <option selected value="">Go to...</option>
-                            <option value="competitions.php">Competitions</option>
-                            <option value="categories.php">Categories</option>
-                            <option value="events.php">Events</option>
-                            <option value="criteria.php">Criterion</option>
-                            <option value="teams.php">Teams</option>
-                            <option value="technicals.php">Technicals</option>
-                        </select>
+                    <div class="d-flex align-items-center">
+                        <button type="button" class="btn btn-primary mr-3 my-3" data-toggle="modal" data-target="#addmodal">ADD DATA</button>
+                        <div class="btn-group" role="group" aria-label="Go to">
+                            <select onchange="window.location.href=this.value" class="btn btn-secondary">
+                                <option selected value="">Go to...</option>
+                                <option value="competitions.php">Competitions</option>
+                                <option value="categories.php">Categories</option>
+                                <option value="events.php">Events</option>
+                                <option value="criteria.php">Criterion</option>
+                                <option value="teams.php">Teams</option>
+                                <option value="technicals.php">Technicals</option>
+                            </select>
+                        </div>
                     </div>
                     <?php
                         require_once '../models/Judge.php';

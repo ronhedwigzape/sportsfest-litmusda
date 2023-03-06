@@ -26,7 +26,7 @@ require_once '../config/database.php';
         <!-- ADD POP UP FORM (Bootstrap MODAL) -->
         <div class="modal fade" id="addmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
              aria-hidden="true">
-            <div class="modal-dialog" role="document">
+            <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Add Data </h5>
@@ -38,8 +38,19 @@ require_once '../config/database.php';
                     <form action="criteria_operation.php" method="POST">
                         <div class="modal-body">
                             <div class="form-group">
-                                <label> Event_ID </label>
-                                <input type="number" name="event_id" class="form-control" min="1" max="6" placeholder="Enter your Event_ID from 1 to 6" autocomplete="off" required>
+                                <label>Event</label>
+                                <select name="event_id" class="form-control" required>
+                                    <option value="">Select Event</option>
+                                    <?php
+                                    require_once '../models/Event.php';
+
+                                    $events = Event::all();
+
+                                    foreach ($events as $event) {
+                                        echo "<option value={$event->getId()}>{$event->getTitle()}</option>";
+                                    }
+                                    ?>
+                                </select>
                             </div>
 
                             <div class="form-group">
@@ -65,7 +76,7 @@ require_once '../config/database.php';
         <!-- EDIT POP UP FORM (Bootstrap MODAL) -->
         <div class="modal fade" id="editmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
              aria-hidden="true">
-            <div class="modal-dialog" role="document">
+            <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel"> Edit Data </h5>
@@ -78,8 +89,19 @@ require_once '../config/database.php';
                         <div class="modal-body">
                             <input type="hidden" name="update_id" id="update_id">
                             <div class="form-group">
-                                <label> Event_ID </label>
-                                <input type="number" name="event_id" id="event_id" class="form-control" min="1" max="6" placeholder="Enter your Event_ID from 1 to 6" autocomplete="off" required>
+                                <label>Event</label>
+                                <select name="event_id" id="event_id" class="form-control" required>
+                                    <option value="">Select Event</option>
+                                    <?php
+                                    require_once '../models/Event.php';
+
+                                    $events = Event::all();
+
+                                    foreach ($events as $event) {
+                                        echo "<option value={$event->getId()}>{$event->getTitle()}</option>";
+                                    }
+                                    ?>
+                                </select>
                             </div>
 
                             <div class="form-group">
