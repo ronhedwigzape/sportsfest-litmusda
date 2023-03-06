@@ -15,7 +15,7 @@ export default createStore({
             backendDir: 'app'
         },
         rating: {
-            min: 50,
+            min: 75,
             max: 100
         }
     },
