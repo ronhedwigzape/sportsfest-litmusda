@@ -121,7 +121,7 @@
 							>
 							</v-text-field>
 						</td>
-						<td class="text-center text-deep-purple-darken-1"> {{ ranks[team.id] }}</td>
+						<td class="text-center text-deep-purple-darken-1"> {{ ranks[`team_${team.id}`] }}</td>
 					</tr>
 				</tbody>
 				<!--	Dialog	  -->
@@ -208,7 +208,7 @@ export default {
 		},
 		methods: {
 			fetchScoreSheet() {
-				// fetch scoresheet from backend
+				// fetch scoreSheet from backend
 				if (this.$route.params.eventSlug) {
 					$.ajax({
 						url: `${this.$store.getters.appURL}/judge.php`,
@@ -331,9 +331,7 @@ export default {
 					const fractionalRank = {};
 					Object.entries(totals).forEach(([id, value]) => {
 						const count = Object.values(totals).filter((x) => x === value).length;
-						console.log(count)
-						const ordinalRank = denseRank[id];
-						fractionalRank[id] = ordinalRank + ((count * (count + 1) / 2) / count);
+						fractionalRank[id] = denseRank[id] + ((count * (count - 1) / 2) / count);
 					});
 
 					// Return fractional rank with team id as keys
@@ -356,12 +354,9 @@ export default {
 				}
 
 				// Return ranks
-				let teamId = 0
-				for (let i = 0; i < this.teams.length; i++) {
-					teamId = this.teams[i].id
-				}
 
-				return getFractionalRank(this.totals[`team_${teamId}`])
+				return getFractionalRank(this.totals)
+
 			}
 		}
 	}
