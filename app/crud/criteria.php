@@ -37,19 +37,29 @@ require_once '../config/database.php';
 
                     <form action="criteria_operation.php" method="POST">
                         <div class="modal-body">
+                            <?php
+                            require_once '../models/Event.php';
+
+                            $page_url = $_SERVER['REQUEST_URI'];
+                            $entity_category = '';
+                            $events = Event::all();
+                            foreach ($events as $event) {
+                                $event_url = strtolower(str_replace(' ', '-', $event->getTitle()));
+                                if (strpos($page_url, $event_url) !== false) {
+                                    $entity_category = $event->getTitle();
+                                    break;
+                                }
+                            }
+
+                            ?>
                             <div class="form-group">
                                 <label>Event</label>
-                                <select name="event_id" class="form-control" required>
+                                <select name="event_id" class="form-control" required <?php if (!empty($entity_category)) echo 'disabled'; ?>>
                                     <option value="">Select Event</option>
-                                    <?php
-                                    require_once '../models/Event.php';
-
-                                    $events = Event::all();
-
-                                    foreach ($events as $event) {
-                                        echo "<option value={$event->getId()}>{$event->getTitle()}</option>";
-                                    }
-                                    ?>
+                                    <?php foreach ($events as $event) {
+                                        $selected = ($event->getTitle() == $entity_category) ? 'selected' : '';
+                                        echo "<option value={$event->getId()} $selected>{$event->getslug()}</option>";
+                                    } ?>
                                 </select>
                             </div>
 
