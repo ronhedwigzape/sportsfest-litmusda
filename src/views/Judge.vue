@@ -72,7 +72,9 @@
 								variant="underlined"
 								hide-details
 								single-line
-								@change="save(ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`], criterion.percentage, team.id)"
+								:min="0"
+								:max="criterion.percentage"
+								@change="saveRating(ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`], criterion.percentage, team.id)"
 								v-model.number="ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value"
 								:class="{
 									'text-error font-weight-bold': (
@@ -90,7 +92,6 @@
 							</v-text-field>
 						</td>
 						<td>
-							<keep-alive>
 							<v-text-field
 								type="number"
 								class="font-weight-bold"
@@ -98,30 +99,29 @@
 								hide-details
 								single-line
 								:loading="loading"
-								v-model.number="total[team.id]"
+								v-model.number="totals[`team_${team.id}`]"
 								:min="$store.state.rating.min"
 								:max="$store.state.rating.max"
-								@change="teamsTotalScores(team)"
+								@change="calculateTotalScores(team)"
 								:class="{
 									'text-error font-weight-bold': (
-										total[team.id] < $store.state.rating.min
-									|| total[team.id] > $store.state.rating.max
+										totals[`team_${team.id}`] < $store.state.rating.min
+									|| totals[`team_${team.id}`] > $store.state.rating.max
 									),
 									'text-success font-weight-bold': (
-										total[team.id] >= $store.state.rating.min
-									&& total[team.id] <= $store.state.rating.max
+										totals[`team_${team.id}`] >= $store.state.rating.min
+									&& totals[`team_${team.id}`] <= $store.state.rating.max
 									)
 								}"
 								:error="(
-									  total[team.id].toString().trim() === ''
-								   || total[team.id] < $store.state.rating.min
-								   || total[team.id] > $store.state.rating.max
+									  totals[`team_${team.id}`].toString().trim() === ''
+								   || totals[`team_${team.id}`] < $store.state.rating.min
+								   || totals[`team_${team.id}`] > $store.state.rating.max
 							   )"
 							>
 							</v-text-field>
-							</keep-alive>
 						</td>
-						<td class="text-center text-deep-purple-darken-1"> {{ ranks[team.id].toFixed(2) }}</td>
+						<td class="text-center text-deep-purple-darken-1"> {{ ranks[team.id] }}</td>
 					</tr>
 				</tbody>
 				<!--	Dialog	  -->
@@ -150,7 +150,7 @@
 									<v-card-actions>
 										<v-spacer></v-spacer>
 										<v-btn color="primary" @click="dialog = false">Close</v-btn>
-										<v-btn color="primary"  @click="">Submit</v-btn>
+										<v-btn color="primary" @click="">Submit</v-btn>
 									</v-card-actions>
 								</v-card>
 							</v-dialog>
@@ -192,12 +192,7 @@ export default {
 				teams: [],
 				criteria: [],
 				ratings: {},
-				ranking: {},
-				total: {
-					1: 0,
-					2: 0,
-					3: 0
-				}
+				totals: {},
 			}
 		},
 		watch: {
@@ -226,11 +221,23 @@ export default {
 						},
 						success: (data) => {
 							data = JSON.parse(data);
-							this.criteria = data.criteria
-							this.teams = data.teams
-							this.ratings = data.ratings
-							this.event = data.event
-							console.log(data)
+							this.criteria = data.criteria;
+							this.teams = data.teams;
+							this.ratings = data.ratings;
+							this.event = data.event;
+							this.totals = {}
+
+							// Gather ratings to total score
+							for (let i = 0; i < this.teams.length; i++) {
+								let total = 0;
+								const rating = this.ratings[`${this.event.slug}_${this.teams[i].id}`];
+								for (let j = 0; j < this.criteria.length; j++) {
+									const criterion = this.criteria[j];
+									const value = rating[`${this.$store.getters['auth/getUser'].id}_${criterion.id}_${this.teams[i].id}`].value
+									total += value;
+								}
+								this.totals[`team_${this.teams[i].id}`] = total;
+							}
 						},
 						error: (error) => {
 							alert(`ERROR ${error.status}: ${error.statusText}`);
@@ -238,7 +245,7 @@ export default {
 					});
 				}
 			},
-			save(rating, percentage, teamId) {
+			saveRating(rating, percentage, teamId) {
 				this.loading = true
 
 				if (rating.value < 0 || rating.value === '') {
@@ -257,7 +264,7 @@ export default {
 						rating
 					},
 					success: (data, textStatus, jqXHR) => {
-						this.total[teamId] += rating.value
+						this.totals[`team_${teamId}`] += rating.value
 						if(this.loading) {
 							setTimeout(() => {
 								this.loading = false;
@@ -270,19 +277,18 @@ export default {
 					},
 				});
 			},
-			teamsTotalScores(team) {
-
-				if (this.total[team.id] < 50 || this.total[team.id] === '') {
-					this.total[team.id] = this.$store.state.rating.min;
+			calculateTotalScores(team) {
+				if (this.totals[`team_${team.id}`] < 50 || this.totals[`team_${team.id}`] === '') {
+					this.totals[`team_${team.id}`] = this.$store.state.rating.min;
 				}
-				else if (this.total[team.id] > 100) {
-					this.total[team.id] = this.$store.state.rating.max;
+				else if (this.totals[`team_${team.id}`] > 100) {
+					this.totals[`team_${team.id}`] = this.$store.state.rating.max;
 				}
 
 				for (let criterion of this.criteria) {
 					const rating = this.ratings[`${this.event.slug}_${team.id}`][`${this.$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`];
-					rating.value = this.total[team.id] * (criterion.percentage / 100);
-					this.save(rating, criterion.percentage)
+					rating.value = this.totals[`team_${team.id}`] * (criterion.percentage / 100);
+					this.saveRating(rating, criterion.percentage)
 				}
 			}
 		},
@@ -325,14 +331,15 @@ export default {
 					const fractionalRank = {};
 					Object.entries(totals).forEach(([id, value]) => {
 						const count = Object.values(totals).filter((x) => x === value).length;
+						console.log(count)
 						const ordinalRank = denseRank[id];
-						fractionalRank[id] = ordinalRank + (count - 1) / 2;
+						fractionalRank[id] = ordinalRank + ((count * (count + 1) / 2) / count);
 					});
 
 					// Return fractional rank with team id as keys
 					const result = {};
-					Object.keys(totals).forEach((key, index) => {
-						result[key] = fractionalRank[key];
+					Object.keys(totals).forEach((id) => {
+						result[id] = fractionalRank[id];
 					});
 
 					// Return result
@@ -348,11 +355,13 @@ export default {
 					return Object.fromEntries(filteredArray);
 				}
 
-				// Call fractional rank function
-				const fractional_rank = getFractionalRank(this.total)
-
 				// Return ranks
-				return filterObject(fractional_rank);
+				let teamId = 0
+				for (let i = 0; i < this.teams.length; i++) {
+					teamId = this.teams[i].id
+				}
+
+				return getFractionalRank(this.totals[`team_${teamId}`])
 			}
 		}
 	}
