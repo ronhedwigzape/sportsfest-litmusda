@@ -140,7 +140,6 @@
 								v-model="submitDialog"
 								persistent
 								max-width="400"
-
 							>
 								<v-card>
 									<v-card-title class="bg-deep-purple-darken-3">
@@ -262,6 +261,7 @@ export default {
 								const criterion = this.criteria[j];
 								const value = rating[`${this.$store.getters['auth/getUser'].id}_${criterion.id}_${this.teams[i].id}`].value
 								total += value;
+								this.totals['is_locked'] = rating[`${this.$store.getters['auth/getUser'].id}_${criterion.id}_${this.teams[i].id}`].is_locked
 							}
 							this.totals[`team_${this.teams[i].id}`] = total;
 
@@ -322,8 +322,9 @@ export default {
 			let maxRating = this.$store.state.rating.max;
 			let isLocked = this.totals['is_locked'];
 			for (let i = 0; i < this.teams.length; i++) {
-				if (this.totals[`team_${this.teams[i].id}`] < minRating || this.totals[`team_${this.teams[i].id}`] > maxRating) {
+				if (isLocked === false && this.totals[`team_${this.teams[i].id}`] < minRating || this.totals[`team_${this.teams[i].id}`] > maxRating) {
 					this.inspectDialog = true
+					this.submitDialog = false
 				}
 				else {
 					this.submitDialog = true
