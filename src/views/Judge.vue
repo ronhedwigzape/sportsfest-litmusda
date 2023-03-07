@@ -131,26 +131,51 @@
 							<v-btn
 								class="px-16 mt-5 mb-10"
 								color="deep-purple-darken-1"
-								@click="dialog = true"
+								@click="openSubmitDialog"
 							>
 							submit ratings
 							</v-btn>
 							<v-dialog
-								v-model="dialog"
+								v-if="submitDialog"
+								v-model="submitDialog"
 								persistent
-								width="auto"
+								max-width="400"
+
 							>
-								<v-card class="pa-2">
-									<v-card-title>
+								<v-card>
+									<v-card-title class="bg-deep-purple-darken-3">
 										Submit Ratings
 									</v-card-title>
 									<v-card-text>
-										Please confirm that you wish to finalize the ratings for {{ event.title }}. This action cannot be undone.
+										Please confirm that you wish to finalize the ratings for <b class="text-deep-purple-darken-3">{{ event.title }}</b>. This action cannot be undone.
 									</v-card-text>
 									<v-card-actions>
 										<v-spacer></v-spacer>
-										<v-btn color="primary" @click="dialog = false">Close</v-btn>
+										<v-btn color="primary" prepend-icon="mdi-close" @click="submitDialog = false">Close</v-btn>
 										<v-btn color="primary" @click="">Submit</v-btn>
+									</v-card-actions>
+								</v-card>
+							</v-dialog>
+							<v-dialog
+								v-if="inspectDialog"
+								v-model="inspectDialog"
+								persistent
+								max-width="400"
+							>
+								<v-card>
+									<v-card-title class="bg-red-darken-4">
+										Submit Ratings
+									</v-card-title>
+									<v-card-text>
+										<p class="mb-2 text-red-darken-4">
+											Sorry, your ratings for {{ event.title}} cannot be submitted as they must be between
+											<b>{{ $store.state.rating.min }}</b> and <b>{{ $store.state.rating.max }}</b>.
+										</p>
+										<p class="text-red-darken-4">Please adjust your ratings and try submitting again.</p>
+									</v-card-text>
+									<v-card-actions>
+										<v-spacer></v-spacer>
+										<v-btn color="red-darken-4" prepend-icon="mdi-close" @click="inspectDialog = false">Close</v-btn>
 									</v-card-actions>
 								</v-card>
 							</v-dialog>
@@ -178,187 +203,201 @@ import sideNav from "../components/nav/SideNav.vue";
 import $ from "jquery";
 
 export default {
-		name: 'Judge',
-		components: {
-			topNav,
-			sideNav
-		},
-		data() {
-			return {
-				dialog: false,
-				loading: false,
-				event: null,
-				timer: null,
-				teams: [],
-				criteria: [],
-				ratings: {},
-				totals: {},
+	name: 'Judge',
+	components: {
+		topNav,
+		sideNav
+	},
+	data() {
+		return {
+			dialog: false,
+			submitDialog: false,
+			inspectDialog: false,
+			loading: false,
+			event: null,
+			timer: null,
+			teams: [],
+			criteria: [],
+			ratings: {},
+			totals: {},
+		}
+	},
+	watch: {
+		$route: {
+			immediate: true,
+			handler(to, from) {
+				this.event = null;
+				if (this.timer)
+					clearTimeout(this.timer)
+				this.fetchScoreSheet();
 			}
-		},
-		watch: {
-			$route: {
-				immediate: true,
-				handler(to, from) {
-					this.event = null;
-					if(this.timer)
-						clearTimeout(this.timer)
-					this.fetchScoreSheet();
-				}
-			}
-		},
-		methods: {
-			fetchScoreSheet() {
-				// fetch scoreSheet from backend
-				if (this.$route.params.eventSlug) {
-					$.ajax({
-						url: `${this.$store.getters.appURL}/${this.$store.getters['auth/getUser'].userType}.php`,
-						type: 'GET',
-						xhrFields: {
-							withCredentials: true
-						},
-						data: {
-							getScoreSheet: this.$route.params.eventSlug
-						},
-						success: (data) => {
-							data = JSON.parse(data);
-							this.criteria = data.criteria;
-							this.teams = data.teams;
-							this.ratings = data.ratings;
-							this.event = data.event;
-							this.totals = {}
-
-							// Gather ratings to total score
-							for (let i = 0; i < this.teams.length; i++) {
-								let total = 0;
-								const rating = this.ratings[`${this.event.slug}_${this.teams[i].id}`];
-								for (let j = 0; j < this.criteria.length; j++) {
-									const criterion = this.criteria[j];
-									const value = rating[`${this.$store.getters['auth/getUser'].id}_${criterion.id}_${this.teams[i].id}`].value
-									total += value;
-								}
-								this.totals[`team_${this.teams[i].id}`] = total;
-							}
-						},
-						error: (error) => {
-							alert(`ERROR ${error.status}: ${error.statusText}`);
-						},
-					});
-				}
-			},
-			saveRating(rating, percentage, teamId) {
-				this.loading = true
-
-				if (rating.value < 0 || rating.value === '') {
-					rating.value = 0;
-				}
-				else if (rating.value > percentage) {
-					rating.value = percentage;
-				}
+		}
+	},
+	methods: {
+		fetchScoreSheet() {
+			// fetch scoreSheet from backend
+			if (this.$route.params.eventSlug) {
 				$.ajax({
 					url: `${this.$store.getters.appURL}/${this.$store.getters['auth/getUser'].userType}.php`,
-					type: 'POST',
+					type: 'GET',
 					xhrFields: {
 						withCredentials: true
 					},
 					data: {
-						rating
+						getScoreSheet: this.$route.params.eventSlug
 					},
-					success: (data, textStatus, jqXHR) => {
-						this.totals[`team_${teamId}`] += rating.value
-						if(this.loading) {
-							setTimeout(() => {
-								this.loading = false;
-							}, 1000);
+					success: (data) => {
+						data = JSON.parse(data);
+						this.criteria = data.criteria;
+						this.teams = data.teams;
+						this.ratings = data.ratings;
+						this.event = data.event;
+						this.totals = {}
+
+						// Gather ratings to total score
+						for (let i = 0; i < this.teams.length; i++) {
+							let total = 0;
+							const rating = this.ratings[`${this.event.slug}_${this.teams[i].id}`];
+							for (let j = 0; j < this.criteria.length; j++) {
+								const criterion = this.criteria[j];
+								const value = rating[`${this.$store.getters['auth/getUser'].id}_${criterion.id}_${this.teams[i].id}`].value
+								total += value;
+							}
+							this.totals[`team_${this.teams[i].id}`] = total;
+
 						}
-						console.log(`${jqXHR.status}: ${jqXHR.statusText}`);
 					},
 					error: (error) => {
 						alert(`ERROR ${error.status}: ${error.statusText}`);
 					},
 				});
-			},
-			calculateTotalScores(team) {
-				if (this.totals[`team_${team.id}`] < 50 || this.totals[`team_${team.id}`] === '') {
-					this.totals[`team_${team.id}`] = this.$store.state.rating.min;
-				}
-				else if (this.totals[`team_${team.id}`] > 100) {
-					this.totals[`team_${team.id}`] = this.$store.state.rating.max;
-				}
-
-				for (let criterion of this.criteria) {
-					const rating = this.ratings[`${this.event.slug}_${team.id}`][`${this.$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`];
-					rating.value = this.totals[`team_${team.id}`] * (criterion.percentage / 100);
-					this.saveRating(rating, criterion.percentage)
-				}
 			}
 		},
-		computed: {
-			ranks() {
-				// Dense rank function
-				const getDenseRank = (totals) => {
+		saveRating(rating, percentage, teamId) {
+			this.loading = true
 
-					// Get total ratings
-					const total_ratings = Object.values(totals);
+			if (rating.value < 0 || rating.value === '') {
+				rating.value = 0;
+			} else if (rating.value > percentage) {
+				rating.value = percentage;
+			}
+			$.ajax({
+				url: `${this.$store.getters.appURL}/${this.$store.getters['auth/getUser'].userType}.php`,
+				type: 'POST',
+				xhrFields: {
+					withCredentials: true
+				},
+				data: {
+					rating
+				},
+				success: (data, textStatus, jqXHR) => {
+					this.totals[`team_${teamId}`] += rating.value
+					if (this.loading) {
+						setTimeout(() => {
+							this.loading = false;
+						}, 1000);
+					}
+					console.log(`${jqXHR.status}: ${jqXHR.statusText}`);
+				},
+				error: (error) => {
+					alert(`ERROR ${error.status}: ${error.statusText}`);
+				},
+			});
+		},
+		calculateTotalScores(team) {
+			if (this.totals[`team_${team.id}`] < 50 || this.totals[`team_${team.id}`] === '') {
+				this.totals[`team_${team.id}`] = this.$store.state.rating.min;
+			} else if (this.totals[`team_${team.id}`] > 100) {
+				this.totals[`team_${team.id}`] = this.$store.state.rating.max;
+			}
 
-					// Gather all unique total ratings U.
-					const U = [...new Set(total_ratings)];
-
-					// Sort U.
-					const sortedU = U.sort((a, b) => b - a);
-
-					// Scan the individual total ratings and find their (index + 1) in U.
-					const totalRatingsRank = total_ratings.map((rating) =>
-						sortedU.indexOf(rating) + 1
-					);
-
-					// Assign dense rank to team id's keys
-					const total_ratings_rank = {};
-					Object.keys(totals).forEach((id, index) => {
-						total_ratings_rank[id] = totalRatingsRank[index];
-					});
-
-					// return total ratings rank
-					return total_ratings_rank;
+			for (let criterion of this.criteria) {
+				const rating = this.ratings[`${this.event.slug}_${team.id}`][`${this.$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`];
+				rating.value = this.totals[`team_${team.id}`] * (criterion.percentage / 100);
+				this.saveRating(rating, criterion.percentage)
+			}
+		},
+		openSubmitDialog() {
+			let minRating = this.$store.state.rating.min;
+			let maxRating = this.$store.state.rating.max;
+			let isLocked = this.totals['is_locked'];
+			for (let i = 0; i < this.teams.length; i++) {
+				if (this.totals[`team_${this.teams[i].id}`] < minRating || this.totals[`team_${this.teams[i].id}`] > maxRating) {
+					this.inspectDialog = true
 				}
-
-				// Fractional rank function
-				const getFractionalRank = (totals) => {
-
-					// Get dense rank
-					const denseRank = getDenseRank(totals);
-
-					// Calculate fractional rank
-					const fractionalRank = {};
-					Object.entries(totals).forEach(([id, value]) => {
-						const count = Object.values(totals).filter((x) => x === value).length;
-						fractionalRank[id] = denseRank[id] + ((count - 1) / 2);
-					});
-
-					// Return fractional rank with team id as keys
-					const result = {};
-					Object.keys(totals).forEach((id) => {
-						result[id] = fractionalRank[id];
-					});
-
-					// Return result
-					return result;
+				else {
+					this.submitDialog = true
 				}
-
-				// Filter Object if `NaN` and `undefined` is present
-				const filterObject = (obj) => {
-					// Remove NaN and undefined in the Object
-					const filteredArray = Object.entries(obj).filter((value) => {
-						return value !== undefined && !Number.isNaN(value);
-					});
-					return Object.fromEntries(filteredArray);
-				}
-
-				// Return ranks
-				return filterObject(getFractionalRank(this.totals))
-
 			}
 		}
+	},
+	computed: {
+		ranks() {
+			// Dense rank function
+			const getDenseRank = (totals) => {
+
+				// Get total ratings
+				const total_ratings = Object.values(totals);
+
+				// Gather all unique total ratings U.
+				const U = [...new Set(total_ratings)];
+
+				// Sort U.
+				const sortedU = U.sort((a, b) => b - a);
+
+				// Scan the individual total ratings and find their (index + 1) in U.
+				const totalRatingsRank = total_ratings.map((rating) =>
+					sortedU.indexOf(rating) + 1
+				);
+
+				// Assign dense rank to team id's keys
+				const total_ratings_rank = {};
+				Object.keys(totals).forEach((id, index) => {
+					total_ratings_rank[id] = totalRatingsRank[index];
+				});
+
+				// return total ratings rank
+				return total_ratings_rank;
+			}
+
+			// Fractional rank function
+			const getFractionalRank = (totals) => {
+
+				// Get dense rank
+				const denseRank = getDenseRank(totals);
+
+				// Calculate fractional rank
+				const fractionalRank = {};
+				Object.entries(totals).forEach(([id, value]) => {
+					const count = Object.values(totals).filter((x) => x === value).length;
+					fractionalRank[id] = denseRank[id] + ((count - 1) / 2);
+				});
+
+				// Return fractional rank with team id as keys
+				const result = {};
+				Object.keys(totals).forEach((id) => {
+					result[id] = fractionalRank[id];
+				});
+
+				// Return result
+				return result;
+			}
+
+			// Filter Object if `NaN` and `undefined` is present
+			const filterObject = (obj) => {
+				// Remove NaN and undefined in the Object
+				const filteredArray = Object.entries(obj).filter((value) => {
+					return value !== undefined && !Number.isNaN(value);
+				});
+				return Object.fromEntries(filteredArray);
+			}
+
+			// Return ranks
+			return filterObject(getFractionalRank(this.totals))
+
+		}
 	}
+}
 </script>
 
 <style scoped>
