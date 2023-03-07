@@ -6,47 +6,45 @@
 		<v-table v-if="$route.params.eventSlug && event" density="comfortable" :bordered="true" hover>
 			<thead>
 				<tr>
-					<th colspan="20" class="text-h5 text-uppercase text-center font-weight-bold">
-						{{ event.title }}
+					<th colspan="20" class="text-h5 text-uppercase text-center font-weight-bold text-deep-purple-darken-2">
+						Results of {{ event.title }}
 					</th>
 				</tr>
 				<tr>
-					<td colspan="2" rowspan="2" class="text-center" >Teams</td>
-					<td rowspan="2" class="text-center">Deduct</td>
+					<td colspan="2" rowspan="2" class="text-center text-uppercase font-weight-bold text-deep-purple-darken-2">{{ event.title}} Teams</td>
+					<td rowspan="2" class="text-center text-uppercase font-weight-bold text-red-darken-3">Deduct</td>
 					<template v-for="judge in judges" :key="judge.id">
-						<td colspan="2" class="text-center">Judge {{ judge.id }}</td>
+						<td colspan="2" class="text-center text-uppercase font-weight-bold">Judge {{ judge.id }}</td>
 					</template>
-					<td rowspan="2" class="text-center">Total</td>
-					<td rowspan="2" class="text-center">Average</td>
-					<td rowspan="2" class="text-center">Total Rank</td>
-					<td rowspan="2" class="text-center">Initial Rank</td>
-					<td rowspan="2" class="text-center">Final Rank</td>
+					<td rowspan="2" class="text-center text-uppercase font-weight-bold text-green-darken-4">Average</td>
+					<td rowspan="2" class="text-center text-uppercase font-weight-bold text-blue-darken-4">Total Rank</td>
+					<td rowspan="2" class="text-center text-uppercase font-weight-bold text-grey-darken-1">Initial Rank</td>
+					<td rowspan="2" class="text-center text-uppercase font-weight-bold">Final Rank</td>
 				</tr>
 				<tr>
 					<template v-for="judge in judges" :key="judge.id">
-						<td class="text-center">Total</td>
-						<td class="text-center">Rank</td>
+						<td class="text-center text-green-darken-3">Total</td>
+						<td class="text-center font-weight-bold text-blue-darken-2">Rank</td>
 					</template>
 				</tr>
 			</thead>
 			<tbody>
-			<tr v-for="team in teams">
-				<td class="text-center">{{ team.id }}</td>
-				<td class="text-center">{{ team.name }}</td>
-				<td class="text-center">{{ team.deductions.total.toFixed(2) }}</td>
+			<tr v-for="team in teams" :key="team.id">
+				<td class="text-h5 text-center font-weight-bold text-deep-purple-darken-2">{{ team.id }}</td>
+				<td class="text-center text-uppercase">{{ team.name }}</td>
+				<td class="text-center text-uppercase font-weight-bold text-red-darken-3">{{ team.deductions.total.toFixed(2) }}</td>
 				<template v-for="judge in judges" :key="judge.id">
-					<td class="text-center">
+					<td class="text-center text-green-darken-3">
 						{{ team.ratings.inputs[`judge_${judge.id}`].final.original.toFixed(2) }}
 					</td>
-					<td class="text-center">
+					<td class="text-center font-weight-bold text-blue-darken-2">
 						{{ team.ratings.inputs[`judge_${judge.id}`].rank.fractional.toFixed(2) }}
 					</td>
 				</template>
-				<td class="text-center">{{ team.ratings.total.toFixed(2) }}</td>
-				<td class="text-center">{{ team.ratings.average.toFixed(2) }}</td>
-				<td class="text-center">{{ team.rank.total.fractional.toFixed(2) }}</td>
-				<td class="text-center">{{ team.rank.initial.fractional.toFixed(2) }}</td>
-				<td class="text-center">{{ team.rank.final.fractional.toFixed(2) }}</td>
+				<td class="text-center font-weight-bold text-green-darken-4">{{ team.ratings.average.toFixed(2) }}</td>
+				<td class="text-center font-weight-bold text-blue-darken-4">{{ team.rank.total.fractional.toFixed(2) }}</td>
+				<td class="text-center font-weight-bold text-grey-darken-1">{{ team.rank.initial.fractional.toFixed(2) }}</td>
+				<td class="text-center font-weight-bold">{{ team.rank.final.fractional }}</td>
 			</tr>
 			</tbody>
 			<tfoot>
@@ -111,6 +109,7 @@
                 event: null,
                 results: {},
                 timer: null,
+				teamIndex: 0,
 				teams: [],
 				judges: [],
 				technicals: []
@@ -147,6 +146,7 @@
 							this.judges = data.results.judges;
 							this.technicals = data.results.technicals;
 
+							console.log(this.teams)
                             // request again
                             if(data.event.slug === this.$route.params.eventSlug) {
                                 this.timer = setTimeout(() => {
@@ -165,6 +165,13 @@
 </script>
 
 <style scoped>
+tbody td, th {
+	height: 64px !important;
+}
+tbody td {
+	border-bottom: 1px solid #ddd;
+	padding: 1rem !important;
+}
 th, td {
 	border: 1px solid #ddd;
 }
