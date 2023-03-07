@@ -6,7 +6,7 @@
 		<v-table v-if="$route.params.eventSlug && event" density="comfortable" :bordered="true" hover>
 			<thead>
 				<tr>
-					<th colspan="20" class="text-h4 text-uppercase text-center font-weight-bold text-deep-purple-darken-2">
+					<th colspan="20" class="text-h5 text-uppercase text-center font-weight-bold text-deep-purple-darken-2">
 						Results of {{ event.title }}
 					</th>
 				</tr>
