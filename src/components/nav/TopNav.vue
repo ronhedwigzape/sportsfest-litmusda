@@ -1,5 +1,5 @@
 <template>
-	<v-app-bar :title="`${$store.getters.appName}`" color="deep-purple-darken-3">
+	<v-app-bar :title="`${$store.getters.appName}`" color="deep-purple-darken-3" flat>
 		<h3 class="me-5">{{ name }}</h3>
 		<v-chip
 			class="ma-2"
