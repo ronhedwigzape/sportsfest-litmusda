@@ -4,7 +4,7 @@ require_once '../../models/Event.php';
 require_once '../../models/Point.php';
 
 $events = Event::all();
-// $Point = Point;
+$ranks = Point::ranks();
 ?>
 
 
@@ -15,61 +15,134 @@ $events = Event::all();
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Event Ranking</title>
-    <link rel="stylesheet" href="../dist/bootstrap-4.2.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
 </head>
-<body class="container py-5">
+<body class="">
+    <!-- The Modal for edit-->
+    <div class="modal fade" id="editmodal">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
 
-    <?php
-    $column_num = 3;
-    $counter = $column_num;
-    $num_items = sizeof($events)+ $column_num;
-    foreach($events as $event){
-        $x = $counter % $column_num;
-        if($x==0){
-            echo '<div class="row">';
-            $end = $counter+$column_num;
-        }
+                            <!-- Modal Header -->
+                            <div class="modal-header">
+                                <h4 class="modal-title" id="event_name"></h4>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
 
+                            <!-- Modal body -->
+                            <form action="action.php" method="POST">
+                                <div class="modal-body">
+                                    <input type="hidden" name="event_id" id="event_id">
+                                    <!-- <input type="hidden" name="rank" id="rank"> -->
+                                    <div class="form-group">
+                                        <label>ID</label>
+                                        <input type="number" name="point_id" id="point_id" class="form-control" placeholder="" readonly>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Rank</label>
+                                        <input type="number" name="rank" id="rank" class="form-control" placeholder="" readonly>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Points</label>
+                                        <input type="number" name="points" id="points" class="form-control" placeholder="Enter your desired points">
+                                    </div>
+                                </div>
 
-        $eventID = $event->getId();
-        $counter++;
-        ?>
-            <div class="col-md-4">
-                <div class="card mb-4 shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title"><?php echo $event->getTitle(); ?></h5>
-                        <p class="card-text">
-                            <?php 
-                            
-                            $ranks = Point::ranks();
-                            // print_r($Points);
-                            foreach($ranks as $rank){
-                            ?>
-                            <p>Rank <?php echo $rank;?>: </p>
-
-                                <?php
-                                    echo Point::stored($eventID, $rank);
-                                ?>
-
-                                <?php
-                            }
-
-                            
-                            ?>
-
-
-                        
-                        </p>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                    <button type="submit" name="edit_btn" id="edit_btn"class="btn btn-primary">Confirm</button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
-            </div>
-    <?php
-        if($counter == $end || $counter == $num_items){
-            echo "</div>";
-            $flag = false;
-        } 
-    }
-    ?>
+    <div class="container py-5">
+        <?php
+        $column_num = 3;
+        $counter = $column_num;
+        $num_items = sizeof($events)+ $column_num;
+        foreach($events as $event){
+            $x = $counter % $column_num;
+            if($x==0){
+                echo '<div class="row">';
+                $end = $counter+$column_num;
+            }
+            $eventID = $event->getId();
+            $counter++;
+            $event_name = $event->getTitle();
+            $event_id = $event->getId();;
+            ?>
+                <div class="col-md-4">
+                    <div class="card mb-4 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title float-left"> <?php echo $event_name; ?></h5>
+                            <h5 class="card-title float-right" id="event_id"><?php echo $event_id; ?> </h5>
+                            <p class="card-text">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th scope="column">ID</th>
+                                            <th scope="column">Rank</th>
+                                            <th scope="column">Points</th>
+                                            <th scope="column"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php 
+                                            foreach($ranks as $rank){
+                                                $Point = Point::find($event_id, $rank);
+                                        ?>
+                                        <tr>
+                                            <td><?php echo $Point->getId();?></td>
+                                            <td><?php echo $Point->getRank();?></td>
+                                            <td><?php echo $Point->getValue();?></td>
+                                            <th><button class=" btn btn-warning edit" data-toggle="modal" data-target="#editmodal">Edit</button></th>
+                                        </tr>
+                                        <?php
+                                            }
+                                        ?>
+                                    </tbody>
+                                </table>
+                            </p>
+                            
+                        </div>
+                    </div>
+                </div>
+        <?php
+            if($counter == $end || $counter == $num_items){
+                echo "</div>";
+                $flag = false;
+            } 
+        }
+        ?>
+    </div>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            $('.edit').on('click', function () {
+                $tr = $(this).closest('tr');
+                var point = $tr.children("td").map(function () {
+                    return $(this).text();
+                }).get();
+
+                console.log(point);
+                $('#point_id').val(point[0]);
+                $('#rank').val(point[1]);
+                $('#points').val(point[2]);
+
+                $div = $(this).closest('div');
+                var event = $div.children("h5").map(function () {
+                    return $(this).text();
+                }).get();
+
+                console.log(event);
+                $('#event_id').val(event[1]);
+                $('#event_name').text(event[0]);
+            });
+        });
+    </script>
 </body>
 </html>
