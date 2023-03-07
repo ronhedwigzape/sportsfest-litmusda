@@ -121,7 +121,7 @@
 							>
 							</v-text-field>
 						</td>
-						<td class="text-center text-deep-purple-darken-1"> {{ ranks[`team_${team.id}`] }}</td>
+						<td class="text-center text-deep-purple-darken-1"> {{ ranks[`team_${team.id}`].toFixed(2) }}</td>
 					</tr>
 				</tbody>
 				<!--	Dialog	  -->
@@ -331,7 +331,7 @@ export default {
 					const fractionalRank = {};
 					Object.entries(totals).forEach(([id, value]) => {
 						const count = Object.values(totals).filter((x) => x === value).length;
-						fractionalRank[id] = denseRank[id] + ((count * (count - 1) / 2) / count);
+						fractionalRank[id] = denseRank[id] + ((count - 1) / 2);
 					});
 
 					// Return fractional rank with team id as keys
