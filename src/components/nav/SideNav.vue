@@ -2,43 +2,37 @@
 	<v-navigation-drawer
 		class="bg-deep-purple-darken-2"
 		theme="dark"
+        permanent
 	>
-		<v-col align="center">
+		<v-col class="d-flex justify-center">
 			<v-img
-				:src="foundationLogo"
-				:lazy-src="foundationLogo"
+				:src="`/${$store.getters.appName}/foundation-logo.png`"
 				aspect-ratio="1"
 				alt="foundation-logo"
 				height="100"
 				width="100"
-			>
-				<template v-slot:placeholder>
-					<v-row
-						class="fill-height ma-0"
-						align="center"
-						justify="center"
-					>
-						<v-progress-circular
-							indeterminate
-							color="grey-lighten-5"
-						></v-progress-circular>
-					</v-row>
-				</template>
-			</v-img>
-			<h1 class="mt-2 font-weight-bold">Competitions</h1>
+			/>
 		</v-col>
 
 		<v-divider />
-		<!--	Events	-->
 
 		<div class="text-center mt-2 mx-4">
 			<v-btn
-				variant="text"
+                :variant="$route.params.eventSlug === event.slug ? 'tonal' : 'text'"
+                :color="$route.params.eventSlug === event.slug ? 'yellow' : 'white'"
+				block
 				class="my-2 mx-1 px-16"
 				v-for="event in $store.getters['events/getEvents']"
-				:prepend-icon="getIconForTitle(event.title)"
 				:key="event.id"
 				@click="handleEventChange(event)"
+				:prepend-icon="
+					event.category_id === 1 ? 'mdi-tennis-ball' :
+					event.category_id === 2 ? 'mdi-chess-king' :
+					event.category_id === 3 ? 'mdi-book-open-page-variant' :
+					event.category_id === 4 ? 'mdi-music' :
+					event.category_id === 5 ? 'mdi-dance-ballroom' :
+					''
+				"
 			>
 				{{ event.title }}
 			</v-btn>
@@ -52,60 +46,52 @@
 </template>
 
 <script>
-import $ from 'jquery';
+    import $ from 'jquery';
 
-export default {
-	name: "SideNav",
-	data() {
-		return {
-			foundationLogo: `${import.meta.env.BASE_URL}foundation-logo.png`
-		}
-	},
-	methods: {
-		getIconForTitle(title) {
-			switch (title) {
-				case "Oration":
-				case "Balagtasan":
-				case "Tigsik":
-					return "mdi-script-text";
-				case "Jazz Chant":
-				case "Vocal Solo Male":
-				case "Vocal Solo Female":
-				case "Vocal Duet":
-				case "Acoustic Band":
-					return "mdi-music";
-				case "Hip Hop":
-				case "Jazz Dance":
-				// Add more cases for other eventTitles
-				default:
-					return "mdi-dance-ballroom";
-			}
-		},
-		handleEventChange(event) {
-			this.$router.push({ name: 'judge', params: { eventSlug: event.slug }});
-		}
-	},
-	// created() {
-	// 	$.ajax({
-	// 		url: `${this.$store.getters.appURL}/judge.php`,
-	// 		type: 'GET',
-	// 		xhrFields: {
-	// 			withCredentials: true
-	// 		},
-	// 		data: {
-	// 			getEvents: ''
-	// 		},
-	// 		success: (data) => {
-	// 			data = JSON.parse(data);
-	// 			this.$store.commit('events/setEvents', data.events)
-	// 			console.log(data)
-	// 		},
-	// 		error: (error) => {
-	// 			alert(`ERROR ${error.status}: ${error.statusText}`);
-	// 		},
-	// 	});
-	// },
-}
+    export default {
+        name: "SideNav",
+        data() {
+            return {
+
+            }
+        },
+        methods: {
+            handleEventChange(event) {
+                localStorage.setItem('active-event', event.slug);
+                this.$router.push({
+                    name: this.$store.getters['auth/getUser'].userType,
+                    params: {
+                        eventSlug: event.slug
+                    }
+                });
+            }
+        },
+        created() {
+            $.ajax({
+                url: `${this.$store.getters.appURL}/${this.$store.getters['auth/getUser'].userType}.php`,
+                type: 'GET',
+                xhrFields: {
+                    withCredentials: true
+                },
+                data: {
+                    getEvents: ''
+                },
+                success: (data) => {
+                    data = JSON.parse(data);
+                    this.$store.commit('events/setEvents', data.events);
+                    const activeEvent = localStorage.getItem('active-event');
+                    if(activeEvent !== undefined) {
+                        const event = data.events.find(event => event.slug === activeEvent);
+                        if(event)
+                            this.handleEventChange(event);
+                    }
+                },
+                error: (error) => {
+                    alert(`ERROR ${error.status}: ${error.statusText}`);
+                },
+            });
+        },
+    }
 </script>
 
 <style scoped>

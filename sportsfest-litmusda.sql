@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 27, 2023 at 01:03 AM
+-- Generation Time: Mar 04, 2023 at 12:22 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.1.12
 
@@ -44,6 +44,21 @@ CREATE TABLE `admins` (
 
 INSERT INTO `admins` (`id`, `number`, `name`, `avatar`, `username`, `password`, `created_at`, `updated_at`) VALUES
 (1, 1, 'SUPER USER', 'no-avatar.jpg', 'admin', 'admin', '2023-02-19 07:36:32', '2023-02-26 06:05:06');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `arrangements`
+--
+
+CREATE TABLE `arrangements` (
+  `id` smallint(5) UNSIGNED NOT NULL,
+  `event_id` smallint(5) UNSIGNED NOT NULL,
+  `team_id` tinyint(3) UNSIGNED NOT NULL,
+  `order` tinyint(3) UNSIGNED NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -319,6 +334,25 @@ INSERT INTO `judge_events` (`id`, `judge_id`, `event_id`, `created_at`, `updated
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `participants`
+--
+
+CREATE TABLE `participants` (
+  `id` smallint(5) UNSIGNED NOT NULL,
+  `team_id` tinyint(3) UNSIGNED NOT NULL,
+  `event_id` smallint(5) UNSIGNED NOT NULL,
+  `number` smallint(5) UNSIGNED NOT NULL,
+  `first_name` varchar(255) NOT NULL,
+  `middle_name` varchar(255) DEFAULT NULL,
+  `last_name` varchar(255) NOT NULL,
+  `gender` enum('male','female') NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `points`
 --
 
@@ -330,6 +364,45 @@ CREATE TABLE `points` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `points`
+--
+
+INSERT INTO `points` (`id`, `event_id`, `rank`, `value`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, 10, '2023-03-04 11:19:20', '2023-03-04 11:19:20'),
+(2, 1, 2, 7, '2023-03-04 11:19:20', '2023-03-04 11:19:20'),
+(3, 1, 3, 5, '2023-03-04 11:19:20', '2023-03-04 11:19:20'),
+(4, 2, 1, 10, '2023-03-04 11:19:20', '2023-03-04 11:19:20'),
+(5, 2, 2, 7, '2023-03-04 11:19:20', '2023-03-04 11:19:20'),
+(6, 2, 3, 5, '2023-03-04 11:19:20', '2023-03-04 11:19:20'),
+(7, 3, 1, 10, '2023-03-04 11:19:20', '2023-03-04 11:19:20'),
+(8, 3, 2, 7, '2023-03-04 11:19:20', '2023-03-04 11:19:20'),
+(9, 3, 3, 5, '2023-03-04 11:19:20', '2023-03-04 11:19:20'),
+(10, 4, 1, 10, '2023-03-04 11:19:20', '2023-03-04 11:19:20'),
+(11, 4, 2, 7, '2023-03-04 11:19:20', '2023-03-04 11:19:20'),
+(12, 4, 3, 5, '2023-03-04 11:19:20', '2023-03-04 11:19:20'),
+(13, 5, 1, 10, '2023-03-04 11:20:10', '2023-03-04 11:20:10'),
+(14, 5, 2, 7, '2023-03-04 11:20:10', '2023-03-04 11:20:10'),
+(15, 5, 3, 5, '2023-03-04 11:20:10', '2023-03-04 11:20:10'),
+(16, 6, 1, 10, '2023-03-04 11:20:10', '2023-03-04 11:20:10'),
+(17, 6, 2, 7, '2023-03-04 11:20:10', '2023-03-04 11:20:10'),
+(18, 6, 3, 5, '2023-03-04 11:20:10', '2023-03-04 11:20:10'),
+(19, 7, 1, 10, '2023-03-04 11:20:10', '2023-03-04 11:20:10'),
+(20, 7, 2, 7, '2023-03-04 11:20:10', '2023-03-04 11:20:10'),
+(21, 7, 3, 5, '2023-03-04 11:20:10', '2023-03-04 11:20:10'),
+(22, 8, 1, 10, '2023-03-04 11:20:10', '2023-03-04 11:20:10'),
+(23, 8, 2, 7, '2023-03-04 11:20:10', '2023-03-04 11:20:10'),
+(24, 8, 3, 5, '2023-03-04 11:20:10', '2023-03-04 11:20:10'),
+(25, 9, 1, 10, '2023-03-04 11:21:23', '2023-03-04 11:21:23'),
+(26, 9, 2, 7, '2023-03-04 11:21:23', '2023-03-04 11:21:23'),
+(27, 9, 3, 5, '2023-03-04 11:21:23', '2023-03-04 11:21:23'),
+(28, 10, 1, 10, '2023-03-04 11:21:23', '2023-03-04 11:21:23'),
+(29, 10, 2, 7, '2023-03-04 11:21:23', '2023-03-04 11:21:23'),
+(30, 10, 3, 5, '2023-03-04 11:21:23', '2023-03-04 11:21:23'),
+(31, 11, 1, 15, '2023-03-04 11:21:23', '2023-03-04 11:22:08'),
+(32, 11, 2, 13, '2023-03-04 11:21:23', '2023-03-04 11:22:08'),
+(33, 11, 3, 10, '2023-03-04 11:21:23', '2023-03-04 11:22:08');
 
 -- --------------------------------------------------------
 
@@ -438,6 +511,14 @@ ALTER TABLE `admins`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `arrangements`
+--
+ALTER TABLE `arrangements`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `event_id` (`event_id`),
+  ADD KEY `team_id` (`team_id`);
+
+--
 -- Indexes for table `categories`
 --
 ALTER TABLE `categories`
@@ -488,6 +569,14 @@ ALTER TABLE `judge_events`
   ADD KEY `event_id` (`event_id`);
 
 --
+-- Indexes for table `participants`
+--
+ALTER TABLE `participants`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `team_id` (`team_id`),
+  ADD KEY `event_id` (`event_id`);
+
+--
 -- Indexes for table `points`
 --
 ALTER TABLE `points`
@@ -534,6 +623,12 @@ ALTER TABLE `admins`
   MODIFY `id` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT for table `arrangements`
+--
+ALTER TABLE `arrangements`
+  MODIFY `id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
@@ -576,10 +671,16 @@ ALTER TABLE `judge_events`
   MODIFY `id` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
 
 --
+-- AUTO_INCREMENT for table `participants`
+--
+ALTER TABLE `participants`
+  MODIFY `id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `points`
 --
 ALTER TABLE `points`
-  MODIFY `id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `ratings`
@@ -608,6 +709,13 @@ ALTER TABLE `technical_events`
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `arrangements`
+--
+ALTER TABLE `arrangements`
+  ADD CONSTRAINT `arrangements_ibfk_1` FOREIGN KEY (`team_id`) REFERENCES `teams` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `arrangements_ibfk_2` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `categories`
@@ -641,6 +749,13 @@ ALTER TABLE `events`
 ALTER TABLE `judge_events`
   ADD CONSTRAINT `judge_events_ibfk_1` FOREIGN KEY (`judge_id`) REFERENCES `judges` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `judge_events_ibfk_2` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `participants`
+--
+ALTER TABLE `participants`
+  ADD CONSTRAINT `participants_ibfk_1` FOREIGN KEY (`team_id`) REFERENCES `teams` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `participants_ibfk_2` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `points`
