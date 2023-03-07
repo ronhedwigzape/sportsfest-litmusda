@@ -13,7 +13,7 @@
 				hover
 				:height="680"
 			>
-				<thead class="position-relative">
+				<thead>
 					<tr>
 						<th rowspan="2" class="text-uppercase text-center font-weight-bold text-deep-purple-darken-2">#</th>
 						<th rowspan="2" class="text-uppercase text-center font-weight-bold text-deep-purple-darken-2">
@@ -33,7 +33,7 @@
 						</template>
 					</tr>
 				</thead>
-				<tbody >
+				<tbody>
 					<tr v-for="(team, teamIndex) in teams" :key="team.id">
 						<td class="text-uppercase text-center text-h5 font-weight-bold text-deep-purple-darken-2">
 							{{ teamIndex + 1 }}
@@ -211,7 +211,7 @@ export default {
 				// fetch scoreSheet from backend
 				if (this.$route.params.eventSlug) {
 					$.ajax({
-						url: `${this.$store.getters.appURL}/judge.php`,
+						url: `${this.$store.getters.appURL}/${this.$store.getters['auth/getUser'].userType}.php`,
 						type: 'GET',
 						xhrFields: {
 							withCredentials: true
@@ -255,7 +255,7 @@ export default {
 					rating.value = percentage;
 				}
 				$.ajax({
-					url: `${this.$store.getters.appURL}/judge.php`,
+					url: `${this.$store.getters.appURL}/${this.$store.getters['auth/getUser'].userType}.php`,
 					type: 'POST',
 					xhrFields: {
 						withCredentials: true
@@ -354,8 +354,7 @@ export default {
 				}
 
 				// Return ranks
-
-				return getFractionalRank(this.totals)
+				return filterObject(getFractionalRank(this.totals))
 
 			}
 		}
