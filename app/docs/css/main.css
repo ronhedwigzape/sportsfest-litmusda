@@ -161,23 +161,11 @@ nav.sticky .menu-btn{
   flex-direction: column;
   justify-content: center;
 }
-.home .text-one{
-  font-size: 85px;
-  color: #0E2431;
-  margin-left: -7px;
-  font-family: sans-serif;
-}
-.home .text-two{
-  color: #0E2431;
-  font-size: 70px;
-  font-weight: 600;
-  margin-left: -3px;
-  font-family: sans-serif;
-}
 .home .text-three{
-  font-size: 50px;
-  margin: 5px 0;
-  color: #ff0000;
+  font-size: 45px;
+  margin: 413px ;
+  margin-bottom: 319px;
+  color: #0f051d;
   font-family: sans-serif;  
 }
 .home .button{
