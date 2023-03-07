@@ -26,7 +26,7 @@ else {
             ]);
         }
 
-        // get scoresheet of the passed event
+        // get scoreSheet of the passed event
         else if (isset($_GET['getScoreSheet'])) {
             require_once 'models/Event.php';
 
