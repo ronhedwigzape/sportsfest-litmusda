@@ -98,7 +98,7 @@
 								variant="outlined"
 								hide-details
 								single-line
-								:loading="loading"
+								:loading="totals[`loading_${team.id}`]"
 								v-model.number="totals[`team_${team.id}`]"
 								:min="$store.state.rating.min"
 								:max="$store.state.rating.max"
@@ -161,7 +161,7 @@
 									<v-card-actions>
 										<v-spacer></v-spacer>
 										<v-btn color="primary" prepend-icon="mdi-close" @click="submitDialog = false">Close</v-btn>
-										<v-btn color="primary" @click="submitRatings">Submit</v-btn>
+										<v-btn color="primary" :loading="submitLoading" @click="submitRatings">Submit</v-btn>
 									</v-card-actions>
 								</v-card>
 							</v-dialog>
@@ -221,8 +221,8 @@ export default {
 		return {
 			dialog: false,
 			submitDialog: false,
+			submitLoading: false,
 			inspectDialog: false,
-			loading: false,
 			event: null,
 			timer: null,
 			teams: [],
@@ -244,6 +244,7 @@ export default {
 	},
 	methods: {
 		fetchScoreSheet() {
+
 			// fetch scoreSheet from backend
 			if (this.$route.params.eventSlug) {
 				$.ajax({
@@ -263,7 +264,7 @@ export default {
 						this.event = data.event;
 						this.totals = {}
 
-						// Gather ratings to total score
+						// Create total score for ratings
 						for (let i = 0; i < this.teams.length; i++) {
 							let total = 0;
 							const rating = this.ratings[`${this.event.slug}_${this.teams[i].id}`];
@@ -274,7 +275,9 @@ export default {
 								total += value;
 							}
 							this.totals[`team_${this.teams[i].id}`] = total;
+							this.totals[`loading_${this.teams[i].id}`] = false;
 						}
+
 					},
 					error: (error) => {
 						alert(`ERROR ${error.status}: ${error.statusText}`);
@@ -283,13 +286,16 @@ export default {
 			}
 		},
 		saveRating(rating, percentage, teamId) {
-			this.loading = true
+			this.totals[`loading_${teamId}`] = true;
 
+			// Ratings are evaluated before saving.
 			if (rating.value < 0 || rating.value === '') {
 				rating.value = 0;
 			} else if (rating.value > percentage) {
 				rating.value = percentage;
 			}
+
+			// Auto-save ratings
 			$.ajax({
 				url: `${this.$store.getters.appURL}/${this.$store.getters['auth/getUser'].userType}.php`,
 				type: 'POST',
@@ -300,14 +306,24 @@ export default {
 					rating
 				},
 				success: (data, textStatus, jqXHR) => {
+
+					// Accumulate ratings to total score
 					let total = 0;
 					const teamRating = this.ratings[`${this.event.slug}_${teamId}`];
 					for (let j = 0; j < this.criteria.length; j++) {
 						const criterion = this.criteria[j];
 						total += teamRating[`${this.$store.getters['auth/getUser'].id}_${criterion.id}_${teamId}`].value
 					}
+
+					// Accumulated total adds into totals object
 					this.totals[`team_${teamId}`] = total;
-					this.loading = false
+
+					if(this.totals[`loading_${teamId}`]) {
+						setTimeout(() => {
+							this.totals[`loading_${teamId}`] = false;
+						}, 1000);
+					}
+
 					console.log(`${jqXHR.status}: ${jqXHR.statusText}`);
 				},
 				error: (error) => {
@@ -316,6 +332,9 @@ export default {
 			});
 		},
 		calculateTotalScores(team) {
+			this.totals[`loading_${team.id}`] = true;
+
+			// Check teams total score
 			if (this.totals[`team_${team.id}`] < 50 || this.totals[`team_${team.id}`] === '') {
 				this.totals[`team_${team.id}`] = this.$store.state.rating.min;
 			}
@@ -323,13 +342,16 @@ export default {
 				this.totals[`team_${team.id}`] = this.$store.state.rating.max;
 			}
 
+			// Total score distributes to each rating according to criteria
 			let ratings = [];
 			for (let criterion of this.criteria) {
 				const rating = this.ratings[`${this.event.slug}_${team.id}`][`${this.$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`];
 				rating.value = this.totals[`team_${team.id}`] * (criterion.percentage / 100);
+				// Ratings are pushed to array
 				ratings.push(rating);
 			}
 
+			// Calls request to submit ratings
 			$.ajax({
 				url: `${this.$store.getters.appURL}/${this.$store.getters['auth/getUser'].userType}.php`,
 				type: 'POST',
@@ -339,20 +361,28 @@ export default {
 				data: {
 					ratings
 				},
-				success: (data) => {
-					
+				success: (data, textStatus, jqXHR) => {
+
+					if(this.totals[`loading_${team.id}`]) {
+						setTimeout(() => {
+							this.totals[`loading_${team.id}`] = false;
+						}, 1000);
+					}
+
+					console.log(`${jqXHR.status}: ${jqXHR.statusText}`);
 				},
 				error: (error) => {
-
+					alert(`ERROR ${error.status}: ${error.statusText}`);
 				}
 			})
 		},
 		openSubmitDialog() {
+
+			// Define minRating and maxRating
 			let minRating = this.$store.state.rating.min;
 			let maxRating = this.$store.state.rating.max;
 
-			this.submitDialog = false
-			this.inspectDialog = false
+			// Opens dialog according to ratings
 			for (let i = 0; i < this.teams.length; i++) {
 				if (this.totals[`team_${this.teams[i].id}`] < minRating || this.totals[`team_${this.teams[i].id}`] > maxRating) {
 					this.inspectDialog = true
@@ -365,17 +395,22 @@ export default {
 			}
 		},
 		submitRatings() {
+			this.submitLoading = true;
+
+			// Ratings are locked.
 			let ratings = [];
 			for (let i = 0; i < this.teams.length; i++) {
 				const team = this.teams[i];
 				for (let criterion of this.criteria) {
 					const rating = this.ratings[`${this.event.slug}_${team.id}`][`${this.$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`];
+
 					rating.is_locked = true;
 					ratings.push(rating);
 					this.totals['is_locked'] = true;
 				}
 			}
 
+			// Calls request to submit ratings after ratings is locked.
 			$.ajax({
 				url: `${this.$store.getters.appURL}/${this.$store.getters['auth/getUser'].userType}.php`,
 				type: 'POST',
@@ -385,16 +420,24 @@ export default {
 				data: {
 					ratings
 				},
-				success: (data) => {
-					this.submitDialog = false;
+				success: (data, textStatus, jqXHR) => {
+
+					if(this.submitLoading) {
+						setTimeout(() => {
+							this.submitLoading = false
+							this.submitDialog = false;
+						}, 600);
+					}
+
+					console.log(`${jqXHR.status}: ${jqXHR.statusText}`);
 				},
 				error: (error) => {
-
+					alert(`ERROR ${error.status}: ${error.statusText}`);
 				}
 			})
 		},
 		move (x, y, focus = true) {
-			// move to input
+			// Move to input
 			const nextInput = document.querySelector(`#input_${y}_${x}`);
 			if(nextInput) {
 				if(focus)
@@ -404,31 +447,30 @@ export default {
 			}
 		},
 		 moveDown (x, y) {
-			// move to input below
+			// Move to input below
 			y += 1;
 			if(y < this.teams.length)
 				this.move(x, y);
 		},
 		moveUp (x, y)  {
-			// move to input above
+			// Move to input above
 			y -= 1;
 			if(y >= 0)
 				this.move(x, y);
 		},
 		moveRight (x, y) {
-			// move to input to the right
+			// Move to input to the right
 			x += 1;
 			if(x <= this.criteria.length)
 				this.move(x, y);
 		},
 		moveLeft (x, y) {
-			// move to input to the left
+			// Move to input to the left
 			x -= 1;
 			if(x >= 0)
 				this.move(x, y);
 		}
 	},
-
 	computed: {
 		ranks() {
 			// Dense rank function
@@ -491,7 +533,7 @@ export default {
 			}
 
 			// Return ranks
-			return filterObject(getFractionalRank(this.totals))
+			return filterObject(getFractionalRank(this.totals));
 
 		}
 	}
