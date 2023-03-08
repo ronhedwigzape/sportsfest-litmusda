@@ -14,7 +14,7 @@
 					<td colspan="2" rowspan="2" class="text-center text-uppercase font-weight-bold text-deep-purple-darken-2">{{ event.title}} Teams</td>
 					<td rowspan="2" class="text-center text-uppercase font-weight-bold text-red-darken-3">Deduct</td>
 					<template v-for="judge in judges" :key="judge.id">
-						<td colspan="2" class="text-center text-uppercase font-weight-bold">Judge {{ judge.id }}</td>
+						<td colspan="2" class="text-center text-uppercase font-weight-bold">Judge {{ judge.number }}</td>
 					</template>
 					<td rowspan="2" class="text-center text-uppercase font-weight-bold text-green-darken-4">Average</td>
 					<td rowspan="2" class="text-center text-uppercase font-weight-bold text-blue-darken-4">Total Rank</td>
