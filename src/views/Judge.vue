@@ -19,9 +19,9 @@
 						<th rowspan="2" class="text-uppercase text-center font-weight-bold text-deep-purple-darken-2">
 							{{ event.title }} Teams
 						</th>
-						<th v-for="criterion in criteria" style="width: 13%" class="text-center font-weight-bold text-uppercase text-deep-purple-lighten-1">
-							<p>{{ criterion.title }}</p>
-							<b>{{ criterion.percentage }}%</b>
+						<th v-for="criterion in criteria" style="width: 13%" class="text-center font-weight-bold text-uppercase">
+							<p class="text-deep-purple-darken-2" style="font-size: 0.8rem;">{{ criterion.title }}</p>
+							<b class="text-deep-purple-darken-4">{{ criterion.percentage }}%</b>
 						</th>
 						<th rowspan="2" style="width: 13%" class="text-uppercase text-center font-weight-bold text-deep-purple-darken-2">Total</th>
 						<th rowspan="2" style="width: 13%" class="text-uppercase text-center font-weight-bold text-deep-purple-darken-2">Rank</th>
@@ -32,7 +32,7 @@
 						<td class="text-uppercase text-center text-h5 font-weight-bold text-deep-purple-darken-2">
 							{{ teamIndex + 1 }}
 						</td>
-						<td class="text-uppercase text-center font-weight-bold">
+						<td class="text-uppercase text-center">
 							<v-col align="center">
 								<v-img
 									:src="`${$store.getters.appURL}/crud/uploads/${team.logo}`"
@@ -81,16 +81,15 @@
 									  ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value.toString().trim() === ''
 								   || ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value < 0
 								   || ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value > criterion.percentage
-							   )"
-							   :disabled="ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].is_locked"
+							   	)"
+							   	:disabled="ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].is_locked"
 								:id="`input_${teamIndex}_${criterionIndex}`"
 								@keydown.down.prevent="moveDown(criterionIndex, teamIndex)"
 								@keydown.enter="moveDown(criterionIndex, teamIndex)"
 								@keydown.up.prevent="moveUp(criterionIndex, teamIndex)"
 								@keydown.right.prevent="moveRight(criterionIndex, teamIndex)"
 								@keydown.left.prevent="moveLeft(criterionIndex, teamIndex)"
-							>
-							</v-text-field>
+							/>
 						</td>
 						<td>
 							<v-text-field
@@ -126,8 +125,7 @@
 								@keydown.up.prevent="moveUp(criteria.length, teamIndex)"
 								@keydown.right.prevent="moveRight(criteria.length, teamIndex)"
 								@keydown.left.prevent="moveLeft(criteria.length, teamIndex)"
-							>
-							</v-text-field>
+							/>
 						</td>
 						<td class="text-center text-deep-purple-darken-1"> {{ ranks[`team_${team.id}`].toFixed(2) }}</td>
 					</tr>
@@ -135,12 +133,15 @@
 				<!--	Dialog	  -->
 				<tfoot>
 					<td colspan="12">
-						<v-col align="center" justify="center">
+						<v-col align="center"
+							   justify="end"
+						>
 							<v-btn
-								class="px-16 mt-5 mb-10"
-								color="deep-purple-darken-1"
+								class="py-6"
+								color="deep-purple-darken-2"
 								@click="openSubmitDialog"
 								:disabled="totals['is_locked']"
+								block
 							>
 							submit ratings
 							</v-btn>
@@ -269,6 +270,7 @@ export default {
 							for (let j = 0; j < this.criteria.length; j++) {
 								const criterion = this.criteria[j];
 								const value = rating[`${this.$store.getters['auth/getUser'].id}_${criterion.id}_${this.teams[i].id}`].value
+								this.totals['is_locked'] = rating[`${this.$store.getters['auth/getUser'].id}_${criterion.id}_${this.teams[i].id}`].is_locked
 								total += value;
 							}
 							this.totals[`team_${this.teams[i].id}`] = total;
@@ -371,6 +373,7 @@ export default {
 					rating.is_locked = true;
 					this.totals['is_locked'] = true;
 					ratings.push(rating);
+					break;
 				}
 				this.submitDialog = false;
 			}
