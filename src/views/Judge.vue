@@ -9,9 +9,9 @@
 			<v-table
 				v-if="$route.params.eventSlug && event"
 				density="comfortable"
-				fix-header
+				fixed-header
 				hover
-				:height="680"
+				:height="1000"
 			>
 				<thead>
 					<tr>
@@ -19,18 +19,12 @@
 						<th rowspan="2" class="text-uppercase text-center font-weight-bold text-deep-purple-darken-2">
 							{{ event.title }} Teams
 						</th>
-						<template v-for="criterion in criteria">
-							<th class="text-center font-weight-bold text-uppercase text-deep-purple-lighten-1">
-								{{ criterion.title }}
-							</th>
-						</template>
-						<th rowspan="2" class="text-uppercase text-center font-weight-bold text-deep-purple-darken-2">Total</th>
-						<th rowspan="2" class="text-uppercase text-center font-weight-bold text-deep-purple-darken-2">Rank</th>
-					</tr>
-					<tr>
-						<template v-for="criterion in criteria">
-						<th class="text-center font-weight-bold text-deep-purple-darken-2">{{ criterion.percentage }}%</th>
-						</template>
+						<th v-for="criterion in criteria" style="width: 13%" class="text-center font-weight-bold text-uppercase text-deep-purple-lighten-1">
+							<p>{{ criterion.title }}</p>
+							<b>{{ criterion.percentage }}%</b>
+						</th>
+						<th rowspan="2" style="width: 13%" class="text-uppercase text-center font-weight-bold text-deep-purple-darken-2">Total</th>
+						<th rowspan="2" style="width: 13%" class="text-uppercase text-center font-weight-bold text-deep-purple-darken-2">Rank</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -65,7 +59,7 @@
 							</v-col>
 							{{ team.name }}
 						</td>
-						<td v-for="criterion in criteria" :key="criterion.id">
+						<td v-for="(criterion, criterionIndex) in criteria" :key="criterion.id">
 							<v-text-field
 								type="number"
 								class="font-weight-bold"
@@ -88,6 +82,13 @@
 								   || ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value < 0
 								   || ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value > criterion.percentage
 							   )"
+							   :disabled="ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].is_locked"
+								:id="`input_${teamIndex}_${criterionIndex}`"
+								@keydown.down.prevent="moveDown(criterionIndex, teamIndex)"
+								@keydown.enter="moveDown(criterionIndex, teamIndex)"
+								@keydown.up.prevent="moveUp(criterionIndex, teamIndex)"
+								@keydown.right.prevent="moveRight(criterionIndex, teamIndex)"
+								@keydown.left.prevent="moveLeft(criterionIndex, teamIndex)"
 							>
 							</v-text-field>
 						</td>
@@ -118,6 +119,13 @@
 								   || totals[`team_${team.id}`] < $store.state.rating.min
 								   || totals[`team_${team.id}`] > $store.state.rating.max
 							   )"
+								:disabled="totals['is_locked']"
+								:id="`input_${teamIndex}_${criteria.length}`"
+								@keydown.down.prevent="moveDown(criteria.length, teamIndex)"
+								@keydown.enter="moveDown(criteria.length, teamIndex)"
+								@keydown.up.prevent="moveUp(criteria.length, teamIndex)"
+								@keydown.right.prevent="moveRight(criteria.length, teamIndex)"
+								@keydown.left.prevent="moveLeft(criteria.length, teamIndex)"
 							>
 							</v-text-field>
 						</td>
@@ -132,6 +140,7 @@
 								class="px-16 mt-5 mb-10"
 								color="deep-purple-darken-1"
 								@click="openSubmitDialog"
+								:disabled="totals['is_locked']"
 							>
 							submit ratings
 							</v-btn>
@@ -151,7 +160,7 @@
 									<v-card-actions>
 										<v-spacer></v-spacer>
 										<v-btn color="primary" prepend-icon="mdi-close" @click="submitDialog = false">Close</v-btn>
-										<v-btn color="primary" @click="">Submit</v-btn>
+										<v-btn color="primary" @click="submitRatings">Submit</v-btn>
 									</v-card-actions>
 								</v-card>
 							</v-dialog>
@@ -261,10 +270,8 @@ export default {
 								const criterion = this.criteria[j];
 								const value = rating[`${this.$store.getters['auth/getUser'].id}_${criterion.id}_${this.teams[i].id}`].value
 								total += value;
-								this.totals['is_locked'] = rating[`${this.$store.getters['auth/getUser'].id}_${criterion.id}_${this.teams[i].id}`].is_locked
 							}
 							this.totals[`team_${this.teams[i].id}`] = total;
-
 						}
 					},
 					error: (error) => {
@@ -291,12 +298,14 @@ export default {
 					rating
 				},
 				success: (data, textStatus, jqXHR) => {
-					this.totals[`team_${teamId}`] += rating.value
-					if (this.loading) {
-						setTimeout(() => {
-							this.loading = false;
-						}, 1000);
+					let total = 0;
+					const teamRating = this.ratings[`${this.event.slug}_${teamId}`];
+					for (let j = 0; j < this.criteria.length; j++) {
+						const criterion = this.criteria[j];
+						total += teamRating[`${this.$store.getters['auth/getUser'].id}_${criterion.id}_${teamId}`].value
 					}
+					this.totals[`team_${teamId}`] = total;
+					this.loading = false
 					console.log(`${jqXHR.status}: ${jqXHR.statusText}`);
 				},
 				error: (error) => {
@@ -307,31 +316,118 @@ export default {
 		calculateTotalScores(team) {
 			if (this.totals[`team_${team.id}`] < 50 || this.totals[`team_${team.id}`] === '') {
 				this.totals[`team_${team.id}`] = this.$store.state.rating.min;
-			} else if (this.totals[`team_${team.id}`] > 100) {
+			}
+			else if (this.totals[`team_${team.id}`] > 100) {
 				this.totals[`team_${team.id}`] = this.$store.state.rating.max;
 			}
 
+			let ratings = [];
 			for (let criterion of this.criteria) {
 				const rating = this.ratings[`${this.event.slug}_${team.id}`][`${this.$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`];
 				rating.value = this.totals[`team_${team.id}`] * (criterion.percentage / 100);
-				this.saveRating(rating, criterion.percentage)
+				ratings.push(rating);
 			}
+
+			$.ajax({
+				url: `${this.$store.getters.appURL}/${this.$store.getters['auth/getUser'].userType}.php`,
+				type: 'POST',
+				xhrFields: {
+					withCredentials: true
+				},
+				data: {
+					ratings
+				},
+				success: (data) => {
+					
+				},
+				error: (error) => {
+
+				}
+			})
 		},
 		openSubmitDialog() {
 			let minRating = this.$store.state.rating.min;
 			let maxRating = this.$store.state.rating.max;
-			let isLocked = this.totals['is_locked'];
+
+			this.submitDialog = false
+			this.inspectDialog = false
 			for (let i = 0; i < this.teams.length; i++) {
-				if (isLocked === false && this.totals[`team_${this.teams[i].id}`] < minRating || this.totals[`team_${this.teams[i].id}`] > maxRating) {
+				if (this.totals[`team_${this.teams[i].id}`] < minRating || this.totals[`team_${this.teams[i].id}`] > maxRating) {
 					this.inspectDialog = true
-					this.submitDialog = false
+					this.submitDialog = false;
+					break;
 				}
 				else {
 					this.submitDialog = true
 				}
 			}
+		},
+		submitRatings() {
+			let ratings = [];
+			for (let i = 0; i < this.teams.length; i++) {
+				const team = this.teams[i];
+				for (let criterion of this.criteria) {
+					const rating = this.ratings[`${this.event.slug}_${team.id}`][`${this.$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`];
+					rating.is_locked = true;
+					this.totals['is_locked'] = true;
+					ratings.push(rating);
+				}
+				this.submitDialog = false;
+			}
+
+			$.ajax({
+				url: `${this.$store.getters.appURL}/${this.$store.getters['auth/getUser'].userType}.php`,
+				type: 'POST',
+				xhrFields: {
+					withCredentials: true
+				},
+				data: {
+					ratings
+				},
+				success: (data) => {
+					
+				},
+				error: (error) => {
+
+				}
+			})
+		},
+		move (x, y, focus = true) {
+			// move to input
+			const nextInput = document.querySelector(`#input_${y}_${x}`);
+			if(nextInput) {
+				if(focus)
+					nextInput.focus();
+				if(Number(nextInput.value) <= 0)
+					nextInput.select();
+			}
+		},
+		 moveDown (x, y) {
+			// move to input below
+			y += 1;
+			if(y < this.teams.length)
+				this.move(x, y);
+		},
+		moveUp (x, y)  {
+			// move to input above
+			y -= 1;
+			if(y >= 0)
+				this.move(x, y);
+		},
+		moveRight (x, y) {
+			// move to input to the right
+			x += 1;
+			if(x <= this.criteria.length)
+				this.move(x, y);
+		},
+		moveLeft (x, y) {
+			// move to input to the left
+			x -= 1;
+			if(x >= 0)
+				this.move(x, y);
 		}
 	},
+
 	computed: {
 		ranks() {
 			// Dense rank function
