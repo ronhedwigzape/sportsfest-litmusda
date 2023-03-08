@@ -31,10 +31,10 @@ class Team extends App
             $result = $stmt->get_result();
             if($result->num_rows > 0) {
                 $row = $result->fetch_assoc();
-                $this->id    = $row['id'];
-                $this->name  = $row['name'];
+                $this->id = $row['id'];
+                $this->name = $row['name'];
                 $this->color = $row['color'];
-                $this->logo  = $row['logo'];
+                $this->logo = $row['logo'];
             }
         }
     }
@@ -91,12 +91,13 @@ class Team extends App
     /***************************************************************************
      * Get all teams as array of objects
      *
+     * @param int $event_id
      * @return Team[]
      */
-    public static function all()
+    public static function all($event_id = 0)
     {
         $team = new Team();
-        $sql  = "SELECT id FROM $team->table ORDER BY id";
+        $sql = "SELECT id FROM $team->table ORDER BY id";
         $stmt = $team->conn->prepare($sql);
         $stmt->execute();
 
@@ -105,6 +106,50 @@ class Team extends App
         while($row = $result->fetch_assoc()) {
             $teams[] = new Team($row['id']);
         }
+
+        // sort teams for an event
+        if($event_id > 0) {
+            require_once 'Arrangement.php';
+            $sorted_teams   = [];
+            $assigned_teams = [];
+            $arrangements = Arrangement::all($event_id);
+            for($i = 0; $i < sizeof($arrangements); $i++) {
+                $arrangement = $arrangements[$i];
+
+                $arranged_team = $arrangement->getTeam();
+                $key = 'team_' . $arrangement->getOrder();
+                if(!isset($sorted_teams[$key]) && !in_array($arranged_team->getId(), $assigned_teams)) {
+                    // push $arranged_team to $sorted_teams
+                    $sorted_teams[$key] = $arranged_team;
+                    $assigned_teams[] = $arranged_team->getId();
+
+                    // remove $arranged_team from $teams
+                    for($j = 0; $j < sizeof($teams); $j++) {
+                        if($teams[$j]->getId() == $arranged_team->getId()) {
+                            unset($teams[$j]);
+                            $teams = array_values($teams);
+                            break;
+                        }
+                    }
+                }
+            }
+
+            // merge $sorted_teams and remaining $teams
+            $final_teams = [];
+            for($i = 1; $i<=sizeof(Arrangement::orders()); $i++) {
+                $key = 'team_' . $i;
+                if(isset($sorted_teams[$key]))
+                    $final_teams[] = $sorted_teams[$key];
+                else {
+                    $final_teams[] = $teams[0];
+                    unset($teams[0]);
+                    $teams = array_values($teams);
+                }
+            }
+
+            $teams = $final_teams;
+        }
+
         return $teams;
     }
 
@@ -112,12 +157,13 @@ class Team extends App
     /***************************************************************************
      * Get all teams as array of arrays
      *
+     * @param int $event_id
      * @return array
      */
-    public static function rows()
+    public static function rows($event_id = 0)
     {
         $teams = [];
-        foreach(self::all() as $team) {
+        foreach(self::all($event_id) as $team) {
             $teams[] = $team->toArray();
         }
         return $teams;
@@ -271,5 +317,64 @@ class Team extends App
     public function getLogo()
     {
         return $this->logo;
+    }
+
+
+    /***************************************************************************
+     * Add team participant for an event
+     *
+     * @param Event $event
+     * @param int $number
+     * @param string $first_name
+     * @param string $middle_name
+     * @param string $last_name
+     * @param string $gender
+     * @return void
+     */
+    public function addParticipant($event, $number, $first_name, $middle_name, $last_name, $gender)
+    {
+        require_once 'Participant.php';
+        $participant = new Participant();
+        $participant->setTeamId($this->id);
+        $participant->setEventId($event->getId());
+        $participant->setNumber($number);
+        $participant->setFirstName($first_name);
+        $participant->setMiddleName($middle_name);
+        $participant->setLastName($last_name);
+        $participant->setGender($gender);
+        $participant->insert();
+    }
+
+
+    /***************************************************************************
+     * Get all team participants for an event as array of objects
+     *
+     * @param Event $event
+     * @return Participant[]
+     */
+    public function getAllParticipants($event)
+    {
+        require_once 'Participant.php';
+        $participants = [];
+        foreach(Participant::all($this->id, $event->getId()) as $participant) {
+            $participants[] = $participant;
+        }
+        return $participants;
+    }
+
+
+    /***************************************************************************
+     * Get all team participants for an event as array of arrays
+     *
+     * @param Event $event
+     * @return Participant[]
+     */
+    public function getRowParticipants($event)
+    {
+        $participants = [];
+        foreach(self::getAllParticipants($event) as $participant) {
+            $participants[] = $participant->toArray();
+        }
+        return $participants;
     }
 }

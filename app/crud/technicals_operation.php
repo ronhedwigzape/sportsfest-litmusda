@@ -83,4 +83,5 @@ if(isset($_POST['deletedata'])) {
     $technical->delete();
 }
 
-header('location: technicals.php');
+$url = $_SERVER['HTTP_REFERER'];
+header("location: $url");

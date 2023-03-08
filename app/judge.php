@@ -26,10 +26,9 @@ else {
             ]);
         }
 
-        // get scoresheet of the passed event
+        // get scoreSheet of the passed event
         else if (isset($_GET['getScoreSheet'])) {
             require_once 'models/Event.php';
-            require_once 'models/Team.php';
 
             $event_slug = trim($_GET['getScoreSheet']);
             $event    = Event::findBySlug($event_slug);
@@ -37,7 +36,7 @@ else {
             echo json_encode([
                 'event'    => $event->toArray(),
                 'criteria' => $event->getRowCriteria(),
-                'teams'    => Team::rows(),
+                'teams'    => $event->getRowTeams(),
                 'ratings'  => $judge->getRowEventRatings($event)
             ]);
         }
@@ -54,6 +53,20 @@ else {
                 Team::findById($rating['team_id']),
                 floatval($rating['value'])
             );
+        }
+
+        else if (isset($_POST['ratings'])) {
+            require_once 'models/Criterion.php';
+            require_once 'models/Team.php';
+
+            foreach ($_POST['ratings'] as $rating) {
+                $judge->setCriterionTeamRating(
+                    Criterion::findById($rating['criterion_id']),
+                    Team::findById($rating['team_id']),
+                    floatval($rating['value']),
+                    filter_var($rating['is_locked'], FILTER_VALIDATE_BOOLEAN)
+                );
+            }
         }
 
         else

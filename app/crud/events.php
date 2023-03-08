@@ -29,7 +29,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Add Event</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Add Data</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -68,7 +68,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Edit Event</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Edit Data</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -108,7 +108,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Delete Event</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Delete Data</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -117,7 +117,7 @@
                 <form action="events_operation.php" method="POST">
                     <div class="modal-body">
                         <input type="hidden" name="delete_id" id="delete_id">
-                        <h4>Do you want to Delete this Event ??</h4>
+                        <h4>Do you want to Delete this Data ??</h4>
                     </div>
 
                     <div class="modal-footer">
@@ -147,19 +147,37 @@
                         </select>
                     </div>
                     <div class="btn-group ml-auto" role="group" aria-label="Go to">
-                        <select onchange="window.location.href=this.value" class="btn btn-dark">
-                            <option selected value="">Go to...</option>
-                            <option value="">Literary</option>
-                            <option value="">Music</option>
-                            <option value="">Dance</option>
+                        <?php require_once '../models/Category.php'; ?>
+                        <select onchange="window.location = `${window.location.pathname}${this.value !== '' ? '?category=' + this.value : ''}`" class="btn btn-dark">
+                            <option selected value="">All Categories</option>
+                            <?php foreach(Category::rows() as $category) { ?>
+                                <option value="<?= $category['slug'] ?>"
+                                    <?php
+                                    if(isset($_GET['category'])) {
+                                        if(strtolower(trim($_GET['category'])) == $category['slug'])
+                                            echo " selected";
+                                    }
+                                    ?>
+                                ><?= $category['title'] ?></option>
+                            <?php } ?>
                         </select>
                     </div>
                 </div>
                 <?php
                     require_once '../config/database.php';
                     require_once '../models/Event.php';
-                    
-                    $events = Event::all();
+                    require_once '../models/Category.php';
+
+                    $events = [];
+                    if(isset($_GET['category'])) {
+                        $category = Category::findBySlug($_GET['category']);
+                        if($category)
+                            $events = $category->getAllEvents();
+                        else
+                            $events = Event::all();
+                    }
+                    else
+                        $events = Event::all();
                 ?>
                 <table id="datatableid" class="table table-bordered table-info table-hover text-center">
                     <thead class="table-dark">

@@ -7,7 +7,6 @@
 		<v-col class="d-flex justify-center">
 			<v-img
 				:src="`/${$store.getters.appName}/foundation-logo.png`"
-				aspect-ratio="1"
 				alt="foundation-logo"
 				height="100"
 				width="100"
@@ -21,7 +20,7 @@
                 :variant="$route.params.eventSlug === event.slug ? 'tonal' : 'text'"
                 :color="$route.params.eventSlug === event.slug ? 'yellow' : 'white'"
 				block
-				class="my-2 mx-1 px-16"
+				class="my-1 mx-1 px-16"
 				v-for="event in $store.getters['events/getEvents']"
 				:key="event.id"
 				@click="handleEventChange(event)"

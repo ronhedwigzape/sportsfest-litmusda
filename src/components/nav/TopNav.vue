@@ -1,8 +1,8 @@
 <template>
-	<v-app-bar :title="`${$store.getters.appName}`" color="deep-purple-darken-3">
+	<v-app-bar :title="`${$store.getters.appName}`" color="deep-purple-darken-3" flat>
 		<h3 class="me-5">{{ name }}</h3>
 		<v-chip
-			class="ma-2"
+			class="ma-2 me-4"
 			:color="$store.getters['auth/getUser'] !== null ?
 					$store.getters['auth/getUser'].userType === 'admin' ? 'amber' :
 					$store.getters['auth/getUser'].userType === 'judge' ? 'green-lighten-2' :

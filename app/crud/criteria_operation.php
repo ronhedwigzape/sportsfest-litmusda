@@ -40,4 +40,5 @@ if(isset($_POST['deletedata'])) {
     $criterion->delete();
 }
 
-header('location: criteria.php');
+$url = $_SERVER['HTTP_REFERER'];
+header("location: $url");
