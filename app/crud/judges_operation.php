@@ -87,4 +87,5 @@ if(isset($_POST['deletedata'])) {
     $judge->delete();
 }
 
-header('location: judges.php');
+$url = $_SERVER['HTTP_REFERER'];
+header("location: $url");

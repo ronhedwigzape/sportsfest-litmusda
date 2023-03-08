@@ -49,7 +49,7 @@ const router = createRouter({
             }
         },
         {
-            path: '/technical',
+            path: '/technical/:eventSlug?',
             name: 'technical',
             component: () => import('../views/Technical.vue'),
             beforeEnter: (to, from, next) => {
