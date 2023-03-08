@@ -45,7 +45,7 @@ $event = Event::all();
 <script src="../dist/bootstrap-5.3.0-alpha1-dist/js/bootstrap.js"></script>
     <script src="js/jqueryCdn.js"></script>
     <script src="js/load_data.js"></script>
-    <script src="action.js"></script>
+    <script src="js/action.js"></script>
 
 <!--    <script>-->
 <!--        function remove(id){-->
