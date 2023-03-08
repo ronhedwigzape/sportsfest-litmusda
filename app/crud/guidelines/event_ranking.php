@@ -104,7 +104,7 @@ $competitions = Competition::all();
                                                     <tbody>
                                                         <?php 
                                                             foreach($ranks as $rank){
-                                                                $Point = Point::find($event_id, $rank);
+                                                                $Point = $event->getRankPoint($rank);
                                                         ?>
                                                         <tr>
                                                             <td class="d-none"><?php echo $Point->getId();?></td>
