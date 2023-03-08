@@ -147,7 +147,7 @@ nav.sticky .menu-btn{
 .home{
   height: 100vh;
   width: 100%;
-  background: url("../images/background.jpg") no-repeat;
+  background: url("../images/bg-img.jpg") no-repeat;
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
@@ -405,16 +405,8 @@ footer .text span a:hover{
   .navbar .menu .cancel-btn{
     display: block;
   }
-  .home .text-two{
-    font-size: 50px;
-  }
   .home .text-three{
     font-size: 30px;
   }
 }
 
-@media (max-width: 500px){
-  .home .text-two{
-    font-size: 55px;
-  }
-}
