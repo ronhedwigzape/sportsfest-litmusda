@@ -371,11 +371,9 @@ export default {
 				for (let criterion of this.criteria) {
 					const rating = this.ratings[`${this.event.slug}_${team.id}`][`${this.$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`];
 					rating.is_locked = true;
-					this.totals['is_locked'] = true;
 					ratings.push(rating);
-					break;
+					this.totals['is_locked'] = true;
 				}
-				this.submitDialog = false;
 			}
 
 			$.ajax({
@@ -388,7 +386,7 @@ export default {
 					ratings
 				},
 				success: (data) => {
-					
+					this.submitDialog = false;
 				},
 				error: (error) => {
 
