@@ -38,19 +38,18 @@ require_once '../config/database.php';
                     <form action="criteria_operation.php" method="POST">
                         <div class="modal-body">
                             <?php
-                            require_once '../models/Event.php';
+                                require_once '../models/Event.php';
 
-                            $page_url = $_SERVER['REQUEST_URI'];
-                            $entity_category = '';
-                            $events = Event::all();
-                            foreach ($events as $event) {
-                                $event_url = strtolower(str_replace(' ', '-', $event->getTitle()));
-                                if (strpos($page_url, $event_url) !== false) {
-                                    $entity_category = $event->getTitle();
-                                    break;
+                                $page_url = $_SERVER['REQUEST_URI'];
+                                $entity_category = '';
+                                $events = Event::all();
+                                foreach ($events as $event) {
+                                    $event_url = strtolower(str_replace(' ', '-', $event->getTitle()));
+                                    if (strpos($page_url, $event_url) !== false) {
+                                        $entity_category = $event->getTitle();
+                                        break;
+                                    }
                                 }
-                            }
-
                             ?>
                             <div class="form-group">
                                 <label>Event</label>
@@ -58,7 +57,7 @@ require_once '../config/database.php';
                                     <option value="">Select Event</option>
                                     <?php foreach ($events as $event) {
                                         $selected = ($event->getTitle() == $entity_category) ? 'selected' : '';
-                                        echo "<option value={$event->getId()} $selected>{$event->getslug()}</option>";
+                                        echo "<option value={$event->getId()} $selected>{$event->getTitle()}</option>";
                                     } ?>
                                 </select>
                             </div>
