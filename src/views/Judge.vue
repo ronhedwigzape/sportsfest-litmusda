@@ -403,7 +403,6 @@ export default {
 				const team = this.teams[i];
 				for (let criterion of this.criteria) {
 					const rating = this.ratings[`${this.event.slug}_${team.id}`][`${this.$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`];
-
 					rating.is_locked = true;
 					ratings.push(rating);
 					this.totals['is_locked'] = true;

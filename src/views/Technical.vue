@@ -12,11 +12,11 @@
 			>
 				<thead>
 					<tr>
-						<th class="text-uppercase text-center font-weight-bold text-deep-purple-darken-2">#</th>
-						<th class="text-uppercase text-center font-weight-bold text-deep-purple-darken-2">
+						<th style="width: 13%" class="text-uppercase text-center font-weight-bold text-deep-purple-darken-2">#</th>
+						<th style="width: 13%" class="text-uppercase text-center font-weight-bold text-deep-purple-darken-2">
 							{{ event.title }} Teams
 						</th>
-						<th class="text-uppercase text-center font-weight-bold text-deep-purple-darken-2">
+						<th style="width: 13%;" class="text-uppercase text-center font-weight-bold text-deep-purple-darken-2">
 							Deductions
 						</th>
 					</tr>
@@ -78,6 +78,7 @@
 								   || deductions[`${event.slug}_${team.id}`].value < 0
 								   || deductions[`${event.slug}_${team.id}`].value > 100
 							   )"
+							   :disabled="deductions[`${event.slug}_${team.id}`].is_locked"
 							/>
 						</td>
 					</tr>
@@ -85,30 +86,34 @@
 				<!--	Dialog	  -->
 				<tfoot>
 				<td colspan="12">
-					<v-col align="center" justify="center">
+					<v-col align="center"
+							justify="end"
+					>
 						<v-btn
-							class="px-16 mt-5 mb-10"
-							color="deep-purple-darken-1"
-							@click="dialog = true"
+							class="py-6"
+							color="deep-purple-darken-2"
+							@click="submitDialog = true"
+							block
+							:disabled="submitDeduction['is_locked']"
 						>
 							submit ratings
 						</v-btn>
 						<v-dialog
-							v-model="dialog"
+							v-model="submitDialog"
 							persistent
-							width="auto"
+							max-width="400"
 						>
-							<v-card class="pa-2">
-								<v-card-title>
+							<v-card>
+								<v-card-title class="bg-deep-purple-darken-3">
 									Submit Ratings
 								</v-card-title>
 								<v-card-text>
-									Please confirm that you wish to finalize the deductions for {{ event.title }}. This action cannot be undone.
+									Please confirm that you wish to finalize the deductions for <b class="text-deep-purple-darken-3">{{ event.title }}</b>. This action cannot be undone.
 								</v-card-text>
 								<v-card-actions>
 									<v-spacer></v-spacer>
-									<v-btn color="primary" @click="dialog = false">Close</v-btn>
-									<v-btn color="primary" @click="">Submit</v-btn>
+									<v-btn color="primary" prepend-icon="mdi-close" @click="submitDialog = false">Close</v-btn>
+									<v-btn color="primary" :loading="submitLoading" @click="submitDeductions">Submit</v-btn>
 								</v-card-actions>
 							</v-card>
 						</v-dialog>
@@ -143,11 +148,14 @@ export default {
 	data() {
 		return {
 			dialog: false,
+			submitDialog: false,
+			submitLoading: false,
 			loading: false,
 			event: null,
 			timer: null,
 			teams: [],
-			deductions: {}
+			deductions: {},
+			submitDeduction: {}
 		}
 	},
 	watch: {
@@ -175,10 +183,17 @@ export default {
 					},
 					success: (data) => {
 						data = JSON.parse(data);
-						console.log(data)
 						this.deductions = data.deductions;
 						this.event = data.event;
 						this.teams = data.teams;
+						this.submitDeduction = {};
+
+						for (let i = 0; i < this.teams.length; i++) {
+							const team = this.teams[i];
+							let deduction = this.deductions[`${this.event.slug}_${team.id}`];
+							this.submitDeduction['is_locked'] = deduction.is_locked;
+						}
+						
 					},
 					error: (error) => {
 						alert(`ERROR ${error.status}: ${error.statusText}`);
@@ -216,6 +231,45 @@ export default {
 					alert(`ERROR ${error.status}: ${error.statusText}`);
 				},
 			});
+		},
+		submitDeductions() {
+			this.submitLoading = true;
+
+			// Deductions are locked.
+			let deductions = [];
+			for (let i = 0; i < this.teams.length; i++) {
+				const team = this.teams[i];
+					const deduction = this.deductions[`${this.event.slug}_${team.id}`] 
+					deduction.is_locked = true;
+					deductions.push(deduction);
+			}
+
+			// Calls request to submit deductions after deduction is locked.
+			$.ajax({
+				url: `${this.$store.getters.appURL}/${this.$store.getters['auth/getUser'].userType}.php`,
+				type: 'POST',
+				xhrFields: {
+					withCredentials: true
+				},
+				data: {
+					deductions
+				},
+				success: (data, textStatus, jqXHR) => {
+
+					if(this.submitLoading) {
+						setTimeout(() => {
+							this.submitLoading = false
+							this.submitDialog = false;
+						}, 600);
+					}
+
+					this.submitDeduction['is_locked'] = true;
+					console.log(`${jqXHR.status}: ${jqXHR.statusText}`);
+				},
+				error: (error) => {
+					alert(`ERROR ${error.status}: ${error.statusText}`);
+				}
+			})
 		}
 	}
 }
