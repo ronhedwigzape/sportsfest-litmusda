@@ -87,7 +87,6 @@
         </div>
     </div>
 </div>
-</div>
     <table class="table table-bordered" style="margin-top: 10px;">
         <thead>
             <tr>

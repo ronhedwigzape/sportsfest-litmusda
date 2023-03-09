@@ -16,37 +16,6 @@ function remove(judge,event){
 
 }
 
-function displayData(){
-    var displayData="true";
-    $.ajax({
-        url:"display_data.php",
-        type: 'post',
-        data: {
-            displaySend:displayData
-        },
-        success:function (data,status){
-            console.log(data);
-            $('#result').html(data);
-        }
-    });
-}
-
-function addEvent(id){
-
-    $.ajax({
-        url:"judgeEventActions.php",
-        type: 'post',
-        data: {
-            add_event:id
-        },
-        success:function (data,status){
-            console.log(data);
-            $('#result').html(data);
-        }
-    });
-
-}
-
 function submitAdd(id){
     const button = document.querySelector('#closeAdd'+id);
     button.click();
@@ -66,3 +35,42 @@ function submitAdd(id){
         }
     });
 }
+
+function removeTech(tech,event){
+    const button = document.querySelector('#buttonTech'+event);
+    button.click();
+    $.ajax({
+        url:"techEventActions.php",
+        type: 'post',
+        data:{
+            tech_id: tech,
+            event_id: event
+        },
+        success:function (data,status){
+            $('#technicalResult').html(data);
+        }
+    });
+
+}
+
+function submitAddTech(id){
+    const button = document.querySelector('#closeAddTech'+id);
+    button.click();
+    let selected = $('#selected_EventTech'+id).val();
+    let techID = id;
+    $.ajax({
+        url:"techEventActions.php",
+        type: 'post',
+        data: {
+            selectedEvent:selected,
+            selectedTech:techID
+        },
+        success:function (data,status){
+            console.log(data);
+            $('#technicalResult').html(data);
+        }
+    });
+}
+
+
+
