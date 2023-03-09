@@ -1,7 +1,10 @@
 <template>
     <v-layout style="height: 100vh;">
-       <side-nav />
+
 		<top-nav />
+
+		<side-nav />
+
 		<v-main v-if="$store.getters['auth/getUser'] !== null">
 			<v-table
 				v-if="$route.params.eventSlug && event"
@@ -12,18 +15,18 @@
 			>
 				<thead>
 					<tr>
-						<th style="width: 13%" class="text-uppercase text-center font-weight-bold text-deep-purple-darken-2">#</th>
-						<th style="width: 13%" class="text-uppercase text-center font-weight-bold text-deep-purple-darken-2">
+						<th style="width: 13%" class="text-uppercase text-center font-weight-bold">#</th>
+						<th style="width: 13%" class="text-uppercase text-center font-weight-bold">
 							{{ event.title }} Teams
 						</th>
-						<th style="width: 13%;" class="text-uppercase text-center font-weight-bold text-deep-purple-darken-2">
+						<th style="width: 13%;" class="text-uppercase text-center font-weight-bold">
 							Deductions
 						</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr v-for="(team, teamIndex) in teams" :key="team.id">
-						<td class="text-uppercase text-center font-weight-bold text-deep-purple-darken-2">
+						<td class="text-uppercase text-center font-weight-bold">
 							{{ teamIndex + 1 }}
 						</td>
 						<td class="text-uppercase text-center font-weight-bold">
@@ -91,7 +94,7 @@
 					>
 						<v-btn
 							class="py-6"
-							color="deep-purple-darken-2"
+							id="submit"
 							@click="submitDialog = true"
 							block
 							:disabled="submitDeduction['is_locked']"
@@ -104,16 +107,16 @@
 							max-width="400"
 						>
 							<v-card>
-								<v-card-title class="bg-deep-purple-darken-3">
-									Submit Ratings
+								<v-card-title class="bg-black">
+									Submit Deductions
 								</v-card-title>
 								<v-card-text>
-									Please confirm that you wish to finalize the deductions for <b class="text-deep-purple-darken-3">{{ event.title }}</b>. This action cannot be undone.
+									Please confirm that you wish to finalize the deductions for <b>{{ event.title }}</b>. This action cannot be undone.
 								</v-card-text>
 								<v-card-actions>
 									<v-spacer></v-spacer>
-									<v-btn color="primary" prepend-icon="mdi-close" @click="submitDialog = false">Close</v-btn>
-									<v-btn color="primary" :loading="submitLoading" @click="submitDeductions">Submit</v-btn>
+									<v-btn prepend-icon="mdi-close" @click="submitDialog = false">Close</v-btn>
+									<v-btn id="submit" :loading="submitLoading" @click="submitDeductions">Submit</v-btn>
 								</v-card-actions>
 							</v-card>
 						</v-dialog>
@@ -126,7 +129,7 @@
 			<div v-else-if="this.$route.params.eventSlug" class="d-flex justify-center align-center" style="height: 100vh;">
 				<v-progress-circular
 					:size="80"
-					color="primary"
+					color="black"
 					class="mb-16"
 					indeterminate
 				/>
@@ -282,5 +285,27 @@ tbody td, th {
 tbody td {
 	border-bottom: 1px solid #ddd;
 	padding-bottom: 1rem !important;
+}
+
+#submit {
+	background: linear-gradient(-45deg, #e73c7e, #23a6d5, #23d5ab, #e8af45);
+	background-size: 200% 200%;
+
+	text-fill-color: transparent;
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+
+	animation: shine 10s ease infinite;
+}
+@keyframes shine {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
 }
 </style>
