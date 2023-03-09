@@ -25,7 +25,7 @@
 			<!--	Sign out	-->
 			<v-dialog
 				v-model="dialog"
-				width="auto"
+				max-width="400"
 			>
 				<template v-slot:activator="{ props }">
 					<v-menu>
@@ -46,7 +46,7 @@
 				</template>
 				<v-card class="bg-dark">
 					<v-card-title class="bg-black">
-						Confirm Logout
+					<v-icon>mdi-alert-circle</v-icon>	Confirm Logout
 					</v-card-title>
 					<v-card-text>Are you sure you want to log out?</v-card-text>
 					<v-card-actions>

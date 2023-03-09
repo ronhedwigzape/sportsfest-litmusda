@@ -19,7 +19,7 @@
 					<tr>
 						<th rowspan="2" class="text-uppercase text-center font-weight-bold">#</th>
 						<th rowspan="2" class="text-uppercase text-center font-weight-bold">
-							{{ event.title }} Teams
+							{{ event.title }}
 						</th>
 						<th v-for="criterion in criteria" style="width: 13%" class="text-center font-weight-bold text-uppercase">
 							<p style="font-size: 0.8rem;">{{ criterion.title }}</p>
@@ -139,14 +139,12 @@
 							   justify="end"
 						>
 							<v-btn
-								class="py-6"
-								style="background-color: #212121;"
+								class="py-7 bg-grey-darken-4"
 								@click="openSubmitDialog"
 								:disabled="totals['is_locked']"
-								id="submit"
 								block
 							>
-							submit ratings
+							<b id="submit" style="font-size: 1.2rem;">submit ratings</b>
 							</v-btn>
 							<v-dialog
 								v-if="submitDialog"
@@ -154,9 +152,9 @@
 								persistent
 								max-width="400"
 							>
-								<v-card :loading="submitLoading">
+								<v-card>
 									<v-card-title class="bg-black">
-										Submit Ratings
+										<v-icon>mdi-information</v-icon> Submit Ratings
 									</v-card-title>
 									<v-card-text>
 										Please confirm that you wish to finalize the ratings for <b>{{ event.title }}</b>. This action cannot be undone.
@@ -164,7 +162,7 @@
 									<v-card-actions>
 										<v-spacer></v-spacer>
 										<v-btn prepend-icon="mdi-close" @click="submitDialog = false">Close</v-btn>
-										<v-btn id="submit" @click="submitRatings">Submit</v-btn>
+										<v-btn id="submit" :loading="submitLoading" @click="submitRatings">Submit</v-btn>
 									</v-card-actions>
 								</v-card>
 							</v-dialog>
@@ -176,7 +174,7 @@
 							>
 								<v-card>
 									<v-card-title class="bg-red-darken-4">
-										Submit Ratings
+										<v-icon>mdi-alert</v-icon>	Submit Ratings
 									</v-card-title>
 									<v-card-text>
 										<p class="mb-2 text-red-darken-4">
@@ -559,17 +557,17 @@ export default {
 		-webkit-background-clip: text;
 		-webkit-text-fill-color: transparent;
 
-		animation: shine 10s ease infinite;
+		animation: shine 5s ease infinite;
 	}
 	@keyframes shine {
 		0% {
-			background-position: 0% 50%;
+			background-position: 50%;
 		}
 		50% {
 			background-position: 100% 50%;
 		}
 		100% {
-			background-position: 0% 50%;
+			background-position: 50%;
 		}
 	}
 </style>

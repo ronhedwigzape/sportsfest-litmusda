@@ -93,13 +93,12 @@
 							justify="end"
 					>
 						<v-btn
-							class="py-6"
-							id="submit"
+							class="py-7 bg-grey-darken-4"
 							@click="submitDialog = true"
-							block
 							:disabled="submitDeduction['is_locked']"
+							block
 						>
-							submit ratings
+							<b id="submit" style="font-size: 1.2rem;">submit deductions</b>
 						</v-btn>
 						<v-dialog
 							v-model="submitDialog"
@@ -108,7 +107,7 @@
 						>
 							<v-card>
 								<v-card-title class="bg-black">
-									Submit Deductions
+									<v-icon>mdi-information</v-icon> Submit Deductions
 								</v-card-title>
 								<v-card-text>
 									Please confirm that you wish to finalize the deductions for <b>{{ event.title }}</b>. This action cannot be undone.
