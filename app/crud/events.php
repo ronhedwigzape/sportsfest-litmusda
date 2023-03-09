@@ -38,19 +38,18 @@
                 <form action="events_operation.php" method="POST">
                     <div class="modal-body">
                         <?php
-                        require_once '../models/Category.php';
+                            require_once '../models/Category.php';
 
-                        $page_url = $_SERVER['REQUEST_URI'];
-                        $entity_category = '';
-                        $categories = Category::all();
-                        foreach ($categories as $category) {
-                            $category_url = strtolower(str_replace(' ', '-', $category->getSlug()));
-                            if (strpos($page_url, $category_url) !== false) {
-                                $entity_category = $category->getTitle();
-                                break;
+                            $page_url = $_SERVER['REQUEST_URI'];
+                            $entity_category = '';
+                            $categories = Category::all();
+                            foreach ($categories as $category) {
+                                $category_url = strtolower(str_replace(' ', '-', $category->getSlug()));
+                                if (strpos($page_url, $category_url) !== false) {
+                                    $entity_category = $category->getTitle();
+                                    break;
+                                }
                             }
-                        }
-
                         ?>
                         <div class="form-group">
                             <label>Category</label>
@@ -58,7 +57,7 @@
                                 <option value="">Select Category</option>
                                 <?php foreach ($categories as $category) {
                                     $selected = ($category->getTitle() == $entity_category) ? 'selected' : '';
-                                    echo "<option value={$category->getId()} $selected>{$category->getSlug()}</option>";
+                                    echo "<option value={$category->getId()} $selected>{$category->getTitle()}</option>";
                                 } ?>
                             </select>
                         </div>
