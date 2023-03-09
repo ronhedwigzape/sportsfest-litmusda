@@ -1,7 +1,7 @@
 <?php
-    require_once '../../../config/database.php';
-    require_once '../../../models/Event.php';
-    require_once '../../../models/Judge.php';
+    require_once '../../config/database.php';
+    require_once '../../models/Event.php';
+    require_once '../../models/Judge.php';
 
     if(isset($_POST['option'])){
         $option = $_POST['option'];
@@ -103,7 +103,7 @@
                     </td>
                     <td style="width: 10%;">
 <!--                        <img src="../dist/image/edit.png" width="18" height="18" data-bs-toggle="modal" data-bs-target="#editTitle_modal" style="cursor: pointer; margin-left: 30%;">-->
-                        <img src="../dist/image/delete.png" type="button" width="25" height="25" style="cursor: pointer; margin-left: 10px;" data-bs-toggle="modal" data-bs-target="#deleteModal<?=$eventData->getId()?>">
+                        <img src="dist/image/delete.png" type="button" width="25" height="25" style="cursor: pointer; margin-left: 10px;" data-bs-toggle="modal" data-bs-target="#deleteModal<?=$eventData->getId()?>">
                     </td>
                 </tr>
 
