@@ -551,23 +551,23 @@ export default {
 
 	#submit {
 		background: linear-gradient(-45deg, #e73c7e, #23a6d5, #23d5ab, #e8af45);
-		background-size: 200% 200%;
+		background-size: 300% 300%;
 
 		text-fill-color: transparent;
 		-webkit-background-clip: text;
 		-webkit-text-fill-color: transparent;
 
-		animation: shine 5s ease infinite;
+		animation: shine 10s ease alternate infinite;
 	}
 	@keyframes shine {
 		0% {
-			background-position: 50%;
+			background-position: 0% 50%;
 		}
 		50% {
 			background-position: 100% 50%;
 		}
 		100% {
-			background-position: 50%;
+			background-position: 0% 50%;
 		}
 	}
 </style>

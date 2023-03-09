@@ -14,7 +14,7 @@
 					</th>
 				</tr>
 				<tr>
-					<td colspan="2" rowspan="2" class="text-center text-uppercase font-weight-bold">{{ event.title}} Teams</td>
+					<td colspan="2" rowspan="2" class="text-center text-uppercase font-weight-bold">{{ event.title}}</td>
 					<td rowspan="2" class="text-center text-uppercase font-weight-bold text-red-darken-3">Deduct</td>
 					<template v-for="judge in judges" :key="judge.id">
 						<td colspan="2" class="text-center text-uppercase font-weight-bold">Judge {{ judge.number }}</td>
@@ -148,6 +148,7 @@
 							this.teams = data.results.teams;
 							this.judges = data.results.judges;
 							this.technicals = data.results.technicals;
+							console.log(data)
 
 							console.log(this.teams)
                             // request again
