@@ -15,7 +15,7 @@
         <link rel="stylesheet" href="dist/bootstrap-4.2.1/css/bootstrap.min.css">
 
         <!-- For Icon -->
-        <link rel="stylesheet" href="https://kit.fontawesome.com/3142f33457.css" crossorigin="anonymous">
+        <link rel="stylesheet" href="dist/fontawesome-6.3.0/css/all.min.css">
 
         <title>CRUD</title>
 
@@ -241,11 +241,8 @@
         </div>
 
         <!-- Bootstrap Javascript -->
-        <script src="dist/ajax/libs/jquery-3.3.1/jquery.min.js"></script>
+        <script src="dist/jquery-3.6.4/jquery-3.6.4.min.js"></script>
         <script src="dist/bootstrap-4.2.1/js/bootstrap.min.js"></script>
-
-        <!-- For Icon -->
-        <script src="dist/fontawesome/icon.js"></script>
 
         <script src="main.js"></script>
 
