@@ -1,29 +1,30 @@
 <template>
-    <v-layout style="height: 100vh;">
-       <side-nav />
-		<top-nav />
-		<v-main v-if="$store.getters['auth/getUser'] !== null">
+	<top-nav />
+
+	<side-nav />
+
+	<!--	Technical Deduction Sheet	-->
+	<v-main v-if="$store.getters['auth/getUser'] !== null">
 			<v-table
 				v-if="$route.params.eventSlug && event"
 				density="comfortable"
-				fix-header
+				fixed-header
 				hover
-				:height="680"
+				:height="scoreSheetHeight"
 			>
 				<thead>
 					<tr>
-						<th class="text-uppercase text-center font-weight-bold text-deep-purple-darken-2">#</th>
-						<th class="text-uppercase text-center font-weight-bold text-deep-purple-darken-2">
-							{{ event.title }} Teams
+						<th colspan="2" class="text-uppercase text-center font-weight-bold text-h5 py-3">
+							{{ event.title }} 
 						</th>
-						<th class="text-uppercase text-center font-weight-bold text-deep-purple-darken-2">
+						<th style="width: 13%;" class="text-uppercase text-center font-weight-bold py-3">
 							Deductions
 						</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr v-for="(team, teamIndex) in teams" :key="team.id">
-						<td class="text-uppercase text-center font-weight-bold text-deep-purple-darken-2">
+						<td class="text-uppercase text-center font-weight-bold text-h5" style="width: 30px;">
 							{{ teamIndex + 1 }}
 						</td>
 						<td class="text-uppercase text-center font-weight-bold">
@@ -51,7 +52,7 @@
 									</template>
 								</v-img>
 							</v-col>
-							{{ team.name }}
+							{{ team.name }} 
 						</td>
 						<td>
 							<v-text-field
@@ -63,9 +64,9 @@
 								single-line
 								:min="0"
 								:max="100"
-								:loading="loading"
+								:loading="deductions[`loading_${team.id}`]"
 								v-model.number="deductions[`${event.slug}_${team.id}`].value"
-								@change="saveDeduction(deductions[`${event.slug}_${team.id}`])"
+								@change="saveDeduction(deductions[`${event.slug}_${team.id}`], team.id)"
 								:class="{
 									'text-error font-weight-bold': (
 										deductions[`${event.slug}_${team.id}`].value < 0 ||
@@ -78,6 +79,11 @@
 								   || deductions[`${event.slug}_${team.id}`].value < 0
 								   || deductions[`${event.slug}_${team.id}`].value > 100
 							   )"
+							   :disabled="deductions[`${event.slug}_${team.id}`].is_locked"
+								:id="`input_${teamIndex}`"
+								@keydown.down.prevent="moveDown(teamIndex)"
+								@keydown.enter="moveDown(teamIndex)"
+								@keydown.up.prevent="moveUp(teamIndex)"
 							/>
 						</td>
 					</tr>
@@ -85,30 +91,33 @@
 				<!--	Dialog	  -->
 				<tfoot>
 				<td colspan="12">
-					<v-col align="center" justify="center">
+					<v-col align="center"
+							justify="end"
+					>
 						<v-btn
-							class="px-16 mt-5 mb-10"
-							color="deep-purple-darken-1"
-							@click="dialog = true"
+							class="py-7 bg-grey-darken-4"
+							@click="submitDialog = true"
+							:disabled="submitDeduction['is_locked']"
+							block
 						>
-							submit ratings
+							<b id="submit" style="font-size: 1.2rem;">submit deductions</b>
 						</v-btn>
 						<v-dialog
-							v-model="dialog"
+							v-model="submitDialog"
 							persistent
-							width="auto"
+							max-width="400"
 						>
-							<v-card class="pa-2">
-								<v-card-title>
-									Submit Ratings
+							<v-card>
+								<v-card-title class="bg-black">
+									<v-icon>mdi-information</v-icon> Submit Deductions
 								</v-card-title>
 								<v-card-text>
-									Please confirm that you wish to finalize the deductions for {{ event.title }}. This action cannot be undone.
+									Please confirm that you wish to finalize the deductions for <b>{{ event.title }}</b>. This action cannot be undone.
 								</v-card-text>
 								<v-card-actions>
 									<v-spacer></v-spacer>
-									<v-btn color="primary" @click="dialog = false">Close</v-btn>
-									<v-btn color="primary" @click="">Submit</v-btn>
+									<v-btn prepend-icon="mdi-close" @click="submitDialog = false">Close</v-btn>
+									<v-btn id="submit" :loading="submitLoading" @click="submitDeductions">Submit</v-btn>
 								</v-card-actions>
 							</v-card>
 						</v-dialog>
@@ -121,13 +130,12 @@
 			<div v-else-if="this.$route.params.eventSlug" class="d-flex justify-center align-center" style="height: 100vh;">
 				<v-progress-circular
 					:size="80"
-					color="primary"
+					color="black"
 					class="mb-16"
 					indeterminate
 				/>
 			</div>
 		</v-main>
-    </v-layout>
 </template>
 <script>
 import topNav from "../components/nav/TopNav.vue";
@@ -143,11 +151,18 @@ export default {
 	data() {
 		return {
 			dialog: false,
-			loading: false,
+			submitDialog: false,
+			submitLoading: false,
 			event: null,
 			timer: null,
 			teams: [],
-			deductions: {}
+			deductions: {},
+			submitDeduction: {}
+		}
+	},
+	computed: {
+		scoreSheetHeight() {
+			return this.$store.getters.windowHeight - 64;
 		}
 	},
 	watch: {
@@ -175,10 +190,19 @@ export default {
 					},
 					success: (data) => {
 						data = JSON.parse(data);
-						console.log(data)
 						this.deductions = data.deductions;
 						this.event = data.event;
 						this.teams = data.teams;
+						this.submitDeduction = {};
+						console.log(data)
+
+						for (let i = 0; i < this.teams.length; i++) {
+							const team = this.teams[i];
+							let deduction = this.deductions[`${this.event.slug}_${team.id}`];
+							this.deductions[`loading_${team.id}`] = false;
+							this.submitDeduction['is_locked'] = deduction.is_locked;
+						}
+						
 					},
 					error: (error) => {
 						alert(`ERROR ${error.status}: ${error.statusText}`);
@@ -186,15 +210,50 @@ export default {
 				});
 			}
 		},
-		saveDeduction(deductions) {
-			this.loading = true
+		saveDeduction(deduction, teamId) {
+			this.deductions[`loading_${teamId}`] = true
 
-			if (deductions.value < 0 || deductions.value === '') {
-				deductions.value = 0;
+			if (deduction.value < 0 || deduction.value === '') {
+				deduction.value = 0;
 			}
-			else if (deductions.value > 100) {
-				deductions.value = 100;
+			else if (deduction.value > 100) {
+				deduction.value = 100;
 			}
+			$.ajax({
+				url: `${this.$store.getters.appURL}/${this.$store.getters['auth/getUser'].userType}.php`,
+				type: 'POST',
+				xhrFields: {
+					withCredentials: true
+				},
+				data: {
+					deduction: deduction
+				},
+				success: (data, textStatus, jqXHR) => {
+					if(this.deductions[`loading_${teamId}`]) {
+						setTimeout(() => {
+							this.deductions[`loading_${teamId}`] = false;
+						}, 1000);
+					}
+					console.log(`${jqXHR.status}: ${jqXHR.statusText}`);
+				},
+				error: (error) => {
+					alert(`ERROR ${error.status}: ${error.statusText}`);
+				},
+			});
+		},
+		submitDeductions() {
+			this.submitLoading = true;
+
+			// Deductions are locked.
+			let deductions = [];
+			for (let i = 0; i < this.teams.length; i++) {
+				const team = this.teams[i];
+					const deduction = this.deductions[`${this.event.slug}_${team.id}`] 
+					deduction.is_locked = true;
+					deductions.push(deduction);
+			}
+
+			// Calls request to submit deductions after deduction is locked.
 			$.ajax({
 				url: `${this.$store.getters.appURL}/${this.$store.getters['auth/getUser'].userType}.php`,
 				type: 'POST',
@@ -205,18 +264,44 @@ export default {
 					deductions
 				},
 				success: (data, textStatus, jqXHR) => {
-					if(this.loading) {
+
+					if(this.submitLoading) {
 						setTimeout(() => {
-							this.loading = false;
-						}, 1000);
+							this.submitLoading = false
+							this.submitDialog = false;
+						}, 600);
 					}
+
+					this.submitDeduction['is_locked'] = true;
 					console.log(`${jqXHR.status}: ${jqXHR.statusText}`);
 				},
 				error: (error) => {
 					alert(`ERROR ${error.status}: ${error.statusText}`);
-				},
-			});
-		}
+				}
+			})
+		},
+		move (y, focus = true) {
+			// Move to input
+			const nextInput = document.querySelector(`#input_${y}`);
+			if(nextInput) {
+				if(focus)
+					nextInput.focus();
+				if(Number(nextInput.value) <= 0)
+					nextInput.select();
+			}
+		},
+		moveDown (y) {
+			// Move to input below
+			y += 1;
+			if(y < this.teams.length)
+				this.move(y);
+		},
+		moveUp (y)  {
+			// Move to input above
+			y -= 1;
+			if(y >= 0)
+				this.move(y);
+		},
 	}
 }
 </script>
@@ -228,5 +313,27 @@ tbody td, th {
 tbody td {
 	border-bottom: 1px solid #ddd;
 	padding-bottom: 1rem !important;
+}
+
+#submit {
+	background: linear-gradient(-45deg, #e73c7e, #23a6d5, #23d5ab, #e8af45);
+	background-size: 200% 200%;
+
+	text-fill-color: transparent;
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+
+	animation: shine 10s ease infinite;
+}
+@keyframes shine {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
 }
 </style>

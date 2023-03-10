@@ -1,6 +1,5 @@
 <template>
 	<v-navigation-drawer
-		class="bg-deep-purple-darken-2"
 		theme="dark"
         permanent
 	>
