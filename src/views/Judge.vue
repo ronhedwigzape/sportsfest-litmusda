@@ -19,12 +19,12 @@
 					</th>
 					<th v-for="criterion in criteria" style="width: 13%" class="text-center font-weight-bold text-uppercase py-3">
 						<div class="d-flex h-100 flex-column align-content-space-between">
-							<p style="font-size: 0.8rem;">{{ criterion.title }}</p>
+							<p>{{ criterion.title }}</p>
 							<b style="margin-top: auto">{{ criterion.percentage }}%</b>
 						</div>
 					</th>
-					<th style="width: 13%" class="text-uppercase text-center font-weight-bold py-3">Total</th>
-					<th style="width: 13%" class="text-uppercase text-center font-weight-bold py-3">Rank</th>
+					<th style="width: 13%" class="text-uppercase text-center font-weight-bold text-h5 py-3">Total</th>
+					<th style="width: 13%" class="text-uppercase text-center font-weight-bold text-h5 py-3">Rank</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -32,7 +32,7 @@
 					<td class="text-uppercase text-center text-h5 font-weight-bold">
 						{{ teamIndex + 1 }}
 					</td>
-					<td class="text-uppercase text-center">
+					<td class="text-uppercase text-center font-weight-bold" :style="{ 'color' : team.color }">
 						<v-col align="center">
 							<v-img
 								:src="`${$store.getters.appURL}/crud/uploads/${team.logo}`"
