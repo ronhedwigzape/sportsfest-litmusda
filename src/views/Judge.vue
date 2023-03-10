@@ -10,20 +10,21 @@
 			density="comfortable"
 			fixed-header
 			hover
+			:height="scoreSheetHeight"
 		>
 			<thead>
-				<tr class="mb-10"></tr>
 				<tr>
-					<th rowspan="2" class="text-uppercase text-center font-weight-bold">#</th>
-					<th rowspan="2" class="text-uppercase text-center font-weight-bold">
+					<th colspan="2" class="text-uppercase text-center font-weight-bold text-h4 py-3">
 						{{ event.title }}
 					</th>
-					<th v-for="criterion in criteria" style="width: 13%" class="text-center font-weight-bold text-uppercase">
-						<p style="font-size: 0.8rem;">{{ criterion.title }}</p>
-						<b>{{ criterion.percentage }}%</b>
+					<th v-for="criterion in criteria" style="width: 13%" class="text-center font-weight-bold text-uppercase py-3">
+						<div class="d-flex h-100 flex-column align-content-space-between">
+							<p style="font-size: 0.8rem;">{{ criterion.title }}</p>
+							<b style="margin-top: auto">{{ criterion.percentage }}%</b>
+						</div>
 					</th>
-					<th rowspan="2" style="width: 13%" class="text-uppercase text-center font-weight-bold">Total</th>
-					<th rowspan="2" style="width: 13%" class="text-uppercase text-center font-weight-bold">Rank</th>
+					<th style="width: 13%" class="text-uppercase text-center font-weight-bold py-3">Total</th>
+					<th style="width: 13%" class="text-uppercase text-center font-weight-bold py-3">Rank</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -32,7 +33,7 @@
 						{{ teamIndex + 1 }}
 					</td>
 					<td class="text-uppercase text-center">
-						<!-- <v-col align="center">
+						<v-col align="center">
 							<v-img
 								:src="`${$store.getters.appURL}/crud/uploads/${team.logo}`"
 								:lazy-src="`${$store.getters.appURL}/crud/uploads/${team.logo}`"
@@ -55,8 +56,8 @@
 									</v-row>
 								</template>
 							</v-img>
-						</v-col> -->
-						{{ team.name }} <b>({{ team.color }})</b>
+						</v-col> 
+						{{ team.name }}
 					</td>
 					<td v-for="(criterion, criterionIndex) in criteria" :key="criterion.id">
 						<v-text-field
@@ -531,6 +532,9 @@ export default {
 			// Return ranks
 			return filterObject(getFractionalRank(this.totals));
 
+		},
+		scoreSheetHeight() {
+			return this.$store.getters.windowHeight - 64;
 		}
 	}
 }

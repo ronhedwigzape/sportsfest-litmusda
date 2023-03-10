@@ -6,39 +6,35 @@
 	<!--	Admin Results	-->
     <v-main v-if="$store.getters['auth/getUser'] !== null">
         <!-- results -->
-		<v-table v-if="$route.params.eventSlug && event" density="comfortable" :bordered="true" hover>
+		<v-table 
+			v-if="$route.params.eventSlug && event" 
+			density="comfortable" :bordered="true" 
+			hover
+			:height="scoreSheetHeight"
+			fixed-header
+		>
 			<thead>
 				<tr>
-					<th colspan="20" class="text-h5 text-uppercase text-center font-weight-bold">
-						Results of {{ event.title }}
-					</th>
-				</tr>
-				<tr>
-					<td colspan="2" rowspan="2" class="text-center text-uppercase font-weight-bold">{{ event.title}}</td>
+					<th colspan="2" class="text-center text-uppercase font-weight-bold">{{ event.title}}</th>
 					<template v-for="(technical, technicalKey, technicalIndex) in technicals" :key="technical.id">
-						<td rowspan="2" class="text-center text-uppercase font-weight-bold text-red-darken-3">
+						<th class="text-center text-uppercase font-weight-bold text-red-darken-3">
 							Deduct {{ technicalIndex + 1 }}
-						</td>
+						</th>
 					</template>
 					<template v-for="judge in judges" :key="judge.id">
-						<td colspan="2" class="text-center text-uppercase font-weight-bold">Judge {{ judge.number }}</td>
+						<th colspan="2" class="text-center text-uppercase font-weight-bold">Judge {{ judge.number }}</th>
 					</template>
-					<td rowspan="2" class="text-center text-uppercase font-weight-bold text-green-darken-4">Average</td>
-					<td rowspan="2" class="text-center text-uppercase font-weight-bold text-blue-darken-4">Total Rank</td>
-					<td rowspan="2" class="text-center text-uppercase font-weight-bold text-grey-darken-1">Initial Rank</td>
-					<td rowspan="2" class="text-center text-uppercase font-weight-bold">Final Rank</td>
-				</tr>
-				<tr>
-					<template v-for="judge in judges" :key="judge.id">
-						<td class="text-center text-green-darken-3">Total</td>
-						<td class="text-center font-weight-bold text-blue-darken-2">Rank</td>
-					</template>
+					<th class="text-center text-uppercase font-weight-bold text-green-darken-4">Average</th>
+					<th class="text-center text-uppercase font-weight-bold text-blue-darken-4">Total Rank</th>
+					<th class="text-center text-uppercase font-weight-bold text-grey-darken-1">Initial Rank</th>
+					<th class="text-center text-uppercase font-weight-bold">Final Rank</th>
 				</tr>
 			</thead>
+			
 			<tbody>
 			<tr v-for="(team, teamKey, teamIndex) in teams" :key="team.id">
 				<td class="text-h5 text-center font-weight-bold">{{ teamIndex + 1 }}</td>
-				<td class="text-center text-uppercase">{{ team.name }}</td>
+				<td class="text-center text-uppercase font-weight-bold" :style="{'color': team.color}">{{ team.name }}</td>
 				 <template v-for="(technical, technicalKey, technicalIndex) in technicals" :key="technical.id">
 					<td
 						class="text-center text-uppercase font-weight-bold text-red-darken-3"
@@ -144,6 +140,11 @@
 				technicals: []
             }
         },
+		computed: {
+			scoreSheetHeight() {
+				return this.$store.getters.windowHeight - 64;
+			}
+		},
         watch: {
             $route: {
                 immediate: true,

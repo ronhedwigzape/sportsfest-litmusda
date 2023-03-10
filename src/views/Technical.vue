@@ -8,24 +8,23 @@
 			<v-table
 				v-if="$route.params.eventSlug && event"
 				density="comfortable"
-				fix-header
+				fixed-header
 				hover
-				:height="680"
+				:height="scoreSheetHeight"
 			>
 				<thead>
 					<tr>
-						<th style="width: 13%" class="text-uppercase text-center font-weight-bold">#</th>
-						<th style="width: 13%" class="text-uppercase text-center font-weight-bold">
-							{{ event.title }} Teams
+						<th colspan="2" class="text-uppercase text-center font-weight-bold text-h5 py-3">
+							{{ event.title }} 
 						</th>
-						<th style="width: 13%;" class="text-uppercase text-center font-weight-bold">
+						<th style="width: 13%;" class="text-uppercase text-center font-weight-bold py-3">
 							Deductions
 						</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr v-for="(team, teamIndex) in teams" :key="team.id">
-						<td class="text-uppercase text-center font-weight-bold">
+						<td class="text-uppercase text-center font-weight-bold text-h5" style="width: 30px;">
 							{{ teamIndex + 1 }}
 						</td>
 						<td class="text-uppercase text-center font-weight-bold">
@@ -53,7 +52,7 @@
 									</template>
 								</v-img>
 							</v-col>
-							{{ team.name }}
+							{{ team.name }} 
 						</td>
 						<td>
 							<v-text-field
@@ -81,6 +80,10 @@
 								   || deductions[`${event.slug}_${team.id}`].value > 100
 							   )"
 							   :disabled="deductions[`${event.slug}_${team.id}`].is_locked"
+								:id="`input_${teamIndex}`"
+								@keydown.down.prevent="moveDown(teamIndex)"
+								@keydown.enter="moveDown(teamIndex)"
+								@keydown.up.prevent="moveUp(teamIndex)"
 							/>
 						</td>
 					</tr>
@@ -155,6 +158,11 @@ export default {
 			teams: [],
 			deductions: {},
 			submitDeduction: {}
+		}
+	},
+	computed: {
+		scoreSheetHeight() {
+			return this.$store.getters.windowHeight - 64;
 		}
 	},
 	watch: {
@@ -271,7 +279,29 @@ export default {
 					alert(`ERROR ${error.status}: ${error.statusText}`);
 				}
 			})
-		}
+		},
+		move (y, focus = true) {
+			// Move to input
+			const nextInput = document.querySelector(`#input_${y}`);
+			if(nextInput) {
+				if(focus)
+					nextInput.focus();
+				if(Number(nextInput.value) <= 0)
+					nextInput.select();
+			}
+		},
+		moveDown (y) {
+			// Move to input below
+			y += 1;
+			if(y < this.teams.length)
+				this.move(y);
+		},
+		moveUp (y)  {
+			// Move to input above
+			y -= 1;
+			if(y >= 0)
+				this.move(y);
+		},
 	}
 }
 </script>
