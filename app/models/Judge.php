@@ -487,11 +487,17 @@ class Judge extends User
      */
     public function getEventTeamRating($event, $team)
     {
-        $total = ['original' => 0];
+        $total = [
+            'is_locked' => false,
+            'original'  => 0
+        ];
 
         foreach($event->getAllCriteria() as $criterion) {
             $rating = $this->getCriterionTeamRating($criterion, $team);
             $total['original'] += $rating->getValue();
+
+            if(!$total['is_locked'] && $rating->getIsLocked())
+                $total['is_locked'] = true;
         }
 
         // apply technicals' average deduction when judge is chairman
@@ -502,7 +508,7 @@ class Judge extends User
             foreach($technicals as $technical) {
                 $deduction_total += ($technical->getEventTeamDeduction($event, $team))->getValue();
             }
-            $deduction_average = $deduction_total / sizeof($technicals);
+            $deduction_average = (sizeof($technicals) > 0) ? ($deduction_total / sizeof($technicals)) : 0;
             $total['deducted'] -= $deduction_average;
         }
 
@@ -592,18 +598,18 @@ class Judge extends User
         // get fractional rank
         $ctr = 0;
         for($i = 0; $i < sizeof($unique_ratings); $i++) {
-            $key   = 'rank_' . ($i + 1);
+            $key = 'rank_' . ($i + 1);
             $group = $rank_group[$key];
-            $size  = sizeof($group);
+            $size = sizeof($group);
             $fractional_rank = $ctr + ((($size * ($size + 1)) / 2) / $size);
 
             // write $fractional_rank to $group members
-            for($j=0; $j<$size; $j++) {
+            for($j = 0; $j < $size; $j++) {
                 $team_row = $team_rows[$group[$j]];
                 $team_row['rank']['fractional'] = $fractional_rank;
 
                 // append to $ranks
-                $ranks['team_'.$team_row['id']] = $team_row['rank'];
+                $ranks['team_' . $team_row['id']] = $team_row['rank'];
             }
             $ctr += $size;
         }

@@ -55,6 +55,7 @@ else {
             );
         }
 
+        // set is_locked ratings to true
         else if (isset($_POST['ratings'])) {
             require_once 'models/Criterion.php';
             require_once 'models/Team.php';
