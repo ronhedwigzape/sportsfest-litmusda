@@ -154,11 +154,11 @@ class Admin extends User
                 $result['technicals'][$key_technical] = $technical->toArray();
 
                 // get technical's total team deductions
-                $technical_total = ($technical->getEventTeamDeduction($event, $team))->getValue();
-                $team_row['deductions']['inputs'][$key_technical] = $technical_total;
+                $technical_total = $technical->getEventTeamDeduction($event, $team);
+                $team_row['deductions']['inputs'][$key_technical] = $technical_total->toArray();
 
                 // increment deductions total
-                $team_row['deductions']['total'] += $technical_total;
+                $team_row['deductions']['total'] += $technical_total->getValue();
             }
 
             // compute for deductions average
