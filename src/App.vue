@@ -36,7 +36,19 @@
                     alert(`ERROR ${error.status}: ${error.statusText}`);
                 },
             });
-        }
+        },
+        methods: {
+            handleWindowResize() {
+                this.$store.commit('setWindowHeight', window.innerHeight);
+            }
+        },
+        mounted() {
+            window.addEventListener('resize', this.handleWindowResize);
+            this.handleWindowResize();
+        },
+        destroyed() {
+            window.removeEventListener('resize', this.handleWindowResize);
+        },
     }
 </script>
 

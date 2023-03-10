@@ -14,6 +14,9 @@ export default createStore({
         app: {
             backendDir: 'app'
         },
+        window: {
+            height: 0
+        },
         rating: {
             min: 75,
             max: 100
@@ -33,11 +36,18 @@ export default createStore({
                 return `http://localhost${import.meta.env.BASE_URL}${state.app.backendDir}`;
             else
                 return `${location.protocol}//${location.hostname}${import.meta.env.BASE_URL}${state.app.backendDir}`;
+        },
+
+        // get window height
+        windowHeight(state) {
+            return state.window.height;
         }
     },
 
     mutations: {
-
+        setWindowHeight(state, n) {
+            state.window.height = n;
+        }
     },
 
 })
