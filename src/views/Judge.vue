@@ -1,210 +1,206 @@
 <template>
-	<v-layout style="height: 100vh;">
+	<top-nav />
 
-		<top-nav />
+	<side-nav />
 
-		<side-nav />
-
-		<!--	Judge Score Sheet	-->
-		<v-main v-if="$store.getters['auth/getUser'] !== null">
-			<v-table
-				v-if="$route.params.eventSlug && event"
-				density="comfortable"
-				fixed-header
-				hover
-				:height="1000"
-			>
-				<thead>
-					<tr class="mb-10"></tr>
-					<tr>
-						<th rowspan="2" class="text-uppercase text-center font-weight-bold">#</th>
-						<th rowspan="2" class="text-uppercase text-center font-weight-bold">
-							{{ event.title }}
-						</th>
-						<th v-for="criterion in criteria" style="width: 13%" class="text-center font-weight-bold text-uppercase">
-							<p style="font-size: 0.8rem;">{{ criterion.title }}</p>
-							<b>{{ criterion.percentage }}%</b>
-						</th>
-						<th rowspan="2" style="width: 13%" class="text-uppercase text-center font-weight-bold">Total</th>
-						<th rowspan="2" style="width: 13%" class="text-uppercase text-center font-weight-bold">Rank</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr v-for="(team, teamIndex) in teams" :key="team.id">
-						<td class="text-uppercase text-center text-h5 font-weight-bold">
-							{{ teamIndex + 1 }}
-						</td>
-						<td class="text-uppercase text-center">
-							<v-col align="center">
-								<v-img
-									:src="`${$store.getters.appURL}/crud/uploads/${team.logo}`"
-									:lazy-src="`${$store.getters.appURL}/crud/uploads/${team.logo}`"
-									aspect-ratio="1"
-									:alt="`${team.name} Logo`"
-									height="100"
-									width="100"
-								>
-									<template v-slot:placeholder>
-										<v-row
-											class="fill-height ma-0"
-											align="center"
-											justify="center"
-										>
-											<v-progress-circular
-												indeterminate
-												color="grey-lighten-5"
-											>
-											</v-progress-circular>
-										</v-row>
-									</template>
-								</v-img>
-							</v-col>
-							{{ team.name }}
-						</td>
-						<td v-for="(criterion, criterionIndex) in criteria" :key="criterion.id">
-							<v-text-field
-								type="number"
-								class="font-weight-bold"
-								variant="underlined"
-								hide-details
-								single-line
-								:min="0"
-								:max="criterion.percentage"
-								@change="saveRating(ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`], criterion.percentage, team.id)"
-								v-model.number="ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value"
-								:class="{
-									'text-error font-weight-bold': (
-										ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value < 0 ||
-										ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value > criterion.percentage
-									),
-									'text-grey-darken-2': ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value === 0
-								}"
-								:error="(
-									  ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value.toString().trim() === ''
-								   || ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value < 0
-								   || ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value > criterion.percentage
-							   	)"
-							   	:disabled="ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].is_locked"
-								:id="`input_${teamIndex}_${criterionIndex}`"
-								@keydown.down.prevent="moveDown(criterionIndex, teamIndex)"
-								@keydown.enter="moveDown(criterionIndex, teamIndex)"
-								@keydown.up.prevent="moveUp(criterionIndex, teamIndex)"
-								@keydown.right.prevent="moveRight(criterionIndex, teamIndex)"
-								@keydown.left.prevent="moveLeft(criterionIndex, teamIndex)"
-							/>
-						</td>
-						<td>
-							<v-text-field
-								type="number"
-								class="font-weight-bold"
-								variant="outlined"
-								hide-details
-								single-line
-								:loading="totals[`loading_${team.id}`]"
-								v-model.number="totals[`team_${team.id}`]"
-								:min="$store.state.rating.min"
-								:max="$store.state.rating.max"
-								@change="calculateTotalScores(team)"
-								:class="{
-									'text-error font-weight-bold': (
-										totals[`team_${team.id}`] < $store.state.rating.min
-									|| totals[`team_${team.id}`] > $store.state.rating.max
-									),
-									'text-success font-weight-bold': (
-										totals[`team_${team.id}`] >= $store.state.rating.min
-									&& totals[`team_${team.id}`] <= $store.state.rating.max
-									)
-								}"
-								:error="(
-									  totals[`team_${team.id}`].toString().trim() === ''
-								   || totals[`team_${team.id}`] < $store.state.rating.min
-								   || totals[`team_${team.id}`] > $store.state.rating.max
-							   )"
-								:disabled="totals['is_locked']"
-								:id="`input_${teamIndex}_${criteria.length}`"
-								@keydown.down.prevent="moveDown(criteria.length, teamIndex)"
-								@keydown.enter="moveDown(criteria.length, teamIndex)"
-								@keydown.up.prevent="moveUp(criteria.length, teamIndex)"
-								@keydown.right.prevent="moveRight(criteria.length, teamIndex)"
-								@keydown.left.prevent="moveLeft(criteria.length, teamIndex)"
-							/>
-						</td>
-						<td class="text-center"> {{ ranks[`team_${team.id}`].toFixed(2) }}</td>
-					</tr>
-				</tbody>
-				<!--	Dialog	  -->
-				<tfoot>
-					<td colspan="12">
-						<v-col align="center"
-							   justify="end"
-						>
-							<v-btn
-								class="py-7 bg-grey-darken-4"
-								@click="openSubmitDialog"
-								:disabled="totals['is_locked']"
-								block
-							>
-							<b id="submit" style="font-size: 1.2rem;">submit ratings</b>
-							</v-btn>
-							<v-dialog
-								v-if="submitDialog"
-								v-model="submitDialog"
-								persistent
-								max-width="400"
-							>
-								<v-card>
-									<v-card-title class="bg-black">
-										<v-icon>mdi-information</v-icon> Submit Ratings
-									</v-card-title>
-									<v-card-text>
-										Please confirm that you wish to finalize the ratings for <b>{{ event.title }}</b>. This action cannot be undone.
-									</v-card-text>
-									<v-card-actions>
-										<v-spacer></v-spacer>
-										<v-btn prepend-icon="mdi-close" @click="submitDialog = false">Close</v-btn>
-										<v-btn id="submit" :loading="submitLoading" @click="submitRatings">Submit</v-btn>
-									</v-card-actions>
-								</v-card>
-							</v-dialog>
-							<v-dialog
-								v-if="inspectDialog"
-								v-model="inspectDialog"
-								persistent
-								max-width="400"
-							>
-								<v-card>
-									<v-card-title class="bg-red-darken-4">
-										<v-icon>mdi-alert</v-icon>	Submit Ratings
-									</v-card-title>
-									<v-card-text>
-										<p class="mb-2 text-red-darken-4">
-											Sorry, your ratings for {{ event.title}} cannot be submitted as they must be between
-											<b>{{ $store.state.rating.min }}</b> and <b>{{ $store.state.rating.max }}</b>.
-										</p>
-										<p class="text-red-darken-4">Please adjust your ratings and try submitting again.</p>
-									</v-card-text>
-									<v-card-actions>
-										<v-spacer></v-spacer>
-										<v-btn color="red-darken-4" prepend-icon="mdi-close" @click="inspectDialog = false">Close</v-btn>
-									</v-card-actions>
-								</v-card>
-							</v-dialog>
-						</v-col>
+	<!--	Judge Score Sheet	-->
+	<v-main v-if="$store.getters['auth/getUser'] !== null">
+		<v-table
+			v-if="$route.params.eventSlug && event"
+			density="comfortable"
+			fixed-header
+			hover
+		>
+			<thead>
+				<tr class="mb-10"></tr>
+				<tr>
+					<th rowspan="2" class="text-uppercase text-center font-weight-bold">#</th>
+					<th rowspan="2" class="text-uppercase text-center font-weight-bold">
+						{{ event.title }}
+					</th>
+					<th v-for="criterion in criteria" style="width: 13%" class="text-center font-weight-bold text-uppercase">
+						<p style="font-size: 0.8rem;">{{ criterion.title }}</p>
+						<b>{{ criterion.percentage }}%</b>
+					</th>
+					<th rowspan="2" style="width: 13%" class="text-uppercase text-center font-weight-bold">Total</th>
+					<th rowspan="2" style="width: 13%" class="text-uppercase text-center font-weight-bold">Rank</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr v-for="(team, teamIndex) in teams" :key="team.id">
+					<td class="text-uppercase text-center text-h5 font-weight-bold">
+						{{ teamIndex + 1 }}
 					</td>
-				</tfoot>
-			</v-table>
+					<td class="text-uppercase text-center">
+						<!-- <v-col align="center">
+							<v-img
+								:src="`${$store.getters.appURL}/crud/uploads/${team.logo}`"
+								:lazy-src="`${$store.getters.appURL}/crud/uploads/${team.logo}`"
+								aspect-ratio="1"
+								:alt="`${team.name} Logo`"
+								height="100"
+								width="100"
+							>
+								<template v-slot:placeholder>
+									<v-row
+										class="fill-height ma-0"
+										align="center"
+										justify="center"
+									>
+										<v-progress-circular
+											indeterminate
+											color="grey-lighten-5"
+										>
+										</v-progress-circular>
+									</v-row>
+								</template>
+							</v-img>
+						</v-col> -->
+						{{ team.name }} <b>({{ team.color }})</b>
+					</td>
+					<td v-for="(criterion, criterionIndex) in criteria" :key="criterion.id">
+						<v-text-field
+							type="number"
+							class="font-weight-bold"
+							variant="underlined"
+							hide-details
+							single-line
+							:min="0"
+							:max="criterion.percentage"
+							@change="saveRating(ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`], criterion.percentage, team.id)"
+							v-model.number="ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value"
+							:class="{
+								'text-error font-weight-bold': (
+									ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value < 0 ||
+									ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value > criterion.percentage
+								),
+								'text-grey-darken-2': ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value === 0
+							}"
+							:error="(
+								  ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value.toString().trim() === ''
+							   || ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value < 0
+							   || ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value > criterion.percentage
+							)"
+							:disabled="ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].is_locked"
+							:id="`input_${teamIndex}_${criterionIndex}`"
+							@keydown.down.prevent="moveDown(criterionIndex, teamIndex)"
+							@keydown.enter="moveDown(criterionIndex, teamIndex)"
+							@keydown.up.prevent="moveUp(criterionIndex, teamIndex)"
+							@keydown.right.prevent="moveRight(criterionIndex, teamIndex)"
+							@keydown.left.prevent="moveLeft(criterionIndex, teamIndex)"
+						/>
+					</td>
+					<td>
+						<v-text-field
+							type="number"
+							class="font-weight-bold"
+							variant="outlined"
+							hide-details
+							single-line
+							:loading="totals[`loading_${team.id}`]"
+							v-model.number="totals[`team_${team.id}`]"
+							:min="$store.state.rating.min"
+							:max="$store.state.rating.max"
+							@change="calculateTotalScores(team)"
+							:class="{
+								'text-error font-weight-bold': (
+									totals[`team_${team.id}`] < $store.state.rating.min
+								|| totals[`team_${team.id}`] > $store.state.rating.max
+								),
+								'text-success font-weight-bold': (
+									totals[`team_${team.id}`] >= $store.state.rating.min
+								&& totals[`team_${team.id}`] <= $store.state.rating.max
+								)
+							}"
+							:error="(
+								  totals[`team_${team.id}`].toString().trim() === ''
+							   || totals[`team_${team.id}`] < $store.state.rating.min
+							   || totals[`team_${team.id}`] > $store.state.rating.max
+						   )"
+							:disabled="totals['is_locked']"
+							:id="`input_${teamIndex}_${criteria.length}`"
+							@keydown.down.prevent="moveDown(criteria.length, teamIndex)"
+							@keydown.enter="moveDown(criteria.length, teamIndex)"
+							@keydown.up.prevent="moveUp(criteria.length, teamIndex)"
+							@keydown.right.prevent="moveRight(criteria.length, teamIndex)"
+							@keydown.left.prevent="moveLeft(criteria.length, teamIndex)"
+						/>
+					</td>
+					<td class="text-center"> {{ ranks[`team_${team.id}`].toFixed(2) }}</td>
+				</tr>
+			</tbody>
+			<!--	Dialog	  -->
+			<tfoot>
+				<td colspan="12">
+					<v-col align="center"
+						   justify="end"
+					>
+						<v-btn
+							class="py-7 bg-grey-darken-4"
+							@click="openSubmitDialog"
+							:disabled="totals['is_locked']"
+							block
+						>
+						<b id="submit" style="font-size: 1.2rem;">submit ratings</b>
+						</v-btn>
+						<v-dialog
+							v-if="submitDialog"
+							v-model="submitDialog"
+							persistent
+							max-width="400"
+						>
+							<v-card>
+								<v-card-title class="bg-black">
+									<v-icon>mdi-information</v-icon> Submit Ratings
+								</v-card-title>
+								<v-card-text>
+									Please confirm that you wish to finalize the ratings for <b>{{ event.title }}</b>. This action cannot be undone.
+								</v-card-text>
+								<v-card-actions>
+									<v-spacer></v-spacer>
+									<v-btn prepend-icon="mdi-close" @click="submitDialog = false">Close</v-btn>
+									<v-btn id="submit" :loading="submitLoading" @click="submitRatings">Submit</v-btn>
+								</v-card-actions>
+							</v-card>
+						</v-dialog>
+						<v-dialog
+							v-if="inspectDialog"
+							v-model="inspectDialog"
+							persistent
+							max-width="400"
+						>
+							<v-card>
+								<v-card-title class="bg-red-darken-4">
+									<v-icon>mdi-alert</v-icon>	Submit Ratings
+								</v-card-title>
+								<v-card-text>
+									<p class="mb-2 text-red-darken-4">
+										Sorry, your ratings for {{ event.title}} cannot be submitted as they must be between
+										<b>{{ $store.state.rating.min }}</b> and <b>{{ $store.state.rating.max }}</b>.
+									</p>
+									<p class="text-red-darken-4">Please adjust your ratings and try submitting again.</p>
+								</v-card-text>
+								<v-card-actions>
+									<v-spacer></v-spacer>
+									<v-btn color="red-darken-4" prepend-icon="mdi-close" @click="inspectDialog = false">Close</v-btn>
+								</v-card-actions>
+							</v-card>
+						</v-dialog>
+					</v-col>
+				</td>
+			</tfoot>
+		</v-table>
 
-			<!-- loader -->
-			<div v-else-if="this.$route.params.eventSlug" class="d-flex justify-center align-center" style="height: 100vh;">
-				<v-progress-circular
-					:size="80"
-					color="black"
-					class="mb-16"
-					indeterminate
-				/>
-			</div>
-		</v-main>
-	</v-layout>
+		<!-- loader -->
+		<div v-else-if="this.$route.params.eventSlug" class="d-flex justify-center align-center" style="height: 100vh;">
+			<v-progress-circular
+				:size="80"
+				color="black"
+				class="mb-16"
+				indeterminate
+			/>
+		</div>
+	</v-main>
 </template>
 
 <script>
@@ -546,7 +542,7 @@ export default {
 	}
 	tbody td {
 		border-bottom: 1px solid #ddd;
-		padding-bottom: 1rem !important;
+		padding: 1rem !important;
 	}
 
 	#submit {

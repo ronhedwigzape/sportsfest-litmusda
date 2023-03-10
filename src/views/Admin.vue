@@ -1,10 +1,10 @@
 <template>
-
 	<top-nav />
 
 	<side-nav />
 
-    <v-main>
+	<!--	Admin Results	-->
+    <v-main v-if="$store.getters['auth/getUser'] !== null">
         <!-- results -->
 		<v-table v-if="$route.params.eventSlug && event" density="comfortable" :bordered="true" hover>
 			<thead>

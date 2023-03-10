@@ -1,11 +1,10 @@
 <template>
-    <v-layout style="height: 100vh;">
+	<top-nav />
 
-		<top-nav />
+	<side-nav />
 
-		<side-nav />
-
-		<v-main v-if="$store.getters['auth/getUser'] !== null">
+	<!--	Technical Deduction Sheet	-->
+	<v-main v-if="$store.getters['auth/getUser'] !== null">
 			<v-table
 				v-if="$route.params.eventSlug && event"
 				density="comfortable"
@@ -134,7 +133,6 @@
 				/>
 			</div>
 		</v-main>
-    </v-layout>
 </template>
 <script>
 import topNav from "../components/nav/TopNav.vue";
