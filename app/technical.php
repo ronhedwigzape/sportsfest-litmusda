@@ -46,13 +46,14 @@ else {
             require_once 'models/Event.php';
             require_once 'models/Team.php';
 
-            $deduction = $_POST['deductions'];
-
-            $technical->setEventTeamDeduction(
-                Event::findById($deduction['event_id']),
-                Team::findById($deduction['team_id']),
-                floatval($deduction['value'])
-            );
+            foreach ($_POST['deductions'] as $deduction) {
+                $technical->setEventTeamDeduction(
+                    Event::findById($deduction['event_id']),
+                    Team::findById($deduction['team_id']),
+                    floatval($deduction['value']),
+                    filter_var($deduction['is_locked'], FILTER_VALIDATE_BOOLEAN)
+                );
+            }
         }
 
         else

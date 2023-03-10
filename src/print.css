@@ -1,0 +1,14 @@
+@media print {
+    .v-app-bar,
+    .v-navigation-drawer {
+        display: none !important;
+    }
+    .v-main {
+        --v-layout-top: 0 !important;
+        --v-layout-left: 0 !important;
+    }
+
+    th, td {
+        background: white !important;
+    }
+}

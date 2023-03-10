@@ -1,6 +1,6 @@
 <?php
 
-require_once '../config/database.php';
+    require_once '../config/database.php';
 
 ?>
 <!DOCTYPE html>
@@ -19,14 +19,23 @@ require_once '../config/database.php';
 
         <title>CRUD</title>
 
+        <style>
+            body {
+                background-color: black;
+            }
+
+            h1 {
+                color: white;
+            }
+        </style>
+
     </head>
     <body>
-
         <!-- Modal -->
         <!-- ADD POP UP FORM (Bootstrap MODAL) -->
         <div class="modal fade" id="addmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
              aria-hidden="true">
-            <div class="modal-dialog" role="document">
+            <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Add Data </h5>
@@ -37,9 +46,21 @@ require_once '../config/database.php';
 
                     <form action="criteria_operation.php" method="POST">
                         <div class="modal-body">
+                            <?php
+                                require_once '../models/Event.php';
+
+                                $entity_category = isset($_GET['event']) ? strtolower(trim($_GET['event'])) : '';
+                                $events = Event::all();
+                            ?>
                             <div class="form-group">
-                                <label> Event_ID </label>
-                                <input type="number" name="event_id" class="form-control" min="1" max="6" placeholder="Enter your Event_ID from 1 to 6" autocomplete="off" required>
+                                <label>Event</label>
+                                <select name="event_id" class="form-control" required <?php if (!empty($entity_category)) echo 'disabled'; ?>>
+                                    <option value="">Select Event</option>
+                                    <?php foreach ($events as $event) {
+                                        $selected = ($event->getSlug() == $entity_category) ? 'selected' : '';
+                                        echo "<option value={$event->getId()} $selected>{$event->getTitle()}</option>";
+                                    } ?>
+                                </select>
                             </div>
 
                             <div class="form-group">
@@ -65,7 +86,7 @@ require_once '../config/database.php';
         <!-- EDIT POP UP FORM (Bootstrap MODAL) -->
         <div class="modal fade" id="editmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
              aria-hidden="true">
-            <div class="modal-dialog" role="document">
+            <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel"> Edit Data </h5>
@@ -77,9 +98,21 @@ require_once '../config/database.php';
                     <form action="criteria_operation.php" method="POST">
                         <div class="modal-body">
                             <input type="hidden" name="update_id" id="update_id">
+                            <?php
+                            require_once '../models/Event.php';
+
+                            $entity_category = isset($_GET['event']) ? strtolower(trim($_GET['event'])) : '';
+                            $events = Event::all();
+                            ?>
                             <div class="form-group">
-                                <label> Event_ID </label>
-                                <input type="number" name="event_id" id="event_id" class="form-control" min="1" max="6" placeholder="Enter your Event_ID from 1 to 6" autocomplete="off" required>
+                                <label>Event</label>
+                                <select name="event_id" class="form-control" required>
+                                    <option value="">Select Event</option>
+                                    <?php foreach ($events as $event) {
+                                        $selected = ($event->getSlug() == $entity_category) ? 'selected' : '';
+                                        echo "<option value={$event->getId()} $selected>{$event->getTitle()}</option>";
+                                    } ?>
+                                </select>
                             </div>
 
                             <div class="form-group">
@@ -129,83 +162,81 @@ require_once '../config/database.php';
             </div>
         </div>
 
-        <div class="container my-3">
-            <div class="card">
-                <div class="card-body">
-                    <h1 class="text-center"><b> <u>Criteria</u> </b></h1>
-                    <div class="d-flex align-items-center">
-                        <button type="button" class="btn btn-primary mr-3 my-3" data-toggle="modal" data-target="#addmodal">ADD DATA</button>
-                        <div class="btn-group" role="group" aria-label="Go to">
-                            <select onchange="window.location.href=this.value" class="btn btn-secondary">
-                                <option selected value="">Go to...</option>
-                                <option value="competitions.php">Competitions</option>
-                                <option value="categories.php">Categories</option>
-                                <option value="events.php">Events</option>
-                                <option value="teams.php">Teams</option>
-                                <option value="judges.php">Judges</option>
-                                <option value="technicals.php">Technicals</option>
-                            </select>
-                        </div>
-                        <div class="btn-group ml-auto" role="group" aria-label="Go to">
-                            <?php require_once '../models/Event.php'; ?>
-                            <select onchange="window.location = `${window.location.pathname}${this.value !== '' ? '?event=' + this.value : ''}`" class="btn btn-dark">
-                                <option selected value="">All Events</option>
-                                <?php foreach(Event::rows() as $event) { ?>
-                                    <option value="<?= $event['slug'] ?>"
-                                        <?php
-                                        if(isset($_GET['event'])) {
-                                            if(strtolower(trim($_GET['event'])) == $event['slug'])
-                                                echo " selected";
-                                        }
-                                        ?>
-                                    ><?= $event['title'] ?></option>
-                                <?php } ?>
-                            </select>
-                        </div>
-                    </div>
-                    <?php
-                        require_once '../config/database.php';
-                        require_once '../models/Criterion.php';
-                        require_once '../models/Event.php';
-
-                        $criteria = [];
-                        if(isset($_GET['event'])) {
-                            $event = Event::findBySlug($_GET['event']);
-                            if($event)
-                                $criteria = $event->getAllCriteria();
-                            else
-                                $criteria = Criterion::all();
-                        }
-                        else
-                            $criteria = Criterion::all();
-                    ?>
-                    <table id="datatableid" class="table table-bordered table-info table-hover text-center">
-                        <thead class="table-dark">
-                        <tr>
-                            <th scope="col" class="d-none">ID</th>
-                            <th scope="col" class="d-none">Event_ID</th>
-                            <th scope="col">Title</th>
-                            <th scope="col">Percentage</th>
-                            <th scope="col">Operations</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <?php foreach ($criteria as $criterion) { ?>
-                            <tr>
-                                <td class="d-none"><?php echo $criterion->getId(); ?></td>
-                                <td class="d-none"><?php echo $criterion->getEventId(); ?></td>
-                                <td><?php echo $criterion->getTitle(); ?></td>
-                                <td><?php echo $criterion->getPercentage(); ?></td>
-                                <td>
-                                    <button type="button" class="btn btn-success editbtn"><i class="fa-solid fa-pen-to-square"></i></button>
-                                    <button type="button" class="btn btn-danger deletebtn" data-id="<?php echo $criterion->getId(); ?>"><i class="fa-solid fa-trash-can"></i></button>
-                                </td>
-                            </tr>
+        <div class="container my-4">
+            <h1 class="text-center"><b> <u>Criteria</u> </b></h1>
+            <div class="d-flex align-items-center mr-3 my-3">
+                <div class="btn-group" role="group" aria-label="Go to">
+                    <select onchange="window.location.href=this.value" class="btn btn-secondary">
+                        <option value="competitions.php">Competitions</option>
+                        <option value="categories.php">Categories</option>
+                        <option value="events.php">Events</option>
+                        <option selected value="">Criteria</option>
+                        <option value="teams.php">Teams</option>
+                        <option value="judges.php">Judges</option>
+                        <option value="technicals.php">Technicals</option>
+                    </select>
+                </div>
+                <div class="btn-group ml-3" role="group" aria-label="Go to">
+                    <?php require_once '../models/Event.php'; ?>
+                    <select onchange="window.location = `${window.location.pathname}${this.value !== '' ? '?event=' + this.value : ''}`" class="btn btn-secondary">
+                        <option selected value="">All Events</option>
+                        <?php foreach(Event::rows() as $event) { ?>
+                            <option value="<?= $event['slug'] ?>"
+                                <?php
+                                if(isset($_GET['event'])) {
+                                    if(strtolower(trim($_GET['event'])) == $event['slug'])
+                                        echo " selected";
+                                }
+                                ?>
+                            ><?= $event['title'] ?></option>
                         <?php } ?>
-                        </tbody>
-                    </table>
+                    </select>
+                </div>
+                <div class="btn-group ml-auto" role="group" aria-label="Go to">
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addmodal">ADD DATA</button>
                 </div>
             </div>
+            <?php
+                require_once '../config/database.php';
+                require_once '../models/Criterion.php';
+                require_once '../models/Event.php';
+
+                $criteria = [];
+                if(isset($_GET['event'])) {
+                    $event = Event::findBySlug($_GET['event']);
+                    if($event)
+                        $criteria = $event->getAllCriteria();
+                    else
+                        $criteria = Criterion::all();
+                }
+                else
+                    $criteria = Criterion::all();
+            ?>
+            <table id="datatableid" class="table table-striped table-info text-center">
+                <thead class="table-dark">
+                <tr>
+                    <th scope="col" class="d-none">ID</th>
+                    <th scope="col" class="d-none">Event_ID</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Percentage</th>
+                    <th scope="col">Operations</th>
+                </tr>
+                </thead>
+                <tbody class="table-dark">
+                <?php foreach ($criteria as $criterion) { ?>
+                    <tr>
+                        <td class="d-none"><?php echo $criterion->getId(); ?></td>
+                        <td class="d-none"><?php echo $criterion->getEventId(); ?></td>
+                        <td><?php echo $criterion->getTitle(); ?></td>
+                        <td><?php echo $criterion->getPercentage(); ?></td>
+                        <td>
+                            <button type="button" class="btn btn-success editbtn"><i class="fa-solid fa-pen-to-square"></i></button>
+                            <button type="button" class="btn btn-danger deletebtn" data-id="<?php echo $criterion->getId(); ?>"><i class="fa-solid fa-trash-can"></i></button>
+                        </td>
+                    </tr>
+                <?php } ?>
+                </tbody>
+            </table>
         </div>
 
         <!-- Bootstrap Javascript -->
