@@ -66,9 +66,9 @@
 								single-line
 								:min="0"
 								:max="100"
-								:loading="loading"
+								:loading="deductions[`loading_${team.id}`]"
 								v-model.number="deductions[`${event.slug}_${team.id}`].value"
-								@change="saveDeduction(deductions[`${event.slug}_${team.id}`])"
+								@change="saveDeduction(deductions[`${event.slug}_${team.id}`], team.id)"
 								:class="{
 									'text-error font-weight-bold': (
 										deductions[`${event.slug}_${team.id}`].value < 0 ||
@@ -152,7 +152,6 @@ export default {
 			dialog: false,
 			submitDialog: false,
 			submitLoading: false,
-			loading: false,
 			event: null,
 			timer: null,
 			teams: [],
@@ -189,10 +188,12 @@ export default {
 						this.event = data.event;
 						this.teams = data.teams;
 						this.submitDeduction = {};
+						console.log(data)
 
 						for (let i = 0; i < this.teams.length; i++) {
 							const team = this.teams[i];
 							let deduction = this.deductions[`${this.event.slug}_${team.id}`];
+							this.deductions[`loading_${team.id}`] = false;
 							this.submitDeduction['is_locked'] = deduction.is_locked;
 						}
 						
@@ -203,14 +204,14 @@ export default {
 				});
 			}
 		},
-		saveDeduction(deductions) {
-			this.loading = true
+		saveDeduction(deduction, teamId) {
+			this.deductions[`loading_${teamId}`] = true
 
-			if (deductions.value < 0 || deductions.value === '') {
-				deductions.value = 0;
+			if (deduction.value < 0 || deduction.value === '') {
+				deduction.value = 0;
 			}
-			else if (deductions.value > 100) {
-				deductions.value = 100;
+			else if (deduction.value > 100) {
+				deduction.value = 100;
 			}
 			$.ajax({
 				url: `${this.$store.getters.appURL}/${this.$store.getters['auth/getUser'].userType}.php`,
@@ -219,12 +220,12 @@ export default {
 					withCredentials: true
 				},
 				data: {
-					deductions
+					deduction: deduction
 				},
 				success: (data, textStatus, jqXHR) => {
-					if(this.loading) {
+					if(this.deductions[`loading_${teamId}`]) {
 						setTimeout(() => {
-							this.loading = false;
+							this.deductions[`loading_${teamId}`] = false;
 						}, 1000);
 					}
 					console.log(`${jqXHR.status}: ${jqXHR.statusText}`);

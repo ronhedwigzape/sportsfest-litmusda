@@ -41,6 +41,22 @@ else {
         }
 
         // auto save deductions for teams
+        else if (isset($_POST['deduction'])) {
+            require_once 'models/Deduction.php';
+            require_once 'models/Event.php';
+            require_once 'models/Team.php';
+
+            $deduction = $_POST['deduction'];
+
+                $technical->setEventTeamDeduction(
+                    Event::findById($deduction['event_id']),
+                    Team::findById($deduction['team_id']),
+                    floatval($deduction['value'])
+                );
+
+        }
+
+        // set is_locked deductions to true
         else if (isset($_POST['deductions'])) {
             require_once 'models/Deduction.php';
             require_once 'models/Event.php';

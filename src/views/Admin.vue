@@ -15,7 +15,11 @@
 				</tr>
 				<tr>
 					<td colspan="2" rowspan="2" class="text-center text-uppercase font-weight-bold">{{ event.title}}</td>
-					<td rowspan="2" class="text-center text-uppercase font-weight-bold text-red-darken-3">Deduct</td>
+					<template v-for="(technical, technicalKey, technicalIndex) in technicals" :key="technical.id">
+						<td rowspan="2" class="text-center text-uppercase font-weight-bold text-red-darken-3">
+							Deduct {{ technicalIndex + 1 }}
+						</td>
+					</template>
 					<template v-for="judge in judges" :key="judge.id">
 						<td colspan="2" class="text-center text-uppercase font-weight-bold">Judge {{ judge.number }}</td>
 					</template>
@@ -32,15 +36,37 @@
 				</tr>
 			</thead>
 			<tbody>
-			<tr v-for="team in teams" :key="team.id">
-				<td class="text-h5 text-center font-weight-bold">{{ team.id }}</td>
+			<tr v-for="(team, teamKey, teamIndex) in teams" :key="team.id">
+				<td class="text-h5 text-center font-weight-bold">{{ teamIndex + 1 }}</td>
 				<td class="text-center text-uppercase">{{ team.name }}</td>
-				<td class="text-center text-uppercase font-weight-bold text-red-darken-3">{{ team.deductions.total.toFixed(2) }}</td>
-				<template v-for="judge in judges" :key="judge.id">
-					<td class="text-center text-green-darken-3">
-						{{ team.ratings.inputs[`judge_${judge.id}`].final.original.toFixed(2) }}
+				 <template v-for="(technical, technicalKey, technicalIndex) in technicals" :key="technical.id">
+					<td
+						class="text-center text-uppercase font-weight-bold text-red-darken-3"
+						:class="{
+							'bg-grey-lighten-3' : !team.deductions.inputs[technicalKey].is_locked,
+							'bg-white' : team.deductions.inputs[technicalKey].is_locked
+						}"
+					>
+						{{ team.deductions.inputs[technicalKey].value.toFixed(2) }}
 					</td>
-					<td class="text-center font-weight-bold text-blue-darken-2">
+				</template> 
+				<template v-for="judge in judges" :key="judge.id">
+					<td
+						class="text-center text-red-darken-3"
+						:class="{
+							'bg-grey-lighten-3' : !team.ratings.inputs[`judge_${judge.id}`].final.is_locked,
+							'bg-white' : team.ratings.inputs[`judge_${judge.id}`].final.is_locked
+						}"
+					>
+						{{ team.ratings.inputs[`judge_${judge.id}`].final.deducted.toFixed(2) }}
+					</td>
+					<td
+						class="text-center font-weight-bold text-blue-darken-2"
+						:class="{
+							'bg-grey-lighten-3' : !team.ratings.inputs[`judge_${judge.id}`].final.is_locked,
+							'bg-white' : team.ratings.inputs[`judge_${judge.id}`].final.is_locked
+						}"
+					>
 						{{ team.ratings.inputs[`judge_${judge.id}`].rank.fractional.toFixed(2) }}
 					</td>
 				</template>
@@ -149,8 +175,6 @@
 							this.judges = data.results.judges;
 							this.technicals = data.results.technicals;
 							console.log(data)
-
-							console.log(this.teams)
                             // request again
                             if(data.event.slug === this.$route.params.eventSlug) {
                                 this.timer = setTimeout(() => {
