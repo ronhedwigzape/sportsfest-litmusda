@@ -155,7 +155,10 @@ class Admin extends User
 
                 // get technical's total team deductions
                 $technical_total = $technical->getEventTeamDeduction($event, $team);
-                $team_row['deductions']['inputs'][$key_technical] = $technical_total->toArray();
+                $team_row['deductions']['inputs'][$key_technical] = [
+                    'value'     => $technical_total->getValue(),
+                    'is_locked' => $technical_total->getIsLocked()
+                ];
 
                 // increment deductions total
                 $team_row['deductions']['total'] += $technical_total->getValue();
