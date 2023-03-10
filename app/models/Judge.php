@@ -508,7 +508,7 @@ class Judge extends User
             foreach($technicals as $technical) {
                 $deduction_total += ($technical->getEventTeamDeduction($event, $team))->getValue();
             }
-            $deduction_average = $deduction_total / sizeof($technicals);
+            $deduction_average = (sizeof($technicals) > 0) ? ($deduction_total / sizeof($technicals)) : 0;
             $total['deducted'] -= $deduction_average;
         }
 
