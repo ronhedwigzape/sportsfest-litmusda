@@ -19,6 +19,16 @@
 
     <title>CRUD</title>
 
+      <style>
+          body {
+              background-color: black;
+          }
+
+          h1 {
+              color: white;
+          }
+      </style>
+
   </head>
   <body>
     
@@ -26,7 +36,7 @@
      <!-- ADD POP UP FORM (Bootstrap MODAL) -->
      <div class="modal fade" id="addmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Add Data</h5>
@@ -37,9 +47,21 @@
 
                 <form action="events_operation.php" method="POST">
                     <div class="modal-body">
+                        <?php
+                            require_once '../models/Category.php';
+
+                            $entity_category = isset($_GET['category']) ? strtolower(trim($_GET['category'])) : '';
+                            $categories = Category::all();
+                        ?>
                         <div class="form-group">
-                            <label>Category_ID</label>
-                            <input type="number" name="category_id" id="category_id" class="form-control" placeholder="Select your Categories_ID 3(literary), 4(music) or 5(dance)"  min="3" max="5" autocomplete="off" required>
+                            <label>Category</label>
+                            <select name="category_id" class="form-control" required <?php if (!empty($entity_category)) echo 'disabled'; ?>>
+                                <option value="">Select Category</option>
+                                <?php foreach ($categories as $category) {
+                                    $selected = ($category->getSlug() == $entity_category) ? 'selected' : '';
+                                    echo "<option value={$category->getId()} $selected>{$category->getTitle()}</option>";
+                                } ?>
+                            </select>
                         </div>
 
                         <div class="form-group">
@@ -65,7 +87,7 @@
     <!-- EDIT POP UP FORM (Bootstrap MODAL) -->
     <div class="modal fade" id="editmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Edit Data</h5>
@@ -77,9 +99,21 @@
                 <form action="events_operation.php" method="POST">
                     <div class="modal-body">
                         <input type="hidden" name="update_id" id="update_id">
+                        <?php
+                            require_once '../models/Category.php';
+
+                            $entity_category = isset($_GET['category']) ? strtolower(trim($_GET['category'])) : '';
+                            $categories = Category::all();
+                        ?>
                         <div class="form-group">
-                            <label>Categories_ID</label>
-                            <input type="number" name="category_id" id="category_id" class="form-control" placeholder="Select your Categories_ID 3(literary), 4(music) or 5(dance)" min="3" max="5" autocomplete="off" required>
+                            <label>Category</label>
+                            <select name="category_id" id="category_id" class="form-control" required>
+                                <option value="">Select Category</option>
+                                <?php foreach ($categories as $category) {
+                                    $selected = ($category->getSlug() == $entity_category) ? 'selected' : '';
+                                    echo "<option value={$category->getId()} $selected>{$category->getTitle()}</option>";
+                                } ?>
+                            </select>
                         </div>
 
                         <div class="form-group">
@@ -130,82 +164,80 @@
     </div>
 
     <div class="container my-3">
-        <div class="card">
-            <div class="card-body">
-                <h1 class="text-center"><b> <u>Events</u> </b></h1>
-                <div class="d-flex align-items-center">
-                    <button type="button" class="btn btn-primary mr-3 my-3" data-toggle="modal" data-target="#addmodal">ADD DATA</button>
-                    <div class="btn-group" role="group" aria-label="Go to">
-                        <select onchange="window.location.href=this.value" class="btn btn-secondary">
-                            <option selected value="">Go to...</option>
-                            <option value="competitions.php">Competitions</option>
-                            <option value="categories.php">Categories</option>
-                            <option value="criteria.php">Criterion</option>
-                            <option value="teams.php">Teams</option>
-                            <option value="judges.php">Judges</option>
-                            <option value="technicals.php">Technicals</option>
-                        </select>
-                    </div>
-                    <div class="btn-group ml-auto" role="group" aria-label="Go to">
-                        <?php require_once '../models/Category.php'; ?>
-                        <select onchange="window.location = `${window.location.pathname}${this.value !== '' ? '?category=' + this.value : ''}`" class="btn btn-dark">
-                            <option selected value="">All Categories</option>
-                            <?php foreach(Category::rows() as $category) { ?>
-                                <option value="<?= $category['slug'] ?>"
-                                    <?php
-                                    if(isset($_GET['category'])) {
-                                        if(strtolower(trim($_GET['category'])) == $category['slug'])
-                                            echo " selected";
-                                    }
-                                    ?>
-                                ><?= $category['title'] ?></option>
-                            <?php } ?>
-                        </select>
-                    </div>
-                </div>
-                <?php
-                    require_once '../config/database.php';
-                    require_once '../models/Event.php';
-                    require_once '../models/Category.php';
-
-                    $events = [];
-                    if(isset($_GET['category'])) {
-                        $category = Category::findBySlug($_GET['category']);
-                        if($category)
-                            $events = $category->getAllEvents();
-                        else
-                            $events = Event::all();
-                    }
-                    else
-                        $events = Event::all();
-                ?>
-                <table id="datatableid" class="table table-bordered table-info table-hover text-center">
-                    <thead class="table-dark">
-                        <tr>
-                            <th scope="col" class="d-none">ID</th>
-                            <th scope="col" class="d-none">Categories_ID</th>
-                            <th scope="col">Slug</th>
-                            <th scope="col">Title</th>
-                            <th scope="col">Operations</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($events as $event) { ?>
-                            <tr>
-                                <td class="d-none"><?php echo $event->getId(); ?></td>
-                                <td class="d-none"><?php echo $event->getCategoryId(); ?></td>
-                                <td><?php echo $event->getSlug(); ?></td>
-                                <td><?php echo $event->getTitle(); ?></td>
-                                <td>
-                                    <button type="button" class="btn btn-success editbtn"><i class="fa-solid fa-pen-to-square"></i></button>
-                                    <button type="button" class="btn btn-danger deletebtn"><i class="fa-solid fa-trash-can"></i></button>
-                                </td>
-                            </tr>
-                        <?php } ?>
-                    </tbody>
-                </table>                    
+        <h1 class="text-center"><b> <u>Events</u> </b></h1>
+        <div class="d-flex align-items-center mr-3 my-3">
+            <div class="btn-group" role="group" aria-label="Go to">
+                <select onchange="window.location.href=this.value" class="btn btn-secondary">
+                    <option value="competitions.php">Competitions</option>
+                    <option value="categories.php">Categories</option>
+                    <option selected value="events.php">Events</option>
+                    <option value="criteria.php">Criterion</option>
+                    <option value="teams.php">Teams</option>
+                    <option value="judges.php">Judges</option>
+                    <option value="technicals.php">Technicals</option>
+                </select>
+            </div>
+            <div class="btn-group ml-3" role="group" aria-label="Go to">
+                <?php require_once '../models/Category.php'; ?>
+                <select onchange="window.location = `${window.location.pathname}${this.value !== '' ? '?category=' + this.value : ''}`" class="btn btn-secondary">
+                    <option selected value="">All Categories</option>
+                    <?php foreach(Category::rows() as $category) { ?>
+                        <option value="<?= $category['slug'] ?>"
+                            <?php
+                            if(isset($_GET['category'])) {
+                                if(strtolower(trim($_GET['category'])) == $category['slug'])
+                                    echo " selected";
+                            }
+                            ?>
+                        ><?= $category['title'] ?></option>
+                    <?php } ?>
+                </select>
+            </div>
+            <div class="btn-group ml-auto" role="group" aria-label="Go to">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addmodal">ADD DATA</button>
             </div>
         </div>
+        <?php
+            require_once '../config/database.php';
+            require_once '../models/Event.php';
+            require_once '../models/Category.php';
+
+            $events = [];
+            if(isset($_GET['category'])) {
+                $category = Category::findBySlug($_GET['category']);
+                if($category)
+                    $events = $category->getAllEvents();
+                else
+                    $events = Event::all();
+            }
+            else
+                $events = Event::all();
+        ?>
+        <table id="datatableid" class="table table-info table-striped text-center">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col" class="d-none">ID</th>
+                    <th scope="col" class="d-none">Categories_ID</th>
+                    <th scope="col">Slug</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Operations</th>
+                </tr>
+            </thead>
+            <tbody class="table-dark">
+                <?php foreach ($events as $event) { ?>
+                    <tr>
+                        <td class="d-none"><?php echo $event->getId(); ?></td>
+                        <td class="d-none"><?php echo $event->getCategoryId(); ?></td>
+                        <td><?php echo $event->getSlug(); ?></td>
+                        <td><?php echo $event->getTitle(); ?></td>
+                        <td>
+                            <button type="button" class="btn btn-success editbtn"><i class="fa-solid fa-pen-to-square"></i></button>
+                            <button type="button" class="btn btn-danger deletebtn"><i class="fa-solid fa-trash-can"></i></button>
+                        </td>
+                    </tr>
+                <?php } ?>
+            </tbody>
+        </table>
     </div>
 
     <!-- Bootstrap Javascript -->
@@ -239,6 +271,5 @@
             });
         });
     </script>
-
-</body>
+  </body>
 </html>

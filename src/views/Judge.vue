@@ -1,8 +1,9 @@
 <template>
 	<v-layout style="height: 100vh;">
-		<side-nav />
 
 		<top-nav />
+
+		<side-nav />
 
 		<!--	Judge Score Sheet	-->
 		<v-main v-if="$store.getters['auth/getUser'] !== null">
@@ -14,22 +15,23 @@
 				:height="1000"
 			>
 				<thead>
+					<tr class="mb-10"></tr>
 					<tr>
-						<th rowspan="2" class="text-uppercase text-center font-weight-bold text-deep-purple-darken-2">#</th>
-						<th rowspan="2" class="text-uppercase text-center font-weight-bold text-deep-purple-darken-2">
-							{{ event.title }} Teams
+						<th rowspan="2" class="text-uppercase text-center font-weight-bold">#</th>
+						<th rowspan="2" class="text-uppercase text-center font-weight-bold">
+							{{ event.title }}
 						</th>
 						<th v-for="criterion in criteria" style="width: 13%" class="text-center font-weight-bold text-uppercase">
-							<p class="text-deep-purple-darken-2" style="font-size: 0.8rem;">{{ criterion.title }}</p>
-							<b class="text-deep-purple-darken-4">{{ criterion.percentage }}%</b>
+							<p style="font-size: 0.8rem;">{{ criterion.title }}</p>
+							<b>{{ criterion.percentage }}%</b>
 						</th>
-						<th rowspan="2" style="width: 13%" class="text-uppercase text-center font-weight-bold text-deep-purple-darken-2">Total</th>
-						<th rowspan="2" style="width: 13%" class="text-uppercase text-center font-weight-bold text-deep-purple-darken-2">Rank</th>
+						<th rowspan="2" style="width: 13%" class="text-uppercase text-center font-weight-bold">Total</th>
+						<th rowspan="2" style="width: 13%" class="text-uppercase text-center font-weight-bold">Rank</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr v-for="(team, teamIndex) in teams" :key="team.id">
-						<td class="text-uppercase text-center text-h5 font-weight-bold text-deep-purple-darken-2">
+						<td class="text-uppercase text-center text-h5 font-weight-bold">
 							{{ teamIndex + 1 }}
 						</td>
 						<td class="text-uppercase text-center">
@@ -127,7 +129,7 @@
 								@keydown.left.prevent="moveLeft(criteria.length, teamIndex)"
 							/>
 						</td>
-						<td class="text-center text-deep-purple-darken-1"> {{ ranks[`team_${team.id}`].toFixed(2) }}</td>
+						<td class="text-center"> {{ ranks[`team_${team.id}`].toFixed(2) }}</td>
 					</tr>
 				</tbody>
 				<!--	Dialog	  -->
@@ -137,13 +139,12 @@
 							   justify="end"
 						>
 							<v-btn
-								class="py-6"
-								color="deep-purple-darken-2"
+								class="py-7 bg-grey-darken-4"
 								@click="openSubmitDialog"
 								:disabled="totals['is_locked']"
 								block
 							>
-							submit ratings
+							<b id="submit" style="font-size: 1.2rem;">submit ratings</b>
 							</v-btn>
 							<v-dialog
 								v-if="submitDialog"
@@ -152,16 +153,16 @@
 								max-width="400"
 							>
 								<v-card>
-									<v-card-title class="bg-deep-purple-darken-3">
-										Submit Ratings
+									<v-card-title class="bg-black">
+										<v-icon>mdi-information</v-icon> Submit Ratings
 									</v-card-title>
 									<v-card-text>
-										Please confirm that you wish to finalize the ratings for <b class="text-deep-purple-darken-3">{{ event.title }}</b>. This action cannot be undone.
+										Please confirm that you wish to finalize the ratings for <b>{{ event.title }}</b>. This action cannot be undone.
 									</v-card-text>
 									<v-card-actions>
 										<v-spacer></v-spacer>
-										<v-btn color="primary" prepend-icon="mdi-close" @click="submitDialog = false">Close</v-btn>
-										<v-btn color="primary" :loading="submitLoading" @click="submitRatings">Submit</v-btn>
+										<v-btn prepend-icon="mdi-close" @click="submitDialog = false">Close</v-btn>
+										<v-btn id="submit" :loading="submitLoading" @click="submitRatings">Submit</v-btn>
 									</v-card-actions>
 								</v-card>
 							</v-dialog>
@@ -173,7 +174,7 @@
 							>
 								<v-card>
 									<v-card-title class="bg-red-darken-4">
-										Submit Ratings
+										<v-icon>mdi-alert</v-icon>	Submit Ratings
 									</v-card-title>
 									<v-card-text>
 										<p class="mb-2 text-red-darken-4">
@@ -197,7 +198,7 @@
 			<div v-else-if="this.$route.params.eventSlug" class="d-flex justify-center align-center" style="height: 100vh;">
 				<v-progress-circular
 					:size="80"
-					color="primary"
+					color="black"
 					class="mb-16"
 					indeterminate
 				/>
@@ -403,7 +404,6 @@ export default {
 				const team = this.teams[i];
 				for (let criterion of this.criteria) {
 					const rating = this.ratings[`${this.event.slug}_${team.id}`][`${this.$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`];
-
 					rating.is_locked = true;
 					ratings.push(rating);
 					this.totals['is_locked'] = true;
@@ -547,5 +547,27 @@ export default {
 	tbody td {
 		border-bottom: 1px solid #ddd;
 		padding-bottom: 1rem !important;
+	}
+
+	#submit {
+		background: linear-gradient(-45deg, #e73c7e, #23a6d5, #23d5ab, #e8af45);
+		background-size: 300% 300%;
+
+		text-fill-color: transparent;
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+
+		animation: shine 10s ease alternate infinite;
+	}
+	@keyframes shine {
+		0% {
+			background-position: 0% 50%;
+		}
+		50% {
+			background-position: 100% 50%;
+		}
+		100% {
+			background-position: 0% 50%;
+		}
 	}
 </style>

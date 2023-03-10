@@ -1,17 +1,20 @@
 <template>
-    <side-nav />
-    <top-nav />
+
+	<top-nav />
+
+	<side-nav />
+
     <v-main>
         <!-- results -->
 		<v-table v-if="$route.params.eventSlug && event" density="comfortable" :bordered="true" hover>
 			<thead>
 				<tr>
-					<th colspan="20" class="text-h5 text-uppercase text-center font-weight-bold text-deep-purple-darken-2">
+					<th colspan="20" class="text-h5 text-uppercase text-center font-weight-bold">
 						Results of {{ event.title }}
 					</th>
 				</tr>
 				<tr>
-					<td colspan="2" rowspan="2" class="text-center text-uppercase font-weight-bold text-deep-purple-darken-2">{{ event.title}} Teams</td>
+					<td colspan="2" rowspan="2" class="text-center text-uppercase font-weight-bold">{{ event.title}}</td>
 					<td rowspan="2" class="text-center text-uppercase font-weight-bold text-red-darken-3">Deduct</td>
 					<template v-for="judge in judges" :key="judge.id">
 						<td colspan="2" class="text-center text-uppercase font-weight-bold">Judge {{ judge.number }}</td>
@@ -30,7 +33,7 @@
 			</thead>
 			<tbody>
 			<tr v-for="team in teams" :key="team.id">
-				<td class="text-h5 text-center font-weight-bold text-deep-purple-darken-2">{{ team.id }}</td>
+				<td class="text-h5 text-center font-weight-bold">{{ team.id }}</td>
 				<td class="text-center text-uppercase">{{ team.name }}</td>
 				<td class="text-center text-uppercase font-weight-bold text-red-darken-3">{{ team.deductions.total.toFixed(2) }}</td>
 				<template v-for="judge in judges" :key="judge.id">
@@ -86,7 +89,7 @@
         <div v-else-if="this.$route.params.eventSlug" class="d-flex justify-center align-center" style="height: 100vh;">
             <v-progress-circular
                 :size="80"
-                color="primary"
+                color="black"
                 class="mb-16"
                 indeterminate
             />
@@ -145,6 +148,7 @@
 							this.teams = data.results.teams;
 							this.judges = data.results.judges;
 							this.technicals = data.results.technicals;
+							console.log(data)
 
 							console.log(this.teams)
                             // request again
