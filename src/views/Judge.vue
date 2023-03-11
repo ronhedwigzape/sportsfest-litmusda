@@ -9,7 +9,6 @@
 			v-if="$route.params.eventSlug && event"
 			density="comfortable"
 			fixed-header
-			hover
 			:height="scoreSheetHeight"
 		>
 			<thead>
@@ -160,7 +159,7 @@
 						   justify="end"
 					>
 						<v-btn
-							class="py-7 bg-grey-darken-4"
+							class="py-7 bg-grey-lighten-2"
 							@click="openSubmitDialog"
 							:disabled="totals['is_locked']"
 							block
@@ -567,7 +566,29 @@ export default {
 		},
 		scoreSheetHeight() {
 			return this.$store.getters.windowHeight - 64;
-		}
+		},
+		// scoreSheetDisabled() {
+		// 	let disabled = true;
+		// 		if(!this.totals['is_locked']) {
+		// 			disabled = false;
+		// 		}
+		//
+		// 	for (let i = 0; i < this.teams.length; i++) {
+		// 		const rating = this.ratings[`${this.event.slug}_${this.teams[i].id}`];
+		// 		for (let j = 0; j < this.criteria.length; j++) {
+		// 			const criterion = this.criteria[j];
+		// 			const ratings = rating[`${this.$store.getters['auth/getUser'].id}_${criterion.id}_${this.teams[i].id}`]
+		// 			if (!ratings.is_locked) {
+		// 				disabled = false;
+		// 				break;
+		// 			}
+		// 		}
+		// 	}
+		//
+		// 	// alert(disabled)
+		//
+		// 	return disabled;
+		// }
 	}
 }
 </script>

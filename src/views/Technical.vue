@@ -9,7 +9,6 @@
 				v-if="$route.params.eventSlug && event"
 				density="comfortable"
 				fixed-header
-				hover
 				:height="scoreSheetHeight"
 			>
 				<thead>
@@ -103,7 +102,7 @@
 							justify="end"
 					>
 						<v-btn
-							class="py-7 bg-grey-darken-4"
+							class="py-7 bg-grey-lighten-2"
 							@click="submitDialog = true"
 							:disabled="submitDeduction['is_locked']"
 							block
