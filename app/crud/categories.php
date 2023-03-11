@@ -1,7 +1,36 @@
 <?php
 
-    require_once '../config/database.php';
+    if(!isset($_SESSION)){
+        session_start();
+    }
 
+    require_once '../config/database.php';
+    require_once '../models/Admin.php';
+
+    // Check if the user is not logged in and is not trying to log in
+    if(!isset($_SESSION['admin_id']) && !isset($_POST['username']) && !isset($_POST['password'])){
+        header('Location: login.php');
+        exit;
+    }
+
+    if(isset($_POST['username']) && isset($_POST['password'])){
+        $username = $_POST['username'];
+        $password = $_POST['password'];
+
+        $admin = ((new Admin($username, $password)))->signIn();
+        if($admin){
+            $_SESSION['admin_id'] = $admin->getId();
+            header('Location: categories.php');
+            exit;
+        }else{
+            $error = "Invalid username or password";
+        }
+    }
+    // Check if the user is logged in before allowing access to competitions.php
+    if(!isset($_SESSION['admin_id'])){
+        header('Location: login.php');
+        exit;
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -194,6 +223,9 @@
                     </select>
                 </div>
                 <div class="btn-group ml-auto" role="group" aria-label="Go to">
+                    <a class="btn btn-danger" href="logout.php" role="button">SIGN OUT</a>
+                </div>
+                <div class="btn-group ml-3" role="group" aria-label="Go to">
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addmodal">ADD DATA</button>
                 </div>
             </div>
