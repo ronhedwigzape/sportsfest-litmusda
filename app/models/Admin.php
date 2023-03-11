@@ -324,9 +324,10 @@ class Admin extends User
      * Tabulate a category
      *
      * @param Category $category
+     * @param bool $verbose
      * @return array
      */
-    private function tabulateCategory($category)
+    private function tabulateCategory($category, $verbose = false)
     {
         // initialize $result
         $result = [
@@ -351,13 +352,16 @@ class Admin extends User
 
         // tabulate each event in category
         foreach($category->getAllEvents() as $event) {
-            // append event to $result['events']
-            $key_event = $event->getSlug();
-            if(!isset($result['events'][$key_event]))
-                $result['events'][$key_event] = $event->toArray();
-
             // tabulate event
             $tabulated_event = $this->tabulateEvent($event);
+
+            // append event to $result['events']
+            $key_event = $event->getSlug();
+            if(!isset($result['events'][$key_event])) {
+                $result['events'][$key_event] = $event->toArray();
+                if($verbose)
+                    $result['events'][$key_event]['results'] = $tabulated_event;
+            }
 
             // accumulate team inputs and points
             foreach($teams as $team) {
@@ -426,9 +430,10 @@ class Admin extends User
      * Tabulate a competition
      *
      * @param Competition $competition
+     * @param bool $verbose
      * @return array
      */
-    private function tabulateCompetition($competition)
+    private function tabulateCompetition($competition, $verbose = false)
     {
         // initialize $result
         $result = [
@@ -453,13 +458,16 @@ class Admin extends User
 
         // tabulate each category in competition
         foreach($competition->getAllCategories() as $category) {
+            // tabulate category
+            $tabulated_category = $this->tabulateCategory($category, $verbose);
+
             // append category to $result['categories']
             $key_category = $category->getSlug();
-            if(!isset($result['categories'][$key_category]))
+            if(!isset($result['categories'][$key_category])) {
                 $result['categories'][$key_category] = $category->toArray();
-
-            // tabulate category
-            $tabulated_category = $this->tabulateCategory($category);
+                if($verbose)
+                    $result['categories'][$key_category]['results'] = $tabulated_category;
+            }
 
             // accumulate team inputs and points
             foreach($teams as $team) {
@@ -524,9 +532,10 @@ class Admin extends User
     /***************************************************************************
      * Tabulate all
      *
+     * @param bool $verbose
      * @return array
      */
-    private function tabulateAll()
+    private function tabulateAll($verbose = false)
     {
         // initialize $result
         $result = [
@@ -552,13 +561,16 @@ class Admin extends User
         // tabulate each competition
         require_once 'Competition.php';
         foreach(Competition::all() as $competition) {
+            // tabulate competition
+            $tabulated_competition = $this->tabulateCompetition($competition, $verbose);
+
             // append competition to $result['competitions']
             $key_competition = $competition->getSlug();
-            if(!isset($result['competitions'][$key_competition]))
+            if(!isset($result['competitions'][$key_competition])) {
                 $result['competitions'][$key_competition] = $competition->toArray();
-
-            // tabulate competition
-            $tabulated_competition = $this->tabulateCompetition($competition);
+                if($verbose)
+                    $result['competitions'][$key_competition]['results'] = $tabulated_competition;
+            }
 
             // accumulate team inputs and points
             foreach($teams as $team) {
@@ -624,34 +636,35 @@ class Admin extends User
      * Tabulate
      *
      * @param Competition|Category|Event $entity
+     * @param bool $verbose
      * @return array
      */
-    public function tabulate($entity = null)
+    public function tabulate($entity = null, $verbose = false)
     {
         // tabulate event
         require_once 'Event.php';
         if($entity instanceof Event) {
             if(Event::exists($entity->getId()))
-                return $this->tabulateEvent($entity);
+                return $this->tabulateEvent($entity, $verbose);
         }
 
         // tabulate category
         require_once 'Category.php';
         if($entity instanceof Category) {
             if(Category::exists($entity->getId()))
-                return $this->tabulateCategory($entity);
+                return $this->tabulateCategory($entity, $verbose);
         }
 
         // tabulate competition
         require_once 'Competition.php';
         if($entity instanceof Competition) {
             if(Competition::exists($entity->getId()))
-                return $this->tabulateCompetition($entity);
+                return $this->tabulateCompetition($entity, $verbose);
         }
 
         // tabulate all
         if($entity == null)
-            return $this->tabulateAll();
+            return $this->tabulateAll($verbose);
 
         // default
         return [];
