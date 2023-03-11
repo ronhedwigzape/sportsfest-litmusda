@@ -16,62 +16,97 @@
             $error = "Invalid username or password";
         }
     }
+
+    if (isset($_POST['login'])) {
+        // Check if the submitted username and password are correct
+        $username = $_POST['username'];
+        $password = $_POST['password'];
+      if ($username === 'valid_username' && $password === 'valid_password') {
+          header('Location: competitions.php');
+        } else {
+            // The username and password are incorrect, show a warning message
+            $error_msg = '*Incorrect username or password...';
+        }
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="style.css">
-    <link rel="shortcut icon" href="logo.png">
-    <title>CRUD | Sign In</title>
-</head>
-<body>
-<div class="main">
-    <div class="container">
-        <center>
-            <div class="middle">
-                <div id="login">
-                    <div class="text-color text-light">
-                        <h2>Sign In</h2>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <link rel="shortcut icon" href="logo.png">
+        <link rel="stylesheet" href="style.css">
+
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="dist/bootstrap-4.2.1/css/bootstrap.min.css">
+
+        <!-- For Icon -->
+        <link rel="stylesheet" href="dist/fontawesome-6.3.0/css/all.min.css">
+
+        <title>CRUD | Sign In</title>
+    </head>
+    <body>
+        <div class="main">
+            <div class="container">
+                <center>
+                    <div class="middle">
+                        <div id="login">
+                            <div class="text-color text-info">
+                                <h2><u>Sign In</u></h2>
+                            </div>
+                            <div id="login-warning">
+                                <?php if(isset($error_msg)) { ?>
+                                    <div class="alert"><?php echo $error_msg; ?></div>
+                                <?php } ?>
+                            </div>
+
+                            <form action="" method="post" class="my-4">
+                                <fieldset class="clearfix">
+                                    <div class="form-element">
+                                        <span class="fa fa-user"></span><input type="text" name="username" id="username" autocomplete="off" placeholder="Enter Username" required>
+                                    </div>
+
+                                    <div class="form-element">
+                                        <span class="fa fa-lock"></span>
+                                        <div class="password-wrapper">
+                                            <input type="password" name="password" id="password" placeholder="Enter Password" required>
+                                            <span class="toggle-password"><i class="fa fa-eye"></i></span>
+                                        </div>
+                                    </div>
+
+                                    <button class="btn btn-info text-center" style="width:100%;" type="submit" name="login">Login</button>
+                                </fieldset>
+                            </form>
+                            <div class="clearfix"></div>
+                        </div> <!-- end login -->
+                        <div class="logo">
+                            <img src="uploads/foundation-logo.png" alt="">
+                            <div class="clearfix"></div>
+                        </div>
                     </div>
-                    <br>
-
-                    <form action="" method="post">
-
-                        <fieldset class="clearfix">
-                            <div class="form-element">
-                                <span class="fa fa-user"></span><input type="text" name="username" id="username" autocomplete="off" placeholder="Enter Usename" required>
-                            </div>
-
-                            <div class="form-element">
-                                <span class="fa fa-lock"></span><input type="password" name="password" id="password"  placeholder="Enter Password" required>
-                            </div>
-
-                            <button class="btn btn-secondary" style="text-align:center; width:100%;" type="submit" name="login">Login</button>
-                        </fieldset>
-                    </form>
-                    <div class="clearfix"></div>
-                </div> <!-- end login -->
-                <div class="logo">
-                    <img src="uploads/ACLClogo.png" alt="">
-                    <div class="clearfix"></div>
-                </div>
+                </center>
             </div>
-    </div>
-</div>
-</center>
-</div>
-</div>
+        </div>
 
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-</body>
+        <!-- Bootstrap Javascript -->
+        <script src="dist/jquery-3.6.4/jquery-3.6.4.min.js"></script>
+        <script src="dist/bootstrap-4.2.1/js/bootstrap.min.js"></script>
+
+        <script>
+            const togglePassword = document.querySelector('.toggle-password');
+            const password = document.querySelector('#password');
+
+            togglePassword.addEventListener('click', function (e) {
+                // toggle the type attribute
+                const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+                password.setAttribute('type', type);
+                // toggle the eye icon
+                this.querySelector('i').classList.toggle('fa-eye');
+                this.querySelector('i').classList.toggle('fa-eye-slash');
+            });
+        </script>
+
+    </body>
 </html>

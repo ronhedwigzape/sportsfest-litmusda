@@ -1,24 +1,12 @@
 @charset "utf-8";
 
-div.main{
-    background: #0264d6; /* Old browsers */
-    background: -moz-radial-gradient(center, ellipse cover,  #0264d6 1%, #1c2b5a 100%); /* FF3.6+ */
-    background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(1%,#0264d6), color-stop(100%,#1c2b5a)); /* Chrome,Safari4+ */
-    background: -webkit-radial-gradient(center, ellipse cover,  #0264d6 1%,#1c2b5a 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-radial-gradient(center, ellipse cover,  #0264d6 1%,#1c2b5a 100%); /* Opera 12+ */
-    background: -ms-radial-gradient(center, ellipse cover,  #0264d6 1%,#1c2b5a 100%); /* IE10+ */
-    background: radial-gradient(ellipse at center,  #0264d6 1%,#1c2b5a 100%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0264d6', endColorstr='#1c2b5a',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
-    height:calc(100vh);
-    width:100%;
-}
-
 [class*="fontawesome-"]:before {
     font-family: 'FontAwesome', sans-serif;
 }
 
 body {
-
+    background: url('uploads/haikyu.png') no-repeat center center fixed;
+    background-size: cover;
     color: #606468;
     font: 87.5%/1.5em 'Open Sans', sans-serif;
     margin: 0;
@@ -68,12 +56,12 @@ p {
     width: 59%;
 }
 
-img{
-    width: 225px;
-    height: 225px;
-    position: fixed;
-
-    left: 60%;
+img {
+    max-width: 150%;
+    height: auto;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 #login form span.fa {
@@ -92,12 +80,13 @@ img{
 #login form input {
     height: 50px;
 }
+
 fieldset{
     padding:0;
     border:0;
     margin: 0;
-
 }
+
 #login form input[type="text"], input[type="password"] {
     background-color: #fff;
     border-radius: 0px 3px 3px 0px;
@@ -131,11 +120,47 @@ fieldset{
 #login > p span {
     padding-left: 5px;
 }
+
+#login-warning {
+    font-size: 13px;
+    color: red;
+    background: none;
+}
+
 .middle {
     display: flex;
     width: 600px;
 }
 
+.form-element {
+    position: relative;
+}
 
+.password-wrapper {
+    position: relative;
+}
 
+.toggle-password {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #666;
+}
 
+.toggle-password:hover {
+    color: #333;
+}
+
+.toggle-password i {
+    font-size: 16px;
+}
+
+.password-wrapper.show-password input[type="password"] {
+    padding-right: 32px;
+}
+
+.password-wrapper.show-password .toggle-password i {
+    transform: rotate(180deg);
+}

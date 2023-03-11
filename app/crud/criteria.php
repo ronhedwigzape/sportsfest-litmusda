@@ -1,6 +1,7 @@
 <?php
 
     require_once '../config/database.php';
+    require_once 'auth.php';
 
 ?>
 <!DOCTYPE html>
@@ -17,20 +18,10 @@
         <!-- For Icon -->
         <link rel="stylesheet" href="dist/fontawesome-6.3.0/css/all.min.css">
 
-        <title>CRUD</title>
-
-        <style>
-            body {
-                background-color: black;
-            }
-
-            h1 {
-                color: white;
-            }
-        </style>
+        <title>Criteria | CRUD</title>
 
     </head>
-    <body>
+    <body style="background-color: black">
         <!-- Modal -->
         <!-- ADD POP UP FORM (Bootstrap MODAL) -->
         <div class="modal fade" id="addmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -162,8 +153,32 @@
             </div>
         </div>
 
+        <!-- Sign Out POP UP Form (Bootstrap MODAL) -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Sign Out</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form action="" method="POST">
+                        <div class="modal-body">
+                            <input type="hidden" name="signout">
+                            <h4> Are you sure you want to Sign Out??</h4>
+                        </div>
+                    </form>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                        <a class="btn btn-danger" href="logout.php" role="button">Yes</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="container my-4">
-            <h1 class="text-center"><b> <u>Criteria</u> </b></h1>
+            <h1 class="text-center text-light"><b> <u>Criteria</u> </b></h1>
             <div class="d-flex align-items-center mr-3 my-3">
                 <div class="btn-group" role="group" aria-label="Go to">
                     <select onchange="window.location.href=this.value" class="btn btn-secondary">
@@ -194,6 +209,11 @@
                 </div>
                 <div class="btn-group ml-auto" role="group" aria-label="Go to">
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addmodal">ADD DATA</button>
+                </div>
+                <div class="btn-group ml-3" role="group" aria-label="Go to">
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">
+                        Sign out <i class="fa-solid fa-right-from-bracket"></i>
+                    </button>
                 </div>
             </div>
             <?php
