@@ -14,20 +14,27 @@
 			>
 				<thead>
 					<tr>
-						<th colspan="2" class="text-uppercase text-center font-weight-bold text-h5 py-3">
+						<th colspan="2" class="text-uppercase text-center font-weight-bold text-h4 text-grey-darken-4 py-3">
 							{{ event.title }} 
 						</th>
-						<th style="width: 13%;" class="text-uppercase text-center font-weight-bold py-3">
-							Deductions
+						<th
+							style="width: 1rem;"
+							class="text-uppercase text-center text-grey-darken-4 text-h4 py-3"
+						>
+							Deduction
 						</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr v-for="(team, teamIndex) in teams" :key="team.id">
-						<td class="text-uppercase text-center font-weight-bold text-h5" style="width: 30px;">
+					<tr
+						v-for="(team, teamIndex) in teams"
+						:key="team.id"
+						:class="{ 'bg-grey-lighten-4': coordinates.y == teamIndex }"
+					>
+						<td class="text-uppercase text-center text-grey-darken-4 font-weight-bold text-h4" style="width: 0.2rem;">
 							{{ teamIndex + 1 }}
 						</td>
-						<td class="text-uppercase text-center font-weight-bold">
+						<td class="text-uppercase text-center font-weight-bold" style="width: 1rem;">
 							<v-col align="center">
 								<v-img
 									:src="`${$store.getters.appURL}/crud/uploads/${team.logo}`"
@@ -84,6 +91,7 @@
 								@keydown.down.prevent="moveDown(teamIndex)"
 								@keydown.enter="moveDown(teamIndex)"
 								@keydown.up.prevent="moveUp(teamIndex)"
+								@focus.passive="updateCoordinates(teamIndex)"
 							/>
 						</td>
 					</tr>
@@ -157,7 +165,11 @@ export default {
 			timer: null,
 			teams: [],
 			deductions: {},
-			submitDeduction: {}
+			submitDeduction: {},
+			coordinates: {
+				x: -1,
+				y: -1
+			}
 		}
 	},
 	computed: {
@@ -302,6 +314,10 @@ export default {
 			if(y >= 0)
 				this.move(y);
 		},
+		updateCoordinates (y) {
+			this.coordinates.y = y;
+			this.move(y, false);
+		}
 	}
 }
 </script>
