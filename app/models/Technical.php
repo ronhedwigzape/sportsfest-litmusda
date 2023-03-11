@@ -433,4 +433,18 @@ class Technical extends User
         }
         return $deductions;
     }
+
+
+    /***************************************************************************
+     * Unlock technical's deductions on a given event
+     *
+     * @param Event $event
+     * @return void
+     */
+    public function unlockDeductions($event)
+    {
+        foreach($this->getAllEventDeductions($event) as $key => $deduction) {
+            $deduction->lock(false);
+        }
+    }
 }
