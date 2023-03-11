@@ -102,7 +102,7 @@
 							justify="end"
 					>
 						<v-btn
-							class="py-7 bg-grey-lighten-3"
+							class="py-7 bg-grey-lighten-2"
 							@click="submitDialog = true"
 							:disabled="submitDeduction['is_locked']"
 							block
