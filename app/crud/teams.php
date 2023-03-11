@@ -1,6 +1,6 @@
 <?php
 
-require_once '../config/database.php';
+    require_once '../config/database.php';
 
 ?>
 <!DOCTYPE html>
@@ -19,14 +19,22 @@ require_once '../config/database.php';
 
         <title>CRUD</title>
 
+        <style>
+            body {
+                background-color: black;
+            }
+
+            h1 {
+                color: white;
+            }
+        </style>
     </head>
     <body>
-
         <!-- Modal -->
         <!-- ADD POP UP FORM (Bootstrap MODAL) -->
         <div class="modal fade" id="addmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
              aria-hidden="true">
-            <div class="modal-dialog" role="document">
+            <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Add Data </h5>
@@ -66,7 +74,7 @@ require_once '../config/database.php';
         <!-- EDIT POP UP FORM (Bootstrap MODAL) -->
         <div class="modal fade" id="editmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
              aria-hidden="true">
-            <div class="modal-dialog" role="document">
+            <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel"> Edit Data </h5>
@@ -131,54 +139,54 @@ require_once '../config/database.php';
             </div>
         </div>
 
-        <div class="container my-3">
-            <div class="card">
-                <div class="card-body">
-                    <h1 class="text-center"><b> <u>Teams</u> </b></h1>
-                    <button type="button" class="btn btn-primary mr-3 my-3" data-toggle="modal" data-target="#addmodal">ADD DATA</button>
-                    <div class="btn-group" role="group" aria-label="Go to">
-                        <select onchange="window.location.href=this.value" class="btn btn-secondary">
-                            <option selected value="">Go to...</option>
-                            <option value="competitions.php">Competitions</option>
-                            <option value="categories.php">Categories</option>
-                            <option value="events.php">Events</option>
-                            <option value="criteria.php">Criterion</option>
-                            <option value="judges.php">Judges</option>
-                            <option value="technicals.php">Technicals</option>
-                        </select>
-                    </div>
-                    <?php
-                        require_once '../models/Team.php';
-
-                        $teams = Team::all();
-                    ?>
-                    <table id="datatableid" class="table table-bordered table-info table-hover text-center" >
-                        <thead class="table-dark">
-                        <tr>
-                            <th scope="col" class="d-none">ID</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Color</th>
-                            <th scope="col">Logo</th>
-                            <th scope="col">Operations</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <?php foreach ($teams as $team) { ?>
-                            <tr>
-                                <td class="d-none"><?php echo $team->getId(); ?></td>
-                                <td><?php echo $team->getName(); ?></td>
-                                <td><?php echo $team->getColor(); ?></td>
-                                <td><?php echo '<img src="uploads/'.$team->getLogo().'" width="50"/>'; ?></td>
-                                <td>
-                                    <button type="button" class="btn btn-success editbtn"><i class="fa-solid fa-pen-to-square"></i></button>
-                                    <button type="button" class="btn btn-danger deletebtn" data-id="<?php echo $team->getId(); ?>"><i class="fa-solid fa-trash-can"></i></button>
-                                </td>
-                            </tr>
-                        <?php } ?>
-                        </tbody>
-                    </table>
+        <div class="container my-4">
+            <h1 class="text-center"><b> <u>Teams</u> </b></h1>
+            <div class="d-flex align-items-center mr-3 my-3">
+                <div class="btn-group" role="group" aria-label="Go to">
+                    <select onchange="window.location.href=this.value" class="btn btn-secondary">
+                        <option value="competitions.php">Competitions</option>
+                        <option value="categories.php">Categories</option>
+                        <option value="events.php">Events</option>
+                        <option value="criteria.php">Criterion</option>
+                        <option selected value="">Teams</option>
+                        <option value="judges.php">Judges</option>
+                        <option value="technicals.php">Technicals</option>
+                    </select>
+                </div>
+                <div class="btn-group ml-auto" role="group" aria-label="Go to">
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addmodal">ADD DATA</button>
                 </div>
             </div>
+            <?php
+                require_once '../models/Team.php';
+
+                $teams = Team::all();
+            ?>
+            <table id="datatableid" class="table table-striped table-info text-center" >
+                <thead class="table-dark">
+                <tr>
+                    <th scope="col" class="d-none">ID</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Color</th>
+                    <th scope="col">Logo</th>
+                    <th scope="col">Operations</th>
+                </tr>
+                </thead>
+                <tbody class="table-dark">
+                <?php foreach ($teams as $team) { ?>
+                    <tr>
+                        <td class="d-none"><?php echo $team->getId(); ?></td>
+                        <td><?php echo $team->getName(); ?></td>
+                        <td><?php echo $team->getColor(); ?></td>
+                        <td><?php echo '<img src="uploads/'.$team->getLogo().'" width="50"/>'; ?></td>
+                        <td>
+                            <button type="button" class="btn btn-success editbtn"><i class="fa-solid fa-pen-to-square"></i></button>
+                            <button type="button" class="btn btn-danger deletebtn" data-id="<?php echo $team->getId(); ?>"><i class="fa-solid fa-trash-can"></i></button>
+                        </td>
+                    </tr>
+                <?php } ?>
+                </tbody>
+            </table>
         </div>
 
         <!-- Bootstrap Javascript -->
