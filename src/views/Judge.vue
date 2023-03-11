@@ -9,30 +9,46 @@
 			v-if="$route.params.eventSlug && event"
 			density="comfortable"
 			fixed-header
-			hover
 			:height="scoreSheetHeight"
 		>
 			<thead>
 				<tr>
-					<th colspan="2" class="text-uppercase text-center font-weight-bold text-h4 py-3">
+					<th colspan="2" class="text-uppercase text-center font-weight-bold text-h4 text-grey-darken-4 py-3">
 						{{ event.title }}
 					</th>
-					<th v-for="criterion in criteria" style="width: 13%" class="text-center font-weight-bold text-uppercase py-3">
+					<th
+						v-for="(criterion, criterionIndex) in criteria"
+						style="width: 13%"
+						class="text-center text-uppercase py-3"
+						:class="{ 'bg-grey-lighten-4': coordinates.x == criterionIndex }"
+					>
 						<div class="d-flex h-100 flex-column align-content-space-between">
-							<p style="font-size: 0.8rem;">{{ criterion.title }}</p>
-							<b style="margin-top: auto">{{ criterion.percentage }}%</b>
+							<p class="text-grey-darken-2">{{ criterion.title }}</p>
+							<b class="text-grey-darken-4" style="margin-top: auto">{{ criterion.percentage }}%</b>
 						</div>
 					</th>
-					<th style="width: 13%" class="text-uppercase text-center font-weight-bold py-3">Total</th>
-					<th style="width: 13%" class="text-uppercase text-center font-weight-bold py-3">Rank</th>
+					<th
+						style="width: 13%"
+						class="text-uppercase text-center text-grey-darken-4 font-weight-bold text-h5 py-3"
+						:class="{ 'bg-grey-lighten-4': coordinates.x == criteria.length }"
+					>
+						Total
+					</th>
+					<th style="width: 13%" class="text-uppercase text-center text-grey-darken-4 font-weight-bold text-h5 py-3">
+						Rank
+					</th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr v-for="(team, teamIndex) in teams" :key="team.id">
-					<td class="text-uppercase text-center text-h5 font-weight-bold">
+				<tr
+					v-for="(team, teamIndex) in teams"
+					:key="team.id"
+					:class="{ 'bg-grey-lighten-4': coordinates.y == teamIndex }"
+				>
+					<td class="text-uppercase text-center text-h4 font-weight-bold text-grey-darken-4" style="width: 6%">
 						{{ teamIndex + 1 }}
 					</td>
-					<td class="text-uppercase text-center">
+					<td class="text-uppercase text-center font-weight-bold" :style="{ 'color' : team.color }">
 						<v-col align="center">
 							<v-img
 								:src="`${$store.getters.appURL}/crud/uploads/${team.logo}`"
@@ -59,7 +75,11 @@
 						</v-col> 
 						{{ team.name }}
 					</td>
-					<td v-for="(criterion, criterionIndex) in criteria" :key="criterion.id">
+					<td
+						v-for="(criterion, criterionIndex) in criteria"
+						:key="criterion.id"
+						:class="{ 'bg-grey-lighten-4': coordinates.x == criterionIndex }"
+					>
 						<v-text-field
 							type="number"
 							class="font-weight-bold"
@@ -89,9 +109,10 @@
 							@keydown.up.prevent="moveUp(criterionIndex, teamIndex)"
 							@keydown.right.prevent="moveRight(criterionIndex, teamIndex)"
 							@keydown.left.prevent="moveLeft(criterionIndex, teamIndex)"
+							@focus.passive="updateCoordinates(criterionIndex, teamIndex)"
 						/>
 					</td>
-					<td>
+					<td :class="{ 'bg-grey-lighten-4': coordinates.x == criteria.length }">
 						<v-text-field
 							type="number"
 							class="font-weight-bold"
@@ -125,6 +146,7 @@
 							@keydown.up.prevent="moveUp(criteria.length, teamIndex)"
 							@keydown.right.prevent="moveRight(criteria.length, teamIndex)"
 							@keydown.left.prevent="moveLeft(criteria.length, teamIndex)"
+							@focus.passive="updateCoordinates(criteria.length, teamIndex)"
 						/>
 					</td>
 					<td class="text-center"> {{ ranks[`team_${team.id}`].toFixed(2) }}</td>
@@ -137,7 +159,7 @@
 						   justify="end"
 					>
 						<v-btn
-							class="py-7 bg-grey-darken-4"
+							class="py-7 bg-grey-lighten-2"
 							@click="openSubmitDialog"
 							:disabled="totals['is_locked']"
 							block
@@ -227,6 +249,10 @@ export default {
 			criteria: [],
 			ratings: {},
 			totals: {},
+			coordinates: {
+				x: -1,
+				y: -1
+			}
 		}
 	},
 	watch: {
@@ -466,6 +492,11 @@ export default {
 			x -= 1;
 			if(x >= 0)
 				this.move(x, y);
+		},
+		updateCoordinates (x, y) {
+			this.coordinates.x = x;
+			this.coordinates.y = y;
+			this.move(x, y, false);
 		}
 	},
 	computed: {
@@ -535,7 +566,29 @@ export default {
 		},
 		scoreSheetHeight() {
 			return this.$store.getters.windowHeight - 64;
-		}
+		},
+		// scoreSheetDisabled() {
+		// 	let disabled = true;
+		// 		if(!this.totals['is_locked']) {
+		// 			disabled = false;
+		// 		}
+		//
+		// 	for (let i = 0; i < this.teams.length; i++) {
+		// 		const rating = this.ratings[`${this.event.slug}_${this.teams[i].id}`];
+		// 		for (let j = 0; j < this.criteria.length; j++) {
+		// 			const criterion = this.criteria[j];
+		// 			const ratings = rating[`${this.$store.getters['auth/getUser'].id}_${criterion.id}_${this.teams[i].id}`]
+		// 			if (!ratings.is_locked) {
+		// 				disabled = false;
+		// 				break;
+		// 			}
+		// 		}
+		// 	}
+		//
+		// 	// alert(disabled)
+		//
+		// 	return disabled;
+		// }
 	}
 }
 </script>
