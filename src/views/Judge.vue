@@ -9,7 +9,6 @@
 			v-if="$route.params.eventSlug && event"
 			density="comfortable"
 			fixed-header
-			hover
 			:height="scoreSheetHeight"
 		>
 			<thead>
