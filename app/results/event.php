@@ -41,11 +41,16 @@ else {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Results in <?= $event->getTitle() ?></title>
 </head>
 <body>
-<h1><?= $event->getTitle() ?></h1>
+    <img class=img-"sportfest" src="img/foundation-logo.png" alt="sportfest">
+    <br>
+    <h1><?= $event->getTitle() ?></h1>
+    <br>
+
 <table border="1" cellspacing="0">
     <thead>
     <tr>
@@ -84,5 +89,13 @@ else {
     <?php } ?>
     </tbody>
 </table>
+
+    <!-- Footer Section Start -->
+    <footer>
+        <div class="text">
+            <span>© ACLC IRIGA | 2023</span>
+        </div>
+    </footer>
+
 </body>
 </html>

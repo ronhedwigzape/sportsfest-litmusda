@@ -2,3 +2,25 @@ h1{
     text-align: center;
     font-family: cursive;
 }
+
+/* Footer CSS */
+footer{
+    background: #FFFFFF;
+    padding: 15px 0;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    font-family: 'Poppins', sans-serif;
+}
+footer .text span{
+    font-size: 17px;
+    font-weight: 400;
+    color: #000000;
+}
+footer .text span a{
+    font-weight: 500;
+    color: #000000;
+}
+footer .text span a:hover{
+    text-decoration: underline;
+}
