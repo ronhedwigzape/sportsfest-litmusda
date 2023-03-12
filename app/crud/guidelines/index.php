@@ -1,6 +1,8 @@
 <?php
-    require_once '../../config/database.php';
+    const LOGIN_PAGE_PATH = '../';
+    require_once '../auth.php';
 
+    require_once '../../config/database.php';
     require_once '../../models/Competition.php';
     require_once '../../models/Category.php';
     require_once '../../models/Event.php';
