@@ -512,6 +512,10 @@ class Judge extends User
             $total['deducted'] -= $deduction_average;
         }
 
+        // clear $total['deducted'] if the team never showed up for the event
+        if($team->hasNotShownUpForEvent($event))
+            $total['deducted'] = 0;
+
         return $total;
     }
 

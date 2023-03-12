@@ -6,6 +6,7 @@ class Event extends App
 {
     // table
     protected $table = 'events';
+    protected $table_noshows = 'event_noshows';
 
     // properties
     protected $id;
@@ -333,6 +334,17 @@ class Event extends App
 
 
     /***************************************************************************
+     * Get table of no-show teams
+     *
+     * @return string
+     */
+    public function getTableNoShows()
+    {
+        return $this->table_noshows;
+    }
+
+
+    /***************************************************************************
      * Get all criteria as array of objects
      *
      * @return Criterion[]
@@ -407,6 +419,18 @@ class Event extends App
 
 
     /***************************************************************************
+     * Determine if the event has a given judge
+     *
+     * @param Judge $judge
+     * @return bool
+     */
+    public function hasJudge($judge)
+    {
+        return $judge->hasEvent($this);
+    }
+
+
+    /***************************************************************************
      * Get all assigned technicals to event as array of objects
      *
      * @return Technical[]
@@ -441,6 +465,18 @@ class Event extends App
             $technicals[] = $technical->toArray();
         }
         return $technicals;
+    }
+
+
+    /***************************************************************************
+     * Determine if the event has a given technical
+     *
+     * @param Technical $technical
+     * @return bool
+     */
+    public function hasTechnical($technical)
+    {
+        return $technical->hasEvent($this);
     }
 
 
@@ -617,4 +653,108 @@ class Event extends App
         require_once 'Team.php';
         return Team::rows($this->getId());
     }
+
+
+    /***************************************************************************
+     * Get teams which never showed up for an event, as array of objects
+     *
+     * @return Team[]
+     */
+    public function getAllNoShowTeams()
+    {
+        require_once 'Team.php';
+
+        $stmt = $this->conn->prepare("SELECT DISTINCT team_id FROM $this->table_noshows WHERE event_id = ? ORDER BY team_id");
+        $stmt->bind_param("i", $this->id);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+        $teams = [];
+        while($row = $result->fetch_assoc()) {
+            $teams[] = new Team($row['team_id']);
+        }
+
+        return $teams;
+    }
+
+
+    /***************************************************************************
+     * Get teams which never showed up for an event, as array of arrays
+     *
+     * @return array
+     */
+    public function getRowNoShowTeams()
+    {
+        $teams = [];
+        foreach($this->getAllNoShowTeams() as $team) {
+            $teams[] = $team->toArray();
+        }
+
+        return $teams;
+    }
+
+
+    /***************************************************************************
+     * Determine if a given team never showed up for the event
+     *
+     * @param Team $team
+     * @return bool
+     */
+    public function hasTeamNotShownUp($team)
+    {
+        $team_id = $team->getId();
+
+        foreach($this->getAllNoShowTeams() as $t) {
+            if($t->getId() == $team_id)
+                return true;
+        }
+        return false;
+    }
+
+
+    /***************************************************************************
+     * Add team which never showed up for the event
+     *
+     * @param Team $team
+     * @return void
+     */
+    public function addNoShowTeam($team)
+    {
+        require_once 'Team.php';
+
+        // check team id
+        $team_id = $team->getId();
+        if(!Team::exists($team_id))
+            App::returnError('HTTP/1.1 500', 'NowShow Team Addition Error: team [id = ' . $team_id . '] does not exist.');
+
+        // proceed with addition
+        if(!$this->hasTeamNotShownUp($team)) {
+            $stmt = $this->conn->prepare("INSERT INTO $this->table_noshows(event_id, team_id) VALUES(?, ?)");
+            $stmt->bind_param("ii", $this->id, $team_id);
+            $stmt->execute();
+        }
+    }
+
+
+    /***************************************************************************
+     * Remove team from event noshows
+     *
+     * @param Team $team
+     * @return void
+     */
+    public function removeNoShowTeam($team)
+    {
+        require_once 'Team.php';
+
+        // check team id
+        $team_id = $team->getId();
+        if(!Team::exists($team_id))
+            App::returnError('HTTP/1.1 500', 'NowShow Team Removal Error: team [id = ' . $team_id . '] does not exist.');
+
+        // proceed with removal
+        $stmt = $this->conn->prepare("DELETE FROM $this->table_noshows WHERE event_id = ? AND team_id = ?");
+        $stmt->bind_param("ii", $this->id, $team_id);
+        $stmt->execute();
+    }
+
 }
