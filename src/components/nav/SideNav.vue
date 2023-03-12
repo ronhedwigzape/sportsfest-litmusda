@@ -24,7 +24,7 @@
                     :key="event.id"
                     :variant="$route.params.eventSlug === event.slug ? 'tonal' : 'text'"
 					class="text-center"
-                    :class="`justify-center text-button${$route.params.eventSlug === event.slug ? ' text-yellow' : ''}`"
+                    :class="`justify-center text-center text-button${$route.params.eventSlug === event.slug ? ' text-yellow' : ''}`"
                     block
                     @click="handleEventChange(event)"
                 >
