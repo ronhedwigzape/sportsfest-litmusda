@@ -512,6 +512,10 @@ class Judge extends User
             $total['deducted'] -= $deduction_average;
         }
 
+        // clear $total['deducted'] if the team never showed up for the event
+        if($team->hasNotShownUpForEvent($event))
+            $total['deducted'] = 0;
+
         return $total;
     }
 
@@ -616,5 +620,21 @@ class Judge extends User
 
         // return $ranks
         return $ranks;
+    }
+
+
+    /***************************************************************************
+     * Unlock judge's ratings on a given event
+     *
+     * @param Event $event
+     * @return void
+     */
+    public function unlockRatings($event)
+    {
+        foreach($this->getAllEventRatings($event) as $key => $ratings) {
+            foreach($ratings as $rating) {
+                $rating->lock(false);
+            }
+        }
     }
 }
