@@ -1,8 +1,8 @@
 <?php
     require_once '../../config/database.php';
 
-     require_once '../../models/Admin.php';
-     $results = (new Admin())->tabulate(null, true);
+    require_once '../../models/Admin.php';
+    $results = (new Admin())->tabulate(null, true);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -11,7 +11,6 @@
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="../../crud/dist/bootstrap-5.2.3/css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/style.css">
     <style>
         th, td {
             vertical-align: middle
@@ -114,17 +113,8 @@
                 <?php } ?>
             </tbody>
         </table>
-
     </div>
 
     <script src="../../crud/dist/bootstrap-5.2.3/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Footer Section Start -->
-    <footer>
-        <div class="text">
-            <span>© ACLC IRIGA | 2023</span>
-        </div>
-    </footer>
-
 </body>
 </html>
