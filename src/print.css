@@ -7,7 +7,9 @@
         --v-layout-top: 0 !important;
         --v-layout-left: 0 !important;
     }
-
+    .v-btn.unlock {
+        display: none !important;
+    }
     th, td {
         background: white !important;
     }

@@ -27,6 +27,11 @@
 						<th
 							class="text-center text-uppercase py-3"
 						>
+						<v-btn class="unlock bg-amber"
+							   @click="unlockJudgeRatings(judge.id, event.id)"
+						>
+							unlock
+						</v-btn>
 							<div
 								:class="{
                                 'text-red-darken-1': judge.is_chairman == 0,
@@ -66,7 +71,6 @@
 					</th>
 				</tr>
 			</thead>
-			
 			<tbody>
 			<tr v-for="(team, teamKey, teamIndex) in teams" :key="team.id">
 				<td class="text-h5 text-center font-weight-bold">{{ teamIndex + 1 }}</td>
@@ -170,12 +174,14 @@
         data() {
             return {
                 event: null,
-                results: {},
                 timer: null,
-				teamIndex: 0,
+				unlockDialog: false,
+				inspectDialog: false,
+				results: {},
 				teams: [],
 				judges: [],
-				technicals: []
+				technicals: [],
+				teamIndex: 0
             }
         },
 		computed: {
@@ -226,7 +232,27 @@
                         },
                     });
                 }
-            }
+            },
+			
+			unlockJudgeRatings(judgeId, eventId) {
+				$.ajax({
+                        url: `${this.$store.getters.appURL}/admin.php`,
+                        type: 'POST',
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        data: {
+                           unlock_judge_id: judgeId,
+						   unlock_event_id: eventId
+                        },
+                        success: (data) => {
+                          
+                        },
+                        error: (error) => {
+                            alert(`ERROR ${error.status}: ${error.statusText}`);
+                        },
+                    });
+			}
 		}
     }
 </script>
@@ -242,4 +268,5 @@ tbody td {
 th, td {
 	border: 1px solid #ddd;
 }
+
 </style>
