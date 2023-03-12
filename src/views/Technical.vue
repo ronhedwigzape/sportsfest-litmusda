@@ -102,12 +102,13 @@
 							justify="end"
 					>
 						<v-btn
-							class="py-7 bg-grey-lighten-2"
+							class="py-7 bg-grey-lighten-1 text-grey-darken-3"
 							@click="submitDialog = true"
 							:disabled="submitDeduction['is_locked']"
 							block
+							flat
 						>
-							<b id="submit" style="font-size: 1.2rem;">submit deductions</b>
+							<p style="font-size: 1.2rem;">submit deductions</p>
 						</v-btn>
 						<v-dialog
 							v-model="submitDialog"
@@ -123,8 +124,8 @@
 								</v-card-text>
 								<v-card-actions>
 									<v-spacer></v-spacer>
-									<v-btn prepend-icon="mdi-close" @click="submitDialog = false">Close</v-btn>
-									<v-btn id="submit" :loading="submitLoading" @click="submitDeductions">Submit</v-btn>
+									<v-btn prepend-icon="mdi-close" class="text-red-darken-1" @click="submitDialog = false">Close</v-btn>
+									<v-btn class="text-green-darken-1" :loading="submitLoading" @click="submitDeductions">Submit</v-btn>
 								</v-card-actions>
 							</v-card>
 						</v-dialog>

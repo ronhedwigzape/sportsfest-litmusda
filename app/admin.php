@@ -56,6 +56,20 @@ else {
             $judge->unlockRatings($event);
         }
 
+        // unlock deductions of technical for an event
+        else if (isset($_POST['unlock_technical_id']) && isset($_POST['unlock_event_id'])) {
+            // instantiate technical object
+            require_once 'models/Technical.php';
+            $technical = Technical::findById($_POST['unlock_technical_id']);
+
+            // instantiate event object
+            require_once 'models/Event.php';
+            $event = Event::findById($_POST['unlock_event_id']);
+
+            // unlock deductions of technical
+            $technical->unlockDeductions($event);
+        }
+
         else
             denyAccess();
     }
