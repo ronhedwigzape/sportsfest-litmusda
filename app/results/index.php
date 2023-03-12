@@ -1,4 +1,8 @@
 <?php
+// apply authentication
+const LOGIN_PAGE_PATH = '../crud/';
+require_once '../crud/auth.php';
+
 /*********************************************************
  * Task for @Luimhar:
 
