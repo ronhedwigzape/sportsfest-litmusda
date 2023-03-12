@@ -377,4 +377,58 @@ class Team extends App
         }
         return $participants;
     }
+
+
+    /***************************************************************************
+     * Get events for which the team never showed up, as array of objects
+     *
+     * @return Event[]
+     */
+    public function getAllNotShownEvents()
+    {
+        require_once 'Event.php';
+
+        $table_noshows = (new Event())->getTableNoShows();
+        $stmt = $this->conn->prepare("SELECT DISTINCT event_id FROM $table_noshows WHERE team_id = ? ORDER BY event_id");
+        $stmt->bind_param("i", $this->id);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+        $events = [];
+        while($row = $result->fetch_assoc()) {
+            $events[] = new Event($row['event_id']);
+        }
+
+        return $events;
+    }
+
+
+    /***************************************************************************
+     * Get events for which the team never showed up, as array of arrays
+     *
+     * @return array
+     */
+    public function getRowNotShownEvents()
+    {
+        $events = [];
+        foreach($this->getAllNotShownEvents() as $event) {
+            $events[] = $event->toArray();
+        }
+
+        return $events;
+    }
+
+
+    /***************************************************************************
+     * Determine if the team never showed up for a given event
+     *
+     * @param Event $event
+     * @return bool
+     */
+    public function hasNotShownUpForEvent($event)
+    {
+        return $event->hasTeamNotShownUp($this);
+    }
+
+
 }
