@@ -68,7 +68,7 @@
                             <h5 class="m-0 text-uppercase"><?= $competition['title'] ?></h5>
                         </td>
                         <?php foreach($results['teams'] as $team_key => $team) { ?>
-                            <td align="right">
+                            <td<?= ($competition['results']['teams'][$team_key]['points'] <= 0) ? ' class="text-danger"' : '' ?> align="right">
                                 <h5 class="m-0 fw-normal"><?= number_format($competition['results']['teams'][$team_key]['points'], 2) ?></h5>
                             </td>
                             <td align="right">
@@ -84,7 +84,7 @@
                                 <h6 class="m-0 text-uppercase"><?= $category['title'] ?></h6>
                             </td>
                             <?php foreach($results['teams'] as $team_key => $team) { ?>
-                                <td class="py-3" align="right">
+                                <td class="py-3<?= ($category['results']['teams'][$team_key]['points'] <= 0) ? ' text-danger' : '' ?>" align="right">
                                     <h6 class="m-0 fw-normal"><?= number_format($category['results']['teams'][$team_key]['points'], 2) ?></h6>
                                 </td>
                                 <td class="py-3" align="right">
@@ -100,7 +100,7 @@
                                     <p class="m-0 px-4"><?= $event['title'] ?></p>
                                 </td>
                                 <?php foreach($results['teams'] as $team_key => $team) { ?>
-                                    <td align="right">
+                                    <td<?= ($event['results']['teams'][$team_key]['points'] <= 0) ? ' class="text-danger"' : '' ?> align="right">
                                         <p class="m-0 fw-normal"><?= number_format($event['results']['teams'][$team_key]['points'], 2) ?></p>
                                     </td>
                                     <td align="right">
