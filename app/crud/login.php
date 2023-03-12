@@ -11,23 +11,13 @@
         $admin = ((new Admin($username, $password)))->signIn();
         if($admin){
             $_SESSION['admin_id'] = $admin->getId();
-            header('Location: competitions.php');
+            header('Location: ' . ((isset($_GET['next'])) ? $_GET['next'] : 'competitions.php'));
         }else{
             $error = "Invalid username or password";
         }
     }
-
-    if (isset($_POST['login'])) {
-        // Check if the submitted username and password are correct
-        $username = $_POST['username'];
-        $password = $_POST['password'];
-      if ($username === 'valid_username' && $password === 'valid_password') {
-          header('Location: competitions.php');
-        } else {
-            // The username and password are incorrect, show a warning message
-            $error_msg = '*Incorrect username or password...';
-        }
-    }
+    else if(isset($_SESSION['admin_id']))
+        header('Location: competitions.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">
