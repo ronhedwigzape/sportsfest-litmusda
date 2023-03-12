@@ -47,9 +47,9 @@ else {
 </head>
 <body>
 
-<br>
-<h1><?= $competition->getTitle() ?></h1>
-<br>
+    <br>
+    <h1><?= $competition->getTitle() ?></h1>
+    <br>
 
 <table border = '1' cellspacing = '0' width = '75%' height = '25%' align = 'center'>
     <thead>
@@ -89,5 +89,13 @@ else {
     <?php } ?>
     </tbody>
 </table>
+
+    <!-- Footer Section Start -->
+    <footer>
+        <div class="text">
+            <span>© ACLC IRIGA | 2023</span>
+        </div>
+    </footer>
+
 </body>
 </html>

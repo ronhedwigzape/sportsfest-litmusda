@@ -53,7 +53,7 @@ else {
 
 <table border = '1' cellspacing = '0' width = '75%' height = '25%' align = 'center'>
     <thead>
-    <tr height = '45px' body style='background-color:darkslategray' align = 'center'>
+    <tr height = '45px' align = 'center'>
         <th rowspan="2">TEAMS</th>
         <?php foreach($result['events'] as $event_slug => $event_data) { ?>
             <th colspan="2"><?= $event_data['title'] ?></th>
@@ -61,7 +61,7 @@ else {
         <th rowspan="2">TOTAL</th>
         <th rowspan="2">RANK</th>
     </tr>
-    <tr height = '50px' body style='background-color:deepskyblue' align = 'center'>
+    <tr height = '50px' align = 'center'>
         <?php foreach($result['events'] as $event_slug => $event_data) { ?>
             <th>Rank</th>
             <th>Points</th>
@@ -70,9 +70,9 @@ else {
     </thead>
     <tbody>
     <?php foreach($result['teams'] as $team_key => $team_data) { ?>
-        <tr height = '50px' body style='background-color:deepskyblue' align = 'center'>
+        <tr height = '50px' align = 'center'>
             <!-- team name -->
-            <td height = '50px' body style='background-color:yellow' align = 'center'><?= $team_data['name'] ?></td>
+            <td height = '50px' align = 'center'><?= $team_data['name'] ?></td>
 
             <!-- events -->
             <?php foreach($result['events'] as $event_slug => $event_data) { ?>
@@ -81,13 +81,21 @@ else {
             <?php } ?>
 
             <!-- total points -->
-            <td height = '50px' body style='background-color:yellow' align = 'center'><b><?= number_format($team_data['points'], 2) ?></b></td>
+            <td height = '50px' align = 'center'><b><?= number_format($team_data['points'], 2) ?></b></td>
 
             <!-- rank -->
-            <td height = '50px' body style='background-color:yellow' align = 'center'><?= number_format($team_data['rank']['fractional'], 2) ?></td>
+            <td height = '50px' align = 'center'><?= number_format($team_data['rank']['fractional'], 2) ?></td>
         </tr>
     <?php } ?>
     </tbody>
 </table>
+
+    <!-- Footer Section Start -->
+    <footer>
+        <div class="text">
+            <span>© ACLC IRIGA | 2023</span>
+        </div>
+    </footer>
+
 </body>
 </html>
