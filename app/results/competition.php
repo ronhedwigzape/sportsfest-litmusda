@@ -3,6 +3,10 @@
 // RESULT FOR SPECIFIC COMPETITION
 // SAMPLE URL: localhost/sportsfest-litmusda/app/results/competition.php?sports
 
+// apply authentication
+const LOGIN_PAGE_PATH = '../crud/';
+require_once '../crud/auth.php';
+
 // get $competition_slug from the URL
 $competition_slug = '';
 $arr_keys = array_keys($_GET);

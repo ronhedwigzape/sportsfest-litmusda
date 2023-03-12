@@ -3,6 +3,10 @@
 // RESULT FOR SPECIFIC EVENT
 // SAMPLE URL: localhost/sportsfest-litmusda/app/results/event.php?oration
 
+// apply authentication
+const LOGIN_PAGE_PATH = '../crud/';
+require_once '../crud/auth.php';
+
 // get $event_slug from the URL
 $event_slug = '';
 $arr_keys = array_keys($_GET);

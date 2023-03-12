@@ -3,6 +3,10 @@
 // RESULT FOR SPECIFIC CATEGORY
 // SAMPLE URL: localhost/sportsfest-litmusda/app/results/category.php?dance
 
+// apply authentication
+const LOGIN_PAGE_PATH = '../crud/';
+require_once '../crud/auth.php';
+
 // get $category_slug from the URL
 $category_slug = '';
 $arr_keys = array_keys($_GET);

@@ -1,6 +1,8 @@
 <?php
-    require_once '../../config/database.php';
+    const LOGIN_PAGE_PATH = '../../crud/';
+    require_once '../../crud/auth.php';
 
+    require_once '../../config/database.php';
     require_once '../../models/Admin.php';
     $results = (new Admin())->tabulate(null, true);
 ?>
