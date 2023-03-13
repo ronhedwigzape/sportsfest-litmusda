@@ -20,28 +20,36 @@
 					</th>
 					<template v-for="(technical, technicalKey, technicalIndex) in technicals" :key="technical.id">
 						<th class="text-center text-uppercase font-weight-bold text-red-darken-4 py-3">
-							<v-btn
-								class="unlock bg-amber"
-								@click="unlockTechnicalDeductions(event.id, event.title, technical.id,  technical.number, technical.name)"
-							>
-								unlock
-							</v-btn>
 							Deduct {{ technicalIndex + 1 }}
+                            <v-btn
+                                class="unlock"
+                                @click="unlockTechnicalDeductions(technical)"
+                                variant="text"
+                                size="x-small"
+                                icon
+                                style="position: absolute; top: 0; right: 1px"
+                            >
+                                <v-icon icon="mdi-lock-open-variant"/>
+                            </v-btn>
 						</th>
 					</template>
 					<template v-for="judge in judges" :key="judge.id">
 						<th
 							class="text-center text-uppercase py-3"
 						>
-						<v-btn
-							class="unlock bg-amber"
-					    	@click="unlockJudgeRatings(event.id, event.title, judge.id,  judge.number, judge.name)"
-						>
-							unlock
-						</v-btn>
+                            <v-btn
+                                class="unlock"
+                                @click="unlockJudgeRatings(judge)"
+                                variant="text"
+                                size="x-small"
+                                icon
+                                style="position: absolute; top: 0; right: 1px"
+                            >
+                                <v-icon icon="mdi-lock-open-variant"/>
+                            </v-btn>
 							<div
 								:class="{
-                                'text-red-darken-1': judge.is_chairman == 0,
+                                'text-dark-darken-1': judge.is_chairman == 0,
                                 'text-red-darken-3': judge.is_chairman == 1
                             	}"
 							>
@@ -49,7 +57,7 @@
 								<div v-if="judge.is_chairman == 1">CHAIRMAN</div>
 								<div v-else>{{ judge.number }}</div>
 								<b :class="{
-									'text-red-darken-1': judge.is_chairman == 0,
+									'text-dark-darken-1': judge.is_chairman == 0,
 									'text-red-darken-4': judge.is_chairman == 1
                             		}"
 								>
@@ -99,7 +107,7 @@
 						:class="{
 							'bg-grey-lighten-3' : !team.ratings.inputs[`judge_${judge.id}`].final.is_locked,
 							'bg-white' : team.ratings.inputs[`judge_${judge.id}`].final.is_locked,
-							'text-red-darken-1': judge.is_chairman == 0,
+							'text-dark-darken-1': judge.is_chairman == 0,
 							'text-red-darken-3': judge.is_chairman == 1
 						}"
 					>
@@ -239,9 +247,9 @@
                     });
                 }
             },
-			unlockJudgeRatings(eventId, eventTitle, judgeId, judgeNumber, judgeName) {
+			unlockJudgeRatings(judge) {
 				// ask admin for unlock ratings
-				if (confirm(`Are you sure to unlock ratings for ${judgeName} (Judge ${judgeNumber}) in ${eventTitle}?`)) {
+				if (confirm(`Are you sure to unlock ratings for ${judge.name} (Judge ${judge.number}) in ${this.event.title}?`)) {
 					$.ajax({
 						url: `${this.$store.getters.appURL}/admin.php`,
 						type: 'POST',
@@ -249,8 +257,8 @@
 							withCredentials: true
 						},
 						data: {
-							unlock_judge_id: judgeId,
-							unlock_event_id: eventId
+							unlock_judge_id: judge.id,
+							unlock_event_id: this.event.id
 						},
 						success: (data, textStatus, jqXHR) => {
 							console.log(`${jqXHR.status}: ${jqXHR.statusText}`);
@@ -261,9 +269,9 @@
 					});
 				}
 			},
-			unlockTechnicalDeductions(eventId, eventTitle, technicalId, technicalNumber, technicalName) {
+			unlockTechnicalDeductions(technical) {
 				// ask admin for unlock ratings
-				if (confirm(`Are you sure to unlock deductions for ${technicalName} (Technical ${technicalNumber}) in ${eventTitle}?`)) {
+				if (confirm(`Are you sure to unlock deductions for ${technical.name} (Technical ${technical.number}) in ${this.event.title}?`)) {
 					$.ajax({
 						url: `${this.$store.getters.appURL}/admin.php`,
 						type: 'POST',
@@ -271,8 +279,8 @@
 							withCredentials: true
 						},
 						data: {
-							unlock_technical_id: technicalId,
-							unlock_event_id: eventId
+							unlock_technical_id: technical.id,
+							unlock_event_id: this.event.id
 						},
 						success: (data, textStatus, jqXHR) => {
 							console.log(`${jqXHR.status}: ${jqXHR.statusText}`);

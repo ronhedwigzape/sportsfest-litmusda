@@ -1,4 +1,5 @@
 <?php
+    date_default_timezone_set('Asia/Manila');
     const LOGIN_PAGE_PATH = '../../crud/';
     require_once '../../crud/auth.php';
 
@@ -26,7 +27,8 @@
             <thead>
                 <tr>
                     <th class="text-center" rowspan="2">
-                        <h1 class="m-0">OFFICIAL RESULTS</h1>
+                        <h1 class="mt-0">OFFICIAL RESULTS</h1>
+                        <p class="m-0"><i>as of</i>&nbsp;&nbsp;<?= date('M. d, Y h:i A', time()) ?></p>
                     </th>
                     <?php foreach($results['teams'] as $team_key => $team) { ?>
                         <th colspan="2" style="color: <?= $team['color'] ?>" class="text-center">
