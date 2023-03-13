@@ -49,7 +49,7 @@
                             </v-btn>
 							<div
 								:class="{
-                                'text-red-darken-1': judge.is_chairman == 0,
+                                'text-dark-darken-1': judge.is_chairman == 0,
                                 'text-red-darken-3': judge.is_chairman == 1
                             	}"
 							>
@@ -57,7 +57,7 @@
 								<div v-if="judge.is_chairman == 1">CHAIRMAN</div>
 								<div v-else>{{ judge.number }}</div>
 								<b :class="{
-									'text-red-darken-1': judge.is_chairman == 0,
+									'text-dark-darken-1': judge.is_chairman == 0,
 									'text-red-darken-4': judge.is_chairman == 1
                             		}"
 								>
@@ -107,7 +107,7 @@
 						:class="{
 							'bg-grey-lighten-3' : !team.ratings.inputs[`judge_${judge.id}`].final.is_locked,
 							'bg-white' : team.ratings.inputs[`judge_${judge.id}`].final.is_locked,
-							'text-red-darken-1': judge.is_chairman == 0,
+							'text-dark-darken-1': judge.is_chairman == 0,
 							'text-red-darken-3': judge.is_chairman == 1
 						}"
 					>
