@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 04, 2023 at 12:22 PM
+-- Generation Time: Mar 12, 2023 at 01:22 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.1.12
 
@@ -226,6 +226,20 @@ INSERT INTO `events` (`id`, `category_id`, `slug`, `title`, `created_at`, `updat
 (9, 5, 'hip-hop', 'Hip Hop', '2023-02-21 02:16:39', '2023-02-22 02:26:17'),
 (10, 5, 'jazz-dance', 'Jazz Dance', '2023-02-21 02:16:39', '2023-02-22 02:26:21'),
 (11, 5, 'cheerdance', 'Cheerdance', '2023-02-21 02:16:39', '2023-02-22 02:26:36');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `event_noshows`
+--
+
+CREATE TABLE `event_noshows` (
+  `id` smallint(5) UNSIGNED NOT NULL,
+  `event_id` smallint(5) UNSIGNED NOT NULL,
+  `team_id` tinyint(3) UNSIGNED NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -555,6 +569,14 @@ ALTER TABLE `events`
   ADD KEY `area_id` (`category_id`);
 
 --
+-- Indexes for table `event_noshows`
+--
+ALTER TABLE `event_noshows`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `event_id` (`event_id`),
+  ADD KEY `team_id` (`team_id`);
+
+--
 -- Indexes for table `judges`
 --
 ALTER TABLE `judges`
@@ -659,6 +681,12 @@ ALTER TABLE `events`
   MODIFY `id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
+-- AUTO_INCREMENT for table `event_noshows`
+--
+ALTER TABLE `event_noshows`
+  MODIFY `id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `judges`
 --
 ALTER TABLE `judges`
@@ -742,6 +770,13 @@ ALTER TABLE `deductions`
 --
 ALTER TABLE `events`
   ADD CONSTRAINT `events_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON UPDATE CASCADE;
+
+--
+-- Constraints for table `event_noshows`
+--
+ALTER TABLE `event_noshows`
+  ADD CONSTRAINT `event_noshows_ibfk_1` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `event_noshows_ibfk_2` FOREIGN KEY (`team_id`) REFERENCES `teams` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `judge_events`

@@ -45,7 +45,7 @@
 					:key="team.id"
 					:class="{ 'bg-grey-lighten-4': coordinates.y == teamIndex }"
 				>
-					<td class="text-uppercase text-center text-h4 font-weight-bold text-grey-darken-4" style="width: 6%">
+					<td class="text-uppercase text-center text-h4 font-weight-bold text-grey-darken-4">
 						{{ teamIndex + 1 }}
 					</td>
 					<td class="text-uppercase text-center font-weight-bold" :style="{ 'color' : team.color }">
@@ -159,12 +159,13 @@
 						   justify="end"
 					>
 						<v-btn
-							class="py-7 bg-grey-lighten-2"
+							class="py-7 bg-grey-lighten-1 text-grey-darken-3"
 							@click="openSubmitDialog"
 							:disabled="totals['is_locked']"
 							block
+							flat
 						>
-						<b id="submit" style="font-size: 1.2rem;">submit ratings</b>
+						<p style="font-size: 1.2rem;">submit ratings</p>
 						</v-btn>
 						<v-dialog
 							v-if="submitDialog"
@@ -181,8 +182,8 @@
 								</v-card-text>
 								<v-card-actions>
 									<v-spacer></v-spacer>
-									<v-btn prepend-icon="mdi-close" @click="submitDialog = false">Close</v-btn>
-									<v-btn id="submit" :loading="submitLoading" @click="submitRatings">Submit</v-btn>
+									<v-btn prepend-icon="mdi-close" class="text-red-darken-1" @click="submitDialog = false">Close</v-btn>
+									<v-btn class="text-green-darken-1" :loading="submitLoading" @click="submitRatings">Submit</v-btn>
 								</v-card-actions>
 							</v-card>
 						</v-dialog>

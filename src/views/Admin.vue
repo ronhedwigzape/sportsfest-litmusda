@@ -21,20 +21,35 @@
 					<template v-for="(technical, technicalKey, technicalIndex) in technicals" :key="technical.id">
 						<th class="text-center text-uppercase font-weight-bold text-red-darken-4 py-3">
 							Deduct {{ technicalIndex + 1 }}
+                            <v-btn
+                                class="unlock"
+                                @click="unlockTechnicalDeductions(technical)"
+                                variant="text"
+                                size="x-small"
+                                icon
+                                style="position: absolute; top: 0; right: 1px"
+                            >
+                                <v-icon icon="mdi-lock-open-variant"/>
+                            </v-btn>
 						</th>
 					</template>
 					<template v-for="judge in judges" :key="judge.id">
 						<th
 							class="text-center text-uppercase py-3"
 						>
-						<v-btn class="unlock bg-amber"
-							   @click="unlockJudgeRatings(judge.id, event.id)"
-						>
-							unlock
-						</v-btn>
+                            <v-btn
+                                class="unlock"
+                                @click="unlockJudgeRatings(judge)"
+                                variant="text"
+                                size="x-small"
+                                icon
+                                style="position: absolute; top: 0; right: 1px"
+                            >
+                                <v-icon icon="mdi-lock-open-variant"/>
+                            </v-btn>
 							<div
 								:class="{
-                                'text-red-darken-1': judge.is_chairman == 0,
+                                'text-dark-darken-1': judge.is_chairman == 0,
                                 'text-red-darken-3': judge.is_chairman == 1
                             	}"
 							>
@@ -42,7 +57,7 @@
 								<div v-if="judge.is_chairman == 1">CHAIRMAN</div>
 								<div v-else>{{ judge.number }}</div>
 								<b :class="{
-									'text-red-darken-1': judge.is_chairman == 0,
+									'text-dark-darken-1': judge.is_chairman == 0,
 									'text-red-darken-4': judge.is_chairman == 1
                             		}"
 								>
@@ -92,7 +107,7 @@
 						:class="{
 							'bg-grey-lighten-3' : !team.ratings.inputs[`judge_${judge.id}`].final.is_locked,
 							'bg-white' : team.ratings.inputs[`judge_${judge.id}`].final.is_locked,
-							'text-red-darken-1': judge.is_chairman == 0,
+							'text-dark-darken-1': judge.is_chairman == 0,
 							'text-red-darken-3': judge.is_chairman == 1
 						}"
 					>
@@ -175,8 +190,7 @@
             return {
                 event: null,
                 timer: null,
-				unlockDialog: false,
-				inspectDialog: false,
+				openUnlockDialog: false,
 				results: {},
 				teams: [],
 				judges: [],
@@ -233,25 +247,49 @@
                     });
                 }
             },
-			
-			unlockJudgeRatings(judgeId, eventId) {
-				$.ajax({
-                        url: `${this.$store.getters.appURL}/admin.php`,
-                        type: 'POST',
-                        xhrFields: {
-                            withCredentials: true
-                        },
-                        data: {
-                           unlock_judge_id: judgeId,
-						   unlock_event_id: eventId
-                        },
-                        success: (data) => {
-                          
-                        },
-                        error: (error) => {
-                            alert(`ERROR ${error.status}: ${error.statusText}`);
-                        },
-                    });
+			unlockJudgeRatings(judge) {
+				// ask admin for unlock ratings
+				if (confirm(`Are you sure to unlock ratings for ${judge.name} (Judge ${judge.number}) in ${this.event.title}?`)) {
+					$.ajax({
+						url: `${this.$store.getters.appURL}/admin.php`,
+						type: 'POST',
+						xhrFields: {
+							withCredentials: true
+						},
+						data: {
+							unlock_judge_id: judge.id,
+							unlock_event_id: this.event.id
+						},
+						success: (data, textStatus, jqXHR) => {
+							console.log(`${jqXHR.status}: ${jqXHR.statusText}`);
+						},
+						error: (error) => {
+							alert(`ERROR ${error.status}: ${error.statusText}`);
+						},
+					});
+				}
+			},
+			unlockTechnicalDeductions(technical) {
+				// ask admin for unlock ratings
+				if (confirm(`Are you sure to unlock deductions for ${technical.name} (Technical ${technical.number}) in ${this.event.title}?`)) {
+					$.ajax({
+						url: `${this.$store.getters.appURL}/admin.php`,
+						type: 'POST',
+						xhrFields: {
+							withCredentials: true
+						},
+						data: {
+							unlock_technical_id: technical.id,
+							unlock_event_id: this.event.id
+						},
+						success: (data, textStatus, jqXHR) => {
+							console.log(`${jqXHR.status}: ${jqXHR.statusText}`);
+						},
+						error: (error) => {
+							alert(`ERROR ${error.status}: ${error.statusText}`);
+						},
+					});
+				}
 			}
 		}
     }

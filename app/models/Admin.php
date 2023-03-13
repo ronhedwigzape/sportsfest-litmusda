@@ -104,6 +104,8 @@ class Admin extends User
      */
     private function tabulateEvent($event)
     {
+        require_once 'Team.php';
+
         // initialize $result
         $result = [
             'technicals' => [],
@@ -306,10 +308,12 @@ class Admin extends User
                     $points += $point->getValue();
             }
 
-            // assign points to $group members
+            // assign points to $group members, if they showed up for the event
             $points = $points / $size;
             for($j = 0; $j < $size; $j++) {
-                $result['teams'][$group[$j]]['points'] = $points;
+                $team = new Team($result['teams'][$group[$j]]['id']);
+                if(!$team->hasNotShownUpForEvent($event))
+                    $result['teams'][$group[$j]]['points'] = $points;
             }
 
             $ctr += $size;

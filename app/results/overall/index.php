@@ -1,4 +1,5 @@
 <?php
+    date_default_timezone_set('Asia/Manila');
     const LOGIN_PAGE_PATH = '../../crud/';
     require_once '../../crud/auth.php';
 
@@ -26,7 +27,8 @@
             <thead>
                 <tr>
                     <th class="text-center" rowspan="2">
-                        <h1 class="m-0">OFFICIAL RESULTS</h1>
+                        <h1 class="mt-0">OFFICIAL RESULTS</h1>
+                        <p class="m-0"><i>as of</i>&nbsp;&nbsp;<?= date('M. d, Y h:i A', time()) ?></p>
                     </th>
                     <?php foreach($results['teams'] as $team_key => $team) { ?>
                         <th colspan="2" style="color: <?= $team['color'] ?>" class="text-center">
@@ -70,7 +72,7 @@
                             <h5 class="m-0 text-uppercase"><?= $competition['title'] ?></h5>
                         </td>
                         <?php foreach($results['teams'] as $team_key => $team) { ?>
-                            <td align="right">
+                            <td<?= ($competition['results']['teams'][$team_key]['points'] <= 0) ? ' class="text-danger"' : '' ?> align="right">
                                 <h5 class="m-0 fw-normal"><?= number_format($competition['results']['teams'][$team_key]['points'], 2) ?></h5>
                             </td>
                             <td align="right">
@@ -86,7 +88,7 @@
                                 <h6 class="m-0 text-uppercase"><?= $category['title'] ?></h6>
                             </td>
                             <?php foreach($results['teams'] as $team_key => $team) { ?>
-                                <td class="py-3" align="right">
+                                <td class="py-3<?= ($category['results']['teams'][$team_key]['points'] <= 0) ? ' text-danger' : '' ?>" align="right">
                                     <h6 class="m-0 fw-normal"><?= number_format($category['results']['teams'][$team_key]['points'], 2) ?></h6>
                                 </td>
                                 <td class="py-3" align="right">
@@ -102,7 +104,7 @@
                                     <p class="m-0 px-4"><?= $event['title'] ?></p>
                                 </td>
                                 <?php foreach($results['teams'] as $team_key => $team) { ?>
-                                    <td align="right">
+                                    <td<?= ($event['results']['teams'][$team_key]['points'] <= 0) ? ' class="text-danger"' : '' ?> align="right">
                                         <p class="m-0 fw-normal"><?= number_format($event['results']['teams'][$team_key]['points'], 2) ?></p>
                                     </td>
                                     <td align="right">
