@@ -617,4 +617,20 @@ class Judge extends User
         // return $ranks
         return $ranks;
     }
+
+
+    /***************************************************************************
+     * Unlock judge's ratings on a given event
+     *
+     * @param Event $event
+     * @return void
+     */
+    public function unlockRatings($event)
+    {
+        foreach($this->getAllEventRatings($event) as $key => $ratings) {
+            foreach($ratings as $rating) {
+                $rating->lock(false);
+            }
+        }
+    }
 }

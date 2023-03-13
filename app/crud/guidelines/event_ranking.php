@@ -1,4 +1,7 @@
 <?php
+const LOGIN_PAGE_PATH = '../';
+require_once '../auth.php';
+
 require_once '../../config/database.php';
 require_once '../../models/Event.php';
 require_once '../../models/Point.php';
@@ -143,7 +146,7 @@ $competitions = Competition::all();
 
         
     </div>
-    <script src="../dist/ajax/libs/jquery-3.3.1/jquery.min.js"></script>
+    <script src="../dist/jquery-3.6.4/jquery-3.6.4.min.js"></script>
     <script src="js/popper.min.js"></script>
     <script src="../dist/bootstrap-4.2.1/js/bootstrap.min.js"></script>
     <script>

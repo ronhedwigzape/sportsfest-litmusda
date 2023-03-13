@@ -15,22 +15,62 @@
 		>
 			<thead>
 				<tr>
-					<th colspan="2" class="text-center text-uppercase font-weight-bold">{{ event.title}}</th>
+					<th colspan="2" class="text-center text-uppercase font-weight-bold text-grey-darken-4 text-h5 py-3">
+						{{ event.title}}
+					</th>
 					<template v-for="(technical, technicalKey, technicalIndex) in technicals" :key="technical.id">
-						<th class="text-center text-uppercase font-weight-bold text-red-darken-3">
+						<th class="text-center text-uppercase font-weight-bold text-red-darken-4 py-3">
 							Deduct {{ technicalIndex + 1 }}
 						</th>
 					</template>
 					<template v-for="judge in judges" :key="judge.id">
-						<th colspan="2" class="text-center text-uppercase font-weight-bold">Judge {{ judge.number }}</th>
+						<th
+							class="text-center text-uppercase py-3"
+						>
+						<v-btn class="unlock bg-amber"
+							   @click="unlockJudgeRatings(judge.id, event.id)"
+						>
+							unlock
+						</v-btn>
+							<div
+								:class="{
+                                'text-red-darken-1': judge.is_chairman == 0,
+                                'text-red-darken-3': judge.is_chairman == 1
+                            	}"
+							>
+								Judge
+								<div v-if="judge.is_chairman == 1">CHAIRMAN</div>
+								<div v-else>{{ judge.number }}</div>
+								<b :class="{
+									'text-red-darken-1': judge.is_chairman == 0,
+									'text-red-darken-4': judge.is_chairman == 1
+                            		}"
+								>
+									Total
+								</b>
+							</div>
+						</th>
+						<th class="text-center text-uppercase py-3 text-blue-darken-2">
+							Judge
+							<div v-if="judge.is_chairman == 1">CHAIRMAN</div>
+							<div v-else>{{ judge.number }}</div>
+							<b class="text-blue-darken-3">Rank</b>
+						</th>
 					</template>
-					<th class="text-center text-uppercase font-weight-bold text-green-darken-4">Average</th>
-					<th class="text-center text-uppercase font-weight-bold text-blue-darken-4">Total Rank</th>
-					<th class="text-center text-uppercase font-weight-bold text-grey-darken-1">Initial Rank</th>
-					<th class="text-center text-uppercase font-weight-bold">Final Rank</th>
+					<th class="text-center text-uppercase font-weight-bold text-green-darken-4 py-3">
+						Average
+					</th>
+					<th class="text-center text-uppercase font-weight-bold text-blue-darken-4 py-3">
+						Total Rank
+					</th>
+					<th class="text-center text-uppercase font-weight-bold text-grey-darken-1 py-3">
+						Initial Rank
+					</th>
+					<th class="text-center text-uppercase font-weight-bold text-grey-darken-4 py-3">
+						Final Rank
+					</th>
 				</tr>
 			</thead>
-			
 			<tbody>
 			<tr v-for="(team, teamKey, teamIndex) in teams" :key="team.id">
 				<td class="text-h5 text-center font-weight-bold">{{ teamIndex + 1 }}</td>
@@ -48,10 +88,12 @@
 				</template> 
 				<template v-for="judge in judges" :key="judge.id">
 					<td
-						class="text-center text-red-darken-3"
+						class="text-center"
 						:class="{
 							'bg-grey-lighten-3' : !team.ratings.inputs[`judge_${judge.id}`].final.is_locked,
-							'bg-white' : team.ratings.inputs[`judge_${judge.id}`].final.is_locked
+							'bg-white' : team.ratings.inputs[`judge_${judge.id}`].final.is_locked,
+							'text-red-darken-1': judge.is_chairman == 0,
+							'text-red-darken-3': judge.is_chairman == 1
 						}"
 					>
 						{{ team.ratings.inputs[`judge_${judge.id}`].final.deducted.toFixed(2) }}
@@ -132,12 +174,14 @@
         data() {
             return {
                 event: null,
-                results: {},
                 timer: null,
-				teamIndex: 0,
+				unlockDialog: false,
+				inspectDialog: false,
+				results: {},
 				teams: [],
 				judges: [],
-				technicals: []
+				technicals: [],
+				teamIndex: 0
             }
         },
 		computed: {
@@ -188,7 +232,27 @@
                         },
                     });
                 }
-            }
+            },
+			
+			unlockJudgeRatings(judgeId, eventId) {
+				$.ajax({
+                        url: `${this.$store.getters.appURL}/admin.php`,
+                        type: 'POST',
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        data: {
+                           unlock_judge_id: judgeId,
+						   unlock_event_id: eventId
+                        },
+                        success: (data) => {
+                          
+                        },
+                        error: (error) => {
+                            alert(`ERROR ${error.status}: ${error.statusText}`);
+                        },
+                    });
+			}
 		}
     }
 </script>
@@ -204,4 +268,5 @@ tbody td {
 th, td {
 	border: 1px solid #ddd;
 }
+
 </style>

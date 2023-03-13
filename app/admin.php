@@ -20,10 +20,12 @@ else {
     else {
         // get events
         if(isset($_GET['getEvents'])) {
+            require_once 'models/Category.php';
             require_once 'models/Event.php';
 
             echo json_encode([
-                "events" => Event::rows()
+                'categories' => Category::rows(),
+                'events'     => Event::rows()
             ]);
         }
 
@@ -40,6 +42,19 @@ else {
             ]);
         }
 
+        // unlock ratings of judge for an event
+        else if (isset($_POST['unlock_judge_id']) && isset($_POST['unlock_event_id'])) {
+            // instantiate judge object
+            require_once 'models/Judge.php';
+            $judge = Judge::findById($_POST['unlock_judge_id']);
+
+            // instantiate event object
+            require_once 'models/Event.php';
+            $event = Event::findById($_POST['unlock_event_id']);
+
+            // unlock ratings of judge
+            $judge->unlockRatings($event);
+        }
 
         else
             denyAccess();
