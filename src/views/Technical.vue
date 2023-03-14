@@ -318,7 +318,11 @@ export default {
 			this.coordinates.y = y;
 			this.move(y, false);
 		}
-	}
+	},
+
+    mounted() {
+        this.$emit('startPing');
+    }
 }
 </script>
 

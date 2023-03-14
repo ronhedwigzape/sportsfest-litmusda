@@ -13,4 +13,7 @@
     th, td {
         background: white !important;
     }
+    .online-status {
+        display: none !important;
+    }
 }
