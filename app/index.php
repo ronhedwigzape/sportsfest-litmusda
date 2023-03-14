@@ -5,7 +5,9 @@ require_once '_init.php';
 if(isset($_GET['getUser'])) {
     echo json_encode([
         'user' => getUser()
-    ]); exit;
+    ]);
+
+    exit;
 }
 
 // user sign-in
@@ -29,11 +31,12 @@ else if(isset($_POST['username']) && isset($_POST['password'])) {
         // successfully logged in
         echo json_encode([
             'user' => $user->toArray()
-        ]);  exit;
+        ]);
     }
     else
         App::returnError('HTTP/1.1 401', 'Invalid Username or Password');
-        exit;
+
+    exit;
 }
 
 
@@ -46,8 +49,11 @@ else if(isset($_POST['signOut'])) {
     }
     echo json_encode([
         'signedOut' => true
-    ]);  exit;
+    ]);
+
+    exit;
 }
+
 
 
 $routes = [
@@ -58,7 +64,6 @@ $routes = [
     [ "name" => "Assignment", "route" => "crud/assignment" ],
     [ "name" => "No show", "route" => "crud/noshow" ]
 ];
-
 ?>
 <!DOCTYPE html>
 <html>
