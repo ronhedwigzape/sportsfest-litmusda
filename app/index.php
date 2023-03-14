@@ -38,7 +38,11 @@ else if(isset($_POST['username']) && isset($_POST['password'])) {
 
 // user sign out
 else if(isset($_POST['signOut'])) {
-    session_destroy();
+    if($user_info = getUser()) {
+        require_once 'models/User.php';
+        $user = new User($user_info['username'], $_SESSION['pass'], $user_info['userType']);
+        $user->signOut();
+    }
     echo json_encode([
         'signedOut' => true
     ]);

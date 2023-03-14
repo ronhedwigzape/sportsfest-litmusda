@@ -18,9 +18,17 @@ else {
         denyAccess();
 
     else {
+        // ping technical
+        if(isset($_POST['ping'])) {
+            $technical->ping();
+
+            echo json_encode([
+                'pinged' => true
+            ]);
+        }
 
         // get events assigned to technical
-        if(isset($_GET['getEvents'])) {
+        else if(isset($_GET['getEvents'])) {
             require_once 'models/Category.php';
 
             echo json_encode([

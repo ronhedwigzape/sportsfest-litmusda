@@ -154,6 +154,7 @@ class Admin extends User
 
                 // append $technical to $result['technicals']
                 $result['technicals'][$key_technical] = $technical->toArray();
+                $result['technicals'][$key_technical]['online'] = $technical->isOnline();
 
                 // get technical's total team deductions
                 $technical_total = $technical->getEventTeamDeduction($event, $team);
@@ -187,6 +188,7 @@ class Admin extends User
 
                 // append $judge to $result['judges']
                 $result['judges'][$key_judge] = $judge->toArray();
+                $result['judges'][$key_judge]['online'] = $judge->isOnline();
 
                 // get judge's total team ratings and ranks
                 $judge_total = $judge->getEventTeamRating($event, $team);
