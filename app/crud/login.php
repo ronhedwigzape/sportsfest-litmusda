@@ -72,7 +72,7 @@
                             <div class="clearfix"></div>
                         </div> <!-- end login -->
                         <div class="logo">
-                            <img src="uploads/foundation-logo.png" alt="">
+                            <img src="foundation-logo.png" alt="">
                             <div class="clearfix"></div>
                         </div>
                     </div>
