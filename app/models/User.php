@@ -15,6 +15,7 @@ class User extends App
     protected $avatar = 'no-avatar.jpg';
     protected $number;
     protected $userType;
+    protected $pinged_at;
 
 
     /***************************************************************************
@@ -44,6 +45,7 @@ class User extends App
                 $this->name = $row['name'];
                 $this->avatar = $row['avatar'];
                 $this->number = $row['number'];
+                $this->pinged_at = $row['pinged_at'];
             }
         }
     }
@@ -118,11 +120,56 @@ class User extends App
     public function signIn()
     {
         if($this->authenticated()) {
+            $this->ping();
+
             $_SESSION['user'] = $this->toArray();
             $_SESSION['pass'] = $this->password;
             return $this;
         }
         return false;
+    }
+
+
+    /***************************************************************************
+     * Sign out
+     *
+     * @return void
+     */
+    public function signOut()
+    {
+        $this->ping(false);
+
+        if(isset($_SESSION['user']))
+            session_destroy();
+    }
+
+
+    /***************************************************************************
+     * Set online status (preferably every 5 seconds)
+     *
+     * @param bool $signed_in
+     * @return void
+     */
+    public function ping($signed_in = true)
+    {
+        $this->pinged_at = $signed_in ? date("Y-m-d H:i:s", time()) : null;
+        $stmt = $this->conn->prepare("UPDATE $this->table SET pinged_at = ? WHERE id = ?");
+        $stmt->bind_param("si", $this->pinged_at, $this->id);
+        $stmt->execute();
+    }
+
+
+    /***************************************************************************
+     * Get online status (preferably every 2.4 seconds)
+     *
+     * @return bool
+     */
+    public function isOnline()
+    {
+        $diff = time() - strtotime($this->pinged_at);
+
+        // online if last ping is below 13 seconds ago
+        return ($diff < 13);
     }
 
 

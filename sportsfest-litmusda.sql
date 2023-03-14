@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 12, 2023 at 01:22 PM
+-- Generation Time: Mar 13, 2023 at 01:02 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.1.12
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `sportsfest-litmusda`
+-- Database: `sportsfest-litmusda-dev`
 --
 
 -- --------------------------------------------------------
@@ -34,6 +34,7 @@ CREATE TABLE `admins` (
   `avatar` varchar(255) NOT NULL,
   `username` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
+  `pinged_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -42,8 +43,8 @@ CREATE TABLE `admins` (
 -- Dumping data for table `admins`
 --
 
-INSERT INTO `admins` (`id`, `number`, `name`, `avatar`, `username`, `password`, `created_at`, `updated_at`) VALUES
-(1, 1, 'SUPER USER', 'no-avatar.jpg', 'admin', 'admin', '2023-02-19 07:36:32', '2023-02-26 06:05:06');
+INSERT INTO `admins` (`id`, `number`, `name`, `avatar`, `username`, `password`, `pinged_at`, `created_at`, `updated_at`) VALUES
+(1, 1, 'SUPER USER', 'no-avatar.jpg', 'admin', 'admin', NULL, '2023-02-19 07:36:32', '2023-02-26 06:05:06');
 
 -- --------------------------------------------------------
 
@@ -255,6 +256,7 @@ CREATE TABLE `judges` (
   `is_chairman` tinyint(1) NOT NULL DEFAULT 0,
   `username` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
+  `pinged_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -263,12 +265,12 @@ CREATE TABLE `judges` (
 -- Dumping data for table `judges`
 --
 
-INSERT INTO `judges` (`id`, `number`, `name`, `avatar`, `is_chairman`, `username`, `password`, `created_at`, `updated_at`) VALUES
-(1, 1, 'JUDGE 01', 'no-avatar.jpg', 1, 'judge01', 'judge01', '2023-02-19 08:58:05', '2023-02-26 06:04:23'),
-(2, 2, 'JUDGE 02', 'no-avatar.jpg', 0, 'judge02', 'judge02', '2023-02-19 08:58:16', '2023-02-26 06:04:26'),
-(3, 3, 'JUDGE 03', 'no-avatar.jpg', 0, 'judge03', 'judge03', '2023-02-19 08:58:32', '2023-02-26 06:04:28'),
-(4, 4, 'JUDGE 04', 'no-avatar.jpg', 0, 'judge04', 'judge04', '2023-02-21 05:32:22', '2023-02-26 06:04:31'),
-(5, 5, 'JUDGE 05', 'no-avatar.jpg', 0, 'judge05', 'judge05', '2023-02-21 05:32:22', '2023-02-26 06:04:33');
+INSERT INTO `judges` (`id`, `number`, `name`, `avatar`, `is_chairman`, `username`, `password`, `pinged_at`, `created_at`, `updated_at`) VALUES
+(1, 1, 'JUDGE 01', 'no-avatar.jpg', 1, 'judge01', 'judge01', NULL, '2023-02-19 08:58:05', '2023-02-26 06:04:23'),
+(2, 2, 'JUDGE 02', 'no-avatar.jpg', 0, 'judge02', 'judge02', NULL, '2023-02-19 08:58:16', '2023-02-26 06:04:26'),
+(3, 3, 'JUDGE 03', 'no-avatar.jpg', 0, 'judge03', 'judge03', NULL, '2023-02-19 08:58:32', '2023-02-26 06:04:28'),
+(4, 4, 'JUDGE 04', 'no-avatar.jpg', 0, 'judge04', 'judge04', NULL, '2023-02-21 05:32:22', '2023-02-26 06:04:31'),
+(5, 5, 'JUDGE 05', 'no-avatar.jpg', 0, 'judge05', 'judge05', NULL, '2023-02-21 05:32:22', '2023-02-26 06:04:33');
 
 -- --------------------------------------------------------
 
@@ -472,6 +474,7 @@ CREATE TABLE `technicals` (
   `avatar` varchar(255) DEFAULT NULL,
   `username` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
+  `pinged_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -480,8 +483,8 @@ CREATE TABLE `technicals` (
 -- Dumping data for table `technicals`
 --
 
-INSERT INTO `technicals` (`id`, `number`, `name`, `avatar`, `username`, `password`, `created_at`, `updated_at`) VALUES
-(1, 1, 'TECHNICAL O1', 'no-avatar.jpg', 'technical01', 'technical01', '2023-02-19 08:58:58', '2023-02-26 06:04:50');
+INSERT INTO `technicals` (`id`, `number`, `name`, `avatar`, `username`, `password`, `pinged_at`, `created_at`, `updated_at`) VALUES
+(1, 1, 'TECHNICAL O1', 'no-avatar.jpg', 'technical01', 'technical01', NULL, '2023-02-19 08:58:58', '2023-02-26 06:04:50');
 
 -- --------------------------------------------------------
 

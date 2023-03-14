@@ -590,7 +590,11 @@ export default {
 		//
 		// 	return disabled;
 		// }
-	}
+	},
+
+    mounted() {
+        this.$emit('startPing');
+    }
 }
 </script>
 
