@@ -141,6 +141,10 @@
 										</v-card-title>
 										<v-card-text class="text-center">
 											Technical Judge {{ technical.number }}
+                                            <p class="mt-2 mb-0 online-status">
+                                                <v-chip v-if="technical.online" size="x-small" color="success" variant="outlined">ONLINE</v-chip>
+                                                <v-chip v-else size="x-small" color="error" variant="flat">OFFLINE</v-chip>
+                                            </p>
 										</v-card-text>
 									</v-card>
 								</v-col>
@@ -154,6 +158,10 @@
 										</v-card-title>
 										<v-card-text class="text-center">
 											Judge {{ judge.number }} <template v-if="judge.is_chairman == 1">(Chairman)</template>
+                                            <p class="mt-2 mb-0 online-status">
+                                                <v-chip v-if="judge.online" size="x-small" color="success" variant="outlined">ONLINE</v-chip>
+                                                <v-chip v-else size="x-small" color="error" variant="flat">OFFLINE</v-chip>
+                                            </p>
 										</v-card-text>
 									</v-card>
 								</v-col>
