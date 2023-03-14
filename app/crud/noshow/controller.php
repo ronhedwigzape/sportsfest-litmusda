@@ -1,4 +1,5 @@
 <?php
+	require_once "../auth.php";
 	require_once '../../config/database.php';
 	require_once "../../models/Event.php";
 	require_once "../../models/Team.php";
@@ -9,20 +10,6 @@
 	}
 
 	switch( $_SERVER['REQUEST_METHOD'] . ( isset($_GET["type"]) ? ":" . $_GET["type"] : "" ) ){
-
-		case "GET":
-			$events = [];
-			$db_events = Event::all();
-			foreach ($db_events as $key => $value) {
-				$events[$key] = $value->toArray();
-				$events[$key]["no_show"] = $value->getRowNoShowTeams();
-			}
-			returnJSON($events);
-			break;
-
-		case "GET:TEAMS";
-			returnJSON(Team::rows());
-
 		case "POST":
 			$event = Event::findById($_POST["event"]);
 			$team = Team::findById($_POST["team"]);

@@ -1,3 +1,11 @@
+<?php
+	require_once "../auth.php";
+	require_once "../../config/database.php";
+	require_once "../../models/Event.php";
+	require_once "../../models/Team.php";
+	require_once "../../models/Competition.php";
+	require_once "../../models/Category.php";
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -39,90 +47,69 @@
 <body>
 
 	<div class="container p-4">
-		<div class="text-center" >
-			<h3>NoShow</h3>
-		</div>
-
 		<div id="app" class="row">
+			<?php
+				foreach (Competition::all() as $competition){ 
+			?>
+			<div class="mb-5 competitions" style="display: none;" >
+				<h3 class="text-center fw-semibold fst-italic" ><?php echo $competition->getTitle(); ?></h3>
+				<hr width="5%" class="mx-auto" >
+
+				<?php foreach(Category::all($competition->getId()) as $category){ ?>
+				<div class="mb-5 categories" >
+					<h4 class="fst-italic" ><?php echo $category->getTitle(); ?></h4>
+
+					<div class="row events">
+						<?php foreach(Event::all($category->getId()) as $event){ ?>
+						<div class="cards col-md-4 text-center g-3 event-item" >
+							<div class="card">
+								<div class="card-body">
+									<code>@<?php echo $event->getSlug(); ?></code>
+									<h2 class="fs-3 fw-semibold mb-4" ><?php echo $event->getTitle(); ?></h2>
+									<div class="d-flex flex-wrap" >
+										<?php foreach(Team::rows($event->getID()) as $team){ ?>
+											<div data-team="<?php echo $team["id"]; ?>" data-event="<?php echo $event->getID(); ?>" class="flex-grow-1 text-center team <?php echo $event->hasTeamNotShownUp(Team::findById($team["id"])) ? "noShow" : ""; ?>" >
+												<div class="avatar" style="background-image: url('../uploads/<?php echo $team["logo"]; ?>')" ></div>
+											</div>
+										<?php } ?>
+									</div>	
+								</div>
+							</div>
+						</div>
+						<?php } ?>
+					</div>
+				</div>
+				<?php } ?>
+			</div>
+			<?php } ?>
 		</div>
 
 	</div>
 
 	<script type="text/javascript">
-		(function(){			
-			let app = $("#app");
-			let teams = [];
-			let events = [];
+		(function(){
+			$(".event-item").parent().parent().parent().fadeIn();
 
-			$.ajax({
-				url: "controller.php?type=TEAMS",
-				success: function(res){
-					teams = res;
-					
-					$.ajax({
-						url: "controller.php",
-						success: function(res){
-							events = res;
+			$(".team").click(function(){
+				var _this = $(this);
 
-							events.forEach(function(event){
-
-								let dom_teams = "";
-								teams.forEach(function(team){
-									let is_found = ( event.no_show.filter(e => e.id == team.id).length > 0 );
-
-									dom_teams += `<div data-team="${ team.id }" data-event="${ event.id }" class="flex-grow-1 text-center team ${ is_found ? "botUp" : "" }" >
-													<div class="avatar" style="background-image: url('../uploads/${ team.logo }')" ></div>
-												</div>`;
-								});
-
-								app.append(`
-								<div class="cards col-md-4 text-center g-3" style="display: none;" >
-									<div class="card">
-										<div class="card-body">
-											<code>@${ event.slug }</code>
-											<h2 class="fs-3 fw-semibold mb-4" >${ event.title }</h2>
-											<div class="d-flex flex-wrap" >
-												${ dom_teams }
-											</div>	
-										</div>
-									</div>
-								</div>
-								`);
-							});
-
-							var cs = $(".cards");
-							for( var i = 0; i < cs.length; i++ ){
-								$(cs[i]).delay(100 * i).fadeIn();
-							}
-							setTimeout(() => {
-								$(".botUp").addClass("noShow");
-							}, (cs.length * 100) + 300);
-
-							$(".team").click(function(){
-								var _this = $(this);
-
-								$.ajax({
-									url: "controller.php",
-									method: "POST",
-									data: {
-										team: _this.data("team"),
-										event: _this.data("event")
-									},
-									success: function(res){
-										if( res.action === 1 ){
-											_this.addClass('noShow');
-										}else{
-											_this.removeClass('noShow');
-										}
-									}
-								});
-
-							});	
+				$.ajax({
+					url: "controller.php",
+					method: "POST",
+					data: {
+						team: _this.data("team"),
+						event: _this.data("event")
+					},
+					success: function(res){
+						if( res.action === 1 ){
+							_this.addClass('noShow');
+						}else{
+							_this.removeClass('noShow');
 						}
-					});
-				}
-			});
+					}
+				});
 
+			});
 		})();
 	</script>
 </body>
