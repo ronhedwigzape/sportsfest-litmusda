@@ -1,5 +1,7 @@
 <?php
+    const LOGIN_PAGE_PATH = '../';
 	require_once "../auth.php";
+
 	require_once "../../config/database.php";
 	require_once "../../models/Event.php";
 	require_once "../../models/Team.php";
