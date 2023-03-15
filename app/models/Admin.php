@@ -187,6 +187,7 @@ class Admin extends User
                 $key_judge = 'judge_' . $judge->getId();
 
                 // append $judge to $result['judges']
+                $judge->setIsChairman($judge->isChairmanOfEvent($event));
                 $result['judges'][$key_judge] = $judge->toArray();
                 $result['judges'][$key_judge]['online'] = $judge->isOnline();
 
