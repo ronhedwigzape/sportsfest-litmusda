@@ -388,9 +388,11 @@ class Event extends App
     public function getAllJudges()
     {
         require_once 'Judge.php';
-        $table_events = (new Judge())->getTableEvents();
+        $judge = new Judge();
+        $table_judges = $judge->getTable();
+        $table_events = $judge->getTableEvents();
 
-        $stmt = $this->conn->prepare("SELECT DISTINCT judge_id FROM $table_events WHERE event_id = ? ORDER BY judge_id");
+        $stmt = $this->conn->prepare("SELECT DISTINCT $table_events.judge_id FROM $table_judges, $table_events WHERE $table_events.event_id = ? AND $table_judges.id = $table_events.judge_id ORDER BY $table_judges.number");
         $stmt->bind_param("i", $this->id);
         $stmt->execute();
         $result = $stmt->get_result();
