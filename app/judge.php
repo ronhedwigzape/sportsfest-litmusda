@@ -18,9 +18,17 @@ else {
         denyAccess();
 
     else {
+        // ping judge
+        if(isset($_POST['ping'])) {
+            $judge->ping();
+
+            echo json_encode([
+                'pinged' => true
+            ]);
+        }
 
         // get events assigned to judge
-        if(isset($_GET['getEvents'])) {
+        else if(isset($_GET['getEvents'])) {
             require_once 'models/Category.php';
 
             echo json_encode([

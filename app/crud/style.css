@@ -5,7 +5,7 @@
 }
 
 body {
-    background: url('uploads/haikyu.png') no-repeat center center fixed;
+    background: url('haikyu.png') no-repeat center center fixed;
     background-size: cover;
     color: #606468;
     font: 87.5%/1.5em 'Open Sans', sans-serif;

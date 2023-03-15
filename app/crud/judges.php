@@ -53,7 +53,7 @@
                                 <small class="form-text text-muted">Select an image file to upload.</small>
                             </div>
 
-                            <div class="form-group">
+                            <div class="form-group d-none">
                                 <div class="form-check">
                                     <input type="checkbox" name="is_chairman" class="form-check-input" id="is_chairman" value="1" autocomplete="off">
                                     <label class="form-check-label" for="is_chairman">is_chairman?</label>
@@ -114,7 +114,7 @@
                                 <small class="form-text text-muted">Select an image file to upload.</small>
                             </div>
 
-                            <div class="form-group">
+                            <div class="form-group d-none">
                                 <div class="form-check">
                                     <input type="checkbox" name="is_chairman" class="form-check-input" id="is_chairman" value="1" autocomplete="off">
                                     <label class="form-check-label" for="is_chairman">is_chairman?</label>
@@ -229,7 +229,7 @@
                     <th scope="col">Number</th>
                     <th scope="col">Name</th>
                     <th scope="col">Avatar</th>
-                    <th scope="col">is_chairman</th>
+                    <th scope="col" class="d-none">is_chairman</th>
                     <th scope="col">Username</th>
                     <th scope="col" class="d-none">Password</th>
                     <th scope="col">Operations</th>
@@ -242,7 +242,7 @@
                         <td><?php echo $judge->getNumber(); ?></td>
                         <td><?php echo $judge->getName(); ?></td>
                         <td><?php echo '<img src="uploads/'.$judge->getAvatar().'" width="50"/>'; ?></td>
-                        <td><?php echo $judge->getIsChairman(); ?></td>
+                        <td class="d-none"><?php echo $judge->getIsChairman(); ?></td>
                         <td><?php echo $judge->getUsername(); ?></td>
                         <td class="d-none"><?php echo $judge->getPassword(); ?></td>
                         <td>
