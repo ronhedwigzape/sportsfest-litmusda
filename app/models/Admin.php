@@ -364,8 +364,7 @@ class Admin extends User
         }
 
         // tabulate each event in category
-        $category_events = $category->getAllEvents();
-        foreach($category_events as $event) {
+        foreach($category->getAllEvents() as $event) {
             // tabulate event
             $tabulated_event = $this->tabulateEvent($event);
 
@@ -471,8 +470,7 @@ class Admin extends User
         }
 
         // tabulate each category in competition
-        $competition_categories = $competition->getAllCategories();
-        foreach($competition_categories as $category) {
+        foreach($competition->getAllCategories() as $category) {
             // tabulate category
             $tabulated_category = $this->tabulateCategory($category, $verbose);
 
