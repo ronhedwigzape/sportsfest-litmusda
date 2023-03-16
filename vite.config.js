@@ -23,7 +23,7 @@ export default ({mode}) => {
         publicDir: 'assets',
         server: {
             host: 'localhost',
-            port: 5176,
+            port: 5177,
             strictPort: true
         },
         build: {
@@ -34,7 +34,7 @@ export default ({mode}) => {
     process.env = {...process.env, ...loadEnv(mode, process.cwd())};
     const SKIP_BASE_PATH = process.env.VITE_SKIP_BASE_PATH;
     if (SKIP_BASE_PATH === undefined || SKIP_BASE_PATH === 'false')
-        config.base = '/sportsfest-litmusda/';
+        config.base = '/fobi/';
 
     return defineConfig(config);
 };

@@ -1,7 +1,7 @@
 <?php
 
 // RESULT FOR SPECIFIC COMPETITION
-// SAMPLE URL: localhost/sportsfest-litmusda/app/results/competition.php?sports
+// SAMPLE URL: localhost/fobi/app/results/competition.php?sports
 
 // apply authentication
 const LOGIN_PAGE_PATH = '../crud/';

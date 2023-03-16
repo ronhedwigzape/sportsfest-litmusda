@@ -64,99 +64,96 @@
 
 
 <script>
-import $ from 'jquery';
+    import $ from 'jquery';
 
-export default {
-	name: 'Login',
-	data() {
-		return {
-			loading: false,
-			show1: false,
-			show2: true,
-			username: '',
-			password: '',
-			img: `${import.meta.env.BASE_URL}foundation-logo.png`,
-			rules: {
-				required: value => !!value || 'Required.',
-			},
-		}
-	},
-	methods: {
-		async handleSubmit() {
-			this.loading = true;
-			await $.ajax({
-				url: `${this.$store.getters.appURL}/index.php`,
-				type: 'POST',
-				xhrFields: {
-					withCredentials: true
-				},
-				data: {
-					username: this.username,
-					password: this.password,
-				},
-				success: (data) => {
-					if (this.loading) {
-						setTimeout(() => {
-							this.loading = false;
-						}, 1000);
-					}
-					data = JSON.parse(data);
-					this.$store.commit('auth/setUser', data.user);
-					this.$router.replace({name: data.user.userType});
-				},
-				error: (error) => {
-					if (this.loading) {
-						setTimeout(() => {
-							this.loading = false;
-							alert(`ERROR ${error.status}: ${error.statusText}`);
-						}, 500);
-					}
-
-				},
-			});
-		},
-	}
-}
+    export default {
+        name: 'Login',
+        data() {
+            return {
+				loading: false,
+                show1: false,
+                show2: true,
+                username: '',
+                password: '',
+                img: `${import.meta.env.BASE_URL}foundation-logo.png`,
+                rules: {
+                    required: value => !!value || 'Required.',
+                },
+            }
+        },
+        methods: {
+            async handleSubmit() {
+				this.loading = true;
+                await $.ajax({
+                    url: `${this.$store.getters.appURL}/index.php`,
+                    type: 'POST',
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    data: {
+                        username: this.username,
+                        password: this.password,
+                    },
+                    success: (data) => {
+						if(this.loading) {
+							setTimeout(() => {
+								this.loading = false;
+							}, 1000);
+						}
+                        data = JSON.parse(data);
+                        this.$store.commit('auth/setUser', data.user);
+                        this.$router.replace({name: data.user.userType});
+                    },
+                    error: (error) => {
+						if(this.loading) {
+							setTimeout(() => {
+								this.loading = false;
+								alert(`ERROR ${error.status}: ${error.statusText}`);
+							}, 500);
+						}
+                    },
+                });
+            },
+        }
+    }
 </script>
 
 
 <style scoped>
-.background-image {
-	background: url('/bg-img.png') no-repeat center fixed !important;
-	height: 100vh;
-}
+    .background-image {
+        height: 100vh;
+    }
 
-#card-login {
-	--borderWidth: 8px;
-	position: relative;
-	border-radius: var(--borderWidth);
-}
+    #card-login {
+        --borderWidth: 8px;
+        position: relative;
+        border-radius: var(--borderWidth);
+    }
 
-#card-login:after {
-	content: '';
-	position: absolute;
-	top: calc(-1 * var(--borderWidth));
-	left: calc(-1 * var(--borderWidth));
-	height: calc(100% + var(--borderWidth) * 2);
-	width: calc(100% + var(--borderWidth) * 2);
-	background: linear-gradient(60deg, #f79533, #f37055, #ef4e7b, #a166ab, #5073b8, #1098ad, #07b39b, #6fba82);
-	border-radius: calc(2 * var(--borderWidth));
-	z-index: -1;
-	animation: animatedGradient 3s ease alternate infinite;
-	background-size: 300% 300%;
-}
+    #card-login:after {
+        content: '';
+        position: absolute;
+        top: calc(-1 * var(--borderWidth));
+        left: calc(-1 * var(--borderWidth));
+        height: calc(100% + var(--borderWidth) * 2);
+        width: calc(100% + var(--borderWidth) * 2);
+        background: linear-gradient(60deg, #f79533, #f37055, #ef4e7b, #a166ab, #5073b8, #1098ad, #07b39b, #6fba82);
+        border-radius: calc(2 * var(--borderWidth));
+        z-index: -1;
+        animation: animatedGradient 3s ease alternate infinite;
+        background-size: 300% 300%;
+    }
 
 
-@keyframes animatedGradient {
-	0% {
-		background-position: 0% 50%;
-	}
-	50% {
-		background-position: 100% 50%;
-	}
-	100% {
-		background-position: 0% 50%;
-	}
-}
-
+    @keyframes animatedGradient {
+        0% {
+            background-position: 0% 50%;
+        }
+        50% {
+            background-position: 100% 50%;
+        }
+        100% {
+            background-position: 0% 50%;
+        }
+    }
 </style>

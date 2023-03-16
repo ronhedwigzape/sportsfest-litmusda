@@ -10,8 +10,8 @@ class Team extends App
     // properties
     protected $id;
     protected $name;
-    protected $color;
-    protected $logo;
+    protected $country;
+    protected $avatar;
 
 
     /***************************************************************************
@@ -33,8 +33,8 @@ class Team extends App
                 $row = $result->fetch_assoc();
                 $this->id = $row['id'];
                 $this->name = $row['name'];
-                $this->color = $row['color'];
-                $this->logo = $row['logo'];
+                $this->country = $row['country'];
+                $this->avatar = $row['avatar'];
             }
         }
     }
@@ -82,8 +82,8 @@ class Team extends App
         return [
             'id'    => $this->id,
             'name'  => $this->name,
-            'color' => $this->color,
-            'logo'  => $this->logo
+            'country' => $this->country,
+            'avatar'  => $this->avatar
         ];
     }
 
@@ -232,8 +232,8 @@ class Team extends App
             App::returnError('HTTP/1.1 409', 'Insert Error: team [id = ' . $this->id . '] already exists.');
 
         // proceed with insert
-        $stmt = $this->conn->prepare("INSERT INTO $this->table(name, color, logo) VALUES(?, ?, ?)");
-        $stmt->bind_param("sss", $this->name, $this->color, $this->logo);
+        $stmt = $this->conn->prepare("INSERT INTO $this->table(name, country, avatar) VALUES(?, ?, ?)");
+        $stmt->bind_param("sss", $this->name, $this->country, $this->avatar);
         $stmt->execute();
         $this->id = $this->conn->insert_id;
     }
@@ -251,8 +251,8 @@ class Team extends App
             App::returnError('HTTP/1.1 404', 'Update Error: team [id = ' . $this->id . '] does not exist.');
 
         // proceed with update
-        $stmt = $this->conn->prepare("UPDATE $this->table SET name = ?, color = ?, logo = ? WHERE id = ?");
-        $stmt->bind_param("sssi", $this->name, $this->color, $this->logo, $this->id);
+        $stmt = $this->conn->prepare("UPDATE $this->table SET name = ?, country = ?, avatar = ? WHERE id = ?");
+        $stmt->bind_param("sssi", $this->name, $this->country, $this->avatar, $this->id);
         $stmt->execute();
     }
 
@@ -288,26 +288,26 @@ class Team extends App
 
 
     /***************************************************************************
-     * Set color
+     * Set country
      *
-     * @param string $color
+     * @param string $country
      * @return void
      */
-    public function setColor($color)
+    public function setCountry($country)
     {
-        $this->color = $color;
+        $this->country = $country;
     }
 
 
     /***************************************************************************
-     * Set logo
+     * Set avatar
      *
-     * @param string $logo
+     * @param string $avatar
      * @return void
      */
-    public function setLogo($logo)
+    public function setAvatar($avatar)
     {
-        $this->logo = $logo;
+        $this->avatar = $avatar;
     }
 
 
@@ -334,24 +334,24 @@ class Team extends App
 
 
     /***************************************************************************
-     * Get color
+     * Get country
      *
      * @return string
      */
-    public function getColor()
+    public function getcountry()
     {
-        return $this->color;
+        return $this->country;
     }
 
 
     /***************************************************************************
-     * Get logo
+     * Get avatar
      *
      * @return string
      */
-    public function getLogo()
+    public function getavatar()
     {
-        return $this->logo;
+        return $this->avatar;
     }
 
 
