@@ -586,9 +586,11 @@ class Judge extends User
         // gather unique ratings
         $unique_ratings = [];
         for($i = 0; $i < sizeof($team_rows); $i++) {
-            $t_rating = ($this->getEventTeamRating($event, new Team($team_rows[$i]['id'])))['deducted'];
+            $event_rating = $this->getEventTeamRating($event, new Team($team_rows[$i]['id']));
+            $t_rating = $event_rating['deducted'];
             $team_rows[$i]['rating'] = $t_rating;
             $team_rows[$i]['rank'] = [
+                'rating'     => $event_rating,
                 'dense'      => 0,
                 'fractional' => 0
             ];
