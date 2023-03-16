@@ -140,7 +140,7 @@
                     <td class="text-center font-weight-bold text-green-darken-4">{{ team.ratings.average.toFixed(2) }}</td>
                     <td class="text-center font-weight-bold text-blue-darken-4">{{ team.rank.total.fractional.toFixed(2) }}</td>
                     <td class="text-center font-weight-bold text-grey-darken-1">{{ team.rank.initial.fractional.toFixed(2) }}</td>
-                    <td class="text-center font-weight-bold">{{ team.rank.final.fractional }}</td>
+                    <td class="text-center font-weight-bold text-h6">{{ team.rank.final.fractional }}</td>
                 </tr>
 				<tr>
 					<td :colspan="(6 + totalTechnicals + totalJudges)">
