@@ -18,21 +18,23 @@
 					<th colspan="2" class="text-center text-uppercase font-weight-bold text-grey-darken-4 text-h5 py-3">
 						{{ event.title}}
 					</th>
-					<template v-for="(technical, technicalKey, technicalIndex) in technicals" :key="technical.id">
-						<th class="text-center text-uppercase font-weight-bold text-red-darken-4 py-3">
-							Deduct {{ technicalIndex + 1 }}
-                            <v-btn
-                                class="unlock"
-                                @click="unlockTechnicalDeductions(technical)"
-                                variant="text"
-                                size="x-small"
-                                icon
-                                style="position: absolute; top: 0; right: 1px"
-                            >
-                                <v-icon icon="mdi-lock-open-variant"/>
-                            </v-btn>
-						</th>
-					</template>
+                    <th
+                        v-for="(technical, technicalKey, technicalIndex) in technicals"
+                        :key="technical.id"
+                        class="text-center text-uppercase font-weight-bold text-red-darken-4 py-3"
+                    >
+                        Deduct {{ technicalIndex + 1 }}
+                        <v-btn
+                            class="unlock"
+                            @click="unlockTechnicalDeductions(technical)"
+                            variant="text"
+                            size="x-small"
+                            icon
+                            style="position: absolute; top: 0; right: 1px"
+                        >
+                            <v-icon icon="mdi-lock-open-variant"/>
+                        </v-btn>
+                    </th>
 					<template v-for="judge in judges" :key="judge.id">
 						<th
 							class="text-center text-uppercase py-3"
@@ -53,24 +55,19 @@
                                 'text-red-darken-3': judge.is_chairman == 1
                             	}"
 							>
-								Judge
-                                <div>
-                                    {{ judge.number }}<span v-if="judge.is_chairman == 1">*</span>
+								Judge {{ judge.number }}<span v-if="judge.is_chairman == 1">*</span>
+                                <div
+                                    :class="{
+                                        'text-dark-darken-1': judge.is_chairman == 0,
+                                        'text-red-darken-4': judge.is_chairman == 1
+                                    }"
+                                >
+                                    <small>Total</small>
                                 </div>
-								<b :class="{
-									'text-dark-darken-1': judge.is_chairman == 0,
-									'text-red-darken-4': judge.is_chairman == 1
-                            		}"
-								>
-									Total
-								</b>
+                                <div class="text-blue-darken-2" style="margin-top: -10px;">
+                                    <small>Rank</small>
+                                </div>
 							</div>
-						</th>
-						<th class="text-center text-uppercase py-3 text-blue-darken-2">
-							Judge
-							<div v-if="judge.is_chairman == 1">CHAIRMAN</div>
-							<div v-else>{{ judge.number }}</div>
-							<b class="text-blue-darken-3">Rank</b>
 						</th>
 					</template>
 					<th class="text-center text-uppercase font-weight-bold text-green-darken-4 py-3">
@@ -88,89 +85,105 @@
 				</tr>
 			</thead>
 			<tbody>
-			<tr v-for="(team, teamKey, teamIndex) in teams" :key="team.id">
-				<td class="text-h5 text-center font-weight-bold">{{ teamIndex + 1 }}</td>
-				<td class="text-center text-uppercase font-weight-bold" :style="{'color': team.color}">{{ team.name }}</td>
-				 <template v-for="(technical, technicalKey, technicalIndex) in technicals" :key="technical.id">
-					<td
-						class="text-center text-uppercase font-weight-bold text-red-darken-3"
-						:class="{
-							'bg-grey-lighten-3' : !team.deductions.inputs[technicalKey].is_locked,
-							'bg-white' : team.deductions.inputs[technicalKey].is_locked
-						}"
-					>
-						{{ team.deductions.inputs[technicalKey].value.toFixed(2) }}
-					</td>
-				</template> 
-				<template v-for="judge in judges" :key="judge.id">
-					<td
-						class="text-center"
-						:class="{
-							'bg-grey-lighten-3' : !team.ratings.inputs[`judge_${judge.id}`].final.is_locked,
-							'bg-white' : team.ratings.inputs[`judge_${judge.id}`].final.is_locked,
-							'text-dark-darken-1': judge.is_chairman == 0,
-							'text-red-darken-3': judge.is_chairman == 1
-						}"
-					>
-						{{ team.ratings.inputs[`judge_${judge.id}`].final.deducted.toFixed(2) }}
-					</td>
-					<td
-						class="text-center font-weight-bold text-blue-darken-2"
-						:class="{
-							'bg-grey-lighten-3' : !team.ratings.inputs[`judge_${judge.id}`].final.is_locked,
-							'bg-white' : team.ratings.inputs[`judge_${judge.id}`].final.is_locked
-						}"
-					>
-						{{ team.ratings.inputs[`judge_${judge.id}`].rank.fractional.toFixed(2) }}
-					</td>
-				</template>
-				<td class="text-center font-weight-bold text-green-darken-4">{{ team.ratings.average.toFixed(2) }}</td>
-				<td class="text-center font-weight-bold text-blue-darken-4">{{ team.rank.total.fractional.toFixed(2) }}</td>
-				<td class="text-center font-weight-bold text-grey-darken-1">{{ team.rank.initial.fractional.toFixed(2) }}</td>
-				<td class="text-center font-weight-bold">{{ team.rank.final.fractional }}</td>
-			</tr>
-			</tbody>
-			<tfoot>
-				<tr>
-					<td colspan="20">
-						<v-row>
-							<template v-for="technical in technicals" :key="technical.id">
-								<v-col>
-									<v-card class="text-center mb-5" flat>
-										<v-card-title class="pt-16 font-weight-bold">
-											{{ technical.name }}
-										</v-card-title>
-										<v-card-text class="text-center">
-											Technical Judge {{ technical.number }}
-                                            <p class="mt-2 mb-0 online-status">
-                                                <v-chip v-if="technical.online" size="x-small" color="success" variant="outlined">ONLINE</v-chip>
-                                                <v-chip v-else size="x-small" color="error" variant="flat">OFFLINE</v-chip>
-                                            </p>
-										</v-card-text>
-									</v-card>
-								</v-col>
-							</template>
+                <tr v-for="(team, teamKey, teamIndex) in teams" :key="team.id">
+                    <td class="text-h5 text-center font-weight-bold">{{ teamIndex + 1 }}</td>
+                    <td>
+                        <div class="d-flex">
+                            <v-avatar size="42" class="mr-2">
+                                <v-img
+                                    cover
+                                    :src="`${$store.getters.appURL}/crud/uploads/${team.avatar}`"
+                                />
+                            </v-avatar>
+                            <div>
+                                <p class="ma-0 text-body-1 text-uppercase font-weight-bold">{{ team.country }}</p>
+                                <p class="ma-0" style="margin-top: -5px !important;"><small>{{ team.name }}</small></p>
+                            </div>
+                        </div>
+                    </td>
+                    <td
+                        v-for="(technical, technicalKey, technicalIndex) in technicals"
+                        :key="technical.id"
+                        class="text-center text-uppercase font-weight-bold text-red-darken-3"
+                        :class="{
+                            'bg-grey-lighten-3' : !team.deductions.inputs[technicalKey].is_locked,
+                            'bg-white' : team.deductions.inputs[technicalKey].is_locked
+                        }"
+                    >
+                        {{ team.deductions.inputs[technicalKey].value.toFixed(2) }}
+                    </td>
+                    <td
+                        v-for="judge in judges" :key="judge.id"
+                        class="text-right"
+                        :class="{
+                            'bg-grey-lighten-3' : !team.ratings.inputs[`judge_${judge.id}`].final.is_locked,
+                            'bg-white' : team.ratings.inputs[`judge_${judge.id}`].final.is_locked,
+                        }"
+                    >
+                        <div :class="{
+                            'text-dark-darken-1': judge.is_chairman == 0,
+                            'text-red-darken-3': judge.is_chairman == 1
+                        }">
+                            {{ team.ratings.inputs[`judge_${judge.id}`].final.deducted.toFixed(2) }}
+                        </div>
 
-							<template v-for="judge in judges" :key="judge.id">
-								<v-col>
-									<v-card class="text-center mb-5" flat>
-										<v-card-title class="pt-16 font-weight-bold">
-											{{ judge.name }}
-										</v-card-title>
-										<v-card-text class="text-center">
-											Judge {{ judge.number }}<template v-if="judge.is_chairman == 1">* (Chairman)</template>
-                                            <p class="mt-2 mb-0 online-status">
-                                                <v-chip v-if="judge.online" size="x-small" color="success" variant="outlined">ONLINE</v-chip>
-                                                <v-chip v-else size="x-small" color="error" variant="flat">OFFLINE</v-chip>
-                                            </p>
-										</v-card-text>
-									</v-card>
-								</v-col>
-							</template>
+                        <div
+                            class="text-right font-weight-bold text-blue-darken-2"
+                            :class="{
+                            'bg-grey-lighten-3' : !team.ratings.inputs[`judge_${judge.id}`].final.is_locked,
+                            'bg-white' : team.ratings.inputs[`judge_${judge.id}`].final.is_locked
+                        }"
+                        >
+                            {{ team.ratings.inputs[`judge_${judge.id}`].rank.fractional.toFixed(2) }}
+                        </div>
+                    </td>
+                    <td class="text-center font-weight-bold text-green-darken-4">{{ team.ratings.average.toFixed(2) }}</td>
+                    <td class="text-center font-weight-bold text-blue-darken-4">{{ team.rank.total.fractional.toFixed(2) }}</td>
+                    <td class="text-center font-weight-bold text-grey-darken-1">{{ team.rank.initial.fractional.toFixed(2) }}</td>
+                    <td class="text-center font-weight-bold">{{ team.rank.final.fractional }}</td>
+                </tr>
+				<tr>
+					<td :colspan="(6 + totalTechnicals + totalJudges)">
+						<v-row class="justify-center">
+                            <v-col
+                                v-for="technical in technicals" :key="technical.id"
+                                md="3"
+                            >
+                                <v-card class="text-center mb-5" flat>
+                                    <v-card-title class="pt-16 font-weight-bold">
+                                        {{ technical.name }}
+                                    </v-card-title>
+                                    <v-card-text class="text-center">
+                                        Technical Judge {{ technical.number }}
+                                        <p class="mt-2 mb-0 online-status">
+                                            <v-chip v-if="technical.online" size="x-small" color="success" variant="outlined">ONLINE</v-chip>
+                                            <v-chip v-else size="x-small" color="error" variant="flat">OFFLINE</v-chip>
+                                        </p>
+                                    </v-card-text>
+                                </v-card>
+                            </v-col>
+
+                            <v-col
+                                v-for="judge in judges" :key="judge.id"
+                                md="3"
+                            >
+                                <v-card class="text-center mb-5" flat>
+                                    <v-card-title class="pt-16 font-weight-bold">
+                                        {{ judge.name }}
+                                    </v-card-title>
+                                    <v-card-text class="text-center">
+                                        Judge {{ judge.number }}<template v-if="judge.is_chairman == 1">* (Chairman)</template>
+                                        <p class="mt-2 mb-0 online-status">
+                                            <v-chip v-if="judge.online" size="x-small" color="success" variant="outlined">ONLINE</v-chip>
+                                            <v-chip v-else size="x-small" color="error" variant="flat">OFFLINE</v-chip>
+                                        </p>
+                                    </v-card-text>
+                                </v-card>
+                            </v-col>
 						</v-row>
 					</td>
 				</tr>
-			</tfoot>
+            </tbody>
 		</v-table>
 
         <!-- loader -->
@@ -210,7 +223,13 @@
 		computed: {
 			scoreSheetHeight() {
 				return this.$store.getters.windowHeight - 64;
-			}
+			},
+            totalTechnicals() {
+                return Object.values(this.technicals).length;
+            },
+            totalJudges() {
+                return Object.values(this.judges).length;
+            }
 		},
         watch: {
             $route: {
@@ -244,11 +263,11 @@
 							this.technicals = data.results.technicals;
 							console.log(data)
                             // request again
-                            if(data.event.slug === this.$route.params.eventSlug) {
+                            /*if(data.event.slug === this.$route.params.eventSlug) {
                                 this.timer = setTimeout(() => {
                                     this.tabulate();
                                 }, 2400);
-                            }
+                            }*/
                         },
                         error: (error) => {
                             alert(`ERROR ${error.status}: ${error.statusText}`);

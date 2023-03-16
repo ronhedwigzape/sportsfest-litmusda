@@ -45,35 +45,22 @@
 					:key="team.id"
 					:class="{ 'bg-grey-lighten-4': coordinates.y == teamIndex }"
 				>
-					<td class="text-uppercase text-center text-h4 font-weight-bold text-grey-darken-4">
+					<td class="text-uppercase text-right text-h5 font-weight-bold text-grey-darken-4">
 						{{ teamIndex + 1 }}
 					</td>
-					<td class="text-uppercase text-center font-weight-bold" :style="{ 'color' : team.color }">
-						<v-col align="center">
-							<v-img
-								:src="`${$store.getters.appURL}/crud/uploads/${team.avatar}`"
-								:lazy-src="`${$store.getters.appURL}/crud/uploads/${team.avatar}`"
-								aspect-ratio="1"
-								:alt="`${team.name} Logo`"
-								height="100"
-								width="100"
-							>
-								<template v-slot:placeholder>
-									<v-row
-										class="fill-height ma-0"
-										align="center"
-										justify="center"
-									>
-										<v-progress-circular
-											indeterminate
-											color="grey-lighten-5"
-										>
-										</v-progress-circular>
-									</v-row>
-								</template>
-							</v-img>
-						</v-col> 
-						{{ team.name }}
+					<td>
+                        <div class="d-flex">
+                            <v-avatar size="42" class="mr-2">
+                                <v-img
+                                    cover
+                                    :src="`${$store.getters.appURL}/crud/uploads/${team.avatar}`"
+                                />
+                            </v-avatar>
+                            <div>
+                                <p class="ma-0 text-body-1 text-uppercase font-weight-bold">{{ team.country }}</p>
+                                <p class="ma-0" style="margin-top: -5px !important;"><small>{{ team.name }}</small></p>
+                            </div>
+                        </div>
 					</td>
 					<td
 						v-for="(criterion, criterionIndex) in criteria"
