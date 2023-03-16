@@ -128,7 +128,10 @@ class Admin extends User
         $judge_ranks = [];
         foreach($judges as $judge) {
             $key_judge = 'judge_' . $judge->getId();
-            $judge_ranks[$key_judge] = $judge->getEventRanks($event);
+            $judge_ranks[$key_judge] = [
+                'is_chairman' => $judge->isChairmanOfEvent($event),
+                'ranks'       => $judge->getEventRanks($event)
+            ];
         }
 
         // prepare $unique_total_fractional_ranks and $unique_final_adjustments
@@ -187,13 +190,13 @@ class Admin extends User
                 $key_judge = 'judge_' . $judge->getId();
 
                 // append $judge to $result['judges']
-                $judge->setIsChairman($judge->isChairmanOfEvent($event));
+                $judge->setIsChairman($judge_ranks[$key_judge]['is_chairman']);
                 $result['judges'][$key_judge] = $judge->toArray();
                 $result['judges'][$key_judge]['online'] = $judge->isOnline();
 
                 // get judge's total team ratings and ranks
-                $judge_total = $judge->getEventTeamRating($event, $team);
-                $judge_rank = $judge_ranks[$key_judge][$key_team];
+                $judge_total = $judge_ranks[$key_judge]['ranks'][$key_team]['rating']; // $judge->getEventTeamRating($event, $team);
+                $judge_rank = $judge_ranks[$key_judge]['ranks'][$key_team];
                 $team_row['ratings']['inputs'][$key_judge] = [
                     'final' => $judge_total,
                     'rank'  => $judge_rank
@@ -307,17 +310,20 @@ class Admin extends User
             for($j = 0; $j < $size; $j++) {
                 $result['teams'][$group[$j]]['rank']['final']['fractional'] = $fractional_rank;
 
+                /*
                 if($point = $event->getRankPoint($ctr + $j + 1))
                     $points += $point->getValue();
+                */
             }
 
             // assign points to $group members, if they showed up for the event
+            /*
             $points = $points / $size;
             for($j = 0; $j < $size; $j++) {
                 $team = new Team($result['teams'][$group[$j]]['id']);
                 if(!$team->hasNotShownUpForEvent($event))
                     $result['teams'][$group[$j]]['points'] = $points;
-            }
+            }*/
 
             $ctr += $size;
         }
