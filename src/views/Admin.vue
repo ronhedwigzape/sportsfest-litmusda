@@ -263,11 +263,11 @@
 							this.technicals = data.results.technicals;
 							console.log(data)
                             // request again
-                            /*if(data.event.slug === this.$route.params.eventSlug) {
+                            if(data.event.slug === this.$route.params.eventSlug) {
                                 this.timer = setTimeout(() => {
                                     this.tabulate();
                                 }, 2400);
-                            }*/
+                            }
                         },
                         error: (error) => {
                             alert(`ERROR ${error.status}: ${error.statusText}`);
