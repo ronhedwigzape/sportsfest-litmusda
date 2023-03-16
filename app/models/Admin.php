@@ -310,17 +310,20 @@ class Admin extends User
             for($j = 0; $j < $size; $j++) {
                 $result['teams'][$group[$j]]['rank']['final']['fractional'] = $fractional_rank;
 
+                /*
                 if($point = $event->getRankPoint($ctr + $j + 1))
                     $points += $point->getValue();
+                */
             }
 
             // assign points to $group members, if they showed up for the event
+            /*
             $points = $points / $size;
             for($j = 0; $j < $size; $j++) {
                 $team = new Team($result['teams'][$group[$j]]['id']);
                 if(!$team->hasNotShownUpForEvent($event))
                     $result['teams'][$group[$j]]['points'] = $points;
-            }
+            }*/
 
             $ctr += $size;
         }
