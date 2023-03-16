@@ -51,8 +51,8 @@
 					<td class="text-uppercase text-center font-weight-bold" :style="{ 'color' : team.color }">
 						<v-col align="center">
 							<v-img
-								:src="`${$store.getters.appURL}/crud/uploads/${team.logo}`"
-								:lazy-src="`${$store.getters.appURL}/crud/uploads/${team.logo}`"
+								:src="`${$store.getters.appURL}/crud/uploads/${team.avatar}`"
+								:lazy-src="`${$store.getters.appURL}/crud/uploads/${team.avatar}`"
 								aspect-ratio="1"
 								:alt="`${team.name} Logo`"
 								height="100"

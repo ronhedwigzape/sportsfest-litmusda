@@ -71,10 +71,6 @@
                             </form>
                             <div class="clearfix"></div>
                         </div> <!-- end login -->
-                        <div class="logo">
-                            <img src="foundation-logo.png" alt="">
-                            <div class="clearfix"></div>
-                        </div>
                     </div>
                 </center>
             </div>

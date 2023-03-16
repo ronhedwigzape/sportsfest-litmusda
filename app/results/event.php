@@ -1,7 +1,7 @@
 <?php
 
 // RESULT FOR SPECIFIC EVENT
-// SAMPLE URL: localhost/sportsfest-litmusda/app/results/event.php?oration
+// SAMPLE URL: localhost/fobi/app/results/event.php?oration
 
 // apply authentication
 const LOGIN_PAGE_PATH = '../crud/';
@@ -50,11 +50,9 @@ else {
     <title>Results in <?= $event->getTitle() ?></title>
 </head>
 <body>
-    <img class=img-"sportfest" src="img/foundation-logo.png" alt="sportfest">
     <br>
     <h1><?= $event->getTitle() ?></h1>
     <br>
-
 <table border="1" cellspacing="0">
     <thead>
     <tr>

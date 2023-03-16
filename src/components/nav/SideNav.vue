@@ -3,17 +3,6 @@
 		theme="dark"
         permanent
 	>
-		<v-col class="d-flex justify-center">
-			<v-img
-				:src="`/${$store.getters.appName}/foundation-logo.png`"
-				alt="foundation-logo"
-				height="100"
-				width="100"
-			/>
-		</v-col>
-
-		<v-divider />
-
         <v-list class="pa-0">
             <template v-for="(group, groupIndex) in $store.getters['events/getCategorizedEvents']">
                 <v-list-subheader class="mt-2 text-subtitle-1">

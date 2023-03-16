@@ -24,23 +24,23 @@ $admin->tabulate()
 2. event.php
 - render mo yung results ng isang event na ipinasa sa URL:
 - examples:
--- the URL "localhost/sportsfest-litmusda/event.php?oration" will render the results for oration
--- the URL "localhost/sportsfest-litmusda/event.php?balagtasan" will render the results for balagtasan
+-- the URL "localhost/fobi/event.php?oration" will render the results for oration
+-- the URL "localhost/fobi/event.php?balagtasan" will render the results for balagtasan
 - you can use $admin->tabulate($event)
 
 2. category.php
 - render mo yung results ng isang category na ipinasa sa URL:
 - examples:
--- the URL "localhost/sportsfest-litmusda/category.php?literary" will render the results for literary
--- the URL "localhost/sportsfest-litmusda/category.php?music" will render the results for music
+-- the URL "localhost/fobi/category.php?literary" will render the results for literary
+-- the URL "localhost/fobi/category.php?music" will render the results for music
 - you can use $admin->tabulate($category)
 
 
 3. competition.php
 - render mo yung results ng isang competition na ipinasa sa URL:
 - examples:
--- the URL "localhost/sportsfest-litmusda/competition.php?sports" will render the results for sports
--- the URL "localhost/sportsfest-litmusda/competition.php?litmusda" will render the results for litmusda
+-- the URL "localhost/fobi/competition.php?sports" will render the results for sports
+-- the URL "localhost/fobi/competition.php?litmusda" will render the results for litmusda
 - you can use $admin->tabulate($competition)
 
  */

@@ -1,5 +1,5 @@
 RewriteEngine On
-RewriteBase /sportsfest-litmusda/
+RewriteBase /fobi/
 
 # Exclude assets from rewrite rule
 RewriteCond %{REQUEST_URI} !\.(css|js|svg|jpg|jpeg|png|gif|woff2|ico)$ [NC]
@@ -7,10 +7,9 @@ RewriteCond %{REQUEST_URI} !\.(css|js|svg|jpg|jpeg|png|gif|woff2|ico)$ [NC]
 # Redirect all requests to index.html
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ /sportsfest-litmusda/public/index.html [L]
+RewriteRule ^(.*)$ /fobi/public/index.html [L]
 
 # Exclude the public and app directories from the rewrite rule
-RewriteCond %{REQUEST_URI} !^/sportsfest-litmusda/public/
-RewriteCond %{REQUEST_URI} !^/sportsfest-litmusda/app/
-RewriteRule ^(.*)$ /sportsfest-litmusda/public/$1 [L]
-
+RewriteCond %{REQUEST_URI} !^/fobi/public/
+RewriteCond %{REQUEST_URI} !^/fobi/app/
+RewriteRule ^(.*)$ /fobi/public/$1 [L]
