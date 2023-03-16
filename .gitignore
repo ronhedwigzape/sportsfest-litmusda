@@ -25,6 +25,7 @@ app/crud/uploads/*
 !app/crud/uploads/belgium.jpg
 !app/crud/uploads/benelux.jpg
 !app/crud/uploads/brazil.jpg
+!app/crud/uploads/egypt.jpg
 !app/crud/uploads/ethiopia.jpg
 !app/crud/uploads/fiji.jpg
 !app/crud/uploads/finland.jpg
