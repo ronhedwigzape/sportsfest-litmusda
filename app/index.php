@@ -58,7 +58,7 @@ else if(isset($_POST['signOut'])) {
 
 $routes = [
     [ "name" => "Main panel", "route" => "crud/competitions.php" ],
-    [ "name" => "Tabulation", "route" => "http://localhost/sportsfest-litmusda" ],
+    [ "name" => "Tabulation", "route" => "http://localhost/fobi" ],
     [ "name" => "Result"    , "route" => "results/overall" ],
     [ "name" => "Guidelines", "route" => "crud/guidelines/event_ranking.php" ],
     [ "name" => "Assignment", "route" => "crud/assignment" ],
@@ -92,7 +92,7 @@ $routes = [
         }
 
     </style>
-    <title>sportsfest-litmusda</title>
+    <title>fobi</title>
 </head>
 <body>
 
@@ -108,7 +108,7 @@ $routes = [
                     </defs>
                     <path fill="url(#grad1)" d="M8 16c3.314 0 6-2 6-5.5 0-1.5-.5-4-2.5-6 .25 1.5-1.25 2-1.25 2C11 4 9 .5 6 0c.357 2 .5 4-2 6-1.25 1-2 2.729-2 4.5C2 14 4.686 16 8 16Zm0-1c-1.657 0-3-1-3-2.75 0-.75.25-2 1.25-3C6.125 10 7 10.5 7 10.5c-.375-1.25.5-3.25 2-3.5-.179 1-.25 2 1 3 .625.5 1 1.364 1 2.25C11 14 9.657 15 8 15Z"/>
                 </svg>
-                <h1 class="fw-bold" >sportsfest-litmusda</h1>
+                <h1 class="fw-bold" >fobi</h1>
                 <p class="fst-italic" >Your SPORTSFEST & LITMUSDA Open Source Panel, because why not?</p>
             </div>
 
@@ -128,7 +128,7 @@ $routes = [
             </div>
 
             <div class="text-center text-secondary mt-5" >
-                <small>Wanna contribute? <a target="_blank" href="https://github.com/ronhedwigzape/sportsfest-litmusda">https://github.com/ronhedwigzape/sportsfest-litmusda</a></small>
+                <small>Wanna contribute? <a target="_blank" href="https://github.com/ronhedwigzape/fobi">https://github.com/ronhedwigzape/fobi</a></small>
             </div>
         </div>
     </div>

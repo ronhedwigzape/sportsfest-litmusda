@@ -8,13 +8,13 @@ require_once '../models/Team.php';
 if(isset($_POST['insertdata'])) {
 
     $name = $_POST['name'];
-    $color = $_POST['color'];
+    $country = $_POST['country'];
     $file_name = '';
 
     // Handle file upload
-    if(isset($_FILES['logo'])) {
-        $file_name = $_FILES['logo']['name'];
-        $file_tmp = $_FILES['logo']['tmp_name'];
+    if(isset($_FILES['avatar'])) {
+        $file_name = $_FILES['avatar']['name'];
+        $file_tmp = $_FILES['avatar']['tmp_name'];
         $arr_filename = explode('.', $file_name);
         $file_ext = strtolower(end($arr_filename));
         $extensions = array("jpeg", "jpg", "png");
@@ -28,8 +28,8 @@ if(isset($_POST['insertdata'])) {
 
     $team = new Team();
     $team->setName($name);
-    $team->setColor($color);
-    $team->setLogo($file_name);
+    $team->setCountry($country);
+    $team->setAvatar($file_name);
     $team->insert();
 }
 
@@ -39,13 +39,13 @@ if (isset($_POST['updatedata'])) {
 
     $id = $_POST['update_id'];
     $name = $_POST['name'];
-    $color = $_POST['color'];
+    $country = $_POST['country'];
     $file_name = '';
 
     // Handle file upload
-    if(isset($_FILES['logo']) && $_FILES['logo']['error'] !== UPLOAD_ERR_NO_FILE) {
-        $file_name = $_FILES['logo']['name'];
-        $file_tmp = $_FILES['logo']['tmp_name'];
+    if(isset($_FILES['avatar']) && $_FILES['avatar']['error'] !== UPLOAD_ERR_NO_FILE) {
+        $file_name = $_FILES['avatar']['name'];
+        $file_tmp = $_FILES['avatar']['tmp_name'];
         $arr_filename = explode('.', $file_name);
         $file_ext = strtolower(end($arr_filename));
         $extensions = array("jpeg", "jpg", "png");
@@ -57,13 +57,13 @@ if (isset($_POST['updatedata'])) {
         move_uploaded_file($file_tmp, "uploads/" . $file_name);
     } else {
         $team = Team::findById($id);
-        $file_name = $team->getLogo();
+        $file_name = $team->getAvatar();
     }
 
     $team = Team::findById($id);
     $team->setName($name);
-    $team->setColor($color);
-    $team->setLogo($file_name);
+    $team->setCountry($country);
+    $team->setAvatar($file_name);
     $team->update();
 }
 

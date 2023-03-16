@@ -10,7 +10,7 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="shortcut icon" href="logo.png">
+        <link rel="shortcut icon" href="avatar.png">
 
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="dist/bootstrap-4.2.1/css/bootstrap.min.css">
@@ -43,13 +43,13 @@
                             </div>
 
                             <div class="form-group">
-                                <label> Color </label>
-                                <input type="text" name="color" class="form-control" placeholder="Enter your Color" autocomplete="off" required>
+                                <label> Country </label>
+                                <input type="text" name="country" class="form-control" placeholder="Enter your Country" autocomplete="off" required>
                             </div>
 
                             <div class="form-group">
-                                <label for="logo">Logo</label>
-                                <input type="file" name="logo" id="logo" class="form-control" accept="image/*">
+                                <label for="avatar">Avatar</label>
+                                <input type="file" name="avatar" id="avatar" class="form-control" accept="image/*">
                                 <small class="form-text text-muted">Select an image file to upload.</small>
                             </div>
                         </div>
@@ -84,13 +84,13 @@
                             </div>
 
                             <div class="form-group">
-                                <label> Color </label>
-                                <input type="text" name="color" id="color" class="form-control" placeholder="Enter your Color" autocomplete="off" required>
+                                <label> Country </label>
+                                <input type="text" name="country" id="country" class="form-control" placeholder="Enter your Country" autocomplete="off" required>
                             </div>
 
                             <div class="form-group">
-                                <label for="logo">Logo</label>
-                                <input type="file" name="logo" id="logo" class="form-control" accept="image/*">
+                                <label for="avatar">Avatar</label>
+                                <input type="file" name="avatar" id="avatar" class="form-control" accept="image/*">
                                 <small class="form-text text-muted">Select an image file to upload.</small>
                             </div>
                         </div>
@@ -149,7 +149,7 @@
                     </form>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-                        <a class="btn btn-danger" href="logout.php" role="button">Yes</a>
+                        <a class="btn btn-danger" href="avatarut.php" role="button">Yes</a>
                     </div>
                 </div>
             </div>
@@ -186,20 +186,24 @@
             <table id="datatableid" class="table table-striped table-info text-center" >
                 <thead class="table-dark">
                 <tr>
-                    <th scope="col" class="d-none">ID</th>
+                    <th scope="col"></th>
                     <th scope="col">Name</th>
-                    <th scope="col">Color</th>
-                    <th scope="col">Logo</th>
+                    <th scope="col">Country</th>
+                    <th scope="col">Avatar</th>
                     <th scope="col">Operations</th>
                 </tr>
                 </thead>
                 <tbody class="table-dark">
-                <?php foreach ($teams as $team) { ?>
+                <?php
+                $i = 0;
+                foreach ($teams as $team) {
+                    $i += 1;
+                ?>
                     <tr>
-                        <td class="d-none"><?php echo $team->getId(); ?></td>
+                        <td><?php echo $i; ?></td>
                         <td><?php echo $team->getName(); ?></td>
-                        <td><?php echo $team->getColor(); ?></td>
-                        <td><?php echo '<img src="uploads/'.$team->getLogo().'" width="50"/>'; ?></td>
+                        <td><?php echo $team->getCountry(); ?></td>
+                        <td><?php echo '<img src="uploads/'.$team->getAvatar().'" width="50"/>'; ?></td>
                         <td>
                             <button type="button" class="btn btn-success editbtn"><i class="fa-solid fa-pen-to-square"></i></button>
                             <button type="button" class="btn btn-danger deletebtn" data-id="<?php echo $team->getId(); ?>"><i class="fa-solid fa-trash-can"></i></button>
@@ -233,8 +237,8 @@
 
                     $('#update_id').val(data[0]);
                     $('#name').val(data[1]);
-                    $('#color').val(data[2]);
-                    $('#logo').val(data[3]);
+                    $('#country').val(data[2]);
+                    $('#avatar').val(data[3]);
 
                 });
             });
