@@ -20,4 +20,8 @@
     .online-status {
         display: none !important;
     }
+
+    .v-table__wrapper {
+        height: 100% !important;
+    }
 }
