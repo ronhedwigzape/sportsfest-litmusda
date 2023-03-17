@@ -8,7 +8,7 @@ class Judge extends User
     protected $table_events = 'judge_events';
 
     // properties
-    protected $is_chairman;
+    protected $is_chairman = false;
 
 
     /***************************************************************************
@@ -20,17 +20,6 @@ class Judge extends User
     public function __construct($username = '', $password = '')
     {
         parent::__construct($username, $password, 'judge');
-
-        if($this->id) {
-            $stmt = $this->conn->prepare("SELECT is_chairman FROM $this->table WHERE id = ?");
-            $stmt->bind_param("i", $this->id);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            if($result->num_rows > 0) {
-                $row = $result->fetch_assoc();
-                $this->is_chairman = ($row['is_chairman'] == 1);
-            }
-        }
     }
 
 
@@ -171,9 +160,8 @@ class Judge extends User
             App::returnError('HTTP/1.1 500', 'Insert Error: judge password is required.');
 
         // proceed with insert
-        $stmt = $this->conn->prepare("INSERT INTO $this->table(number, name, avatar, is_chairman, username, password) VALUES(?, ?, ?, ?, ?, ?)");
-        $is_chairman = $this->is_chairman ? 1 : 0;
-        $stmt->bind_param("ississ", $this->number, $this->name, $this->avatar, $is_chairman, $this->username, $this->password);
+        $stmt = $this->conn->prepare("INSERT INTO $this->table(number, name, avatar, username, password) VALUES(?, ?, ?, ?, ?)");
+        $stmt->bind_param("issss", $this->number, $this->name, $this->avatar, $this->username, $this->password);
         $stmt->execute();
         $this->id = $this->conn->insert_id;
     }
@@ -201,9 +189,8 @@ class Judge extends User
             App::returnError('HTTP/1.1 500', 'Insert Error: judge password is required.');
 
         // proceed with update
-        $stmt = $this->conn->prepare("UPDATE $this->table SET number = ?, name = ?, avatar = ?, is_chairman = ?, username = ?, password = ? WHERE id = ?");
-        $is_chairman = $this->is_chairman ? 1 : 0;
-        $stmt->bind_param("ississi", $this->number, $this->name, $this->avatar, $is_chairman, $this->username, $this->password, $this->id);
+        $stmt = $this->conn->prepare("UPDATE $this->table SET number = ?, name = ?, avatar = ?, username = ?, password = ? WHERE id = ?");
+        $stmt->bind_param("issssi", $this->number, $this->name, $this->avatar, $this->username, $this->password, $this->id);
         $stmt->execute();
     }
 
@@ -246,6 +233,17 @@ class Judge extends User
     public function getIsChairman()
     {
         return $this->is_chairman;
+    }
+
+
+    /***************************************************************************
+     * Get table
+     *
+     * @return string
+     */
+    public function getTable()
+    {
+        return $this->table;
     }
 
 
@@ -357,6 +355,23 @@ class Judge extends User
             $events[] = $event->toArray();
         }
         return $events;
+    }
+
+
+    /***************************************************************************
+     * Determine if judge is chairman of a given event
+     *
+     * @param Event $event
+     * @return bool
+     */
+    public function isChairmanOfEvent($event) {
+        $stmt = $this->conn->prepare("SELECT id FROM $this->table_events WHERE judge_id = ? AND event_id = ? AND is_chairman = 1");
+        $event_id = $event->getId();
+        $stmt->bind_param("ii", $this->id, $event_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        return ($result->num_rows > 0);
     }
 
 
@@ -502,7 +517,7 @@ class Judge extends User
 
         // apply technicals' average deduction when judge is chairman
         $total['deducted'] = $total['original'];
-        if($this->is_chairman) {
+        if($this->isChairmanOfEvent($event)) {
             $technicals = $event->getAllTechnicals();
             $deduction_total = 0;
             foreach($technicals as $technical) {
@@ -571,9 +586,11 @@ class Judge extends User
         // gather unique ratings
         $unique_ratings = [];
         for($i = 0; $i < sizeof($team_rows); $i++) {
-            $t_rating = ($this->getEventTeamRating($event, new Team($team_rows[$i]['id'])))['deducted'];
+            $event_rating = $this->getEventTeamRating($event, new Team($team_rows[$i]['id']));
+            $t_rating = $event_rating['deducted'];
             $team_rows[$i]['rating'] = $t_rating;
             $team_rows[$i]['rank'] = [
+                'rating'     => $event_rating,
                 'dense'      => 0,
                 'fractional' => 0
             ];

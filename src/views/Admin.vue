@@ -54,8 +54,9 @@
                             	}"
 							>
 								Judge
-								<div v-if="judge.is_chairman == 1">CHAIRMAN</div>
-								<div v-else>{{ judge.number }}</div>
+                                <div>
+                                    {{ judge.number }}<span v-if="judge.is_chairman == 1">*</span>
+                                </div>
 								<b :class="{
 									'text-dark-darken-1': judge.is_chairman == 0,
 									'text-red-darken-4': judge.is_chairman == 1
@@ -157,7 +158,7 @@
 											{{ judge.name }}
 										</v-card-title>
 										<v-card-text class="text-center">
-											Judge {{ judge.number }} <template v-if="judge.is_chairman == 1">(Chairman)</template>
+											Judge {{ judge.number }}<template v-if="judge.is_chairman == 1">* (Chairman)</template>
                                             <p class="mt-2 mb-0 online-status">
                                                 <v-chip v-if="judge.online" size="x-small" color="success" variant="outlined">ONLINE</v-chip>
                                                 <v-chip v-else size="x-small" color="error" variant="flat">OFFLINE</v-chip>
