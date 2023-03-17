@@ -74,13 +74,13 @@
 						Average
 					</th>
 					<th class="text-center text-uppercase font-weight-bold text-blue-darken-4 py-3">
-						Total Rank
+						Total<br>Rank
 					</th>
 					<th class="text-center text-uppercase font-weight-bold text-grey-darken-1 py-3">
-						Initial Rank
+						Initial<br>Rank
 					</th>
 					<th class="text-center text-uppercase font-weight-bold text-grey-darken-4 py-3">
-						Final Rank
+						Final<br>Rank
 					</th>
 				</tr>
 			</thead>
@@ -137,10 +137,10 @@
                             {{ team.ratings.inputs[`judge_${judge.id}`].rank.fractional.toFixed(2) }}
                         </div>
                     </td>
-                    <td class="text-center font-weight-bold text-green-darken-4">{{ team.ratings.average.toFixed(2) }}</td>
-                    <td class="text-center font-weight-bold text-blue-darken-4">{{ team.rank.total.fractional.toFixed(2) }}</td>
-                    <td class="text-center font-weight-bold text-grey-darken-1">{{ team.rank.initial.fractional.toFixed(2) }}</td>
-                    <td class="text-center font-weight-bold text-h6">{{ team.rank.final.fractional }}</td>
+                    <td class="text-right font-weight-bold text-green-darken-4"><span class="pr-2">{{ team.ratings.average.toFixed(2) }}</span></td>
+                    <td class="text-right font-weight-bold text-blue-darken-4"><span class="pr-2">{{ team.rank.total.fractional.toFixed(2) }}</span></td>
+                    <td class="text-right font-weight-bold text-grey-darken-1"><span class="pr-2">{{ team.rank.initial.fractional.toFixed(2) }}</span></td>
+                    <td class="text-right font-weight-bold text-h6"><span class="pr-3">{{ team.rank.final.fractional }}</span></td>
                 </tr>
 				<tr>
 					<td :colspan="(6 + totalTechnicals + totalJudges)">
@@ -263,7 +263,7 @@
 							this.teams = data.results.teams;
 							this.judges = data.results.judges;
 							this.technicals = data.results.technicals;
-							console.log(data)
+
                             // request again
                             if(data.event.slug === this.$route.params.eventSlug) {
                                 this.timer = setTimeout(() => {
