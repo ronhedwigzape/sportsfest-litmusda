@@ -431,4 +431,54 @@ class Team extends App
     }
 
 
+    /***************************************************************************
+     * Get events for which the team was eliminated, as array of objects
+     *
+     * @return Event[]
+     */
+    public function getAllEliminatedEvents()
+    {
+        require_once 'Event.php';
+
+        $table_eliminations = (new Event())->getTableEliminations();
+        $stmt = $this->conn->prepare("SELECT DISTINCT event_id FROM $table_eliminations WHERE team_id = ? ORDER BY event_id");
+        $stmt->bind_param("i", $this->id);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+        $events = [];
+        while($row = $result->fetch_assoc()) {
+            $events[] = new Event($row['event_id']);
+        }
+
+        return $events;
+    }
+
+
+    /***************************************************************************
+     * Get events for which the team was eliminated, as array of arrays
+     *
+     * @return array
+     */
+    public function getRowEliminatedEvents()
+    {
+        $events = [];
+        foreach($this->getAllEliminatedEvents() as $event) {
+            $events[] = $event->toArray();
+        }
+
+        return $events;
+    }
+
+
+    /***************************************************************************
+     * Determine if the team is eliminated from a given event
+     *
+     * @param Event $event
+     * @return bool
+     */
+    public function hasBeenEliminatedFromEvent($event)
+    {
+        return $event->hasTeamBeenEliminated($this);
+    }
 }
