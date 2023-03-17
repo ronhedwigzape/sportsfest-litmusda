@@ -7,6 +7,7 @@ class Event extends App
     // table
     protected $table = 'events';
     protected $table_noshows = 'event_noshows';
+    protected $table_eliminations = 'eliminations';
 
     // properties
     protected $id;
@@ -345,6 +346,17 @@ class Event extends App
 
 
     /***************************************************************************
+     * Get table of eliminated teams
+     *
+     * @return string
+     */
+    public function getTableEliminations()
+    {
+        return $this->table_eliminations;
+    }
+
+
+    /***************************************************************************
      * Get all criteria as array of objects
      *
      * @return Criterion[]
@@ -658,7 +670,7 @@ class Event extends App
 
 
     /***************************************************************************
-     * Get teams which never showed up for an event, as array of objects
+     * Get teams which never showed up for the event, as array of objects
      *
      * @return Team[]
      */
@@ -681,7 +693,7 @@ class Event extends App
 
 
     /***************************************************************************
-     * Get teams which never showed up for an event, as array of arrays
+     * Get teams which never showed up for the event, as array of arrays
      *
      * @return array
      */
@@ -759,4 +771,106 @@ class Event extends App
         $stmt->execute();
     }
 
+
+    /***************************************************************************
+     * Get teams which are eliminated from the event, as array of objects
+     *
+     * @return Team[]
+     */
+    public function getAllEliminatedTeams()
+    {
+        require_once 'Team.php';
+
+        $stmt = $this->conn->prepare("SELECT DISTINCT team_id FROM $this->table_eliminations WHERE event_id = ? ORDER BY team_id");
+        $stmt->bind_param("i", $this->id);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+        $teams = [];
+        while($row = $result->fetch_assoc()) {
+            $teams[] = new Team($row['team_id']);
+        }
+
+        return $teams;
+    }
+
+
+    /***************************************************************************
+     * Get teams which are eliminated from the event, as array of arrays
+     *
+     * @return array
+     */
+    public function getRowEliminatedTeams()
+    {
+        $teams = [];
+        foreach($this->getAllEliminatedTeams() as $team) {
+            $teams[] = $team->toArray();
+        }
+
+        return $teams;
+    }
+
+
+    /***************************************************************************
+     * Determine if a given team is eliminated from the event
+     *
+     * @param Team $team
+     * @return bool
+     */
+    public function hasTeamBeenEliminated($team)
+    {
+        $team_id = $team->getId();
+
+        foreach($this->getAllEliminatedTeams() as $t) {
+            if($t->getId() == $team_id)
+                return true;
+        }
+        return false;
+    }
+
+
+    /***************************************************************************
+     * Eliminate a given team from the event
+     *
+     * @param Team $team
+     * @return void
+     */
+    public function eliminateTeam($team)
+    {
+        require_once 'Team.php';
+
+        // check team id
+        $team_id = $team->getId();
+        if(!Team::exists($team_id))
+            App::returnError('HTTP/1.1 500', 'Team Elimination Error: team [id = ' . $team_id . '] does not exist.');
+
+        // proceed with elimination
+        if(!$this->hasTeamBeenEliminated($team)) {
+            $stmt = $this->conn->prepare("INSERT INTO $this->table_eliminations(event_id, team_id) VALUES(?, ?)");
+            $stmt->bind_param("ii", $this->id, $team_id);
+            $stmt->execute();
+        }
+    }
+
+
+    /***************************************************************************
+     * Revive an eliminated from the event
+     *
+     * @param Team $team
+     * @return void
+     */
+    public function reviveTeam($team)
+    {
+        require_once 'Team.php';
+
+        // check team id
+        $team_id = $team->getId();
+        if(!Team::exists($team_id))
+            App::returnError('HTTP/1.1 500', 'Team Revival Error: team [id = ' . $team_id . '] does not exist.');
+
+        // proceed with removal
+        $stmt = $this->conn->prepare("DELETE FROM $this->table_eliminations WHERE event_id = ? AND team_id = ?");
+        $stmt->bind_param("ii", $this->id, $team_id);
+        $stmt->execute();
+    }
 }

@@ -144,7 +144,7 @@ class Point extends App
     {
         $ranks = [];
         require_once 'Team.php';
-        $total_teams = sizeof(Team::all());
+        $total_teams = Team::count();
         for($i = 1; $i <= $total_teams; $i++) {
             $ranks[] = $i;
         }
