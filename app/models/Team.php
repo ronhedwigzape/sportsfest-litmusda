@@ -89,6 +89,22 @@ class Team extends App
 
 
     /***************************************************************************
+     * Count all teams
+     *
+     * @return int
+     */
+    public static function count()
+    {
+        $team = new Team();
+        $stmt = $team->conn->prepare("SELECT COUNT(id) as total_teams FROM $team->table");
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+        return $row['total_teams'];
+    }
+
+
+    /***************************************************************************
      * Get all teams as array of objects
      *
      * @param int $event_id
@@ -96,15 +112,29 @@ class Team extends App
      */
     public static function all($event_id = 0)
     {
+        // gather team ids of eliminated teams
+        $eliminated_team_ids = [];
+        if($event_id > 0) {
+            require_once 'Event.php';
+            $event = Event::findById($event_id);
+            foreach($event->getAllEliminatedTeams() as $eliminated_team) {
+                $eliminated_team_ids[] = $eliminated_team->getId();
+            }
+        }
+
+        // gather teams
         $team = new Team();
         $sql = "SELECT id FROM $team->table ORDER BY id";
         $stmt = $team->conn->prepare($sql);
         $stmt->execute();
-
         $result = $stmt->get_result();
         $teams = [];
         while($row = $result->fetch_assoc()) {
-            $teams[] = new Team($row['id']);
+            $team_id = $row['id'];
+
+            // push to $teams if not eliminated
+            if(!in_array($team_id, $eliminated_team_ids))
+                $teams[] = new Team($team_id);
         }
 
         // sort teams for an event
@@ -135,8 +165,9 @@ class Team extends App
             }
 
             // merge $sorted_teams and remaining $teams
-            $final_teams = [];
-            for($i = 1; $i<=sizeof(Arrangement::orders()); $i++) {
+            $final_teams  = [];
+            $total_orders = sizeof(Arrangement::orders()) - sizeof($eliminated_team_ids);
+            for($i = 1; $i <= $total_orders; $i++) {
                 $key = 'team_' . $i;
                 if(isset($sorted_teams[$key]))
                     $final_teams[] = $sorted_teams[$key];
