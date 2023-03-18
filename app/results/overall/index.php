@@ -34,14 +34,17 @@
         $average_preliminary      = isset($result_preliminary['teams'][$team_key]) ? $result_preliminary['teams'][$team_key]['ratings']['average'] : 0;
         $percentage_preliminary   = $average_preliminary * 0.60;
 
-        $average_swimsuit         = isset($result_swimsuit['teams'][$team_key]) ? $result_swimsuit['teams'][$team_key]['ratings']['average'] : 0;
-        $percentage_swimsuit      = $average_swimsuit * 0.10;
+        $rank_swimsuit            = isset($result_swimsuit['teams'][$team_key]) ? $result_swimsuit['teams'][$team_key]['rank']['final']['fractional'] : 0;
+        $rank_average_swimsuit    = 100 - $rank_swimsuit;
+        $percentage_swimsuit      = $rank_average_swimsuit * 0.10; // $average_swimsuit * 0.10;
 
-        $average_evening_gown     = isset($result_evening_gown['teams'][$team_key]) ? $result_evening_gown['teams'][$team_key]['ratings']['average'] : 0;
-        $percentage_evening_gown  = $average_evening_gown * 0.10;
+        $rank_evening_gown         = isset($result_evening_gown['teams'][$team_key]) ? $result_evening_gown['teams'][$team_key]['rank']['final']['fractional'] : 0;
+        $rank_average_evening_gown = 100 - $rank_evening_gown;
+        $percentage_evening_gown   = $rank_average_evening_gown * 0.10; // $average_evening_gown * 0.10;
 
-        $average_qa               = isset($result_qa['teams'][$team_key]) ? $result_qa['teams'][$team_key]['ratings']['average'] : 0;
-        $percentage_qa            = $average_qa * 0.20;
+        $rank_qa                   = isset($result_qa['teams'][$team_key]) ? $result_qa['teams'][$team_key]['rank']['final']['fractional'] : 0;
+        $rank_average_qa           = 100 - $rank_qa;
+        $percentage_qa             = $rank_average_qa * 0.20; // $average_qa * 0.20;
 
         // save ratings for the judge
         foreach($event_final_result->getAllJudges() as $judge) {
@@ -54,20 +57,23 @@
         // append to results
         $results[$team_key] = [
             'preliminary' => [
-                'average'    => $average_preliminary,
-                'percentage' => $percentage_preliminary
+                'average'      => $average_preliminary,
+                'percentage'   => $percentage_preliminary
             ],
             'swimsuit' => [
-                'average'    => $average_swimsuit,
-                'percentage' => $percentage_swimsuit
+                'rank'         => $rank_swimsuit,
+                'rank_average' => $rank_average_swimsuit,
+                'percentage'   => $percentage_swimsuit
             ],
             'evening-gown' => [
-                'average'    => $average_evening_gown,
-                'percentage' => $percentage_evening_gown
+                'rank'         => $rank_evening_gown,
+                'rank_average' => $rank_average_evening_gown,
+                'percentage'   => $percentage_evening_gown
             ],
             'qa' => [
-                'average'    => $average_qa,
-                'percentage' => $percentage_qa
+                'rank'         => $rank_qa,
+                'rank_average' => $rank_average_qa,
+                'percentage'   => $percentage_qa
             ]
         ];
     }
@@ -82,67 +88,88 @@
     <link rel="stylesheet" href="../../crud/dist/bootstrap-5.2.3/css/bootstrap.min.css">
     <style>
         th, td {
-            vertical-align: middle
+            vertical-align: middle;
+        },
+        .bt {
+            border-top: 2px solid #777 !important;
         }
+        .br {
+            border-right: 2px solid #777 !important;
+        }
+        .bb {
+            border-bottom: 2px solid #777 !important;
+        }
+        .bl {
+            border-left: 2px solid #777 !important;
+        }
+
     </style>
     <title>Overall Results</title>
 <body>
     <table class="table table-bordered">
         <thead>
-            <tr>
-                <th colspan="2" rowspan="2" class="text-center">
+            <tr class="table-secondary">
+                <th colspan="2" rowspan="2" class="text-center bt br bl">
                     <h1 class="m-0">FINAL RESULTS</h1>
                 </th>
-                <th colspan="2" class="text-center">
+                <th colspan="2" class="text-center bt br">
                     PRELIM
                 </th>
-                <th colspan="2" class="text-center">
+                <th colspan="3" class="text-center bt br">
                     SWIMSUIT
                 </th>
-                <th colspan="2" class="text-center">
+                <th colspan="3" class="text-center bt br">
                     EVENING<br>GOWN
                 </th>
-                <th colspan="2" class="text-center">
+                <th colspan="3" class="text-center bt br">
                     Q & A
                 </th>
-                <th rowspan="2" class="text-center">
+                <th rowspan="2" class="text-center bt br">
                     TOTAL<br>AVERAGE
                 </th>
-                <th rowspan="2" class="text-center">
+                <th rowspan="2" class="text-center bt br">
                     INITIAL<br>RANK
                 </th>
-                <th rowspan="2" class="text-center">
+                <th rowspan="2" class="text-center bl br">
                     <h5 class="m-0 fw-bold">
                         FINAL<br>RANK
                     </h5>
                 </th>
             </tr>
-            <tr>
-                <th></th>
-                <th class="text-center">60%</th>
-                <th></th>
-                <th class="text-center">10%</th>
-                <th></th>
-                <th class="text-center">10%</th>
-                <th></th>
-                <th class="text-center">20%</th>
+            <tr class="table-secondary">
+                <th class="bl">Average</th>
+                <th class="text-center br">60%</th>
+
+                <th class="bl">Rank</th>
+                <th class="text-center">100<br>-Rank</th>
+                <th class="text-center br">10%</th>
+
+                <th class="bl">Rank</th>
+                <th class="text-center">100<br>-Rank</th>
+                <th class="text-center br">10%</th>
+
+                <th class="bl">Rank</th>
+                <th class="text-center">100<br>-Rank</th>
+                <th class="text-center br">20%</th>
             </tr>
         </thead>
 
         <tbody>
             <?php
             $i = 0;
-            foreach($event_final_result->getAllTeams() as $team) {
+            $teams = $event_final_result->getAllTeams();
+            foreach($teams as $team) {
                 $i += 1;
+                $is_last = ($i == sizeof($teams));
                 $team_key = 'team_'.$team->getId();
             ?>
                 <tr>
-                    <td class="pe-2 fw-bold" align="right">
+                    <td class="pe-2 fw-bold bl<?= $is_last ? ' bb' : '' ?>" align="right">
                         <h5 class="m-0">
                             <?= $i ?>
                         </h5>
                     </td>
-                    <td>
+                    <td class="br<?= $is_last ? ' bb' : '' ?>">
                         <div class="d-flex">
                             <div style="position: relative; width: 48px; height: 48px; overflow: hidden; border-radius: 50%;">
                                 <img
@@ -159,53 +186,62 @@
                     </td>
 
                     <!-- prelim -->
-                    <td class="pe-2" align="right">
+                    <td class="pe-2 bl<?= $is_last ? ' bb' : '' ?>" align="right">
                         <?= number_format($results[$team_key]['preliminary']['average'], 2) ?>
                     </td>
-                    <td class="pe-2 fw-bold text-secondary" align="right">
+                    <td class="pe-2 fw-bold text-secondary br<?= $is_last ? ' bb' : '' ?>" align="right">
                         <?= number_format($results[$team_key]['preliminary']['percentage'], 2) ?>
                     </td>
 
                     <!-- swimsuit -->
-                    <td class="pe-2" align="right">
-                        <?= number_format($results[$team_key]['swimsuit']['average'], 2) ?>
+                    <td class="pe-2 bl<?= $is_last ? ' bb' : '' ?>" align="right">
+                        <?= number_format($results[$team_key]['swimsuit']['rank'], 2) ?>
                     </td>
-                    <td class="pe-2 fw-bold text-secondary" align="right">
+                    <td class="pe-2<?= $is_last ? ' bb' : '' ?>" align="right">
+                        <?= number_format($results[$team_key]['swimsuit']['rank_average'], 2) ?>
+                    </td>
+                    <td class="pe-2 fw-bold text-secondary br<?= $is_last ? ' bb' : '' ?>" align="right">
                         <?= number_format($results[$team_key]['swimsuit']['percentage'], 2) ?>
                     </td>
 
                     <!-- evening-gown -->
-                    <td class="pe-2" align="right">
-                        <?= number_format($results[$team_key]['evening-gown']['average'], 2) ?>
+                    <td class="pe-2 bl<?= $is_last ? ' bb' : '' ?>" align="right">
+                        <?= number_format($results[$team_key]['evening-gown']['rank'], 2) ?>
                     </td>
-                    <td class="pe-2 fw-bold text-secondary" align="right">
+                    <td class="pe-2<?= $is_last ? ' bb' : '' ?>" align="right">
+                        <?= number_format($results[$team_key]['evening-gown']['rank_average'], 2) ?>
+                    </td>
+                    <td class="pe-2 fw-bold text-secondary br<?= $is_last ? ' bb' : '' ?>" align="right">
                         <?= number_format($results[$team_key]['evening-gown']['percentage'], 2) ?>
                     </td>
 
                     <!-- qa -->
-                    <td class="pe-2" align="right">
-                        <?= number_format($results[$team_key]['qa']['average'], 2) ?>
+                    <td class="pe-2 bl<?= $is_last ? ' bb' : '' ?>" align="right">
+                        <?= number_format($results[$team_key]['qa']['rank'], 2) ?>
                     </td>
-                    <td class="pe-2 fw-bold text-secondary" align="right">
+                    <td class="pe-2<?= $is_last ? ' bb' : '' ?>" align="right">
+                        <?= number_format($results[$team_key]['qa']['rank_average'], 2) ?>
+                    </td>
+                    <td class="pe-2 fw-bold text-secondary br<?= $is_last ? ' bb' : '' ?>" align="right">
                         <?= number_format($results[$team_key]['qa']['percentage'], 2) ?>
                     </td>
 
                     <!-- average -->
-                    <td class="pe-2 fw-bold text-secondary" align="right">
+                    <td class="pe-2 fw-bold text-secondary bl br<?= $is_last ? ' bb' : '' ?>" align="right">
                         <h5 class="m-0">
                             <?= number_format($result_final_result['teams'][$team_key]['ratings']['average'], 2) ?>
                         </h5>
                     </td>
 
                     <!-- initial rank -->
-                    <td class="pe-2 fw-bold text-secondary" align="right">
+                    <td class="pe-2 fw-bold text-secondary bl br<?= $is_last ? ' bb' : '' ?>" align="right">
                         <h5 class="m-0">
                             <?= number_format($result_final_result['teams'][$team_key]['rank']['initial']['fractional'], 2) ?>
                         </h5>
                     </td>
 
                     <!-- final rank -->
-                    <td class="pe-2 fw-bolder" align="right">
+                    <td class="pe-2 fw-bolder bl br<?= $is_last ? ' bb' : '' ?>" align="right">
                         <h4 class="m-0">
                             <?= number_format($result_final_result['teams'][$team_key]['rank']['final']['fractional'], 2) ?>
                         </h4>
