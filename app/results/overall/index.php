@@ -13,7 +13,7 @@
     $criterion_evening_gown = Criterion::findById(23);
     $criterion_qa           = Criterion::findById(24);
 
-    $event_final_result = Event::findBySlug('final-result');
+    $event_final_result = Event::findBySlug('final');
     $event_preliminary  = Event::findBySlug('preliminary');
     $event_swimsuit     = Event::findBySlug('swimsuit-2');
     $event_evening_gown = Event::findBySlug('evening-gown-2');
