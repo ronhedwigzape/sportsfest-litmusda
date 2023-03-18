@@ -88,6 +88,7 @@
 	</v-app-bar>
 </template>
 
+
 <script>
 import $ from "jquery";
 
@@ -128,49 +129,50 @@ export default {
 }
 </script>
 
+
 <style scoped>
-#topnav {
-	background: linear-gradient(-45deg, #e73c7e, #23a6d5, #23d5ab, #e8af45);
-	background-size: 200% 200%;
+    #topnav {
+        background: linear-gradient(-45deg, #e73c7e, #23a6d5, #23d5ab, #e8af45);
+        background-size: 200% 200%;
 
-	text-fill-color: transparent;
-	-webkit-background-clip: text;
-	-webkit-text-fill-color: transparent;
+        text-fill-color: transparent;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
 
-	animation: shine 10s ease infinite;
-}
+        animation: shine 10s ease infinite;
+    }
 
-#remind {
-	animation: tilt-shaking 1s linear infinite;
-}
+    #remind {
+        animation: tilt-shaking 1s linear infinite;
+    }
 
-@keyframes shine {
-	0% {
-		background-position: 0% 50%;
-	}
-	50% {
-		background-position: 100% 50%;
-	}
-	100% {
-		background-position: 0% 50%;
-	}
-}
+    @keyframes shine {
+        0% {
+            background-position: 0% 50%;
+        }
+        50% {
+            background-position: 100% 50%;
+        }
+        100% {
+            background-position: 0% 50%;
+        }
+    }
 
-@keyframes tilt-shaking {
-	0% {
-		transform: rotate(0deg);
-	}
-	25% {
-		transform: rotate(10deg);
-	}
-	50% {
-		transform: rotate(0deg);
-	}
-	75% {
-		transform: rotate(-10deg);
-	}
-	100% {
-		transform: rotate(0deg);
-	}
-}
+    @keyframes tilt-shaking {
+        0% {
+            transform: rotate(0deg);
+        }
+        25% {
+            transform: rotate(10deg);
+        }
+        50% {
+            transform: rotate(0deg);
+        }
+        75% {
+            transform: rotate(-10deg);
+        }
+        100% {
+            transform: rotate(0deg);
+        }
+    }
 </style>
