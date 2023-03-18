@@ -251,6 +251,25 @@
         </tbody>
     </table>
 
+    <!-- Judges -->
+    <div class="row justify-content-center">
+        <?php foreach($event_qa->getAllJudges() as $judge) { ?>
+            <div class="col-md-3">
+                <div class="mt-5 pt-3 text-center">
+                    <h6 class="mb-0"><?= $judge->getName() ?></h6>
+                </div>
+                <div class="text-center">
+                    <p class="mb-0">
+                        Judge <?= $judge->getNumber() ?>
+                        <?php if($judge->isChairmanOfEvent($event_qa)) { ?>
+                            * (Chairman)
+                        <?php } ?>
+                    </p>
+                </div>
+            </div>
+        <?php } ?>
+    </div>
+
     <script src="../../crud/dist/bootstrap-5.2.3/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
