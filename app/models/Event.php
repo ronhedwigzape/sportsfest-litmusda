@@ -411,7 +411,9 @@ class Event extends App
 
         $judges = [];
         while($row = $result->fetch_assoc()) {
-            $judges[] = Judge::findById($row['judge_id']);
+            $judge = Judge::findById($row['judge_id']);
+            $judge->setIsChairman($judge->isChairmanOfEvent($this));
+            $judges[] = $judge;
         }
         return $judges;
     }

@@ -262,9 +262,10 @@ class Judge extends User
      * Assign event to judge
      *
      * @param Event $event
+     * @param bool $is_chairman
      * @return void
      */
-    public function assignEvent($event)
+    public function assignEvent($event, $is_chairman = false)
     {
         require_once 'Event.php';
 
@@ -275,8 +276,9 @@ class Judge extends User
 
         // proceed with assignment
         if(!$this->hasEvent($event)) {
-            $stmt = $this->conn->prepare("INSERT INTO $this->table_events(judge_id, event_id) VALUES(?, ?)");
-            $stmt->bind_param("ii", $this->id, $event_id);
+            $stmt = $this->conn->prepare("INSERT INTO $this->table_events(judge_id, event_id, is_chairman) VALUES(?, ?, ?)");
+            $is_chairman = $is_chairman ? 1 : 0;
+            $stmt->bind_param("iii", $this->id, $event_id, $is_chairman);
             $stmt->execute();
         }
     }
@@ -355,6 +357,62 @@ class Judge extends User
             $events[] = $event->toArray();
         }
         return $events;
+    }
+
+
+    /***************************************************************************
+     * Toggle judge is_chairman for a given event
+     *
+     * @param Event $event
+     * @param bool $is_chairman
+     * @return void
+     */
+    private function toggleChairmanOfEvent($event, $is_chairman = true) {
+        require_once 'Event.php';
+
+        // initialize values
+        $action = 'Assign';
+        $value  = 1;
+        if(!$is_chairman) {
+            $action = 'Remove';
+            $value  = 0;
+        }
+
+        // check event id
+        $event_id = $event->getId();
+        if(!Event::exists($event_id))
+            App::returnError('HTTP/1.1 500', $action . ' Chairman Error: event [id = ' . $event_id . '] does not exist.');
+
+        // check if judge has the event
+        if(!$this->hasEvent($event))
+            App::returnError('HTTP/1.1 500', $action . ' Chairman Error: judge [id = ' . $this->id . '] is not assigned to event [id = ' . $event_id . '].');
+
+        // proceed
+        $stmt = $this->conn->prepare("UPDATE $this->table_events SET is_chairman = ? WHERE judge_id = ? AND event_id = ?");
+        $stmt->bind_param("iii", $value, $this->id, $event_id);
+        $stmt->execute();
+    }
+
+
+    /***************************************************************************
+     * Assign judge as chairman of a given event
+     *
+     * @param $event
+     * @return void
+     */
+    public function assignChairmanOfEvent($event) {
+        $this->toggleChairmanOfEvent($event);
+    }
+
+
+    /***************************************************************************
+     * Remove judge as chairman of a given event
+     *
+     * @param $event
+     * @return void
+     */
+    public function removeChairmanOfEvent($event) {
+        $this->toggleChairmanOfEvent($event, false);
     }
 
 
