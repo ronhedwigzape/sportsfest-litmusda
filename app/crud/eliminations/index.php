@@ -24,6 +24,11 @@ $teams = Team::all();
     <script src="../../crud/dist/vue-3.2.47/vue.global.js"></script>
     <script src="../../crud/dist/jquery-3.6.4/jquery-3.6.4.min.js"></script>
     <title>Eliminations</title>
+    <style>
+        .text-decor-none {
+            text-decoration: none !important;
+        }
+    </style>
 </head>
 <body>
 <div id="app" class="container mt-3" align="center">
@@ -53,15 +58,14 @@ $teams = Team::all();
                         $team_id = $team->getId();
 
                         ?>
-                        <tr class="text-decoration-none">
+                        <tr>
                             <td
                                 id="team_<?= $team_id ?>_<?= $event_id ?>"
-                                class="<?= $event->hasTeamBeenEliminated($team) ? 'opacity-50 text-decoration-line-through' : 'text-decoration-none'; ?>"
+                                class="<?= $event->hasTeamBeenEliminated($team) ? 'opacity-50 text-decoration-line-through' : ''; ?>"
                                 :class="{
                                     'opacity-50 text-decoration-line-through': (team['isEliminated_<?= $team_id ?>_<?= $event_id ?>'] == true),
-                                    'opacity-100 text-decoration-none': (team['isEliminated_<?= $team_id ?>_<?= $event_id ?>'] == false)
+                                    'opacity-100 text-decor-none': (team['isEliminated_<?= $team_id ?>_<?= $event_id ?>'] == false)
                                 }"
-                                style="text-decoration: none;"
                             >
                                 <?= $team_name ?>
                             </td>
