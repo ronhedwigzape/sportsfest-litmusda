@@ -64,7 +64,7 @@
                         <td>
                             <button
                                 id="action_<?= $team_id ?>_<?= $event_id ?>"
-                                class="btn btn-danger"
+                                class="btn <?= $event->hasTeamBeenEliminated($team) ? 'btn-primary' : 'btn-danger' ?>"
                                 @click="toggleElimination(<?= $event_id ?>, <?= $team_id ?>)"
                             >
                             <?= $event->hasTeamBeenEliminated($team) ? 'Revive' : 'Eliminate' ?>
@@ -73,9 +73,6 @@
                     </tr>
                 <?php } ?>
                 </tbody>
-                <tfoot>
-
-                </tfoot>
             </table>
             <?php } ?>
       <?php } ?>
