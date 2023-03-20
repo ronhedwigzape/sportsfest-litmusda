@@ -8,8 +8,8 @@ require_once '../models/Category.php';
 if(isset($_POST['insertdata'])) {
 
     $competition_id = $_POST['competition_id'];
-    $slug = $_POST['slug'];
-    $title = $_POST['title'];
+    $slug           = $_POST['slug'];
+    $title          = $_POST['title'];
 
     $category = new Category();
     $category->setCompetitionId($competition_id);
@@ -24,8 +24,8 @@ if (isset($_POST['updatedata'])) {
     $id = $_POST['update_id'];
 
     $competition_id = $_POST['competition_id'];
-    $slug = $_POST['slug'];
-    $title = $_POST['title'];
+    $slug           = $_POST['slug'];
+    $title          = $_POST['title'];
 
     $category = Category::findById($id);
     $category->setCompetitionId($competition_id);
@@ -37,7 +37,7 @@ if (isset($_POST['updatedata'])) {
 // Delete Data
 if(isset($_POST['deletedata'])) {
 
-    $id = $_POST['delete_id'];
+    $id       = $_POST['delete_id'];
     $category = Category::findById($id);
     $category->delete();
 }
