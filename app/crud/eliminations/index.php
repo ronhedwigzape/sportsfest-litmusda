@@ -73,7 +73,7 @@ $teams = Team::all();
                                 >
                                     <i
                                         id="icon_<?= $team_id ?>_<?= $event_id ?>"
-                                        class="<?= $event->hasTeamBeenEliminated($team) ? 'fa-solid fa-hands-holding-child fa-fw' : 'fa-solid fa-skull-crossbones fa-fw' ?>">
+                                        class="fa-solid <?= $event->hasTeamBeenEliminated($team) ? 'fa-hands-holding-child' : 'fa-skull-crossbones' ?> fa-fw">
                                     </i>
                                 </button>
                             </td>
@@ -115,8 +115,8 @@ $teams = Team::all();
                         this.team[`isEliminated_${teamId}_${eventId}`] = data.teamEliminated;
                         if (this.team[`isEliminated_${teamId}_${eventId}`]) {
                             $(`#icon_${teamId}_${eventId}`)
-                                .addClass("fa-hands-holding-child fa-fw")
-                                .removeClass("fa-skull-crossbones fa-fw");
+                                .addClass("fa-hands-holding-child")
+                                .removeClass("fa-skull-crossbones");
                             $(`#team_${teamId}_${eventId}`)
                                 .removeClass("text-decoration-line-through");
                             $(`#action_${teamId}_${eventId}`)
@@ -124,8 +124,8 @@ $teams = Team::all();
                                 .addClass("btn-outline-secondary");
                         } else {
                             $(`#icon_${teamId}_${eventId}`)
-                                .addClass("fa-skull-crossbones fa-fw")
-                                .removeClass("fa-hands-holding-child fa-fw");
+                                .addClass("fa-skull-crossbones")
+                                .removeClass("fa-hands-holding-child");
                             $(`#team_${teamId}_${eventId}`)
                                 .addClass("text-decoration-line-through");
                             $(`#action_${teamId}_${eventId}`)
