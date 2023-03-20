@@ -104,6 +104,7 @@ body {
 
 button {
     background-color: transparent;
+    border: none;
 }
 
 @keyframes btn-anim1 {
