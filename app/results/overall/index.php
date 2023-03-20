@@ -124,7 +124,7 @@
                 <th colspan="3" class="text-center bt br">
                     Q & A
                 </th>
-                <th rowspan="2" class="text-center bt br">
+                <th rowspan="2" class="text-center bl bt br">
                     TOTAL<br>AVERAGE
                 </th>
                 <th rowspan="2" class="text-center bt br">
