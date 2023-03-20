@@ -57,6 +57,7 @@
                     Login
                 </button>
             </form>
+        </div>
         <script>
             const togglePassword = document.querySelector('.toggle-password');
             const password = document.querySelector('#password');
