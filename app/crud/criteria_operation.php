@@ -1,5 +1,6 @@
 <?php
 
+require_once 'auth.php';
 require_once '../config/database.php';
 require_once '../models/Criterion.php';
 
@@ -40,4 +41,5 @@ if(isset($_POST['deletedata'])) {
     $criterion->delete();
 }
 
-header('location: criteria.php');
+$url = $_SERVER['HTTP_REFERER'];
+header("location: $url");

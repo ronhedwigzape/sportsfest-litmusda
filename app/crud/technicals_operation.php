@@ -1,5 +1,6 @@
 <?php
 
+require_once 'auth.php';
 require_once '../config/database.php';
 require_once '../models/Technical.php';
 
@@ -83,4 +84,5 @@ if(isset($_POST['deletedata'])) {
     $technical->delete();
 }
 
-header('location: technicals.php');
+$url = $_SERVER['HTTP_REFERER'];
+header("location: $url");

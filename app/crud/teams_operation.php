@@ -1,5 +1,6 @@
 <?php
 
+require_once 'auth.php';
 require_once '../config/database.php';
 require_once '../models/Team.php';
 
@@ -75,4 +76,5 @@ if(isset($_POST['deletedata'])) {
     $team->delete();
 }
 
-header('location: teams.php');
+$url = $_SERVER['HTTP_REFERER'];
+header("location: $url");

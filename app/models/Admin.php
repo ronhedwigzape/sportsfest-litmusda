@@ -104,6 +104,8 @@ class Admin extends User
      */
     private function tabulateEvent($event)
     {
+        require_once 'Team.php';
+
         // initialize $result
         $result = [
             'technicals' => [],
@@ -126,7 +128,10 @@ class Admin extends User
         $judge_ranks = [];
         foreach($judges as $judge) {
             $key_judge = 'judge_' . $judge->getId();
-            $judge_ranks[$key_judge] = $judge->getEventRanks($event);
+            $judge_ranks[$key_judge] = [
+                'is_chairman' => $judge->isChairmanOfEvent($event),
+                'ranks'       => $judge->getEventRanks($event)
+            ];
         }
 
         // prepare $unique_total_fractional_ranks and $unique_final_adjustments
@@ -152,13 +157,17 @@ class Admin extends User
 
                 // append $technical to $result['technicals']
                 $result['technicals'][$key_technical] = $technical->toArray();
+                $result['technicals'][$key_technical]['online'] = $technical->isOnline();
 
                 // get technical's total team deductions
-                $technical_total = ($technical->getEventTeamDeduction($event, $team))->getValue();
-                $team_row['deductions']['inputs'][$key_technical] = $technical_total;
+                $technical_total = $technical->getEventTeamDeduction($event, $team);
+                $team_row['deductions']['inputs'][$key_technical] = [
+                    'value'     => $technical_total->getValue(),
+                    'is_locked' => $technical_total->getIsLocked()
+                ];
 
                 // increment deductions total
-                $team_row['deductions']['total'] += $technical_total;
+                $team_row['deductions']['total'] += $technical_total->getValue();
             }
 
             // compute for deductions average
@@ -181,11 +190,13 @@ class Admin extends User
                 $key_judge = 'judge_' . $judge->getId();
 
                 // append $judge to $result['judges']
+                $judge->setIsChairman($judge_ranks[$key_judge]['is_chairman']);
                 $result['judges'][$key_judge] = $judge->toArray();
+                $result['judges'][$key_judge]['online'] = $judge->isOnline();
 
                 // get judge's total team ratings and ranks
-                $judge_total = $judge->getEventTeamRating($event, $team);
-                $judge_rank = $judge_ranks[$key_judge][$key_team];
+                $judge_total = $judge_ranks[$key_judge]['ranks'][$key_team]['rating']; // $judge->getEventTeamRating($event, $team);
+                $judge_rank = $judge_ranks[$key_judge]['ranks'][$key_team];
                 $team_row['ratings']['inputs'][$key_judge] = [
                     'final' => $judge_total,
                     'rank'  => $judge_rank
@@ -303,10 +314,12 @@ class Admin extends User
                     $points += $point->getValue();
             }
 
-            // assign points to $group members
+            // assign points to $group members, if they showed up for the event
             $points = $points / $size;
             for($j = 0; $j < $size; $j++) {
-                $result['teams'][$group[$j]]['points'] = $points;
+                $team = new Team($result['teams'][$group[$j]]['id']);
+                if(!$team->hasNotShownUpForEvent($event))
+                    $result['teams'][$group[$j]]['points'] = $points;
             }
 
             $ctr += $size;
@@ -321,13 +334,15 @@ class Admin extends User
      * Tabulate a category
      *
      * @param Category $category
+     * @param bool $verbose
      * @return array
      */
-    private function tabulateCategory($category)
+    private function tabulateCategory($category, $verbose = false)
     {
         // initialize $result
         $result = [
-            'teams' => []
+            'events' => [],
+            'teams'  => []
         ];
 
         // get all teams
@@ -336,23 +351,43 @@ class Admin extends User
         foreach($teams as $team) {
             $key_team = 'team_' . $team->getId();
             $arr_team = $team->toArray();
+            $arr_team['inputs'] = [];
+            $arr_team['points'] = 0;
             $arr_team['rank'] = [
                 'dense'      => 0,
                 'fractional' => 0
             ];
-            $arr_team['points'] = 0;
             $result['teams'][$key_team] = $arr_team;
         }
 
         // tabulate each event in category
         foreach($category->getAllEvents() as $event) {
+            // tabulate event
             $tabulated_event = $this->tabulateEvent($event);
 
-            // accumulate team points
+            // append event to $result['events']
+            $key_event = $event->getSlug();
+            if(!isset($result['events'][$key_event])) {
+                $result['events'][$key_event] = $event->toArray();
+                if($verbose)
+                    $result['events'][$key_event]['results'] = $tabulated_event;
+            }
+
+            // accumulate team inputs and points
             foreach($teams as $team) {
                 $key_team = 'team_' . $team->getId();
+                $team_rank = $tabulated_event['teams'][$key_team]['rank'];
                 $team_points = $tabulated_event['teams'][$key_team]['points'];
                 $result['teams'][$key_team]['points'] += $team_points;
+
+                // append $team rank and points to $result['teams'][$key_team]['inputs']
+                $result['teams'][$key_team]['inputs'][$key_event] = [
+                    'rank'   => [
+                        'dense'      => $team_rank['final']['dense'],
+                        'fractional' => $team_rank['final']['fractional'],
+                    ],
+                    'points' => $team_points
+                ];
             }
         }
 
@@ -405,13 +440,15 @@ class Admin extends User
      * Tabulate a competition
      *
      * @param Competition $competition
+     * @param bool $verbose
      * @return array
      */
-    private function tabulateCompetition($competition)
+    private function tabulateCompetition($competition, $verbose = false)
     {
         // initialize $result
         $result = [
-            'teams' => []
+            'categories' => [],
+            'teams'      => []
         ];
 
         // get all teams
@@ -420,23 +457,40 @@ class Admin extends User
         foreach($teams as $team) {
             $key_team = 'team_' . $team->getId();
             $arr_team = $team->toArray();
+            $arr_team['inputs'] = [];
+            $arr_team['points'] = 0;
             $arr_team['rank'] = [
                 'dense'      => 0,
                 'fractional' => 0
             ];
-            $arr_team['points'] = 0;
             $result['teams'][$key_team] = $arr_team;
         }
 
         // tabulate each category in competition
         foreach($competition->getAllCategories() as $category) {
-            $tabulated_category = $this->tabulateCategory($category);
+            // tabulate category
+            $tabulated_category = $this->tabulateCategory($category, $verbose);
 
-            // accumulate team points
+            // append category to $result['categories']
+            $key_category = $category->getSlug();
+            if(!isset($result['categories'][$key_category])) {
+                $result['categories'][$key_category] = $category->toArray();
+                if($verbose)
+                    $result['categories'][$key_category]['results'] = $tabulated_category;
+            }
+
+            // accumulate team inputs and points
             foreach($teams as $team) {
                 $key_team = 'team_' . $team->getId();
+                $team_rank = $tabulated_category['teams'][$key_team]['rank'];
                 $team_points = $tabulated_category['teams'][$key_team]['points'];
                 $result['teams'][$key_team]['points'] += $team_points;
+
+                // append $team rank and points to $result['teams'][$key_team]['inputs']
+                $result['teams'][$key_team]['inputs'][$key_category] = [
+                    'rank'   => $team_rank,
+                    'points' => $team_points
+                ];
             }
         }
 
@@ -488,13 +542,15 @@ class Admin extends User
     /***************************************************************************
      * Tabulate all
      *
+     * @param bool $verbose
      * @return array
      */
-    private function tabulateAll()
+    private function tabulateAll($verbose = false)
     {
         // initialize $result
         $result = [
-            'teams' => []
+            'competitions' => [],
+            'teams'        => []
         ];
 
         // get all teams
@@ -503,25 +559,41 @@ class Admin extends User
         foreach($teams as $team) {
             $key_team = 'team_' . $team->getId();
             $arr_team = $team->toArray();
+            $arr_team['inputs'] = [];
+            $arr_team['points'] = 0;
             $arr_team['rank'] = [
                 'dense'      => 0,
                 'fractional' => 0
             ];
-            $arr_team['points'] = 0;
             $result['teams'][$key_team] = $arr_team;
         }
-
 
         // tabulate each competition
         require_once 'Competition.php';
         foreach(Competition::all() as $competition) {
-            $tabulated_competition = $this->tabulateCompetition($competition);
+            // tabulate competition
+            $tabulated_competition = $this->tabulateCompetition($competition, $verbose);
 
-            // accumulate team points
+            // append competition to $result['competitions']
+            $key_competition = $competition->getSlug();
+            if(!isset($result['competitions'][$key_competition])) {
+                $result['competitions'][$key_competition] = $competition->toArray();
+                if($verbose)
+                    $result['competitions'][$key_competition]['results'] = $tabulated_competition;
+            }
+
+            // accumulate team inputs and points
             foreach($teams as $team) {
                 $key_team = 'team_' . $team->getId();
+                $team_rank   = $tabulated_competition['teams'][$key_team]['rank'];
                 $team_points = $tabulated_competition['teams'][$key_team]['points'];
                 $result['teams'][$key_team]['points'] += $team_points;
+
+                // append $team rank and points to $result['teams'][$key_team]['inputs']
+                $result['teams'][$key_team]['inputs'][$key_competition] = [
+                    'rank'   => $team_rank,
+                    'points' => $team_points
+                ];
             }
         }
 
@@ -574,26 +646,37 @@ class Admin extends User
      * Tabulate
      *
      * @param Competition|Category|Event $entity
+     * @param bool $verbose
      * @return array
      */
-    public function tabulate($entity = null)
+    public function tabulate($entity = null, $verbose = false)
     {
         // tabulate event
         require_once 'Event.php';
-        if($entity instanceof Event)
-            return $this->tabulateEvent($entity);
+        if($entity instanceof Event) {
+            if(Event::exists($entity->getId()))
+                return $this->tabulateEvent($entity, $verbose);
+        }
 
         // tabulate category
         require_once 'Category.php';
-        if($entity instanceof Category)
-            return $this->tabulateCategory($entity);
+        if($entity instanceof Category) {
+            if(Category::exists($entity->getId()))
+                return $this->tabulateCategory($entity, $verbose);
+        }
 
         // tabulate competition
         require_once 'Competition.php';
-        if($entity instanceof Competition)
-            return $this->tabulateCompetition($entity);
+        if($entity instanceof Competition) {
+            if(Competition::exists($entity->getId()))
+                return $this->tabulateCompetition($entity, $verbose);
+        }
 
         // tabulate all
-        return $this->tabulateAll();
+        if($entity == null)
+            return $this->tabulateAll($verbose);
+
+        // default
+        return [];
     }
 }

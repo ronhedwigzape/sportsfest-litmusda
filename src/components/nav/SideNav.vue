@@ -1,13 +1,11 @@
 <template>
 	<v-navigation-drawer
-		class="bg-deep-purple-darken-2"
 		theme="dark"
         permanent
 	>
 		<v-col class="d-flex justify-center">
 			<v-img
 				:src="`/${$store.getters.appName}/foundation-logo.png`"
-				aspect-ratio="1"
 				alt="foundation-logo"
 				height="100"
 				width="100"
@@ -16,19 +14,25 @@
 
 		<v-divider />
 
-		<div class="text-center mt-2 mx-4">
-			<v-btn
-                :variant="$route.params.eventSlug === event.slug ? 'tonal' : 'text'"
-                :color="$route.params.eventSlug === event.slug ? 'yellow' : 'white'"
-				block
-				class="my-2 mx-1 px-16"
-				v-for="event in $store.getters['events/getEvents']"
-				:key="event.id"
-				@click="handleEventChange(event)"
-			>
-				{{ event.title }}
-			</v-btn>
-		</div>
+        <v-list class="pa-0">
+            <template v-for="(group, groupIndex) in $store.getters['events/getCategorizedEvents']">
+                <v-list-subheader class="mt-2 text-subtitle-1">
+                    {{ group.category.title }}
+                </v-list-subheader>
+                <v-list-item
+                    v-for="event in group.events"
+                    :key="event.id"
+                    :variant="$route.params.eventSlug === event.slug ? 'tonal' : 'text'"
+					class="text-center"
+                    :class="`justify-center text-center text-button${$route.params.eventSlug === event.slug ? ' text-yellow' : ''}`"
+                    block
+                    @click="handleEventChange(event)"
+                >
+                    {{ event.title }}
+                </v-list-item>
+                <v-divider v-if="groupIndex < ($store.getters['events/getCategorizedEvents'].length - 1)" class="mt-2"/>
+            </template>
+        </v-list>
 		<template v-slot:append>
 			<v-col class="text-center mt-4" cols="12">
 				&copy; <strong class="text-uppercase">aclc iriga 2023</strong>
@@ -70,6 +74,7 @@
                 },
                 success: (data) => {
                     data = JSON.parse(data);
+                    this.$store.commit('events/setCategories', data.categories);
                     this.$store.commit('events/setEvents', data.events);
                     const activeEvent = localStorage.getItem('active-event');
                     if(activeEvent !== undefined) {

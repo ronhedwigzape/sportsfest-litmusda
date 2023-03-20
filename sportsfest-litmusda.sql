@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 04, 2023 at 12:22 PM
+-- Generation Time: Mar 17, 2023 at 12:24 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.1.12
 
@@ -34,6 +34,7 @@ CREATE TABLE `admins` (
   `avatar` varchar(255) NOT NULL,
   `username` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
+  `pinged_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -42,8 +43,8 @@ CREATE TABLE `admins` (
 -- Dumping data for table `admins`
 --
 
-INSERT INTO `admins` (`id`, `number`, `name`, `avatar`, `username`, `password`, `created_at`, `updated_at`) VALUES
-(1, 1, 'SUPER USER', 'no-avatar.jpg', 'admin', 'admin', '2023-02-19 07:36:32', '2023-02-26 06:05:06');
+INSERT INTO `admins` (`id`, `number`, `name`, `avatar`, `username`, `password`, `pinged_at`, `created_at`, `updated_at`) VALUES
+(1, 1, 'SUPER USER', 'no-avatar.jpg', 'admin', 'admin', NULL, '2023-02-19 07:36:32', '2023-02-26 06:05:06');
 
 -- --------------------------------------------------------
 
@@ -198,6 +199,20 @@ CREATE TABLE `deductions` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `eliminations`
+--
+
+CREATE TABLE `eliminations` (
+  `id` mediumint(8) UNSIGNED NOT NULL,
+  `event_id` smallint(5) UNSIGNED NOT NULL,
+  `team_id` tinyint(3) UNSIGNED NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `events`
 --
 
@@ -230,6 +245,20 @@ INSERT INTO `events` (`id`, `category_id`, `slug`, `title`, `created_at`, `updat
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `event_noshows`
+--
+
+CREATE TABLE `event_noshows` (
+  `id` smallint(5) UNSIGNED NOT NULL,
+  `event_id` smallint(5) UNSIGNED NOT NULL,
+  `team_id` tinyint(3) UNSIGNED NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `judges`
 --
 
@@ -238,9 +267,9 @@ CREATE TABLE `judges` (
   `number` tinyint(3) UNSIGNED NOT NULL,
   `name` varchar(255) NOT NULL,
   `avatar` varchar(255) DEFAULT NULL,
-  `is_chairman` tinyint(1) NOT NULL DEFAULT 0,
   `username` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
+  `pinged_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -249,12 +278,12 @@ CREATE TABLE `judges` (
 -- Dumping data for table `judges`
 --
 
-INSERT INTO `judges` (`id`, `number`, `name`, `avatar`, `is_chairman`, `username`, `password`, `created_at`, `updated_at`) VALUES
-(1, 1, 'JUDGE 01', 'no-avatar.jpg', 1, 'judge01', 'judge01', '2023-02-19 08:58:05', '2023-02-26 06:04:23'),
-(2, 2, 'JUDGE 02', 'no-avatar.jpg', 0, 'judge02', 'judge02', '2023-02-19 08:58:16', '2023-02-26 06:04:26'),
-(3, 3, 'JUDGE 03', 'no-avatar.jpg', 0, 'judge03', 'judge03', '2023-02-19 08:58:32', '2023-02-26 06:04:28'),
-(4, 4, 'JUDGE 04', 'no-avatar.jpg', 0, 'judge04', 'judge04', '2023-02-21 05:32:22', '2023-02-26 06:04:31'),
-(5, 5, 'JUDGE 05', 'no-avatar.jpg', 0, 'judge05', 'judge05', '2023-02-21 05:32:22', '2023-02-26 06:04:33');
+INSERT INTO `judges` (`id`, `number`, `name`, `avatar`, `username`, `password`, `pinged_at`, `created_at`, `updated_at`) VALUES
+(1, 1, 'JUDGE 01', 'no-avatar.jpg', 'judge01', 'judge01', NULL, '2023-02-19 08:58:05', '2023-02-26 06:04:23'),
+(2, 2, 'JUDGE 02', 'no-avatar.jpg', 'judge02', 'judge02', NULL, '2023-02-19 08:58:16', '2023-02-26 06:04:26'),
+(3, 3, 'JUDGE 03', 'no-avatar.jpg', 'judge03', 'judge03', NULL, '2023-02-19 08:58:32', '2023-02-26 06:04:28'),
+(4, 4, 'JUDGE 04', 'no-avatar.jpg', 'judge04', 'judge04', NULL, '2023-02-21 05:32:22', '2023-02-26 06:04:31'),
+(5, 5, 'JUDGE 05', 'no-avatar.jpg', 'judge05', 'judge05', NULL, '2023-02-21 05:32:22', '2023-02-26 06:04:33');
 
 -- --------------------------------------------------------
 
@@ -266,6 +295,7 @@ CREATE TABLE `judge_events` (
   `id` tinyint(3) UNSIGNED NOT NULL,
   `judge_id` tinyint(3) UNSIGNED NOT NULL,
   `event_id` smallint(5) UNSIGNED NOT NULL,
+  `is_chairman` tinyint(1) NOT NULL DEFAULT 0,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -274,62 +304,62 @@ CREATE TABLE `judge_events` (
 -- Dumping data for table `judge_events`
 --
 
-INSERT INTO `judge_events` (`id`, `judge_id`, `event_id`, `created_at`, `updated_at`) VALUES
-(1, 1, 1, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
-(2, 1, 2, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
-(3, 1, 3, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
-(4, 1, 4, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
-(5, 1, 5, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
-(6, 1, 6, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
-(7, 1, 7, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
-(8, 1, 8, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
-(9, 1, 9, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
-(10, 1, 10, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
-(11, 1, 11, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
-(12, 2, 1, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
-(13, 2, 2, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
-(14, 2, 3, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
-(15, 2, 4, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
-(16, 2, 5, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
-(17, 2, 6, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
-(18, 2, 7, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
-(19, 2, 8, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
-(20, 2, 9, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
-(21, 2, 10, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
-(22, 2, 11, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
-(23, 3, 1, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
-(24, 3, 2, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
-(25, 3, 3, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
-(26, 3, 4, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
-(27, 3, 5, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
-(28, 3, 6, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
-(29, 3, 7, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
-(30, 3, 8, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
-(31, 3, 9, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
-(32, 3, 10, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
-(33, 3, 11, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
-(34, 4, 1, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
-(35, 4, 2, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
-(36, 4, 3, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
-(37, 4, 4, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
-(38, 4, 5, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
-(39, 4, 6, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
-(40, 4, 7, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
-(41, 4, 8, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
-(42, 4, 9, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
-(43, 4, 10, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
-(44, 4, 11, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
-(45, 5, 1, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
-(46, 5, 2, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
-(47, 5, 3, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
-(48, 5, 4, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
-(49, 5, 5, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
-(50, 5, 6, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
-(51, 5, 7, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
-(52, 5, 8, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
-(53, 5, 9, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
-(54, 5, 10, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
-(55, 5, 11, '2023-02-25 12:10:05', '2023-02-25 12:10:05');
+INSERT INTO `judge_events` (`id`, `judge_id`, `event_id`, `is_chairman`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, 1, '2023-02-25 12:10:05', '2023-03-14 22:49:42'),
+(2, 1, 2, 1, '2023-02-25 12:10:05', '2023-03-14 22:49:40'),
+(3, 1, 3, 1, '2023-02-25 12:10:05', '2023-03-14 22:49:38'),
+(4, 1, 4, 1, '2023-02-25 12:10:05', '2023-03-14 22:49:36'),
+(5, 1, 5, 1, '2023-02-25 12:10:05', '2023-03-14 22:49:34'),
+(6, 1, 6, 1, '2023-02-25 12:10:05', '2023-03-14 22:49:32'),
+(7, 1, 7, 1, '2023-02-25 12:10:05', '2023-03-14 22:49:30'),
+(8, 1, 8, 1, '2023-02-25 12:10:05', '2023-03-14 22:49:28'),
+(9, 1, 9, 1, '2023-02-25 12:10:05', '2023-03-14 22:49:26'),
+(10, 1, 10, 1, '2023-02-25 12:10:05', '2023-03-14 22:49:24'),
+(11, 1, 11, 1, '2023-02-25 12:10:05', '2023-03-14 22:49:22'),
+(12, 2, 1, 0, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(13, 2, 2, 0, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(14, 2, 3, 0, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(15, 2, 4, 0, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(16, 2, 5, 0, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(17, 2, 6, 0, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(18, 2, 7, 0, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(19, 2, 8, 0, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(20, 2, 9, 0, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(21, 2, 10, 0, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(22, 2, 11, 0, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(23, 3, 1, 0, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(24, 3, 2, 0, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(25, 3, 3, 0, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(26, 3, 4, 0, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(27, 3, 5, 0, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(28, 3, 6, 0, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(29, 3, 7, 0, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(30, 3, 8, 0, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(31, 3, 9, 0, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(32, 3, 10, 0, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(33, 3, 11, 0, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(34, 4, 1, 0, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(35, 4, 2, 0, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(36, 4, 3, 0, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(37, 4, 4, 0, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(38, 4, 5, 0, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(39, 4, 6, 0, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(40, 4, 7, 0, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(41, 4, 8, 0, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(42, 4, 9, 0, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(43, 4, 10, 0, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(44, 4, 11, 0, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(45, 5, 1, 0, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(46, 5, 2, 0, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(47, 5, 3, 0, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(48, 5, 4, 0, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(49, 5, 5, 0, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(50, 5, 6, 0, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(51, 5, 7, 0, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(52, 5, 8, 0, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(53, 5, 9, 0, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(54, 5, 10, 0, '2023-02-25 12:10:05', '2023-02-25 12:10:05'),
+(55, 5, 11, 0, '2023-02-25 12:10:05', '2023-02-25 12:10:05');
 
 -- --------------------------------------------------------
 
@@ -458,6 +488,7 @@ CREATE TABLE `technicals` (
   `avatar` varchar(255) DEFAULT NULL,
   `username` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
+  `pinged_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -466,8 +497,8 @@ CREATE TABLE `technicals` (
 -- Dumping data for table `technicals`
 --
 
-INSERT INTO `technicals` (`id`, `number`, `name`, `avatar`, `username`, `password`, `created_at`, `updated_at`) VALUES
-(1, 1, 'TECHNICAL O1', 'no-avatar.jpg', 'technical01', 'technical01', '2023-02-19 08:58:58', '2023-02-26 06:04:50');
+INSERT INTO `technicals` (`id`, `number`, `name`, `avatar`, `username`, `password`, `pinged_at`, `created_at`, `updated_at`) VALUES
+(1, 1, 'TECHNICAL O1', 'no-avatar.jpg', 'technical01', 'technical01', NULL, '2023-02-19 08:58:58', '2023-02-26 06:04:50');
 
 -- --------------------------------------------------------
 
@@ -548,11 +579,27 @@ ALTER TABLE `deductions`
   ADD KEY `event_id` (`event_id`);
 
 --
+-- Indexes for table `eliminations`
+--
+ALTER TABLE `eliminations`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `event_id` (`event_id`),
+  ADD KEY `team_id` (`team_id`);
+
+--
 -- Indexes for table `events`
 --
 ALTER TABLE `events`
   ADD PRIMARY KEY (`id`),
   ADD KEY `area_id` (`category_id`);
+
+--
+-- Indexes for table `event_noshows`
+--
+ALTER TABLE `event_noshows`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `event_id` (`event_id`),
+  ADD KEY `team_id` (`team_id`);
 
 --
 -- Indexes for table `judges`
@@ -653,10 +700,22 @@ ALTER TABLE `deductions`
   MODIFY `id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `eliminations`
+--
+ALTER TABLE `eliminations`
+  MODIFY `id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `events`
 --
 ALTER TABLE `events`
   MODIFY `id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- AUTO_INCREMENT for table `event_noshows`
+--
+ALTER TABLE `event_noshows`
+  MODIFY `id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `judges`
@@ -738,10 +797,24 @@ ALTER TABLE `deductions`
   ADD CONSTRAINT `deductions_ibfk_3` FOREIGN KEY (`technical_id`) REFERENCES `technicals` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
+-- Constraints for table `eliminations`
+--
+ALTER TABLE `eliminations`
+  ADD CONSTRAINT `eliminations_ibfk_1` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `eliminations_ibfk_2` FOREIGN KEY (`team_id`) REFERENCES `teams` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
 -- Constraints for table `events`
 --
 ALTER TABLE `events`
   ADD CONSTRAINT `events_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON UPDATE CASCADE;
+
+--
+-- Constraints for table `event_noshows`
+--
+ALTER TABLE `event_noshows`
+  ADD CONSTRAINT `event_noshows_ibfk_1` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `event_noshows_ibfk_2` FOREIGN KEY (`team_id`) REFERENCES `teams` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `judge_events`

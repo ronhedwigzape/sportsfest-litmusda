@@ -1,5 +1,6 @@
 <?php
 
+require_once 'auth.php';
 require_once '../config/database.php';
 require_once '../models/Event.php';
 
@@ -40,4 +41,6 @@ if(isset($_POST['deletedata'])) {
     $event->delete();
 }
 
-header('location: events.php');
+$url = $_SERVER['HTTP_REFERER'];
+header("location: $url");
+

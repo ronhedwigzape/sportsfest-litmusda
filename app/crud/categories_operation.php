@@ -1,5 +1,6 @@
 <?php
 
+require_once 'auth.php';
 require_once '../config/database.php';
 require_once '../models/Category.php';
 
@@ -41,4 +42,5 @@ if(isset($_POST['deletedata'])) {
     $category->delete();
 }
 
-header('location: categories.php');
+$url = $_SERVER['HTTP_REFERER'];
+header("location: $url");

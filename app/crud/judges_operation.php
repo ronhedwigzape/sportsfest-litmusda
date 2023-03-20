@@ -1,5 +1,6 @@
 <?php
 
+require_once 'auth.php';
 require_once '../config/database.php';
 require_once '../models/Judge.php';
 
@@ -9,7 +10,7 @@ if(isset($_POST['insertdata'])) {
     $number = $_POST['number'];
     $name = $_POST['name'];
     $file_name = '';
-    $is_chairman = $_POST['is_chairman'];
+    // $is_chairman = $_POST['is_chairman'];
     $username = $_POST['username'];
     $password = $_POST['password'];
 
@@ -33,7 +34,7 @@ if(isset($_POST['insertdata'])) {
     $judge->setNumber($number);
     $judge->setName($name);
     $judge->setAvatar($file_name);
-    $judge->setIsChairman($is_chairman);
+    // $judge->setIsChairman($is_chairman);
     $judge->setUsername($username);
     $judge->setPassword($password);
     $judge->insert();
@@ -46,7 +47,7 @@ if (isset($_POST['updatedata'])) {
     $number = $_POST['number'];
     $name = $_POST['name'];
     $file_name = '';
-    $is_chairman = $_POST['is_chairman'];
+    // $is_chairman = $_POST['is_chairman'];
     $username = $_POST['username'];
     $password = $_POST['password'];
 
@@ -72,7 +73,7 @@ if (isset($_POST['updatedata'])) {
     $judge->setNumber($number);
     $judge->setName($name);
     $judge->setAvatar($file_name);
-    $judge->setIsChairman($is_chairman);
+    // $judge->setIsChairman($is_chairman);
     $judge->setUsername($username);
     $judge->setPassword($password);
     $judge->update();
@@ -87,4 +88,5 @@ if(isset($_POST['deletedata'])) {
     $judge->delete();
 }
 
-header('location: judges.php');
+$url = $_SERVER['HTTP_REFERER'];
+header("location: $url");

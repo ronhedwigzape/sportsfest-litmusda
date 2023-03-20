@@ -89,6 +89,22 @@ class Team extends App
 
 
     /***************************************************************************
+     * Count all teams
+     *
+     * @return int
+     */
+    public static function count()
+    {
+        $team = new Team();
+        $stmt = $team->conn->prepare("SELECT COUNT(id) as total_teams FROM $team->table");
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+        return $row['total_teams'];
+    }
+
+
+    /***************************************************************************
      * Get all teams as array of objects
      *
      * @param int $event_id
@@ -96,15 +112,29 @@ class Team extends App
      */
     public static function all($event_id = 0)
     {
+        // gather team ids of eliminated teams
+        $eliminated_team_ids = [];
+        if($event_id > 0) {
+            require_once 'Event.php';
+            $event = Event::findById($event_id);
+            foreach($event->getAllEliminatedTeams() as $eliminated_team) {
+                $eliminated_team_ids[] = $eliminated_team->getId();
+            }
+        }
+
+        // gather teams
         $team = new Team();
         $sql = "SELECT id FROM $team->table ORDER BY id";
         $stmt = $team->conn->prepare($sql);
         $stmt->execute();
-
         $result = $stmt->get_result();
         $teams = [];
         while($row = $result->fetch_assoc()) {
-            $teams[] = new Team($row['id']);
+            $team_id = $row['id'];
+
+            // push to $teams if not eliminated
+            if(!in_array($team_id, $eliminated_team_ids))
+                $teams[] = new Team($team_id);
         }
 
         // sort teams for an event
@@ -135,8 +165,9 @@ class Team extends App
             }
 
             // merge $sorted_teams and remaining $teams
-            $final_teams = [];
-            for($i = 1; $i<=sizeof(Arrangement::orders()); $i++) {
+            $final_teams  = [];
+            $total_orders = sizeof(Arrangement::orders()) - sizeof($eliminated_team_ids);
+            for($i = 1; $i <= $total_orders; $i++) {
                 $key = 'team_' . $i;
                 if(isset($sorted_teams[$key]))
                     $final_teams[] = $sorted_teams[$key];
@@ -376,5 +407,109 @@ class Team extends App
             $participants[] = $participant->toArray();
         }
         return $participants;
+    }
+
+
+    /***************************************************************************
+     * Get events for which the team never showed up, as array of objects
+     *
+     * @return Event[]
+     */
+    public function getAllNotShownEvents()
+    {
+        require_once 'Event.php';
+
+        $table_noshows = (new Event())->getTableNoShows();
+        $stmt = $this->conn->prepare("SELECT DISTINCT event_id FROM $table_noshows WHERE team_id = ? ORDER BY event_id");
+        $stmt->bind_param("i", $this->id);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+        $events = [];
+        while($row = $result->fetch_assoc()) {
+            $events[] = new Event($row['event_id']);
+        }
+
+        return $events;
+    }
+
+
+    /***************************************************************************
+     * Get events for which the team never showed up, as array of arrays
+     *
+     * @return array
+     */
+    public function getRowNotShownEvents()
+    {
+        $events = [];
+        foreach($this->getAllNotShownEvents() as $event) {
+            $events[] = $event->toArray();
+        }
+
+        return $events;
+    }
+
+
+    /***************************************************************************
+     * Determine if the team never showed up for a given event
+     *
+     * @param Event $event
+     * @return bool
+     */
+    public function hasNotShownUpForEvent($event)
+    {
+        return $event->hasTeamNotShownUp($this);
+    }
+
+
+    /***************************************************************************
+     * Get events for which the team was eliminated, as array of objects
+     *
+     * @return Event[]
+     */
+    public function getAllEliminatedEvents()
+    {
+        require_once 'Event.php';
+
+        $table_eliminations = (new Event())->getTableEliminations();
+        $stmt = $this->conn->prepare("SELECT DISTINCT event_id FROM $table_eliminations WHERE team_id = ? ORDER BY event_id");
+        $stmt->bind_param("i", $this->id);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+        $events = [];
+        while($row = $result->fetch_assoc()) {
+            $events[] = new Event($row['event_id']);
+        }
+
+        return $events;
+    }
+
+
+    /***************************************************************************
+     * Get events for which the team was eliminated, as array of arrays
+     *
+     * @return array
+     */
+    public function getRowEliminatedEvents()
+    {
+        $events = [];
+        foreach($this->getAllEliminatedEvents() as $event) {
+            $events[] = $event->toArray();
+        }
+
+        return $events;
+    }
+
+
+    /***************************************************************************
+     * Determine if the team is eliminated from a given event
+     *
+     * @param Event $event
+     * @return bool
+     */
+    public function hasBeenEliminatedFromEvent($event)
+    {
+        return $event->hasTeamBeenEliminated($this);
     }
 }

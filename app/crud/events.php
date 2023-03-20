@@ -1,6 +1,7 @@
 <?php
 
     require_once '../config/database.php';
+    require_once 'auth.php';
     
 ?>
 <!DOCTYPE html>
@@ -11,25 +12,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="logo.png">
 
-      <!-- Bootstrap CSS -->
-      <link rel="stylesheet" href="dist/bootstrap-4.2.1/css/bootstrap.min.css">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="dist/bootstrap-4.2.1/css/bootstrap.min.css">
 
     <!-- For Icon -->
-    <link rel="stylesheet" href="https://kit.fontawesome.com/3142f33457.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="dist/fontawesome-6.3.0/css/all.min.css">
 
-    <title>CRUD</title>
+    <title>Events | CRUD</title>
 
   </head>
-  <body>
-    
+  <body style="background-color: black">
      <!-- Modal -->
      <!-- ADD POP UP FORM (Bootstrap MODAL) -->
      <div class="modal fade" id="addmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Add Event</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Add Data</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -37,9 +37,21 @@
 
                 <form action="events_operation.php" method="POST">
                     <div class="modal-body">
+                        <?php
+                            require_once '../models/Category.php';
+
+                            $entity_category = isset($_GET['category']) ? strtolower(trim($_GET['category'])) : '';
+                            $categories = Category::all();
+                        ?>
                         <div class="form-group">
-                            <label>Category_ID</label>
-                            <input type="number" name="category_id" id="category_id" class="form-control" placeholder="Select your Categories_ID 3(literary), 4(music) or 5(dance)"  min="3" max="5" autocomplete="off" required>
+                            <label>Category</label>
+                            <select name="category_id" class="form-control" required <?php if (!empty($entity_category)) echo 'disabled'; ?>>
+                                <option value="">Select Category</option>
+                                <?php foreach ($categories as $category) {
+                                    $selected = ($category->getSlug() == $entity_category) ? 'selected' : '';
+                                    echo "<option value={$category->getId()} $selected>{$category->getTitle()}</option>";
+                                } ?>
+                            </select>
                         </div>
 
                         <div class="form-group">
@@ -65,10 +77,10 @@
     <!-- EDIT POP UP FORM (Bootstrap MODAL) -->
     <div class="modal fade" id="editmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Edit Event</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Edit Data</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -77,9 +89,21 @@
                 <form action="events_operation.php" method="POST">
                     <div class="modal-body">
                         <input type="hidden" name="update_id" id="update_id">
+                        <?php
+                            require_once '../models/Category.php';
+
+                            $entity_category = isset($_GET['category']) ? strtolower(trim($_GET['category'])) : '';
+                            $categories = Category::all();
+                        ?>
                         <div class="form-group">
-                            <label>Categories_ID</label>
-                            <input type="number" name="category_id" id="category_id" class="form-control" placeholder="Select your Categories_ID 3(literary), 4(music) or 5(dance)" min="3" max="5" autocomplete="off" required>
+                            <label>Category</label>
+                            <select name="category_id" id="category_id" class="form-control" required>
+                                <option value="">Select Category</option>
+                                <?php foreach ($categories as $category) {
+                                    $selected = ($category->getSlug() == $entity_category) ? 'selected' : '';
+                                    echo "<option value={$category->getId()} $selected>{$category->getTitle()}</option>";
+                                } ?>
+                            </select>
                         </div>
 
                         <div class="form-group">
@@ -108,7 +132,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Delete Event</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Delete Data</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -117,7 +141,7 @@
                 <form action="events_operation.php" method="POST">
                     <div class="modal-body">
                         <input type="hidden" name="delete_id" id="delete_id">
-                        <h4>Do you want to Delete this Event ??</h4>
+                        <h4>Do you want to Delete this Data ??</h4>
                     </div>
 
                     <div class="modal-footer">
@@ -129,73 +153,115 @@
         </div>
     </div>
 
+     <!-- Sign Out POP UP Form (Bootstrap MODAL) -->
+     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+         <div class="modal-dialog modal-dialog-centered">
+             <div class="modal-content">
+                 <div class="modal-header">
+                     <h5 class="modal-title" id="exampleModalLabel">Sign Out</h5>
+                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                         <span aria-hidden="true">&times;</span>
+                     </button>
+                 </div>
+                 <form action="" method="POST">
+                     <div class="modal-body">
+                         <input type="hidden" name="signout">
+                         <h4> Are you sure you want to Sign Out??</h4>
+                     </div>
+                 </form>
+                 <div class="modal-footer">
+                     <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                     <a class="btn btn-danger" href="logout.php" role="button">Yes</a>
+                 </div>
+             </div>
+         </div>
+     </div>
+
     <div class="container my-3">
-        <div class="card">
-            <div class="card-body">
-                <h1 class="text-center"><b> <u>Events</u> </b></h1>
-                <div class="d-flex align-items-center">
-                    <button type="button" class="btn btn-primary mr-3 my-3" data-toggle="modal" data-target="#addmodal">ADD DATA</button>
-                    <div class="btn-group" role="group" aria-label="Go to">
-                        <select onchange="window.location.href=this.value" class="btn btn-secondary">
-                            <option selected value="">Go to...</option>
-                            <option value="competitions.php">Competitions</option>
-                            <option value="categories.php">Categories</option>
-                            <option value="criteria.php">Criterion</option>
-                            <option value="teams.php">Teams</option>
-                            <option value="judges.php">Judges</option>
-                            <option value="technicals.php">Technicals</option>
-                        </select>
-                    </div>
-                    <div class="btn-group ml-auto" role="group" aria-label="Go to">
-                        <select onchange="window.location.href=this.value" class="btn btn-dark">
-                            <option selected value="">Go to...</option>
-                            <option value="">Literary</option>
-                            <option value="">Music</option>
-                            <option value="">Dance</option>
-                        </select>
-                    </div>
-                </div>
-                <?php
-                    require_once '../config/database.php';
-                    require_once '../models/Event.php';
-                    
-                    $events = Event::all();
-                ?>
-                <table id="datatableid" class="table table-bordered table-info table-hover text-center">
-                    <thead class="table-dark">
-                        <tr>
-                            <th scope="col" class="d-none">ID</th>
-                            <th scope="col" class="d-none">Categories_ID</th>
-                            <th scope="col">Slug</th>
-                            <th scope="col">Title</th>
-                            <th scope="col">Operations</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($events as $event) { ?>
-                            <tr>
-                                <td class="d-none"><?php echo $event->getId(); ?></td>
-                                <td class="d-none"><?php echo $event->getCategoryId(); ?></td>
-                                <td><?php echo $event->getSlug(); ?></td>
-                                <td><?php echo $event->getTitle(); ?></td>
-                                <td>
-                                    <button type="button" class="btn btn-success editbtn"><i class="fa-solid fa-pen-to-square"></i></button>
-                                    <button type="button" class="btn btn-danger deletebtn"><i class="fa-solid fa-trash-can"></i></button>
-                                </td>
-                            </tr>
-                        <?php } ?>
-                    </tbody>
-                </table>                    
+        <h1 class="text-center text-light"><b> <u>Events</u> </b></h1>
+        <div class="d-flex align-items-center mr-3 my-3">
+            <div class="btn-group" role="group" aria-label="Go to">
+                <select onchange="window.location.href=this.value" class="btn btn-secondary">
+                    <option value="competitions.php">Competitions</option>
+                    <option value="categories.php">Categories</option>
+                    <option selected value="events.php">Events</option>
+                    <option value="criteria.php">Criterion</option>
+                    <option value="teams.php">Teams</option>
+                    <option value="judges.php">Judges</option>
+                    <option value="technicals.php">Technicals</option>
+                </select>
+            </div>
+            <div class="btn-group ml-3" role="group" aria-label="Go to">
+                <?php require_once '../models/Category.php'; ?>
+                <select onchange="window.location = `${window.location.pathname}${this.value !== '' ? '?category=' + this.value : ''}`" class="btn btn-secondary">
+                    <option selected value="">All Categories</option>
+                    <?php foreach(Category::rows() as $category) { ?>
+                        <option value="<?= $category['slug'] ?>"
+                            <?php
+                            if(isset($_GET['category'])) {
+                                if(strtolower(trim($_GET['category'])) == $category['slug'])
+                                    echo " selected";
+                            }
+                            ?>
+                        ><?= $category['title'] ?></option>
+                    <?php } ?>
+                </select>
+            </div>
+            <div class="btn-group ml-auto" role="group" aria-label="Go to">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addmodal">ADD DATA</button>
+            </div>
+            <div class="btn-group ml-3" role="group" aria-label="Go to">
+                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">
+                    Sign out <i class="fa-solid fa-right-from-bracket"></i>
+                </button>
             </div>
         </div>
+        <?php
+            require_once '../config/database.php';
+            require_once '../models/Event.php';
+            require_once '../models/Category.php';
+
+            $events = [];
+            if(isset($_GET['category'])) {
+                $category = Category::findBySlug($_GET['category']);
+                if($category)
+                    $events = $category->getAllEvents();
+                else
+                    $events = Event::all();
+            }
+            else
+                $events = Event::all();
+        ?>
+        <table id="datatableid" class="table table-info table-striped text-center">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col" class="d-none">ID</th>
+                    <th scope="col" class="d-none">Categories_ID</th>
+                    <th scope="col">Slug</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Operations</th>
+                </tr>
+            </thead>
+            <tbody class="table-dark">
+                <?php foreach ($events as $event) { ?>
+                    <tr>
+                        <td class="d-none"><?php echo $event->getId(); ?></td>
+                        <td class="d-none"><?php echo $event->getCategoryId(); ?></td>
+                        <td><?php echo $event->getSlug(); ?></td>
+                        <td><?php echo $event->getTitle(); ?></td>
+                        <td>
+                            <button type="button" class="btn btn-success editbtn"><i class="fa-solid fa-pen-to-square"></i></button>
+                            <button type="button" class="btn btn-danger deletebtn"><i class="fa-solid fa-trash-can"></i></button>
+                        </td>
+                    </tr>
+                <?php } ?>
+            </tbody>
+        </table>
     </div>
 
     <!-- Bootstrap Javascript -->
-    <script src="dist/ajax/libs/jquery-3.3.1/jquery.min.js"></script>
+    <script src="dist/jquery-3.6.4/jquery-3.6.4.min.js"></script>
     <script src="dist/bootstrap-4.2.1/js/bootstrap.min.js"></script>
-
-    <!-- For Icon -->
-    <script src="dist/fontawesome/icon.js"></script>
 
     <script src="main.js"></script>
 
@@ -221,6 +287,5 @@
             });
         });
     </script>
-
-</body>
+  </body>
 </html>
