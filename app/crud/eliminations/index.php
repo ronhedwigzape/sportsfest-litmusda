@@ -63,6 +63,7 @@
                         </td>
                         <td>
                             <button
+                                id="action"
                                 class="btn btn-danger"
                                 @click="toggleElimination(<?= $event_id ?>, <?= $team_id ?>)"
                             >
@@ -106,10 +107,14 @@
                     },
                     success: (data, textStatus, jqXHR) => {
                         data = JSON.parse(data);
-                        console.log(data.teamEliminated)
 
                         this.team[`isEliminated_${teamId}_${eventId}`] = data.teamEliminated;
-
+                        if (this.team[`isEliminated_${teamId}_${eventId}`]) {
+                            $("#action").html("Revive");
+                        }
+                        else {
+                            $("#action").html("Eliminate");
+                        }
                         console.log(`${jqXHR.status}: ${jqXHR.statusText}`);
                     },
                     error: (error) => {
