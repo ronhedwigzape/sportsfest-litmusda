@@ -360,10 +360,10 @@ export default {
 			this.totals[`loading_${team.id}`] = true;
 
 			// Check teams total score
-			if (this.totals[`team_${team.id}`] < 50 || this.totals[`team_${team.id}`] === '') {
+			if (this.totals[`team_${team.id}`] < this.$store.state.rating.min || this.totals[`team_${team.id}`] === '') {
 				this.totals[`team_${team.id}`] = this.$store.state.rating.min;
 			}
-			else if (this.totals[`team_${team.id}`] > 100) {
+			else if (this.totals[`team_${team.id}`] > this.$store.state.rating.max) {
 				this.totals[`team_${team.id}`] = this.$store.state.rating.max;
 			}
 
