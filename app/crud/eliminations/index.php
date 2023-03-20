@@ -63,7 +63,7 @@
                         </td>
                         <td>
                             <button
-                                id="action"
+                                id="action_<?= $team_id ?>_<?= $event_id ?>"
                                 class="btn btn-danger"
                                 @click="toggleElimination(<?= $event_id ?>, <?= $team_id ?>)"
                             >
@@ -110,10 +110,16 @@
 
                         this.team[`isEliminated_${teamId}_${eventId}`] = data.teamEliminated;
                         if (this.team[`isEliminated_${teamId}_${eventId}`]) {
-                            $("#action").html("Revive");
+                            $(`#action_${teamId}_${eventId}`)
+                                .html("Revive")
+                                .removeClass("btn-danger")
+                                .addClass("btn-primary");
                         }
                         else {
-                            $("#action").html("Eliminate");
+                            $(`#action_${teamId}_${eventId}`)
+                                .html("Eliminate")
+                                .removeClass("btn-primary")
+                                .addClass("btn-danger");
                         }
                         console.log(`${jqXHR.status}: ${jqXHR.statusText}`);
                     },
