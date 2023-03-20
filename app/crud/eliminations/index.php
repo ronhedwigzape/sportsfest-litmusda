@@ -52,7 +52,13 @@
 
                 ?>
                     <tr>
-                        <td class="<?php echo $event->hasTeamBeenEliminated($team) ? 'opacity-50' : '';?>">
+                        <td
+                            class="<?= $event->hasTeamBeenEliminated($team) ? 'opacity-50' : '';?>"
+                            :class="{
+                                'opacity-50': (team['isEliminated_<?= $team_id ?>_<?= $event_id ?>'] == true),
+                                'opacity-100': (team['isEliminated_<?= $team_id ?>_<?= $event_id ?>'] == false)
+                            }"
+                        >
                             <?= $team_name ?>
                         </td>
                         <td>
@@ -60,7 +66,7 @@
                                 class="btn btn-danger"
                                 @click="toggleElimination(<?= $event_id ?>, <?= $team_id ?>)"
                             >
-                            <?php echo $event->hasTeamBeenEliminated($team) ? 'Revive' : 'Eliminate' ?>
+                            <?= $event->hasTeamBeenEliminated($team) ? 'Revive' : 'Eliminate' ?>
                             </button>
                         </td>
                     </tr>
@@ -83,7 +89,7 @@
     createApp({
         data() {
             return {
-
+                team: {}
             }
         },
         methods: {
@@ -99,7 +105,11 @@
                         teamId
                     },
                     success: (data, textStatus, jqXHR) => {
-                        window.location.reload();
+                        data = JSON.parse(data);
+                        console.log(data.teamEliminated)
+
+                        this.team[`isEliminated_${teamId}_${eventId}`] = data.teamEliminated;
+
                         console.log(`${jqXHR.status}: ${jqXHR.statusText}`);
                     },
                     error: (error) => {

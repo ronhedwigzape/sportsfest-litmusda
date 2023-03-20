@@ -19,7 +19,7 @@ if (isset($_POST['teamId']) && isset($_POST['eventId'])) {
     }
 
     echo json_encode([
-        "eliminated" => $event->hasTeamBeenEliminated($team),
+        "teamEliminated" => $event->hasTeamBeenEliminated($team),
         "teams"      => $team->toArray()
     ]);
 }
