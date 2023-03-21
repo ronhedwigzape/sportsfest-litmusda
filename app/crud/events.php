@@ -45,7 +45,7 @@
                         ?>
                         <div class="form-group">
                             <label>Category</label>
-                            <select name="category_id" class="form-control" required <?php if (!empty($entity_category)) echo 'disabled'; ?>>
+                            <select name="category_id" class="form-control">
                                 <option value="">Select Category</option>
                                 <?php foreach ($categories as $category) {
                                     $selected = ($category->getSlug() == $entity_category) ? 'selected' : '';
@@ -97,7 +97,7 @@
                         ?>
                         <div class="form-group">
                             <label>Category</label>
-                            <select name="category_id" id="category_id" class="form-control" required>
+                            <select name="category_id" id="category_id" class="form-control">
                                 <option value="">Select Category</option>
                                 <?php foreach ($categories as $category) {
                                     $selected = ($category->getSlug() == $entity_category) ? 'selected' : '';
