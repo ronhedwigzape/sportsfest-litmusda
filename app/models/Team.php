@@ -363,7 +363,7 @@ class Team extends App
      * @param string $avatar
      * @return void
      */
-    public function addParticipant($event, $number, $first_name, $middle_name, $last_name, $gender, $avatar)
+    public function addParticipant($event, $number, $first_name, $middle_name, $last_name, $gender = 'male', $avatar = 'no-avatar.jpg')
     {
         require_once 'Participant.php';
         $participant = new Participant();
