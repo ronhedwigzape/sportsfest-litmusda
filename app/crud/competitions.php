@@ -196,7 +196,7 @@
                 <?php } ?>
             </tbody>
         </table>
-    <</div>
+    </div>
 
     <!-- Bootstrap Javascript -->
     <script src="dist/jquery-3.6.4/jquery-3.6.4.min.js"></script>

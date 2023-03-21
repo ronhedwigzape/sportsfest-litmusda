@@ -360,9 +360,10 @@ class Team extends App
      * @param string $middle_name
      * @param string $last_name
      * @param string $gender
+     * @param string $avatar
      * @return void
      */
-    public function addParticipant($event, $number, $first_name, $middle_name, $last_name, $gender)
+    public function addParticipant($event, $number, $first_name, $middle_name, $last_name, $gender = 'male', $avatar = 'no-avatar.jpg')
     {
         require_once 'Participant.php';
         $participant = new Participant();
@@ -373,6 +374,7 @@ class Team extends App
         $participant->setMiddleName($middle_name);
         $participant->setLastName($last_name);
         $participant->setGender($gender);
+        $participant->setAvatar($avatar);
         $participant->insert();
     }
 
