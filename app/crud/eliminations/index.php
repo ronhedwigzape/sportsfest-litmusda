@@ -8,9 +8,6 @@ require_once '../../models/Category.php';
 require_once '../../models/Event.php';
 require_once '../../models/Team.php';
 
-$competitions = Competition::all();
-$categories = Category::all();
-$teams = Team::all();
 ?>
 <!doctype html>
 <html lang="en">
@@ -33,9 +30,13 @@ $teams = Team::all();
 <body>
 <div id="app" class="container mt-3" align="center">
     <h1>Eliminations</h1>
-    <?php foreach ($competitions as $competition) { ?>
+    <?php
+    $competitions = Competition::all();
+    foreach ($competitions as $competition) { ?>
         <h2 class="text-center"><?= $competition->getTitle() ?></h2>
-        <?php foreach ($categories as $category) { ?>
+        <?php
+        $categories = Category::all($competition->getId());
+        foreach ($categories as $category) { ?>
             <hr>
             <h4><?= $category->getTitle() ?></h4>
             <?php
@@ -53,6 +54,7 @@ $teams = Team::all();
                     </thead>
                     <tbody>
                     <?php
+                    $teams = Team::all();
                     foreach ($teams as $team) {
                         $team_name = $team->getName();
                         $team_id = $team->getId();

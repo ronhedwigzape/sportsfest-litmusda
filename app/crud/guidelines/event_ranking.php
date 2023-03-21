@@ -54,7 +54,7 @@ $competitions = Competition::all();
 
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                                    <button type="submit" name="edit_btn" id="edit_btn"class="btn btn-primary">Confirm</button>
+                                    <button type="submit" name="edit_btn" id="edit_btn" class="btn btn-primary">Confirm</button>
                                 </div>
                             </form>
                         </div>
