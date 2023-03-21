@@ -70,7 +70,7 @@ if(isset($_POST['option'])) {
                 <h1 class="modal-title fs-5" id="staticBackdropLabel">Add Event title</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body d-flex">
                 <select class="form-select" aria-label="Default select example"
                         style="width: 50%; color: white; background-color: #2F4F4F; text-align: center; margin-left: 25%;"
                         id="selected_Event<?= $option ?>">
@@ -79,6 +79,9 @@ if(isset($_POST['option'])) {
                         <option value="<?= $disTitle->getId() ?>"><?= $disTitle->getTitle() ?></option>
                     <?php } ?>
                 </select>
+                <div class="form-check form-switch" style="margin-left: 25px;">
+                    <input class="form-check-input" type="checkbox" id="addEventToggle">
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeAdd<?= $option ?>">
@@ -102,6 +105,11 @@ if(isset($_POST['option'])) {
         <tr>
             <td style="padding-left: 30px;">
                 <?= $eventData->getTitle() ?>
+            </td>
+            <td style="width: 10%;">
+                <div class="form-check form-switch" onclick="judgeToggle(<?= $judgeID ?>,<?= $eventData->getId() ?>)">
+                    <input class="form-check-input" type="checkbox" id="judgeSwitch<?= $judgeID ?><?= $eventData->getId() ?>" <?php if ($judge_data->isChairmanOfEvent(Event::findById($eventData->getId())) == "1") { echo "checked "; echo "value=true";} else{echo "value=false";} ?>>
+                </div>
             </td>
             <td style="width: 10%;">
                 <span

@@ -65,11 +65,11 @@
 
         <div id="technicalResult" style="width: 70%; margin-left: 15%;"></div>
     </div>
-
     <script src="../dist/jquery-3.6.4/jquery-3.6.4.min.js"></script>
     <script src="../dist/bootstrap-5.2.3/js/bootstrap.bundle.min.js"></script>
     <script src="js/load_data.js"></script>
     <script src="js/action.js"></script>
+    <script src="js/toggleButton.js"></script>
     <script src="js/show_hide.js"></script>
 </body>
 </html>

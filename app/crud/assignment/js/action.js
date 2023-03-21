@@ -1,3 +1,4 @@
+
 function remove(judge,event){
     const button = document.querySelector('#button'+event);
     button.click();
@@ -16,25 +17,24 @@ function remove(judge,event){
 
 }
 
-function submitAdd(id){
-    const button = document.querySelector('#closeAdd'+id);
-    button.click();
-    let selected = $('#selected_Event'+id).val();
-    let judgeID = id;
-    console.log(judgeID);
-    $.ajax({
-        url:"judgeEventActions.php",
-        type: 'post',
-        data: {
-            selectedEvent:selected,
-            selectedJudge:judgeID
-        },
-        success:function (data,status){
-            console.log(data);
-            $('#result').html(data);
-        }
-    });
-}
+// function submitAdd(id){
+//     console.log('aaaaaa');
+//     const button = document.querySelector('#closeAdd'+id);
+//     button.click();
+//     let selected = $('#selected_Event'+id).val();
+//     let addToggle = $('#addEventToggle').val();
+//     $.ajax({
+//         url:"judgeEventActions.php",
+//         type: 'post',
+//         data: {
+//             selectedEvent:selected,
+//             selectedJudge:judgeID
+//         },
+//         success:function (data,status){
+//             $('#result').html(data);
+//         }
+//     });
+// }
 
 function removeTech(tech,event){
     const button = document.querySelector('#buttonTech'+event);
@@ -66,11 +66,12 @@ function submitAddTech(id){
             selectedTech:techID
         },
         success:function (data,status){
-            console.log(data);
             $('#technicalResult').html(data);
         }
     });
 }
+
+
 
 
 

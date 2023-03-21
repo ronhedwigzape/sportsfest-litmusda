@@ -43,7 +43,6 @@ if(isset($_POST['judge_id'])) {
 if(isset($_POST['selectedEvent'])) {
     $judgeID = $_POST['selectedJudge'];
     $eventID = $_POST['selectedEvent'];
-
     $eve = Event::findById($eventID);
     $jud = Judge::findById($judgeID);
     $jud->assignEvent($eve);
@@ -72,6 +71,48 @@ if(isset($_POST['selectedEvent'])) {
         $displayTitle[] = Event::findById($display[$i]);
     }
 }
+
+//Judge Chairman
+if(isset($_POST['judgeNum'])) {
+    $judgeID = $_POST['judgeNum'];
+    $eventID = $_POST['eventNum'];
+    $toggleID = $_POST['toggle_id'];
+
+    $eve = Event::findById($eventID);
+    $jud = Judge::findById($judgeID);
+    $judgeEvent = $jud->getAllEvents();
+    if ($toggleID == "true"){
+        $jud->removeChairmanOfEvent($eve);
+    }
+    elseif ($toggleID == "false"){
+        $jud->assignChairmanOfEvent($eve);
+    }
+
+    $all_event = Event::all();
+    $j = 0;
+    $display = [];
+    $displayTitle = [];
+
+    foreach($all_event as $all) {
+        foreach($judgeEvent as $evt) {
+            if($all->getId() == $evt->getId()) {
+                $j++;
+            }
+
+        }
+        if($j == 0) {
+            $display[] = $all->getId();
+        }
+        else {
+            $j = 0;
+        }
+    }
+    for($i = 0; $i < count($display); $i++) {
+        $displayTitle[] = Event::findById($display[$i]);
+    }
+    $judge_data = Judge::findById($judgeID);
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -134,6 +175,11 @@ if(isset($_POST['selectedEvent'])) {
             <tr>
                 <td style="padding-left: 30px;">
                     <?= $eventData->getTitle() ?>
+                </td>
+                <td style="width: 10%;">
+                    <div class="form-check form-switch" onclick="judgeToggle(<?= $judgeID ?>,<?= $eventData->getId() ?>)">
+                        <input class="form-check-input" type="checkbox" id="judgeSwitch<?= $judgeID ?><?= $eventData->getId() ?>" <?php if ($jud->isChairmanOfEvent(Event::findById($eventData->getId())) == "1") { echo "checked "; echo "value=true";} else{echo "value=false";} ?>>
+                    </div>
                 </td>
                 <td style="width: 10%;">
                     <span
