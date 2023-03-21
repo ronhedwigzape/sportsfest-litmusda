@@ -8,9 +8,6 @@ require_once '../../models/Category.php';
 require_once '../../models/Event.php';
 require_once '../../models/Team.php';
 
-
-
-
 ?>
 <!doctype html>
 <html lang="en">
