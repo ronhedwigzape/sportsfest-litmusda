@@ -29,61 +29,35 @@
         <link rel="shortcut icon" href="logo.png">
         <link rel="stylesheet" href="style.css">
 
-        <!-- Bootstrap CSS -->
-        <link rel="stylesheet" href="dist/bootstrap-4.2.1/css/bootstrap.min.css">
-
         <!-- For Icon -->
         <link rel="stylesheet" href="dist/fontawesome-6.3.0/css/all.min.css">
 
         <title>CRUD | Sign In</title>
     </head>
     <body>
-        <div class="main">
-            <div class="container">
-                <center>
-                    <div class="middle">
-                        <div id="login">
-                            <div class="text-color text-info">
-                                <h2><u>Sign In</u></h2>
-                            </div>
-                            <div id="login-warning">
-                                <?php if(isset($error_msg)) { ?>
-                                    <div class="alert"><?php echo $error_msg; ?></div>
-                                <?php } ?>
-                            </div>
+        <div class="login-box">
+            <h2>Sign In</h2>
+            <form action="" method="post" class="my-4">
+                <div class="user-box">
+                    <input type="text" name="username" id="username" autocomplete="off" required>
+                    <label>Username</label>
+                </div>
 
-                            <form action="" method="post" class="my-4">
-                                <fieldset class="clearfix">
-                                    <div class="form-element">
-                                        <span class="fa fa-user"></span><input type="text" name="username" id="username" autocomplete="off" placeholder="Enter Username" required>
-                                    </div>
+                <div class="user-box">
+                    <input type="password" name="password" id="password" required>
+                    <label>Password</label>
+                    <span class="toggle-password"><i class="fa fa-eye-slash"></i></span>
+                </div>
 
-                                    <div class="form-element">
-                                        <span class="fa fa-lock"></span>
-                                        <div class="password-wrapper">
-                                            <input type="password" name="password" id="password" placeholder="Enter Password" required>
-                                            <span class="toggle-password"><i class="fa fa-eye"></i></span>
-                                        </div>
-                                    </div>
-
-                                    <button class="btn btn-info text-center" style="width:100%;" type="submit" name="login">Login</button>
-                                </fieldset>
-                            </form>
-                            <div class="clearfix"></div>
-                        </div> <!-- end login -->
-                        <div class="logo">
-                            <img src="foundation-logo.png" alt="">
-                            <div class="clearfix"></div>
-                        </div>
-                    </div>
-                </center>
-            </div>
+                <button class="btn-secondary" type="submit" name="login">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    Login
+                </button>
+            </form>
         </div>
-
-        <!-- Bootstrap Javascript -->
-        <script src="dist/jquery-3.6.4/jquery-3.6.4.min.js"></script>
-        <script src="dist/bootstrap-4.2.1/js/bootstrap.min.js"></script>
-
         <script>
             const togglePassword = document.querySelector('.toggle-password');
             const password = document.querySelector('#password');
@@ -97,6 +71,5 @@
                 this.querySelector('i').classList.toggle('fa-eye-slash');
             });
         </script>
-
     </body>
 </html>

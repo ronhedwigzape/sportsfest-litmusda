@@ -1,6 +1,18 @@
 <template>
     <v-app>
-        <router-view @startPing="startPing"/>
+		<!-- loader -->
+		<div v-if="loading" class="d-flex justify-center align-center" style="height: 100vh;">
+			<v-sheet width="240">
+				<v-progress-linear
+					indeterminate
+					rounded
+					height="6"
+				/>
+			</v-sheet>
+		</div>
+
+		<!-- router view -->
+		<router-view v-else @startPing="startPing"/>
     </v-app>
 </template>
 
@@ -11,6 +23,7 @@
         name: 'App',
         data() {
             return {
+				loading: true,
                 pingTimer: null
             }
         },
@@ -33,9 +46,13 @@
                             name: data.user.userType
                         });
                     }
+					setTimeout(() => {
+						this.loading = false;
+					}, 1000);
                 },
                 error: (error) => {
                     alert(`ERROR ${error.status}: ${error.statusText}`);
+					this.loading = false;
                 },
             });
         },
