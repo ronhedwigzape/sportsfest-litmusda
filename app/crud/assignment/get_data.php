@@ -40,6 +40,11 @@ if(isset($_POST['option'])) {
     else {
         $judgeEvent = [];
     }
+    sleep(1);
+}
+
+if (isset($_POST['toggleValue'])){
+    $toggleValue = $_POST['toggleValue'];
 }
 ?>
 
@@ -53,6 +58,12 @@ if(isset($_POST['option'])) {
     <link rel="stylesheet" href="../dist/bootstrap-5.2.3/css/bootstrap.min.css">
     <link rel="stylesheet" href="../dist/fontawesome-6.3.0/css/all.min.css">
     <title>CRUD</title>
+    <style>
+        .smallSpinner{
+            margin-left: 35%;
+            display: none;
+        }
+    </style>
 </head>
 <body>
 <!-- Button trigger modal -->
@@ -80,7 +91,7 @@ if(isset($_POST['option'])) {
                     <?php } ?>
                 </select>
                 <div class="form-check form-switch" style="margin-left: 25px;">
-                    <input class="form-check-input" type="checkbox" id="addEventToggle">
+                    <input class="form-check-input" value="<?php if (isset($toggleValue)){ echo "true";} else{echo "false";} ?>"  onclick="toggleValue1()"  type="checkbox" id="addEventToggle" style="cursor:pointer;">
                 </div>
             </div>
             <div class="modal-footer">
@@ -107,8 +118,11 @@ if(isset($_POST['option'])) {
                 <?= $eventData->getTitle() ?>
             </td>
             <td style="width: 10%;">
+                <div class="spinner-border spinner-border-sm text-primary smallSpinner" role="status" id="smSpinner<?= $judgeID ?><?= $eventData->getId() ?>">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
                 <div class="form-check form-switch" onclick="judgeToggle(<?= $judgeID ?>,<?= $eventData->getId() ?>)">
-                    <input class="form-check-input" type="checkbox" id="judgeSwitch<?= $judgeID ?><?= $eventData->getId() ?>" <?php if ($judge_data->isChairmanOfEvent(Event::findById($eventData->getId())) == "1") { echo "checked "; echo "value=true";} else{echo "value=false";} ?>>
+                    <input class="form-check-input" type="checkbox" id="judgeSwitch<?= $judgeID ?><?= $eventData->getId() ?>" <?php if ($judge_data->isChairmanOfEvent(Event::findById($eventData->getId())) == "1") { echo "checked "; echo "value=true";} else{echo "value=false";} ?> style="cursor: pointer">
                 </div>
             </td>
             <td style="width: 10%;">

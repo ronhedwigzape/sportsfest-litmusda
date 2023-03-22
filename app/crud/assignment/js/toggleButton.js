@@ -12,8 +12,14 @@ function judgeToggle(judgeID,eventID){
             eventNum:event_num,
             toggle_id:toggleID
         },
+        beforeSend:function (){
+            $('#judgeSwitch'+judgeID+eventID).hide();
+            $('#smSpinner'+judgeID+eventID).show();
+        },
         success:function (data,status){
             $('#result').html(data);
+            $('#judgeSwitch'+judgeID+eventID).show();
+            $('#smSpinner'+judgeID+eventID).hide();
         }
     });
 

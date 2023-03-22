@@ -43,10 +43,15 @@ if(isset($_POST['judge_id'])) {
 if(isset($_POST['selectedEvent'])) {
     $judgeID = $_POST['selectedJudge'];
     $eventID = $_POST['selectedEvent'];
+    $toggleDATA = $_POST['toggleData'];
     $eve = Event::findById($eventID);
     $jud = Judge::findById($judgeID);
     $jud->assignEvent($eve);
+    if ($toggleDATA == "true"){
+        $jud->assignChairmanOfEvent($eve);
+    }
     $judgeEvent = $jud->getAllEvents();
+
 
     $all_event = Event::all();
     $j = 0;
@@ -70,6 +75,7 @@ if(isset($_POST['selectedEvent'])) {
     for($i = 0; $i < count($display); $i++) {
         $displayTitle[] = Event::findById($display[$i]);
     }
+    sleep(1);
 }
 
 //Judge Chairman
@@ -111,6 +117,8 @@ if(isset($_POST['judgeNum'])) {
         $displayTitle[] = Event::findById($display[$i]);
     }
     $judge_data = Judge::findById($judgeID);
+
+    sleep(1);
 }
 
 ?>
@@ -124,6 +132,12 @@ if(isset($_POST['judgeNum'])) {
     <link rel="stylesheet" href="../dist/bootstrap-5.2.3/css/bootstrap.min.css">
     <link rel="stylesheet" href="../dist/fontawesome-6.3.0/css/all.min.css">
     <title>CRUD</title>
+    <style>
+        .smallSpinner{
+            display: none;
+            margin-left: 35%;
+        }
+    </style>
 </head>
 <body>
 
@@ -152,7 +166,7 @@ if(isset($_POST['judgeNum'])) {
                         <h1 class="modal-title fs-5" id="staticBackdropLabel">Add Event title</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body d-flex">
                         <select class="form-select" aria-label="Default select example"
                                 style="width: 50%; color: white; background-color: #2F4F4F; text-align: center; margin-left: 25%;"
                                 id="selected_Event<?= $judgeID ?>">
@@ -161,6 +175,9 @@ if(isset($_POST['judgeNum'])) {
                                 <option value="<?= $disTitle->getId() ?>"><?= $disTitle->getTitle() ?></option>
                             <?php } ?>
                         </select>
+                        <div class="form-check form-switch" style="margin-left: 25px;">
+                            <input class="form-check-input" value="<?php if (isset($toggleValue)){ echo "true";} else{echo "false";} ?>"  onclick="toggleValue2()"  type="checkbox" id="addEventToggle" style="cursor:pointer;">
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
@@ -177,8 +194,11 @@ if(isset($_POST['judgeNum'])) {
                     <?= $eventData->getTitle() ?>
                 </td>
                 <td style="width: 10%;">
+                    <div class="spinner-border spinner-border-sm text-primary smallSpinner" role="status" id="smSpinner<?= $judgeID ?><?= $eventData->getId() ?>">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
                     <div class="form-check form-switch" onclick="judgeToggle(<?= $judgeID ?>,<?= $eventData->getId() ?>)">
-                        <input class="form-check-input" type="checkbox" id="judgeSwitch<?= $judgeID ?><?= $eventData->getId() ?>" <?php if ($jud->isChairmanOfEvent(Event::findById($eventData->getId())) == "1") { echo "checked "; echo "value=true";} else{echo "value=false";} ?>>
+                        <input class="form-check-input" type="checkbox" id="judgeSwitch<?= $judgeID ?><?= $eventData->getId() ?>" <?php if ($jud->isChairmanOfEvent(Event::findById($eventData->getId())) == "1") { echo "checked "; echo "value=true";} else{echo "value=false";} ?> style="cursor: pointer">
                     </div>
                 </td>
                 <td style="width: 10%;">
