@@ -149,7 +149,7 @@
 							@focus.passive="updateCoordinates(criteria.length, teamIndex)"
 						/>
 					</td>
-					<td class="text-center"> {{ ranks[`team_${team.id}`].toFixed(2) }}</td>
+					<td class="text-center"> {{ ranks[`team_${team.id}`] }}</td>
 				</tr>
 			</tbody>
 			<!--	Dialog	  -->
@@ -502,67 +502,50 @@ export default {
 	},
 	computed: {
 		ranks() {
-			// Dense rank function
-			const getDenseRank = (totals) => {
-
-				// Get total ratings
-				const total_ratings = Object.values(totals);
-
-				// Gather all unique total ratings U.
-				const U = [...new Set(total_ratings)];
-
-				// Sort U.
-				const sortedU = U.sort((a, b) => b - a);
-
-				// Scan the individual total ratings and find their (index + 1) in U.
-				const totalRatingsRank = total_ratings.map((rating) =>
-					sortedU.indexOf(rating) + 1
-				);
-
-				// Assign dense rank to team id's keys
-				const total_ratings_rank = {};
-				Object.keys(totals).forEach((id, index) => {
-					total_ratings_rank[id] = totalRatingsRank[index];
-				});
-
-				// return total ratings rank
-				return total_ratings_rank;
+			const teamRanks = {};
+			// get unique totals
+			const uniqueTotals = [];
+			for(let i=0; i<this.teams.length; i++) {
+				const team    = this.teams[i];
+				const teamKey = `team_${team.id}`;
+				const total   = this.totals[teamKey];
+				if(!uniqueTotals.includes(total))
+					uniqueTotals.push(total);
+				// push to teamRanks
+				teamRanks[teamKey] = 0;
 			}
-
-			// Fractional rank function
-			const getFractionalRank = (totals) => {
-
-				// Get dense rank
-				const denseRank = getDenseRank(totals);
-
-				// Calculate fractional rank
-				const fractionalRank = {};
-				Object.entries(totals).forEach(([id, value]) => {
-					const count = Object.values(totals).filter((x) => x === value).length;
-					fractionalRank[id] = denseRank[id] + ((count - 1) / 2);
-				});
-
-				// Return fractional rank with team id as keys
-				const result = {};
-				Object.keys(totals).forEach((id) => {
-					result[id] = fractionalRank[id];
-				});
-
-				// Return result
-				return result;
+			// sort uniqueTotals in descending order
+			uniqueTotals.sort((a, b) => b - a);
+			// prepare rankGroup
+			const rankGroup = {};
+			// get dense rank of each team
+			const denseRanks = {};
+			for(let i=0; i<this.teams.length; i++) {
+				const team    = this.teams[i];
+				const teamKey = `team_${team.id}`;
+				const total = this.totals[teamKey];
+				const denseRank  = 1 + uniqueTotals.indexOf(total);
+				denseRanks[denseRank] = denseRank;
+				// push to rankGroup
+				const rankGroupKey = `rank_${denseRank}`;
+				if(!rankGroup[rankGroupKey])
+					rankGroup[rankGroupKey] = [];
+				rankGroup[rankGroupKey].push(teamKey);
 			}
-
-			// Filter Object if `NaN` and `undefined` is present
-			const filterObject = (obj) => {
-				// Remove NaN and undefined in the Object
-				const filteredArray = Object.entries(obj).filter((value) => {
-					return value !== undefined && !Number.isNaN(value);
-				});
-				return Object.fromEntries(filteredArray);
+			// get fractional rank
+			let ctr = 0;
+			for(let i = 0; i < uniqueTotals.length; i++) {
+				const key = `rank_${(i + 1)}`;
+				const group = rankGroup[key];
+				const size = group.length;
+				const fractionalRank = ctr + (((size * (size + 1)) / 2) / size);
+				// write fractionalRank to group members
+				for(let j = 0; j < size; j++) {
+					teamRanks[group[j]] = fractionalRank;
+				}
+				ctr += size;
 			}
-
-			// Return ranks
-			return filterObject(getFractionalRank(this.totals));
+			return teamRanks;
 
 		},
 		scoreSheetHeight() {

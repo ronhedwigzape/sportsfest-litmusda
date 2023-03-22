@@ -45,7 +45,7 @@
                             ?>
                             <div class="form-group">
                                 <label>Competition</label>
-                                <select name="competition_id" class="form-control" required <?php if (!empty($entity_category)) echo 'disabled'; ?>>
+                                <select name="competition_id" class="form-control">
                                     <option value="">Select Competition</option>
                                     <?php foreach ($competitions as $competition) {
                                         $selected = ($competition->getSlug() == $entity_category) ? 'selected' : '';
@@ -97,7 +97,7 @@
                             ?>
                             <div class="form-group">
                                 <label>Competition</label>
-                                <select name="competition_id" id="competition_id" class="form-control" required>
+                                <select name="competition_id" id="competition_id" class="form-control">
                                     <option value="">Select Competition</option>
                                     <?php foreach ($competitions as $competition) {
                                         $selected = ($competition->getSlug() == $entity_category) ? 'selected' : '';
