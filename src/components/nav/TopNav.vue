@@ -46,24 +46,24 @@
 				</template>
 				<v-card class="bg-dark">
 					<v-card-title class="bg-black">
-					<v-icon>mdi-alert-circle</v-icon>	Confirm Logout
+					<v-icon>mdi-alert-circle</v-icon> Confirm Logout
 					</v-card-title>
 					<v-card-text>Are you sure you want to log out?</v-card-text>
 					<v-card-actions>
 						<v-spacer></v-spacer>
 						<v-btn
-							color="red-darken-1"
+							color="green-darken-1"
 							variant="text"
 							@click="dialog = false"
 						>
-							cancel
+							Go Back
 						</v-btn>
 						<v-btn
-							color="green-darken-1"
+							color="red-darken-1"
 							variant="text"
 							@click="signOut"
 						>
-							ok
+							Log Out
 						</v-btn>
 					</v-card-actions>
 				</v-card>

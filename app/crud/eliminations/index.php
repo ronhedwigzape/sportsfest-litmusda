@@ -28,66 +28,76 @@ require_once '../../models/Team.php';
     </style>
 </head>
 <body>
-<div id="app" class="container mt-3" align="center">
-    <h1>Eliminations</h1>
+<div id="app" class="container mt-3">
+    <h1 class="text-center fw-bolder ">Eliminations</h1>
     <?php
     $competitions = Competition::all();
     foreach ($competitions as $competition) { ?>
-        <h2 class="text-center"><?= $competition->getTitle() ?></h2>
+        <h2 class="text-center fw-bold text-uppercase"><?= $competition->getTitle(); ?></h2>
+
         <?php
         $categories = Category::all($competition->getId());
         foreach ($categories as $category) { ?>
             <hr>
-            <h4><?= $category->getTitle() ?></h4>
-            <?php
-                $events = Event::all($category->getId());
-            foreach ($events as $event) {
-                $event_name = $event->getTitle();
-                $event_id = $event->getId();
-            ?>
-                <table class="table table-bordered w-50 text-center">
-                    <thead>
-                    <tr>
-                        <th><?php print_r($event_name) ?></th>
-                        <th>Action</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <?php
-                    $teams = Team::all();
-                    foreach ($teams as $team) {
-                        $team_name = $team->getName();
-                        $team_id = $team->getId();
+            <div class="row d-flex justify-content-center">
+                <h3 class="text-center"><?= $category->getTitle(); ?></h3>
+                <?php
+                    $events = Event::all($category->getId());
+                foreach ($events as $event) {
+                    $event_name = $event->getTitle();
+                    $event_id = $event->getId();
+                ?>
+                    <div class="col-lg-4 col-md-6 text-center mt-3">
+                        <button
+                            class="btn btn-danger mb-3"
+                        >
+                            Eliminate All
+                        </button>
+                        <table class="table table-bordered text-center">
+                            <thead>
+                            <tr>
+                                <th><?php print_r($event_name); ?></th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <?php
+                            $teams = Team::all();
+                            foreach ($teams as $team) {
+                                $team_name = $team->getName();
+                                $team_id = $team->getId();
 
-                        ?>
-                        <tr>
-                            <td
-                                id="team_<?= $team_id ?>_<?= $event_id ?>"
-                                class="<?= $event->hasTeamBeenEliminated($team) ? 'opacity-50 text-decoration-line-through' : ''; ?>"
-                                :class="{
-                                    'opacity-50 text-decoration-line-through': (team['isEliminated_<?= $team_id ?>_<?= $event_id ?>'] == true),
-                                    'opacity-100 text-decor-none': (team['isEliminated_<?= $team_id ?>_<?= $event_id ?>'] == false)
-                                }"
-                            >
-                                <?= $team_name ?>
-                            </td>
-                            <td>
-                                <button
-                                    id="action_<?= $team_id ?>_<?= $event_id ?>"
-                                    class="btn <?= $event->hasTeamBeenEliminated($team) ? 'btn-outline-secondary' : 'btn-outline-danger' ?>"
-                                    @click="toggleElimination(<?= $event_id ?>, <?= $team_id ?>)"
-                                >
-                                    <i
-                                        id="icon_<?= $team_id ?>_<?= $event_id ?>"
-                                        class="fa-solid <?= $event->hasTeamBeenEliminated($team) ? 'fa-hands-holding-child' : 'fa-skull-crossbones' ?> fa-fw">
-                                    </i>
-                                </button>
-                            </td>
-                        </tr>
-                    <?php } ?>
-                    </tbody>
-                </table>
-            <?php } ?>
+                                ?>
+                                <tr>
+                                    <td
+                                        id="team_<?= $team_id ?>_<?= $event_id ?>"
+                                        class="<?= $event->hasTeamBeenEliminated($team) ? 'opacity-50 text-decoration-line-through' : ''; ?>"
+                                        :class="{
+                                            'opacity-50 text-decoration-line-through': (team['isEliminated_<?= $team_id ?>_<?= $event_id ?>'] == true),
+                                            'opacity-100 text-decor-none': (team['isEliminated_<?= $team_id ?>_<?= $event_id ?>'] == false)
+                                        }"
+                                    >
+                                        <?= $team_name ?>
+                                    </td>
+                                    <td>
+                                        <button
+                                            id="action_<?= $team_id ?>_<?= $event_id ?>"
+                                            class="btn <?= $event->hasTeamBeenEliminated($team) ? 'btn-outline-secondary' : 'btn-outline-danger' ?>"
+                                            @click="toggleElimination(<?= $event_id ?>, <?= $team_id ?>)"
+                                        >
+                                            <i
+                                                id="icon_<?= $team_id ?>_<?= $event_id ?>"
+                                                class="fa-solid <?= $event->hasTeamBeenEliminated($team) ? 'fa-hands-holding-child' : 'fa-skull-crossbones' ?> fa-fw">
+                                            </i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            <?php } ?>
+                            </tbody>
+                        </table>
+                    </div>
+                <?php } ?>
+            </div>
         <?php } ?>
     <?php } ?>
 </div>
