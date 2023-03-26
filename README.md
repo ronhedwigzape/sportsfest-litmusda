@@ -66,10 +66,21 @@ and your ***Feature Tests*** to the
 ### Running Tests
 1. Open a terminal window and navigate to the root directory of the project.
 2. Run the following command to execute your tests:
+
+   - *all tests*
    ```shell
    phpunit
    ```
-   If this command does not work, try running `vendor\bin\phpunit` instead.
+   - *unit tests only*
+   ```shell
+   phpunit --testsuite unit
+   ```
+   - *feature tests only*
+   ```shell
+   phpunit --testsuite feature
+   ```
+   
+   If `phpunit` command does not work, try running `vendor\bin\phpunit` instead.
 
 
 ---

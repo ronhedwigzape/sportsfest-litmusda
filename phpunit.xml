@@ -3,8 +3,11 @@
          stopOnFailure="false" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.0/phpunit.xsd"
          cacheDirectory=".phpunit.cache">
     <testsuites>
-        <testsuite name="Test suite">
-            <directory>tests/backend</directory>
+        <testsuite name="unit">
+            <directory>./tests/backend/unit</directory>
+        </testsuite>
+        <testsuite name="feature">
+            <directory>./tests/backend/feature</directory>
         </testsuite>
     </testsuites>
 </phpunit>
