@@ -2,6 +2,7 @@
 
 Literacy, Dance, Music, and Cheerdance Sportsfest-Foundation Tabulation System 
 
+---
 ## Development Setup
 Here are the steps to set up the development environment for this project:
 
@@ -36,6 +37,7 @@ Here are the steps to set up the development environment for this project:
 9. Open your web browser and access <http://localhost:5176/sportsfest-litmusda> to view the application.
 
 
+---
 ## Backend Testing
 This guide will walk you through the process of testing the backend models.
 
@@ -43,11 +45,17 @@ This guide will walk you through the process of testing the backend models.
 Before getting started, ensure that you have [**Composer**](https://getcomposer.org/download/) installed:
 
 ### Setup
-Run the following command to install the required dependencies.
-```shell
-composer install
-```
-If this command does not work, try running `composer update` instead.
+1. Copy [**`tests/backend/config/test-database.example.php`**](tests/backend/config/test-database.example.php)
+   to **`tests/backend/config/test-database.php`**, then modify the database connection settings in the new file.
+
+2. Inside [phpMyAdmin](http://localhost/phpmyadmin),
+   create a MySQL database named `test-sportsfest-litmusda` and import [sportsfest-litmusda.sql](sportsfest-litmusda.sql) into it.
+
+3. Run the following command to install the required dependencies.
+   ```shell
+   composer install
+   ```
+   If this command does not work, try running `composer update` instead.
 
 ### Writing Tests
 To write your tests, simply add your **Unit Tests** to the
@@ -58,12 +66,13 @@ and your ***Feature Tests*** to the
 ### Running Tests
 1. Open a terminal window and navigate to the root directory of the project.
 2. Run the following command to execute your tests:
-```shell
-phpunit
-```
-If this command does not work, try running `vendor\bin\phpunit` instead.
+   ```shell
+   phpunit
+   ```
+   If this command does not work, try running `vendor\bin\phpunit` instead.
 
 
+---
 ## Production Deployment
 Here's how to compile the project for production deployment:
 
