@@ -36,6 +36,34 @@ Here are the steps to set up the development environment for this project:
 9. Open your web browser and access <http://localhost:5176/sportsfest-litmusda> to view the application.
 
 
+## Backend Testing
+This guide will walk you through the process of testing the backend models.
+
+### Prerequisites
+Before getting started, ensure that you have [**Composer**](https://getcomposer.org/download/) installed:
+
+### Setup
+Run the following command to install the required dependencies.
+```shell
+composer install
+```
+If this command does not work, try running `composer update` instead.
+
+### Writing Tests
+To write your tests, simply add your **Unit Tests** to the
+[tests/backend/**unit**](tests/backend/unit) directory
+and your ***Feature Tests*** to the
+[tests/backend/**feature**](tests/backend/feature) directory.
+
+### Running Tests
+1. Open a terminal window and navigate to the root directory of the project.
+2. Run the following command to execute your tests:
+```shell
+phpunit
+```
+If this command does not work, try running `vendor\bin\phpunit` instead.
+
+
 ## Production Deployment
 Here's how to compile the project for production deployment:
 
