@@ -42,7 +42,7 @@ Here are the steps to set up the development environment for this project:
 This guide will walk you through the process of testing the backend models.
 
 ### Prerequisites
-Before getting started, ensure that you have [**Composer**](https://getcomposer.org/download/) installed:
+Before getting started, ensure that you have [**Composer**](https://getcomposer.org/download/) installed.
 
 ### Setup
 1. Copy [**`tests/backend/config/test-database.example.php`**](tests/backend/config/test-database.example.php)
