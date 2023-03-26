@@ -37,3 +37,9 @@ app/crud/uploads/*
 *.njsproj
 *.sln
 *.sw?
+
+# Testing
+vendor
+.phpunit.cache
+.phpunit.result.cache
+tests/backend/config/test-database.php
