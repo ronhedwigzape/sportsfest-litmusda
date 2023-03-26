@@ -143,22 +143,26 @@ class Team extends App
             $sorted_teams   = [];
             $assigned_teams = [];
             $arrangements = Arrangement::all($event_id);
+
             for($i = 0; $i < sizeof($arrangements); $i++) {
                 $arrangement = $arrangements[$i];
 
                 $arranged_team = $arrangement->getTeam();
-                $key = 'team_' . $arrangement->getOrder();
-                if(!isset($sorted_teams[$key]) && !in_array($arranged_team->getId(), $assigned_teams)) {
-                    // push $arranged_team to $sorted_teams
-                    $sorted_teams[$key] = $arranged_team;
-                    $assigned_teams[] = $arranged_team->getId();
+                $arranged_team_id = $arranged_team->getId();
+                if(!in_array($arranged_team_id, $eliminated_team_ids)) {
+                    $key = 'team_' . $arrangement->getOrder();
+                    if(!isset($sorted_teams[$key]) && !in_array($arranged_team_id, $assigned_teams)) {
+                        // push $arranged_team to $sorted_teams
+                        $sorted_teams[$key] = $arranged_team;
+                        $assigned_teams[] = $arranged_team_id;
 
-                    // remove $arranged_team from $teams
-                    for($j = 0; $j < sizeof($teams); $j++) {
-                        if($teams[$j]->getId() == $arranged_team->getId()) {
-                            unset($teams[$j]);
-                            $teams = array_values($teams);
-                            break;
+                        // remove $arranged_team from $teams
+                        for($j = 0; $j < sizeof($teams); $j++) {
+                            if($teams[$j]->getId() == $arranged_team_id) {
+                                unset($teams[$j]);
+                                $teams = array_values($teams);
+                                break;
+                            }
                         }
                     }
                 }
@@ -166,12 +170,12 @@ class Team extends App
 
             // merge $sorted_teams and remaining $teams
             $final_teams  = [];
-            $total_orders = sizeof(Arrangement::orders()) - sizeof($eliminated_team_ids);
+            $total_orders = sizeof(Arrangement::orders());
             for($i = 1; $i <= $total_orders; $i++) {
                 $key = 'team_' . $i;
                 if(isset($sorted_teams[$key]))
                     $final_teams[] = $sorted_teams[$key];
-                else {
+                else if(isset($teams[0])) {
                     $final_teams[] = $teams[0];
                     unset($teams[0]);
                     $teams = array_values($teams);
@@ -363,7 +367,7 @@ class Team extends App
      * @param string $avatar
      * @return void
      */
-    public function addParticipant($event, $number, $first_name, $middle_name, $last_name, $gender, $avatar)
+    public function addParticipant($event, $number, $first_name, $middle_name, $last_name, $gender = 'male', $avatar = 'no-avatar.jpg')
     {
         require_once 'Participant.php';
         $participant = new Participant();
