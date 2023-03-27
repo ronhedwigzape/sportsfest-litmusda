@@ -178,11 +178,11 @@ class Competition extends App
     {
         // check id
         if(self::exists($this->id))
-            App::returnError('HTTP/1.1 500', 'Insert Error: competition [id = ' . $this->id . '] already exists.');
+            App::returnError('HTTP/1.1 409', 'Insert Error: competition [id = ' . $this->id . '] already exists.');
 
         // check slug
         if(self::slugExists($this->slug))
-            App::returnError('HTTP/1.1 500', 'Insert Error: competition [slug = ' . $this->slug . '] already exists.');
+            App::returnError('HTTP/1.1 409', 'Insert Error: competition [slug = ' . $this->slug . '] already exists.');
 
         // proceed with insert
         $stmt = $this->conn->prepare("INSERT INTO $this->table(slug, title) VALUES(?, ?)");
@@ -201,11 +201,11 @@ class Competition extends App
     {
         // check id
         if(!self::exists($this->id))
-            App::returnError('HTTP/1.1 500', 'Update Error: competition [id = ' . $this->id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Update Error: competition [id = ' . $this->id . '] does not exist.');
 
         // check slug
         if(self::slugExists($this->slug, $this->id))
-            App::returnError('HTTP/1.1 500', 'Update Error: competition [slug = ' . $this->slug . '] already exists.');
+            App::returnError('HTTP/1.1 409', 'Update Error: competition [slug = ' . $this->slug . '] already exists.');
 
         // proceed with update
         $stmt = $this->conn->prepare("UPDATE $this->table SET slug = ?, title = ? WHERE id = ?");
@@ -223,7 +223,7 @@ class Competition extends App
     {
         // check id
         if(!self::exists($this->id))
-            App::returnError('HTTP/1.1 500', 'Delete Error: competition [id = ' . $this->id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Delete Error: competition [id = ' . $this->id . '] does not exist.');
 
         // proceed with delete
         $stmt = $this->conn->prepare("DELETE FROM $this->table WHERE id = ?");

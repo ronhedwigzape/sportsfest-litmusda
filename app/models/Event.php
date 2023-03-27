@@ -190,16 +190,16 @@ class Event extends App
     {
         // check id
         if(self::exists($this->id))
-            App::returnError('HTTP/1.1 500', 'Insert Error: event [id = ' . $this->id . '] already exists.');
+            App::returnError('HTTP/1.1 409', 'Insert Error: event [id = ' . $this->id . '] already exists.');
 
         // check category_id
         require_once 'Category.php';
         if(!Category::exists($this->category_id))
-            App::returnError('HTTP/1.1 500', 'Insert Error: category [id = ' . $this->category_id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Insert Error: category [id = ' . $this->category_id . '] does not exist.');
 
         // check slug
         if(self::slugExists($this->slug))
-            App::returnError('HTTP/1.1 500', 'Insert Error: event [slug = ' . $this->slug . '] already exists.');
+            App::returnError('HTTP/1.1 409', 'Insert Error: event [slug = ' . $this->slug . '] already exists.');
 
         // proceed with insert
         $stmt = $this->conn->prepare("INSERT INTO $this->table(category_id, slug, title) VALUES(?, ?, ?)");
@@ -218,16 +218,16 @@ class Event extends App
     {
         // check id
         if(!self::exists($this->id))
-            App::returnError('HTTP/1.1 500', 'Update Error: event [id = ' . $this->id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Update Error: event [id = ' . $this->id . '] does not exist.');
 
         // check category_id
         require_once 'Category.php';
         if(!Category::exists($this->category_id))
-            App::returnError('HTTP/1.1 500', 'Update Error: category [id = ' . $this->category_id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Update Error: category [id = ' . $this->category_id . '] does not exist.');
 
         // check slug
         if(self::slugExists($this->slug, $this->id))
-            App::returnError('HTTP/1.1 500', 'Update Error: event [slug = ' . $this->slug . '] already exists.');
+            App::returnError('HTTP/1.1 409', 'Update Error: event [slug = ' . $this->slug . '] already exists.');
 
         // proceed with update
         $stmt = $this->conn->prepare("UPDATE $this->table SET category_id = ?, slug = ?, title = ? WHERE id = ?");
@@ -245,7 +245,7 @@ class Event extends App
     {
         // check id
         if(!self::exists($this->id))
-            App::returnError('HTTP/1.1 500', 'Delete Error: event [id = ' . $this->id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Delete Error: event [id = ' . $this->id . '] does not exist.');
 
         // proceed with delete
         $stmt = $this->conn->prepare("DELETE FROM $this->table WHERE id = ?");
@@ -741,7 +741,7 @@ class Event extends App
         // check team id
         $team_id = $team->getId();
         if(!Team::exists($team_id))
-            App::returnError('HTTP/1.1 500', 'NowShow Team Addition Error: team [id = ' . $team_id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'NowShow Team Addition Error: team [id = ' . $team_id . '] does not exist.');
 
         // proceed with addition
         if(!$this->hasTeamNotShownUp($team)) {
@@ -765,7 +765,7 @@ class Event extends App
         // check team id
         $team_id = $team->getId();
         if(!Team::exists($team_id))
-            App::returnError('HTTP/1.1 500', 'NowShow Team Removal Error: team [id = ' . $team_id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'NowShow Team Removal Error: team [id = ' . $team_id . '] does not exist.');
 
         // proceed with removal
         $stmt = $this->conn->prepare("DELETE FROM $this->table_noshows WHERE event_id = ? AND team_id = ?");
@@ -844,7 +844,7 @@ class Event extends App
         // check team id
         $team_id = $team->getId();
         if(!Team::exists($team_id))
-            App::returnError('HTTP/1.1 500', 'Team Elimination Error: team [id = ' . $team_id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Team Elimination Error: team [id = ' . $team_id . '] does not exist.');
 
         // proceed with elimination
         if(!$this->hasTeamBeenEliminated($team)) {
@@ -868,7 +868,7 @@ class Event extends App
         // check team id
         $team_id = $team->getId();
         if(!Team::exists($team_id))
-            App::returnError('HTTP/1.1 500', 'Team Revival Error: team [id = ' . $team_id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Team Revival Error: team [id = ' . $team_id . '] does not exist.');
 
         // proceed with removal
         $stmt = $this->conn->prepare("DELETE FROM $this->table_eliminations WHERE event_id = ? AND team_id = ?");
