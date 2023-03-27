@@ -152,28 +152,28 @@ class Deduction extends App
     {
         // check id
         if(self::exists($this->id))
-            App::returnError('HTTP/1.1 500', 'Insert Error: deduction [id = ' . $this->id . '] already exists.');
+            App::returnError('HTTP/1.1 409', 'Insert Error: deduction [id = ' . $this->id . '] already exists.');
 
         // check technical_id
         require_once 'Technical.php';
         if(!Technical::exists($this->technical_id))
-            App::returnError('HTTP/1.1 500', 'Insert Error: technical [id = ' . $this->technical_id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Insert Error: technical [id = ' . $this->technical_id . '] does not exist.');
 
         // check event_id
         require_once 'Event.php';
         if(!Event::exists($this->event_id))
-            App::returnError('HTTP/1.1 500', 'Insert Error: event [id = ' . $this->event_id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Insert Error: event [id = ' . $this->event_id . '] does not exist.');
 
         // check team_id
         require_once 'Team.php';
         if(!Team::exists($this->team_id))
-            App::returnError('HTTP/1.1 500', 'Insert Error: team [id = ' . $this->team_id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Insert Error: team [id = ' . $this->team_id . '] does not exist.');
 
         // check if technical is allowed to deduct
         $event     = $this->getEvent();
         $technical = $this->getTechnical();
         if(!$technical->hasEvent($event))
-            App::returnError('HTTP/1.1 500', 'Insert Error: event [slug = ' . $event->getSlug() . '] is not assigned to technical [id = ' . $this->technical_id . ']');
+            App::returnError('HTTP/1.1 422', 'Insert Error: event [slug = ' . $event->getSlug() . '] is not assigned to technical [id = ' . $this->technical_id . ']');
 
         // proceed with insert if not yet stored
         if(!self::stored($this->technical_id, $this->event_id, $this->team_id)) {
@@ -181,7 +181,7 @@ class Deduction extends App
             $min = 0;
             $max = $event->getTotalCriteriaPercentage();
             if($this->value < $min || $this->value > $max)
-                App::returnError('HTTP/1.1 500', 'Insert Error: deduction for event [slug = ' . $event->getSlug() . '] must be from ' . $min . ' to ' . $max . ', [given = ' . $this->value . '].');
+                App::returnError('HTTP/1.1 422', 'Insert Error: deduction for event [slug = ' . $event->getSlug() . '] must be from ' . $min . ' to ' . $max . ', [given = ' . $this->value . '].');
 
             // proceed with insert
             $stmt = $this->conn->prepare("INSERT INTO $this->table(technical_id, event_id, team_id, value) VALUES(?, ?, ?, ?)");
@@ -202,41 +202,41 @@ class Deduction extends App
     {
         // check id
         if(!self::exists($this->id))
-            App::returnError('HTTP/1.1 500', 'Update Error: deduction [id = ' . $this->id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Update Error: deduction [id = ' . $this->id . '] does not exist.');
 
         // check is_locked
         if(!$toggle_lock) {
             $stored_deduction = self::findById($this->id);
             if($stored_deduction->is_locked)
-                App::returnError('HTTP/1.1 500', 'Update Error: deduction [id = ' . $this->id . '] is already locked.');
+                App::returnError('HTTP/1.1 409', 'Update Error: deduction [id = ' . $this->id . '] is already locked.');
         }
 
         // check technical_id
         require_once 'Technical.php';
         if(!Technical::exists($this->technical_id))
-            App::returnError('HTTP/1.1 500', 'Update Error: technical [id = ' . $this->technical_id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Update Error: technical [id = ' . $this->technical_id . '] does not exist.');
 
         // check event_id
         require_once 'Event.php';
         if(!Event::exists($this->event_id))
-            App::returnError('HTTP/1.1 500', 'Update Error: event [id = ' . $this->event_id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Update Error: event [id = ' . $this->event_id . '] does not exist.');
 
         // check team_id
         require_once 'Team.php';
         if(!Team::exists($this->team_id))
-            App::returnError('HTTP/1.1 500', 'Update Error: team [id = ' . $this->team_id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Update Error: team [id = ' . $this->team_id . '] does not exist.');
 
         // check if technical is allowed to deduct
         $event     = $this->getEvent();
         $technical = $this->getTechnical();
         if(!$technical->hasEvent($event))
-            App::returnError('HTTP/1.1 500', 'Update Error: event [slug = ' . $event->getSlug() . '] is not assigned to technical [id = ' . $this->technical_id . ']');
+            App::returnError('HTTP/1.1 422', 'Update Error: event [slug = ' . $event->getSlug() . '] is not assigned to technical [id = ' . $this->technical_id . ']');
 
         // check value
         $min = 0;
         $max = $event->getTotalCriteriaPercentage();
         if($this->value < $min || $this->value > $max)
-            App::returnError('HTTP/1.1 500', 'Update Error: deduction for event [slug = ' . $event->getSlug() . '] must be from ' . $min . ' to ' . $max . ', [given = ' . $this->value . '].');
+            App::returnError('HTTP/1.1 422', 'Update Error: deduction for event [slug = ' . $event->getSlug() . '] must be from ' . $min . ' to ' . $max . ', [given = ' . $this->value . '].');
 
         // proceed with update
         $stmt = $this->conn->prepare("UPDATE $this->table SET technical_id = ?,  event_id = ?, team_id = ?, value = ?, is_locked = ? WHERE id = ?");
@@ -255,7 +255,7 @@ class Deduction extends App
     {
         // check id
         if(!self::exists($this->id))
-            App::returnError('HTTP/1.1 500', 'Delete Error: deduction [id = ' . $this->id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Delete Error: deduction [id = ' . $this->id . '] does not exist.');
 
         // proceed with delete
         $stmt = $this->conn->prepare("DELETE FROM $this->table WHERE id = ?");

@@ -142,17 +142,17 @@ class Technical extends User
     {
         // check id
         if(self::exists($this->id))
-            App::returnError('HTTP/1.1 500', 'Insert Error: technical [id = ' . $this->id . '] already exists.');
+            App::returnError('HTTP/1.1 409', 'Insert Error: technical [id = ' . $this->id . '] already exists.');
 
         // check username
         if(trim($this->username) == '')
-            App::returnError('HTTP/1.1 500', 'Insert Error: technical username is required.');
+            App::returnError('HTTP/1.1 422', 'Insert Error: technical username is required.');
         else if(self::usernameExists($this->username))
-            App::returnError('HTTP/1.1 500', 'Insert Error: technical [username = ' . $this->username . '] already exists.');
+            App::returnError('HTTP/1.1 409', 'Insert Error: technical [username = ' . $this->username . '] already exists.');
 
         // check password
         if($this->password == '')
-            App::returnError('HTTP/1.1 500', 'Insert Error: technical password is required.');
+            App::returnError('HTTP/1.1 422', 'Insert Error: technical password is required.');
 
         // proceed with insert
         $stmt = $this->conn->prepare("INSERT INTO $this->table(number, name, avatar, username, password) VALUES(?, ?, ?, ?, ?)");
@@ -171,17 +171,17 @@ class Technical extends User
     {
         // check id
         if(!self::exists($this->id))
-            App::returnError('HTTP/1.1 500', 'Update Error: technical [id = ' . $this->id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Update Error: technical [id = ' . $this->id . '] does not exist.');
 
         // check username
         if(trim($this->username) == '')
-            App::returnError('HTTP/1.1 500', 'Insert Error: technical username is required.');
+            App::returnError('HTTP/1.1 422', 'Insert Error: technical username is required.');
         else if(self::usernameExists($this->username, $this->id))
-            App::returnError('HTTP/1.1 500', 'Insert Error: technical [username = ' . $this->username . '] already exists.');
+            App::returnError('HTTP/1.1 409', 'Insert Error: technical [username = ' . $this->username . '] already exists.');
 
         // check password
         if($this->password == '')
-            App::returnError('HTTP/1.1 500', 'Insert Error: technical password is required.');
+            App::returnError('HTTP/1.1 422', 'Insert Error: technical password is required.');
 
         // proceed with update
         $stmt = $this->conn->prepare("UPDATE $this->table SET number = ?, name = ?, avatar = ?, username = ?, password = ? WHERE id = ?");
@@ -199,7 +199,7 @@ class Technical extends User
     {
         // check id
         if(!self::exists($this->id))
-            App::returnError('HTTP/1.1 500', 'Delete Error: technical [id = ' . $this->id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Delete Error: technical [id = ' . $this->id . '] does not exist.');
 
         // proceed with delete
         $stmt = $this->conn->prepare("DELETE FROM $this->table WHERE id = ?");
@@ -232,7 +232,7 @@ class Technical extends User
         // check event id
         $event_id = $event->getId();
         if(!Event::exists($event_id))
-            App::returnError('HTTP/1.1 500', 'Event Assignment Error: event [id = ' . $event_id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Event Assignment Error: event [id = ' . $event_id . '] does not exist.');
 
         // proceed with assignment
         if(!$this->hasEvent($event)) {
@@ -256,7 +256,7 @@ class Technical extends User
         // check event id
         $event_id = $event->getId();
         if(!Event::exists($event_id))
-            App::returnError('HTTP/1.1 500', 'Event Removal Error: event [id = ' . $event_id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Event Removal Error: event [id = ' . $event_id . '] does not exist.');
 
         // proceed with removal
         $stmt = $this->conn->prepare("DELETE FROM $this->table_events WHERE technical_id = ? AND event_id = ?");

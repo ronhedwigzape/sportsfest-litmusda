@@ -147,17 +147,17 @@ class Judge extends User
     {
         // check id
         if(self::exists($this->id))
-            App::returnError('HTTP/1.1 500', 'Insert Error: judge [id = ' . $this->id . '] already exists.');
+            App::returnError('HTTP/1.1 409', 'Insert Error: judge [id = ' . $this->id . '] already exists.');
 
         // check username
         if(trim($this->username) == '')
-            App::returnError('HTTP/1.1 500', 'Insert Error: judge username is required.');
+            App::returnError('HTTP/1.1 422', 'Insert Error: judge username is required.');
         else if(self::usernameExists($this->username))
-            App::returnError('HTTP/1.1 500', 'Insert Error: judge [username = ' . $this->username . '] already exists.');
+            App::returnError('HTTP/1.1 409', 'Insert Error: judge [username = ' . $this->username . '] already exists.');
 
         // check password
         if($this->password == '')
-            App::returnError('HTTP/1.1 500', 'Insert Error: judge password is required.');
+            App::returnError('HTTP/1.1 422', 'Insert Error: judge password is required.');
 
         // proceed with insert
         $stmt = $this->conn->prepare("INSERT INTO $this->table(number, name, avatar, username, password) VALUES(?, ?, ?, ?, ?)");
@@ -176,17 +176,17 @@ class Judge extends User
     {
         // check id
         if(!self::exists($this->id))
-            App::returnError('HTTP/1.1 500', 'Update Error: judge [id = ' . $this->id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Update Error: judge [id = ' . $this->id . '] does not exist.');
 
         // check username
         if(trim($this->username) == '')
-            App::returnError('HTTP/1.1 500', 'Insert Error: judge username is required.');
+            App::returnError('HTTP/1.1 422', 'Insert Error: judge username is required.');
         else if(self::usernameExists($this->username, $this->id))
-            App::returnError('HTTP/1.1 500', 'Insert Error: judge [username = ' . $this->username . '] already exists.');
+            App::returnError('HTTP/1.1 409', 'Insert Error: judge [username = ' . $this->username . '] already exists.');
 
         // check password
         if($this->password == '')
-            App::returnError('HTTP/1.1 500', 'Insert Error: judge password is required.');
+            App::returnError('HTTP/1.1 422', 'Insert Error: judge password is required.');
 
         // proceed with update
         $stmt = $this->conn->prepare("UPDATE $this->table SET number = ?, name = ?, avatar = ?, username = ?, password = ? WHERE id = ?");
@@ -204,7 +204,7 @@ class Judge extends User
     {
         // check id
         if(!self::exists($this->id))
-            App::returnError('HTTP/1.1 500', 'Delete Error: judge [id = ' . $this->id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Delete Error: judge [id = ' . $this->id . '] does not exist.');
 
         // proceed with delete
         $stmt = $this->conn->prepare("DELETE FROM $this->table WHERE id = ?");
@@ -272,7 +272,7 @@ class Judge extends User
         // check event id
         $event_id = $event->getId();
         if(!Event::exists($event_id))
-            App::returnError('HTTP/1.1 500', 'Event Assignment Error: event [id = ' . $event_id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Event Assignment Error: event [id = ' . $event_id . '] does not exist.');
 
         // proceed with assignment
         if(!$this->hasEvent($event)) {
@@ -297,7 +297,7 @@ class Judge extends User
         // check event id
         $event_id = $event->getId();
         if(!Event::exists($event_id))
-            App::returnError('HTTP/1.1 500', 'Event Removal Error: event [id = ' . $event_id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Event Removal Error: event [id = ' . $event_id . '] does not exist.');
 
         // proceed with removal
         $stmt = $this->conn->prepare("DELETE FROM $this->table_events WHERE judge_id = ? AND event_id = ?");
@@ -381,11 +381,11 @@ class Judge extends User
         // check event id
         $event_id = $event->getId();
         if(!Event::exists($event_id))
-            App::returnError('HTTP/1.1 500', $action . ' Chairman Error: event [id = ' . $event_id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', $action . ' Chairman Error: event [id = ' . $event_id . '] does not exist.');
 
         // check if judge has the event
         if(!$this->hasEvent($event))
-            App::returnError('HTTP/1.1 500', $action . ' Chairman Error: judge [id = ' . $this->id . '] is not assigned to event [id = ' . $event_id . '].');
+            App::returnError('HTTP/1.1 422', $action . ' Chairman Error: judge [id = ' . $this->id . '] is not assigned to event [id = ' . $event_id . '].');
 
         // proceed
         $stmt = $this->conn->prepare("UPDATE $this->table_events SET is_chairman = ? WHERE judge_id = ? AND event_id = ?");
