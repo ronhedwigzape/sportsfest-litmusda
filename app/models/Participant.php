@@ -187,17 +187,17 @@ class Participant extends App
     {
         // check id
         if(self::exists($this->id))
-            App::returnError('HTTP/1.1 500', 'Insert Error: participant [id = ' . $this->id . '] already exists.');
+            App::returnError('HTTP/1.1 409', 'Insert Error: participant [id = ' . $this->id . '] already exists.');
 
         // check team_id
         require_once 'Team.php';
         if(!Team::exists($this->team_id))
-            App::returnError('HTTP/1.1 500', 'Insert Error: team [id = ' . $this->team_id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Insert Error: team [id = ' . $this->team_id . '] does not exist.');
 
         // check event_id
         require_once 'Event.php';
         if(!Event::exists($this->event_id))
-            App::returnError('HTTP/1.1 500', 'Insert Error: event [id = ' . $this->event_id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Insert Error: event [id = ' . $this->event_id . '] does not exist.');
 
         // proceed with insert
         $stmt = $this->conn->prepare("INSERT INTO $this->table(team_id, event_id, number, first_name, middle_name, last_name, gender, avatar) VALUES(?, ?, ?, ?, ?, ?, ?, ?)");
@@ -216,17 +216,17 @@ class Participant extends App
     {
         // check id
         if(!self::exists($this->id))
-            App::returnError('HTTP/1.1 500', 'Update Error: participant [id = ' . $this->id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Update Error: participant [id = ' . $this->id . '] does not exist.');
 
         // check team_id
         require_once 'Team.php';
         if(!Team::exists($this->team_id))
-            App::returnError('HTTP/1.1 500', 'Update Error: team [id = ' . $this->team_id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Update Error: team [id = ' . $this->team_id . '] does not exist.');
 
         // check event_id
         require_once 'Event.php';
         if(!Event::exists($this->event_id))
-            App::returnError('HTTP/1.1 500', 'Update Error: event [id = ' . $this->event_id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Update Error: event [id = ' . $this->event_id . '] does not exist.');
 
         // proceed with update
         $stmt = $this->conn->prepare("UPDATE $this->table SET team_id = ?, event_id = ?, number = ?, first_name = ?, middle_name = ?, last_name = ?, gender = ?, avatar = ? WHERE id = ?");
@@ -244,7 +244,7 @@ class Participant extends App
     {
         // check id
         if(!self::exists($this->id))
-            App::returnError('HTTP/1.1 500', 'Delete Error: participant [id = ' . $this->id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Delete Error: participant [id = ' . $this->id . '] does not exist.');
 
         // proceed with delete
         $stmt = $this->conn->prepare("DELETE FROM $this->table WHERE id = ?");
