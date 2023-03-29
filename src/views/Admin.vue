@@ -6,7 +6,6 @@
 	<!--	Admin Results	-->
     <v-main
 		v-if="$store.getters['auth/getUser'] !== null"
-		@click="$store.state.app.sideNav = false"
 	>
         <!-- results -->
 		<v-table 

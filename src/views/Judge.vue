@@ -6,7 +6,6 @@
 	<!--	Judge Score Sheet	-->
 	<v-main
 		v-if="$store.getters['auth/getUser'] !== null"
-		@click="$store.state.app.sideNav = false"
 	>
 		<v-table
 			v-if="$route.params.eventSlug && event"
