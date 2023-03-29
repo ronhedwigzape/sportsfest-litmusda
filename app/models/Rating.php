@@ -152,29 +152,29 @@ class Rating extends App
     {
         // check id
         if(self::exists($this->id))
-            App::returnError('HTTP/1.1 500', 'Insert Error: rating [id = ' . $this->id . '] already exists.');
+            App::returnError('HTTP/1.1 409', 'Insert Error: rating [id = ' . $this->id . '] already exists.');
 
         // check judge_id
         require_once 'Judge.php';
         if(!Judge::exists($this->judge_id))
-            App::returnError('HTTP/1.1 500', 'Insert Error: judge [id = ' . $this->judge_id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Insert Error: judge [id = ' . $this->judge_id . '] does not exist.');
 
         // check criterion_id
         require_once 'Criterion.php';
         if(!Criterion::exists($this->criterion_id))
-            App::returnError('HTTP/1.1 500', 'Insert Error: criterion [id = ' . $this->criterion_id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Insert Error: criterion [id = ' . $this->criterion_id . '] does not exist.');
 
         // check team_id
         require_once 'Team.php';
         if(!Team::exists($this->team_id))
-            App::returnError('HTTP/1.1 500', 'Insert Error: team [id = ' . $this->team_id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Insert Error: team [id = ' . $this->team_id . '] does not exist.');
 
         // check if judge is allowed to rate
         $criterion = $this->getCriterion();
         $event = $criterion->getEvent();
         $judge = $this->getJudge();
         if(!$judge->hasEvent($event))
-            App::returnError('HTTP/1.1 500', 'Insert Error: event [slug = ' . $event->getSlug() . '] is not assigned to judge [id = ' . $this->judge_id . ']');
+            App::returnError('HTTP/1.1 422', 'Insert Error: event [slug = ' . $event->getSlug() . '] is not assigned to judge [id = ' . $this->judge_id . ']');
 
         // proceed with insert if not yet stored
         if(!self::stored($this->judge_id, $this->criterion_id, $this->team_id)) {
@@ -182,7 +182,7 @@ class Rating extends App
             $min = 0;
             $max = $criterion->getPercentage();
             if($this->value < $min || $this->value > $max)
-                App::returnError('HTTP/1.1 500', 'Insert Error: criterion [title = "' . $criterion->getTitle() . '"] must be from ' . $min . ' to ' . $max . ', [given = ' . $this->value . '].');
+                App::returnError('HTTP/1.1 422', 'Insert Error: criterion [title = "' . $criterion->getTitle() . '"] must be from ' . $min . ' to ' . $max . ', [given = ' . $this->value . '].');
 
             // proceed with insert
             $stmt = $this->conn->prepare("INSERT INTO $this->table(judge_id, criteria_id, team_id, value) VALUES(?, ?, ?, ?)");
@@ -203,42 +203,42 @@ class Rating extends App
     {
         // check id
         if(!self::exists($this->id))
-            App::returnError('HTTP/1.1 500', 'Update Error: rating [id = ' . $this->id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Update Error: rating [id = ' . $this->id . '] does not exist.');
 
         // check is_locked
         if(!$toggle_lock) {
             $stored_rating = self::findById($this->id);
             if($stored_rating->is_locked)
-                App::returnError('HTTP/1.1 500', 'Update Error: rating [id = ' . $this->id . '] is already locked.');
+                App::returnError('HTTP/1.1 409', 'Update Error: rating [id = ' . $this->id . '] is already locked.');
         }
 
         // check judge_id
         require_once 'Judge.php';
         if(!Judge::exists($this->judge_id))
-            App::returnError('HTTP/1.1 500', 'Update Error: judge [id = ' . $this->judge_id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Update Error: judge [id = ' . $this->judge_id . '] does not exist.');
 
         // check criterion_id
         require_once 'Criterion.php';
         if(!Criterion::exists($this->criterion_id))
-            App::returnError('HTTP/1.1 500', 'Update Error: criterion [id = ' . $this->criterion_id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Update Error: criterion [id = ' . $this->criterion_id . '] does not exist.');
 
         // check team_id
         require_once 'Team.php';
         if(!Team::exists($this->team_id))
-            App::returnError('HTTP/1.1 500', 'Update Error: team [id = ' . $this->team_id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Update Error: team [id = ' . $this->team_id . '] does not exist.');
 
         // check if judge is allowed to rate
         $criterion = $this->getCriterion();
         $event = $criterion->getEvent();
         $judge = $this->getJudge();
         if(!$judge->hasEvent($event))
-            App::returnError('HTTP/1.1 500', 'Update Error: event [slug = ' . $event->getSlug() . '] is not assigned to judge [id = ' . $this->judge_id . ']');
+            App::returnError('HTTP/1.1 422', 'Update Error: event [slug = ' . $event->getSlug() . '] is not assigned to judge [id = ' . $this->judge_id . ']');
 
         // check value
         $min = 0;
         $max = $criterion->getPercentage();
         if($this->value < $min || $this->value > $max)
-            App::returnError('HTTP/1.1 500', 'Update Error: criterion [title = "' . $criterion->getTitle() . '"] must be from ' . $min . ' to ' . $max . ', [given = ' . $this->value . '].');
+            App::returnError('HTTP/1.1 422', 'Update Error: criterion [title = "' . $criterion->getTitle() . '"] must be from ' . $min . ' to ' . $max . ', [given = ' . $this->value . '].');
 
         // proceed with update
         $stmt = $this->conn->prepare("UPDATE $this->table SET judge_id = ?,  criteria_id = ?, team_id = ?, value = ?, is_locked = ? WHERE id = ?");
@@ -257,7 +257,7 @@ class Rating extends App
     {
         // check id
         if(!self::exists($this->id))
-            App::returnError('HTTP/1.1 500', 'Delete Error: rating [id = ' . $this->id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Delete Error: rating [id = ' . $this->id . '] does not exist.');
 
         // proceed with delete
         $stmt = $this->conn->prepare("DELETE FROM $this->table WHERE id = ?");

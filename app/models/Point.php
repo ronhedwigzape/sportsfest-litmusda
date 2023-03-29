@@ -161,17 +161,17 @@ class Point extends App
     {
         // check id
         if(self::exists($this->id))
-            App::returnError('HTTP/1.1 500', 'Insert Error: point [id = ' . $this->id . '] already exists.');
+            App::returnError('HTTP/1.1 409', 'Insert Error: point [id = ' . $this->id . '] already exists.');
 
         // check event_id
         require_once 'Event.php';
         if(!Event::exists($this->event_id))
-            App::returnError('HTTP/1.1 500', 'Insert Error: event [id = ' . $this->event_id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Insert Error: event [id = ' . $this->event_id . '] does not exist.');
 
         // check rank
         $ranks = self::ranks();
         if(!in_array($this->rank, $ranks))
-            App::returnError('HTTP/1.1 500', 'Insert Error: rank must be within [' . implode(', ', $ranks) . '], [given = ' . $this->rank . '].');
+            App::returnError('HTTP/1.1 422', 'Insert Error: rank must be within [' . implode(', ', $ranks) . '], [given = ' . $this->rank . '].');
 
         // proceed with insert if not yet stored
         if(!self::stored($this->event_id, $this->rank)) {
@@ -192,17 +192,17 @@ class Point extends App
     {
         // check id
         if(!self::exists($this->id))
-            App::returnError('HTTP/1.1 500', 'Update Error: point [id = ' . $this->id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Update Error: point [id = ' . $this->id . '] does not exist.');
 
         // check event_id
         require_once 'Event.php';
         if(!Event::exists($this->event_id))
-            App::returnError('HTTP/1.1 500', 'Update Error: event [id = ' . $this->event_id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Update Error: event [id = ' . $this->event_id . '] does not exist.');
 
         // check rank
         $ranks = self::ranks();
         if(!in_array($this->rank, $ranks))
-            App::returnError('HTTP/1.1 500', 'Update Error: rank must be within [' . implode(', ', $ranks) . '], [given = ' . $this->rank . '].');
+            App::returnError('HTTP/1.1 422', 'Update Error: rank must be within [' . implode(', ', $ranks) . '], [given = ' . $this->rank . '].');
 
         // proceed with update
         $stmt = $this->conn->prepare("UPDATE $this->table SET event_id = ?, rank = ?, value = ? WHERE id = ?");
@@ -220,7 +220,7 @@ class Point extends App
     {
         // check id
         if(!self::exists($this->id))
-            App::returnError('HTTP/1.1 500', 'Delete Error: point [id = ' . $this->id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Delete Error: point [id = ' . $this->id . '] does not exist.');
 
         // proceed with delete
         $stmt = $this->conn->prepare("DELETE FROM $this->table WHERE id = ?");

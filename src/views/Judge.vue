@@ -20,7 +20,7 @@
 						v-for="(criterion, criterionIndex) in criteria"
 						style="width: 13%"
 						class="text-center text-uppercase py-3"
-						:class="{ 'bg-grey-lighten-4': coordinates.x == criterionIndex }"
+						:class="{ 'bg-grey-lighten-4': coordinates.x == criterionIndex && !scoreSheetDisabled }"
 					>
 						<div class="d-flex h-100 flex-column align-content-space-between">
 							<p class="text-grey-darken-2">{{ criterion.title }}</p>
@@ -30,7 +30,7 @@
 					<th
 						style="width: 13%"
 						class="text-uppercase text-center text-grey-darken-4 font-weight-bold text-h5 py-3"
-						:class="{ 'bg-grey-lighten-4': coordinates.x == criteria.length }"
+						:class="{ 'bg-grey-lighten-4': coordinates.x == criteria.length && !scoreSheetDisabled }"
 					>
 						Total
 					</th>
@@ -43,7 +43,7 @@
 				<tr
 					v-for="(team, teamIndex) in teams"
 					:key="team.id"
-					:class="{ 'bg-grey-lighten-4': coordinates.y == teamIndex }"
+					:class="{ 'bg-grey-lighten-4': coordinates.y == teamIndex && !scoreSheetDisabled }"
 				>
 					<td class="text-uppercase text-center text-h4 font-weight-bold text-grey-darken-4">
 						{{ teamIndex + 1 }}
@@ -78,7 +78,7 @@
 					<td
 						v-for="(criterion, criterionIndex) in criteria"
 						:key="criterion.id"
-						:class="{ 'bg-grey-lighten-4': coordinates.x == criterionIndex }"
+						:class="{ 'bg-grey-lighten-4': coordinates.x == criterionIndex && !scoreSheetDisabled }"
 					>
 						<v-text-field
 							type="number"
@@ -112,7 +112,7 @@
 							@focus.passive="updateCoordinates(criterionIndex, teamIndex)"
 						/>
 					</td>
-					<td :class="{ 'bg-grey-lighten-4': coordinates.x == criteria.length }">
+					<td :class="{ 'bg-grey-lighten-4': coordinates.x == criteria.length && !scoreSheetDisabled }">
 						<v-text-field
 							type="number"
 							class="font-weight-bold"
@@ -289,7 +289,7 @@ export default {
 						this.event = data.event;
 						this.totals = {}
 
-						// Create total score for ratings
+						// create total score for ratings
 						for (let i = 0; i < this.teams.length; i++) {
 							let total = 0;
 							const rating = this.ratings[`${this.event.slug}_${this.teams[i].id}`];
@@ -313,14 +313,14 @@ export default {
 		saveRating(rating, percentage, teamId) {
 			this.totals[`loading_${teamId}`] = true;
 
-			// Ratings are evaluated before saving.
+			// validates rating
 			if (rating.value < 0 || rating.value === '') {
 				rating.value = 0;
 			} else if (rating.value > percentage) {
 				rating.value = percentage;
 			}
 
-			// Auto-save ratings
+			// auto-save ratings
 			$.ajax({
 				url: `${this.$store.getters.appURL}/${this.$store.getters['auth/getUser'].userType}.php`,
 				type: 'POST',
@@ -332,7 +332,7 @@ export default {
 				},
 				success: (data, textStatus, jqXHR) => {
 
-					// Accumulate ratings to total score
+					// accumulate ratings to total score
 					let total = 0;
 					const teamRating = this.ratings[`${this.event.slug}_${teamId}`];
 					for (let j = 0; j < this.criteria.length; j++) {
@@ -340,7 +340,7 @@ export default {
 						total += teamRating[`${this.$store.getters['auth/getUser'].id}_${criterion.id}_${teamId}`].value
 					}
 
-					// Accumulated total adds into totals object
+					// accumulate total adds into totals object
 					this.totals[`team_${teamId}`] = total;
 
 					if(this.totals[`loading_${teamId}`]) {
@@ -357,9 +357,10 @@ export default {
 			});
 		},
 		calculateTotalScores(team) {
+			// set loading state
 			this.totals[`loading_${team.id}`] = true;
 
-			// Check teams total score
+			// validates total scores
 			if (this.totals[`team_${team.id}`] < this.$store.state.rating.min || this.totals[`team_${team.id}`] === '') {
 				this.totals[`team_${team.id}`] = this.$store.state.rating.min;
 			}
@@ -367,7 +368,7 @@ export default {
 				this.totals[`team_${team.id}`] = this.$store.state.rating.max;
 			}
 
-			// Total score distributes to each rating according to criteria
+			// total score divided and distributed based on criteria percentage
 			let ratings = [];
 			for (let criterion of this.criteria) {
 				const rating = this.ratings[`${this.event.slug}_${team.id}`][`${this.$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`];
@@ -376,7 +377,7 @@ export default {
 				ratings.push(rating);
 			}
 
-			// Calls request to submit ratings
+			// auto-save total score
 			$.ajax({
 				url: `${this.$store.getters.appURL}/${this.$store.getters['auth/getUser'].userType}.php`,
 				type: 'POST',
@@ -402,7 +403,6 @@ export default {
 			})
 		},
 		openSubmitDialog() {
-
 			// Define minRating and maxRating
 			let minRating = this.$store.state.rating.min;
 			let maxRating = this.$store.state.rating.max;
@@ -420,9 +420,10 @@ export default {
 			}
 		},
 		submitRatings() {
+			// set loading state
 			this.submitLoading = true;
 
-			// Ratings are locked.
+			// make all ratings and totals lock
 			let ratings = [];
 			for (let i = 0; i < this.teams.length; i++) {
 				const team = this.teams[i];
@@ -434,7 +435,7 @@ export default {
 				}
 			}
 
-			// Calls request to submit ratings after ratings is locked.
+			// sends data when ratings are locked
 			$.ajax({
 				url: `${this.$store.getters.appURL}/${this.$store.getters['auth/getUser'].userType}.php`,
 				type: 'POST',
@@ -445,14 +446,13 @@ export default {
 					ratings
 				},
 				success: (data, textStatus, jqXHR) => {
-
+					// submit ratings then locks scoreSheet
 					if(this.submitLoading) {
 						setTimeout(() => {
 							this.submitLoading = false
 							this.submitDialog = false;
 						}, 600);
 					}
-
 					console.log(`${jqXHR.status}: ${jqXHR.statusText}`);
 				},
 				error: (error) => {
@@ -470,7 +470,7 @@ export default {
 					nextInput.select();
 			}
 		},
-		 moveDown (x, y) {
+	 	moveDown (x, y) {
 			// Move to input below
 			y += 1;
 			if(y < this.teams.length)
@@ -546,35 +546,32 @@ export default {
 				ctr += size;
 			}
 			return teamRanks;
-
 		},
 		scoreSheetHeight() {
 			return this.$store.getters.windowHeight - 64;
 		},
-		// scoreSheetDisabled() {
-		// 	let disabled = true;
-		// 		if(!this.totals['is_locked']) {
-		// 			disabled = false;
-		// 		}
-		//
-		// 	for (let i = 0; i < this.teams.length; i++) {
-		// 		const rating = this.ratings[`${this.event.slug}_${this.teams[i].id}`];
-		// 		for (let j = 0; j < this.criteria.length; j++) {
-		// 			const criterion = this.criteria[j];
-		// 			const ratings = rating[`${this.$store.getters['auth/getUser'].id}_${criterion.id}_${this.teams[i].id}`]
-		// 			if (!ratings.is_locked) {
-		// 				disabled = false;
-		// 				break;
-		// 			}
-		// 		}
-		// 	}
-		//
-		// 	// alert(disabled)
-		//
-		// 	return disabled;
-		// }
+		scoreSheetDisabled() {
+			// set disabled to true
+			let disabled = true;
+			// set disabled to totals
+			if(!this.totals['is_locked']) {
+				disabled = false;
+			}
+			// set disabled to ratings
+			for (let i = 0; i < this.teams.length; i++) {
+				const rating = this.ratings[`${this.event.slug}_${this.teams[i].id}`];
+				for (let j = 0; j < this.criteria.length; j++) {
+					const criterion = this.criteria[j];
+					const ratings = rating[`${this.$store.getters['auth/getUser'].id}_${criterion.id}_${this.teams[i].id}`]
+					if (!ratings.is_locked) {
+						disabled = false;
+						break;
+					}
+				}
+			}
+			return disabled;
+		}
 	},
-
     mounted() {
         this.$emit('startPing');
     }
