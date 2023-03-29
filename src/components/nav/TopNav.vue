@@ -1,17 +1,19 @@
 <template>
 	<v-app-bar color="black">
-		<v-app-bar-nav-icon @click.stop="$store.state.app.sideNav = !$store.state.app.sideNav" />
-		<h3 v-if="$vuetify.display.mdAndUp" id="topnav" class="ms-5">{{ $store.getters.appName }}</h3>
-		<h4 v-else-if="$vuetify.display.mdAndDown" id="topnav" class="ms-5">{{ $store.getters.appName }}</h4>
+		<v-app-bar-nav-icon
+			:class="$vuetify.display.mdAndDown ? 'ma-1' : ''"
+			@click.stop="$store.state.app.sideNav = !$store.state.app.sideNav"
+		/>
+		<h3 v-if="$vuetify.display.mdAndUp" id="topnav">{{ $store.getters.appName }}</h3>
+		<h5 v-else-if="$vuetify.display.mdAndDown" id="topnav">{{ $store.getters.appName }}</h5>
 		<v-spacer />
 		<div v-if="$store.getters['auth/getUser'] !== null">
-			<v-spacer />
 			<v-chip
-				class="ma-2 me-4"
 				:color="$store.getters['auth/getUser'] !== null ?
 					$store.getters['auth/getUser'].userType === 'admin' ? 'amber' :
 					$store.getters['auth/getUser'].userType === 'judge' ? 'green-lighten-2' :
 					'red-lighten-2' : ''"
+				:style="$vuetify.display.mdAndDown ? 'font-size: 12px' : ''"
 			>
 				<v-icon start icon="mdi-account-circle" />
 				{{ $store.getters['auth/getUser'].name }}
@@ -20,6 +22,7 @@
 			<v-avatar
 				size="35"
 				v-if="$vuetify.display.mdAndUp"
+				:class="$vuetify.display.mdAndUp ? 'ms-3' : ''"
 			>
 				<v-img
 					:src="`${$store.getters.appURL}/crud/uploads/${$store.getters['auth/getUser'].avatar}`"
@@ -36,10 +39,11 @@
 				<v-menu>
 					<template
 						v-slot:activator="{ props }"
-						class="position-fixed"
-						style="right: 0;"
 					>
-						<v-btn class="ma-3" icon="mdi-dots-vertical" v-bind="props" />
+						<v-btn
+							:class="$vuetify.display.mdAndDown ? 'ma-1' : 'ma-3'"
+							icon="mdi-dots-vertical"
+							v-bind="props" />
 					</template>
 					<v-list>
 						<v-list-item
