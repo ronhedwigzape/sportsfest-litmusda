@@ -1,7 +1,8 @@
 <template>
 	<v-navigation-drawer
 		theme="dark"
-        permanent
+		v-model="$store.state.app.sideNav"
+		:permanent="$vuetify.display.lgAndUp"
 	>
 		<v-col class="d-flex justify-center">
 			<v-img
@@ -48,7 +49,7 @@
         name: "SideNav",
         data() {
             return {
-
+				sideNavOpened: false
             }
         },
         methods: {
