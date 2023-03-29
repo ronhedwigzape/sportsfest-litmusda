@@ -12,7 +12,8 @@ export default createStore({
 
     state: {
         app: {
-            backendDir: 'app'
+            backendDir: 'app',
+            sideNav: false
         },
         window: {
             height: 0

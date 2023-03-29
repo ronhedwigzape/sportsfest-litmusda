@@ -4,7 +4,9 @@
 	<side-nav />
 
 	<!--	Admin Results	-->
-    <v-main v-if="$store.getters['auth/getUser'] !== null">
+    <v-main
+		v-if="$store.getters['auth/getUser'] !== null"
+	>
         <!-- results -->
 		<v-table 
 			v-if="$route.params.eventSlug && event" 
@@ -15,11 +17,18 @@
 		>
 			<thead>
 				<tr>
-					<th colspan="2" class="text-center text-uppercase font-weight-bold text-grey-darken-4 text-h5 py-3">
+					<th
+						colspan="2"
+						class="text-center text-uppercase font-weight-bold text-grey-darken-4 py-3"
+						:class="$vuetify.display.mdAndDown ? 'text-h6' : 'text-h5'"
+					>
 						{{ event.title}}
 					</th>
 					<template v-for="(technical, technicalKey, technicalIndex) in technicals" :key="technical.id">
-						<th class="text-center text-uppercase font-weight-bold text-red-darken-4 py-3">
+						<th
+							class="text-center text-uppercase font-weight-bold text-red-darken-4 py-3"
+							:class="$vuetify.display.mdAndDown ? 'text-caption' : ''"
+						>
 							Deduct {{ technicalIndex + 1 }}
                             <v-btn
                                 class="unlock"
@@ -36,6 +45,7 @@
 					<template v-for="judge in judges" :key="judge.id">
 						<th
 							class="text-center text-uppercase py-3"
+							:class="$vuetify.display.mdAndDown ? 'text-caption' : ''"
 						>
                             <v-btn
                                 class="unlock"
@@ -66,38 +76,64 @@
 								</b>
 							</div>
 						</th>
-						<th class="text-center text-uppercase py-3 text-blue-darken-2">
+						<th
+							class="text-center text-uppercase py-3 text-blue-darken-2"
+							:class="$vuetify.display.mdAndDown ? 'text-caption' : ''"
+						>
 							Judge
 							<div v-if="judge.is_chairman == 1">CHAIRMAN</div>
 							<div v-else>{{ judge.number }}</div>
 							<b class="text-blue-darken-3">Rank</b>
 						</th>
 					</template>
-					<th class="text-center text-uppercase font-weight-bold text-green-darken-4 py-3">
+					<th
+						class="text-center text-uppercase font-weight-bold text-green-darken-4 py-3"
+						:class="$vuetify.display.mdAndDown ? 'text-caption' : ''"
+					>
 						Average
 					</th>
-					<th class="text-center text-uppercase font-weight-bold text-blue-darken-4 py-3">
+					<th
+						class="text-center text-uppercase font-weight-bold text-blue-darken-4 py-3"
+						:class="$vuetify.display.mdAndDown ? 'text-caption' : ''"
+					>
 						Total Rank
 					</th>
-					<th class="text-center text-uppercase font-weight-bold text-grey-darken-1 py-3">
+					<th
+						class="text-center text-uppercase font-weight-bold text-grey-darken-1 py-3"
+						:class="$vuetify.display.mdAndDown ? 'text-caption' : ''"
+					>
 						Initial Rank
 					</th>
-					<th class="text-center text-uppercase font-weight-bold text-grey-darken-4 py-3">
+					<th
+						class="text-center text-uppercase font-weight-bold text-grey-darken-4 py-3"
+						:class="$vuetify.display.mdAndDown ? 'text-caption' : ''"
+					>
 						Final Rank
 					</th>
 				</tr>
 			</thead>
 			<tbody>
 			<tr v-for="(team, teamKey, teamIndex) in teams" :key="team.id">
-				<td class="text-h5 text-center font-weight-bold">{{ teamIndex + 1 }}</td>
-				<td class="text-center text-uppercase font-weight-bold" :style="{'color': team.color}">{{ team.name }}</td>
+				<td
+					class="text-center font-weight-bold"
+					:class="$vuetify.display.mdAndDown ? 'text-h6' : 'text-h5'"
+				>
+					{{ teamIndex + 1 }}
+				</td>
+				<td
+					class="text-center text-uppercase font-weight-bold"
+					:style="{'color': team.color}"
+					:class="$vuetify.display.mdAndDown ? 'text-caption' : ''"
+				>
+					{{ team.name }}
+				</td>
 				 <template v-for="(technical, technicalKey, technicalIndex) in technicals" :key="technical.id">
 					<td
 						class="text-center text-uppercase font-weight-bold text-red-darken-3"
 						:class="{
 							'bg-grey-lighten-3' : !team.deductions.inputs[technicalKey].is_locked,
 							'bg-white' : team.deductions.inputs[technicalKey].is_locked
-						}"
+						}, $vuetify.display.mdAndDown ? 'text-caption' : ''"
 					>
 						{{ team.deductions.inputs[technicalKey].value.toFixed(2) }}
 					</td>
@@ -110,7 +146,7 @@
 							'bg-white' : team.ratings.inputs[`judge_${judge.id}`].final.is_locked,
 							'text-dark-darken-1': judge.is_chairman == 0,
 							'text-red-darken-3': judge.is_chairman == 1
-						}"
+						}, $vuetify.display.mdAndDown ? 'text-caption' : ''"
 					>
 						{{ team.ratings.inputs[`judge_${judge.id}`].final.deducted.toFixed(2) }}
 					</td>
@@ -119,15 +155,34 @@
 						:class="{
 							'bg-grey-lighten-3' : !team.ratings.inputs[`judge_${judge.id}`].final.is_locked,
 							'bg-white' : team.ratings.inputs[`judge_${judge.id}`].final.is_locked
-						}"
+						}, $vuetify.display.mdAndDown ? 'text-caption' : ''"
 					>
 						{{ team.ratings.inputs[`judge_${judge.id}`].rank.fractional.toFixed(2) }}
 					</td>
 				</template>
-				<td class="text-center font-weight-bold text-green-darken-4">{{ team.ratings.average.toFixed(2) }}</td>
-				<td class="text-center font-weight-bold text-blue-darken-4">{{ team.rank.total.fractional.toFixed(2) }}</td>
-				<td class="text-center font-weight-bold text-grey-darken-1">{{ team.rank.initial.fractional.toFixed(2) }}</td>
-				<td class="text-center font-weight-bold">{{ team.rank.final.fractional }}</td>
+				<td
+					class="text-center font-weight-bold text-green-darken-4"
+					:class="$vuetify.display.mdAndDown ? 'text-caption' : ''"
+				>
+					{{ team.ratings.average.toFixed(2) }}</td>
+				<td
+					class="text-center font-weight-bold text-blue-darken-4"
+					:class="$vuetify.display.mdAndDown ? 'text-caption' : ''"
+				>
+					{{ team.rank.total.fractional.toFixed(2) }}
+				</td>
+				<td
+					class="text-center font-weight-bold text-grey-darken-1"
+					:class="$vuetify.display.mdAndDown ? 'text-caption' : ''"
+				>
+					{{ team.rank.initial.fractional.toFixed(2) }}
+				</td>
+				<td
+					class="text-center font-weight-bold"
+					:class="$vuetify.display.mdAndDown ? 'text-caption' : ''"
+				>
+					{{ team.rank.final.fractional }}
+				</td>
 			</tr>
 			</tbody>
 			<tfoot>
