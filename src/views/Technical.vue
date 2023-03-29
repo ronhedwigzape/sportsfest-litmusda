@@ -4,7 +4,10 @@
 	<side-nav />
 
 	<!--	Technical Deduction Sheet	-->
-	<v-main v-if="$store.getters['auth/getUser'] !== null">
+	<v-main
+		v-if="$store.getters['auth/getUser'] !== null"
+		@click="$store.state.app.sideNav = false"
+	>
 			<v-table
 				v-if="$route.params.eventSlug && event"
 				density="comfortable"
@@ -13,12 +16,17 @@
 			>
 				<thead>
 					<tr>
-						<th colspan="2" class="text-uppercase text-center font-weight-bold text-h4 text-grey-darken-4 py-3">
+						<th
+							colspan="2"
+							class="text-uppercase text-center font-weight-bold text-grey-darken-4 py-3"
+							:class="$vuetify.display.mdAndDown ? 'text-h6' : 'text-h4'"
+						>
 							{{ event.title }} 
 						</th>
 						<th
 							style="width: 1rem;"
-							class="text-uppercase text-center text-grey-darken-4 text-h4 py-3"
+							class="text-uppercase text-center text-grey-darken-4 py-3"
+							:class="$vuetify.display.mdAndDown ? 'text-subtitle-1' : 'text-h5'"
 						>
 							Deduction
 						</th>
@@ -30,18 +38,27 @@
 						:key="team.id"
 						:class="{ 'bg-grey-lighten-4': coordinates.y == teamIndex }"
 					>
-						<td class="text-uppercase text-center text-grey-darken-4 font-weight-bold text-h4" style="width: 0.2rem;">
+						<td
+							class="text-uppercase text-center text-grey-darken-4 font-weight-bold"
+							style="width: 0.2rem;"
+							:class="$vuetify.display.mdAndDown ? 'text-h5' : 'text-h4'"
+						>
 							{{ teamIndex + 1 }}
 						</td>
-						<td class="text-uppercase text-center font-weight-bold" style="width: 1rem;">
+						<td
+							class="text-uppercase text-center font-weight-bold"
+							style="width: 1rem;"
+							:style="{ 'color' : team.color }"
+							:class="$vuetify.display.mdAndDown ? 'text-caption' : ''"
+						>
 							<v-col align="center">
 								<v-img
 									:src="`${$store.getters.appURL}/crud/uploads/${team.logo}`"
 									:lazy-src="`${$store.getters.appURL}/crud/uploads/${team.logo}`"
 									aspect-ratio="1"
 									:alt="`${team.name} Logo`"
-									height="100"
-									width="100"
+									:height="$vuetify.display.mdAndDown ? 70 : 100"
+									:width="$vuetify.display.mdAndDown ? 70 : 100"
 								>
 									<template v-slot:placeholder>
 										<v-row
@@ -117,7 +134,7 @@
 						>
 							<v-card>
 								<v-card-title class="bg-black">
-									<v-icon>mdi-information</v-icon> Submit Deductions
+									<v-icon id="remind">mdi-information</v-icon> Submit Deductions
 								</v-card-title>
 								<v-card-text>
 									Please confirm that you wish to finalize the deductions for <b>{{ event.title }}</b>. This action cannot be undone.
@@ -345,6 +362,19 @@ tbody td {
 
 	animation: shine 10s ease infinite;
 }
+
+#remind {
+	animation: tilt-shaking 1s linear infinite;
+}
+
+@keyframes tilt-shaking {
+	0% { transform: rotate(0deg); }
+	25% { transform: rotate(6deg); }
+	50% { transform: rotate(0deg); }
+	75% { transform: rotate(-6deg); }
+	100% { transform: rotate(0deg); }
+}
+
 @keyframes shine {
 	0% {
 		background-position: 0% 50%;

@@ -8,8 +8,8 @@
 			<v-img
 				:src="`/${$store.getters.appName}/foundation-logo.png`"
 				alt="foundation-logo"
-				height="100"
-				width="100"
+				:height="$vuetify.display.mdAndDown ? 120 : 90"
+				:width="$vuetify.display.mdAndDown ? 120 : 90"
 			/>
 		</v-col>
 
@@ -36,7 +36,7 @@
         </v-list>
 		<template v-slot:append>
 			<v-col class="text-center mt-4" cols="12">
-				&copy; <strong class="text-uppercase">aclc iriga 2023</strong>
+				&copy; <strong class="text-uppercase">ACLC Iriga 2023</strong>
 			</v-col>
 		</template>
 	</v-navigation-drawer>
