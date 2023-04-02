@@ -19,7 +19,11 @@
                 </v-img>
 
                 <v-card id="card-login" class="mx-10 my-3 pa-1 elevation-10">
-                    <v-form class="bg-white pa-12 rounded" @submit.prevent="handleSubmit">
+                    <v-form
+						class="bg-white rounded"
+						@submit.prevent="handleSubmit"
+						:class="$vuetify.display.mdAndDown ? 'pa-6' : 'pa-12'"
+					>
                         <v-text-field
                             v-model="username"
                             :rules="[rules.required]"
@@ -27,7 +31,7 @@
                             variant="outlined"
                             required
                             autofocus
-                        ></v-text-field>
+                        />
                         <v-text-field
                             v-model="password"
                             :append-inner-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
@@ -39,7 +43,7 @@
                             counter
                             required
                             @click:appendInner="show1 = !show1"
-                        ></v-text-field>
+                        />
                         <v-code style="background: transparent;" align="right">
                             <v-btn
                                 class="mt-4 bg-amber-darken-1"

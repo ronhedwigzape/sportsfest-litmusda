@@ -1,7 +1,7 @@
 <template>
 	<v-app-bar color="black">
 		<v-app-bar-nav-icon
-			:class="$vuetify.display.mdAndDown ? 'ma-1' : ''"
+			:class="$vuetify.display.mdAndDown ? 'ma-1 pa-1' : ''"
 			@click.stop="$store.state.app.sideNav = !$store.state.app.sideNav"
 		/>
 		<h3 v-if="$vuetify.display.mdAndUp" id="topnav">{{ $store.getters.appName }}</h3>
@@ -59,7 +59,7 @@
 			</template>
 			<v-card class="bg-dark">
 				<v-card-title class="bg-black">
-				<v-icon>mdi-alert-circle</v-icon> Confirm Logout
+				<v-icon id="remind">mdi-alert-circle</v-icon> Confirm Logout
 				</v-card-title>
 				<v-card-text>Are you sure you want to log out?</v-card-text>
 				<v-card-actions>
@@ -137,6 +137,11 @@ export default {
 
 	animation: shine 10s ease infinite;
 }
+
+#remind {
+	animation: tilt-shaking 1s linear infinite;
+}
+
 @keyframes shine {
 	0% {
 		background-position: 0% 50%;
@@ -147,5 +152,13 @@ export default {
 	100% {
 		background-position: 0% 50%;
 	}
+}
+
+@keyframes tilt-shaking {
+	0% { transform: rotate(0deg); }
+	25% { transform: rotate(10deg); }
+	50% { transform: rotate(0deg); }
+	75% { transform: rotate(-10deg); }
+	100% { transform: rotate(0deg); }
 }
 </style>
