@@ -1,11 +1,11 @@
 <template>
-	<v-app-bar color="black">
+	<v-app-bar color="black" :class="{ 'pl-5': $vuetify.display.mdAndUp }">
 		<v-app-bar-nav-icon
-			:class="$vuetify.display.mdAndDown ? 'ma-1 pa-1' : ''"
+            v-if="$vuetify.display.smAndDown"
 			@click.stop="$store.state.app.sideNav = !$store.state.app.sideNav"
 		/>
 		<h3 v-if="$vuetify.display.mdAndUp" id="topnav">{{ $store.getters.appName }}</h3>
-		<h5 v-else-if="$vuetify.display.mdAndDown" id="topnav">{{ $store.getters.appName }}</h5>
+		<h4 v-else-if="$vuetify.display.smAndDown" id="topnav">{{ $store.getters.appName }}</h4>
 		<v-spacer />
 		<div v-if="$store.getters['auth/getUser'] !== null">
 			<v-chip
@@ -92,8 +92,7 @@ export default {
 	data() {
 		return {
 			dialog: false,
-			signedOut: false,
-			group: null
+			signedOut: false
 		}
 	},
 	methods: {
@@ -117,12 +116,7 @@ export default {
 				},
 			})
 		},
-	},
-	watch: {
-		group () {
-			this.$store.state.app.sideNav = false;
-		},
-	},
+	}
 }
 </script>
 
