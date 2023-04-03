@@ -6,7 +6,7 @@ class Event extends App
 {
     // table
     protected $table = 'events';
-    protected $table_noshows = 'event_noshows';
+    protected $table_noshows = 'noshows';
     protected $table_eliminations = 'eliminations';
 
     // properties
