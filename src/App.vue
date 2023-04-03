@@ -59,6 +59,10 @@
         methods: {
             handleWindowResize() {
                 this.$store.commit('setWindowHeight', window.innerHeight);
+
+                // check sidebar
+                if(this.$vuetify.display.smAndDown)
+                    this.$store.state.app.sideNav = false;
             },
 
             startPing() {
@@ -104,6 +108,10 @@
         mounted() {
             window.addEventListener('resize', this.handleWindowResize);
             this.handleWindowResize();
+
+            // manage sidebar
+            if(this.$vuetify.display.mdAndUp)
+                this.$store.state.app.sideNav = true;
         },
         destroyed() {
             window.removeEventListener('resize', this.handleWindowResize);
