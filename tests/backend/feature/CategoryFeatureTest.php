@@ -8,14 +8,21 @@ class CategoryFeatureTest extends PHPUnit\Framework\TestCase
 
     public function setUp(): void
     {
+        resetDatabase();
+
+        // insert a competition
+        $competition = new Competition();
+        $competition->setSlug('test');
+        $competition->setTitle('Test');
+        $competition->insert();
+
         // insert $this->category
         $this->category = new Category();
+        $this->category->setCompetitionId($competition->getId());
         $this->category->setSlug('literary');
         $this->category->setTitle('Literary Competition');
-        if(!Category::findBySlug($this->category->getSlug()))
-            $this->category->insert();
+        $this->category->insert();
     }
-
 
     /** @test */
     public function event_can_be_related_to_category()
