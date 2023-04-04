@@ -17,40 +17,40 @@ The User class is a PHP class that is used for creating user objects and perform
 
 To create a user object, instantiate the User class with the username, password and user type as parameters. For example:
 
-````
+```php
 $user = new User('johndoe', 'password123', 'customer');
-````
+```
 ### Authentication
 
 To authenticate a user, call the `signIn` method on the User object. This method checks if the provided credentials are valid and sets the user information in the `$_SESSION` variable.
 
-````
+```php
 $user->signIn();
-````
+```
 ### Retrieving User Information
 
 To retrieve user information, call the `toArray` method on the User object. This method returns an array of the user information.
 
-````
+```php
 $user_info = $user->toArray();
-````
+```
 ### Updating User Information
 
 To update user information, call the respective setter methods on the User object and then call the `update` method.
 
-````
+```php
 $user->setName('John Doe');
 $user->setAvatar('avatar.jpg');
-$user->setNumber(1234567890);
+$user->setNumber(1);
 $user->update();
-````
+```
 ### Getting Current User
 
 To get the current user information, call the `getUser` static method. This method retrieves the user information from the `$_SESSION` variable and returns an array.
 
-````
+```php
 $current_user = User::getUser();
-````
+```
 ### Other Methods
 
 - `authenticated()` - Checks if the user is authenticated.
@@ -65,7 +65,7 @@ $current_user = User::getUser();
 
 This code is released under the MIT License.
 
-````
+```php
 <?php
 
 // require the User class file
@@ -91,3 +91,4 @@ $user_info = $user->toArray();
 
 // output the user's information as JSON
 echo json_encode($user_info);
+```

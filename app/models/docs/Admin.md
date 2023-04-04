@@ -36,7 +36,7 @@ This method takes a prepared statement `$stmt` and executes it. It then returns 
 
 The `Admin` class requires the `User` class to be included. It also assumes that there is a database table called `admins` with columns `id`, `username`, `password`, and `role`. The database connection is assumed to be stored in the `User` class.
 
-````
+```php
 // First, create a new admin user
 $newAdmin = new Admin("newadmin", "password123");
 
@@ -54,3 +54,4 @@ $adminRows = Admin::rows();
 
 // Convert an admin object to an array
 $adminArray = $admin->toArray();
+```

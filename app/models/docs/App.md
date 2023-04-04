@@ -18,7 +18,7 @@ The `generateSlug` method is a static method that can be used to generate a slug
 
 The `App` class is a useful base class for creating web applications. It includes some helpful methods that can be used in various parts of the application. The `returnError` method is especially useful for handling errors, while the `generateSlug` method is useful for generating slugs that can be used in URLs.
 
-````
+```php
 <?php
 // instantiate the App class
 $app = new App();
@@ -31,3 +31,4 @@ $slug = App::generateSlug($title);
 $query = "SELECT * FROM posts WHERE slug = '$slug'";
 $result = $app->conn->query($query);
 // ...
+```
