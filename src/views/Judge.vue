@@ -105,7 +105,7 @@
 							single-line
 							:min="0"
 							:max="criterion.percentage"
-							@change="saveRating(ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`], criterion.percentage, team.id)"
+							@change="saveRating(ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`], criterion.percentage, team)"
 							v-model.number="ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value"
 							:class="{
 								'text-error font-weight-bold': (
@@ -136,27 +136,27 @@
 							variant="outlined"
 							hide-details
 							single-line
-							:loading="totals[`loading_${team.id}`]"
-							v-model.number="totals[`team_${team.id}`]"
+							:loading="totals[`team_${team.id}`].loading"
+							v-model.number="totals[`team_${team.id}`].value"
 							:min="$store.state.rating.min"
 							:max="$store.state.rating.max"
 							@change="calculateTotalScores(team)"
 							:class="{
 								'text-error font-weight-bold': (
-									totals[`team_${team.id}`] < $store.state.rating.min
-								|| totals[`team_${team.id}`] > $store.state.rating.max
+									totals[`team_${team.id}`].value < $store.state.rating.min
+								|| totals[`team_${team.id}`].value > $store.state.rating.max
 								),
 								'text-success font-weight-bold': (
-									totals[`team_${team.id}`] >= $store.state.rating.min
-								&& totals[`team_${team.id}`] <= $store.state.rating.max
+									totals[`team_${team.id}`].value >= $store.state.rating.min
+								&& totals[`team_${team.id}`].value <= $store.state.rating.max
 								)
 							}"
 							:error="(
-								  totals[`team_${team.id}`].toString().trim() === ''
-							   || totals[`team_${team.id}`] < $store.state.rating.min
-							   || totals[`team_${team.id}`] > $store.state.rating.max
+								  totals[`team_${team.id}`].value.toString().trim() === ''
+							   || totals[`team_${team.id}`].value < $store.state.rating.min
+							   || totals[`team_${team.id}`].value > $store.state.rating.max
 						   )"
-							:disabled="totals['is_locked']"
+							:disabled="totals[`team_${team.id}`].is_locked"
 							:id="`input_${teamIndex}_${criteria.length}`"
 							@keydown.down.prevent="moveDown(criteria.length, teamIndex)"
 							@keydown.enter="moveDown(criteria.length, teamIndex)"
@@ -178,7 +178,7 @@
 						<v-btn
 							class="py-7 bg-grey-lighten-1 text-grey-darken-3"
 							@click="openSubmitDialog"
-							:disabled="totals['is_locked']"
+							:disabled="scoreSheetDisabled"
 							block
 							flat
 						>
@@ -243,7 +243,6 @@
 		</div>
 	</v-main>
 </template>
-
 <script>
 import topNav from "../components/nav/TopNav.vue";
 import sideNav from "../components/nav/SideNav.vue";
@@ -286,7 +285,6 @@ export default {
 	},
 	methods: {
 		fetchScoreSheet() {
-
 			// fetch scoreSheet from backend
 			if (this.$route.params.eventSlug) {
 				$.ajax({
@@ -305,21 +303,20 @@ export default {
 						this.ratings = data.ratings;
 						this.event = data.event;
 						this.totals = {}
-
 						// create total score for ratings
 						for (let i = 0; i < this.teams.length; i++) {
 							let total = 0;
+							this.totals[`team_${this.teams[i].id}`] = {};
 							const rating = this.ratings[`${this.event.slug}_${this.teams[i].id}`];
 							for (let j = 0; j < this.criteria.length; j++) {
 								const criterion = this.criteria[j];
 								const value = rating[`${this.$store.getters['auth/getUser'].id}_${criterion.id}_${this.teams[i].id}`].value
-								this.totals['is_locked'] = rating[`${this.$store.getters['auth/getUser'].id}_${criterion.id}_${this.teams[i].id}`].is_locked
+								this.totals[`team_${this.teams[i].id}`].is_locked = rating[`${this.$store.getters['auth/getUser'].id}_${criterion.id}_${this.teams[i].id}`].is_locked
 								total += value;
 							}
-							this.totals[`team_${this.teams[i].id}`] = total;
-							this.totals[`loading_${this.teams[i].id}`] = false;
+							this.totals[`team_${this.teams[i].id}`].value = total;
+							this.totals[`team_${this.teams[i].id}`].loading = false;
 						}
-
 					},
 					error: (error) => {
 						alert(`ERROR ${error.status}: ${error.statusText}`);
@@ -327,16 +324,14 @@ export default {
 				});
 			}
 		},
-		saveRating(rating, percentage, teamId) {
-			this.totals[`loading_${teamId}`] = true;
-
+		saveRating(rating, percentage, team) {
+			this.totals[`team_${team.id}`].loading = true;
 			// validates rating
 			if (rating.value < 0 || rating.value === '') {
 				rating.value = 0;
 			} else if (rating.value > percentage) {
 				rating.value = percentage;
 			}
-
 			// auto-save ratings
 			$.ajax({
 				url: `${this.$store.getters.appURL}/${this.$store.getters['auth/getUser'].userType}.php`,
@@ -348,24 +343,21 @@ export default {
 					rating
 				},
 				success: (data, textStatus, jqXHR) => {
-
-					// accumulate ratings to total score
 					let total = 0;
-					const teamRating = this.ratings[`${this.event.slug}_${teamId}`];
+					// accumulate ratings to total score
+					const teamRating = this.ratings[`${this.event.slug}_${team.id}`];
 					for (let j = 0; j < this.criteria.length; j++) {
 						const criterion = this.criteria[j];
-						total += teamRating[`${this.$store.getters['auth/getUser'].id}_${criterion.id}_${teamId}`].value
+						total += teamRating[`${this.$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value
 					}
-
 					// accumulate total adds into totals object
-					this.totals[`team_${teamId}`] = total;
-
-					if(this.totals[`loading_${teamId}`]) {
+					this.totals[`team_${team.id}`].value = total;
+					// set timeout for loading
+					if(this.totals[`team_${team.id}`].loading) {
 						setTimeout(() => {
-							this.totals[`loading_${teamId}`] = false;
+							this.totals[`team_${team.id}`].loading = false;
 						}, 1000);
 					}
-
 					console.log(`${jqXHR.status}: ${jqXHR.statusText}`);
 				},
 				error: (error) => {
@@ -375,25 +367,22 @@ export default {
 		},
 		calculateTotalScores(team) {
 			// set loading state
-			this.totals[`loading_${team.id}`] = true;
-
+			this.totals[`team_${team.id}`].loading = true;
 			// validates total scores
-			if (this.totals[`team_${team.id}`] < this.$store.state.rating.min || this.totals[`team_${team.id}`] === '') {
-				this.totals[`team_${team.id}`] = this.$store.state.rating.min;
+			if (this.totals[`team_${team.id}`].value < this.$store.state.rating.min || this.totals[`team_${team.id}`].value === '') {
+				this.totals[`team_${team.id}`].value = this.$store.state.rating.min;
 			}
-			else if (this.totals[`team_${team.id}`] > this.$store.state.rating.max) {
-				this.totals[`team_${team.id}`] = this.$store.state.rating.max;
+			else if (this.totals[`team_${team.id}`].value > this.$store.state.rating.max) {
+				this.totals[`team_${team.id}`].value = this.$store.state.rating.max;
 			}
-
 			// total score divided and distributed based on criteria percentage
 			let ratings = [];
 			for (let criterion of this.criteria) {
 				const rating = this.ratings[`${this.event.slug}_${team.id}`][`${this.$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`];
-				rating.value = this.totals[`team_${team.id}`] * (criterion.percentage / 100);
+				rating.value = this.totals[`team_${team.id}`].value * (criterion.percentage / 100);
 				// Ratings are pushed to array
 				ratings.push(rating);
 			}
-
 			// auto-save total score
 			$.ajax({
 				url: `${this.$store.getters.appURL}/${this.$store.getters['auth/getUser'].userType}.php`,
@@ -405,13 +394,11 @@ export default {
 					ratings
 				},
 				success: (data, textStatus, jqXHR) => {
-
-					if(this.totals[`loading_${team.id}`]) {
+					if(this.totals[`team_${team.id}`].loading) {
 						setTimeout(() => {
-							this.totals[`loading_${team.id}`] = false;
+							this.totals[`team_${team.id}`].loading = false;
 						}, 1000);
 					}
-
 					console.log(`${jqXHR.status}: ${jqXHR.statusText}`);
 				},
 				error: (error) => {
@@ -426,7 +413,7 @@ export default {
 
 			// Opens dialog according to ratings
 			for (let i = 0; i < this.teams.length; i++) {
-				if (this.totals[`team_${this.teams[i].id}`] < minRating || this.totals[`team_${this.teams[i].id}`] > maxRating) {
+				if (this.totals[`team_${this.teams[i].id}`].value < minRating || this.totals[`team_${this.teams[i].id}`].value > maxRating) {
 					this.inspectDialog = true
 					this.submitDialog = false;
 					break;
@@ -439,7 +426,6 @@ export default {
 		submitRatings() {
 			// set loading state
 			this.submitLoading = true;
-
 			// make all ratings and totals lock
 			let ratings = [];
 			for (let i = 0; i < this.teams.length; i++) {
@@ -448,11 +434,10 @@ export default {
 					const rating = this.ratings[`${this.event.slug}_${team.id}`][`${this.$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`];
 					rating.is_locked = true;
 					ratings.push(rating);
-					this.totals['is_locked'] = true;
+					this.totals[`team_${team.id}`].is_locked = true;
 				}
 			}
-
-			// sends data when ratings are locked
+			// send data when ratings are locked
 			$.ajax({
 				url: `${this.$store.getters.appURL}/${this.$store.getters['auth/getUser'].userType}.php`,
 				type: 'POST',
@@ -478,7 +463,7 @@ export default {
 			})
 		},
 		move (x, y, focus = true) {
-			// Move to input
+			// move to input
 			const nextInput = document.querySelector(`#input_${y}_${x}`);
 			if(nextInput) {
 				if(focus)
@@ -488,30 +473,31 @@ export default {
 			}
 		},
 	 	moveDown (x, y) {
-			// Move to input below
+			// move to input below
 			y += 1;
 			if(y < this.teams.length)
 				this.move(x, y);
 		},
 		moveUp (x, y)  {
-			// Move to input above
+			// move to input above
 			y -= 1;
 			if(y >= 0)
 				this.move(x, y);
 		},
 		moveRight (x, y) {
-			// Move to input to the right
+			// move to input to the right
 			x += 1;
 			if(x <= this.criteria.length)
 				this.move(x, y);
 		},
 		moveLeft (x, y) {
-			// Move to input to the left
+			// move to input to the left
 			x -= 1;
 			if(x >= 0)
 				this.move(x, y);
 		},
 		updateCoordinates (x, y) {
+			// get input coordinates
 			this.coordinates.x = x;
 			this.coordinates.y = y;
 			this.move(x, y, false);
@@ -525,7 +511,7 @@ export default {
 			for(let i=0; i<this.teams.length; i++) {
 				const team    = this.teams[i];
 				const teamKey = `team_${team.id}`;
-				const total   = this.totals[teamKey];
+				const total   = this.totals[teamKey].value;
 				if(!uniqueTotals.includes(total))
 					uniqueTotals.push(total);
 				// push to teamRanks
@@ -540,7 +526,7 @@ export default {
 			for(let i=0; i<this.teams.length; i++) {
 				const team    = this.teams[i];
 				const teamKey = `team_${team.id}`;
-				const total = this.totals[teamKey];
+				const total = this.totals[teamKey].value;
 				const denseRank  = 1 + uniqueTotals.indexOf(total);
 				denseRanks[denseRank] = denseRank;
 				// push to rankGroup
@@ -568,24 +554,21 @@ export default {
 			return this.$store.getters.windowHeight - 64;
 		},
 		scoreSheetDisabled() {
-			// set disabled to true
+			// initialize disable
 			let disabled = true;
-			// set disabled to totals
-			if(!this.totals['is_locked']) {
-				disabled = false;
-			}
-			// set disabled to ratings
+			// get ratings.is_locked and pass value to disabled variable
 			for (let i = 0; i < this.teams.length; i++) {
-				const rating = this.ratings[`${this.event.slug}_${this.teams[i].id}`];
+				const ratings = this.ratings[`${this.event.slug}_${this.teams[i].id}`];
 				for (let j = 0; j < this.criteria.length; j++) {
 					const criterion = this.criteria[j];
-					const ratings = rating[`${this.$store.getters['auth/getUser'].id}_${criterion.id}_${this.teams[i].id}`]
-					if (!ratings.is_locked) {
+					const rating = ratings[`${this.$store.getters['auth/getUser'].id}_${criterion.id}_${this.teams[i].id}`]
+					if (!rating.is_locked) {
 						disabled = false;
 						break;
 					}
 				}
 			}
+			// return value
 			return disabled;
 		}
 	},
@@ -602,17 +585,6 @@ export default {
 	tbody td {
 		border-bottom: 1px solid #ddd;
 		padding: 1rem !important;
-	}
-
-	#submit {
-		background: linear-gradient(-45deg, #e73c7e, #23a6d5, #23d5ab, #e8af45);
-		background-size: 300% 300%;
-
-		text-fill-color: transparent;
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-
-		animation: shine 10s ease alternate infinite;
 	}
 
 	#warning {
