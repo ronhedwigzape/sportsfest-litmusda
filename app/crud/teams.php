@@ -186,6 +186,7 @@
             <table id="datatableid" class="table table-striped table-info text-center" >
                 <thead class="table-dark">
                 <tr>
+                    <th class="d-none"></th>
                     <th scope="col"></th>
                     <th scope="col">Name</th>
                     <th scope="col">Country</th>
@@ -200,6 +201,7 @@
                     $i += 1;
                 ?>
                     <tr>
+                        <td class="d-none"><?php echo $team->getId(); ?></td>
                         <td><?php echo $i; ?></td>
                         <td><?php echo $team->getName(); ?></td>
                         <td><?php echo $team->getCountry(); ?></td>
@@ -236,9 +238,9 @@
                     console.log(data);
 
                     $('#update_id').val(data[0]);
-                    $('#name').val(data[1]);
-                    $('#country').val(data[2]);
-                    $('#avatar').val(data[3]);
+                    $('#name').val(data[2]);
+                    $('#country').val(data[3]);
+                    $('#avatar').val(data[4]);
 
                 });
             });
