@@ -114,46 +114,50 @@
 			</tbody>
 			<!--	Dialog	  -->
 			<tfoot>
-			<td colspan="12">
-				<v-col align="center"
-					   justify="end"
-				>
-					<v-btn
-						class="py-7 bg-grey-lighten-1 text-grey-darken-3"
-						@click="submitDialog = true"
-						:disabled="scoreSheetDisabled"
-						block
-						flat
+			<tr>
+				<td colspan="12">
+					<v-col align="center"
+						   justify="end"
 					>
-						<p style="font-size: 1.2rem;">submit deductions</p>
-					</v-btn>
-					<v-dialog
-						v-model="submitDialog"
-						persistent
-						max-width="400"
-					>
-						<v-card>
-							<v-card-title class="bg-black">
-								<v-icon id="remind">mdi-information</v-icon>
-								Submit Deductions
-							</v-card-title>
-							<v-card-text>
-								Please confirm that you wish to finalize the deductions for <b>{{ event.title }}</b>.
-								This action cannot be undone.
-							</v-card-text>
-							<v-card-actions>
-								<v-spacer></v-spacer>
-								<v-btn prepend-icon="mdi-close" class="text-red-darken-1" @click="submitDialog = false">
-									Close
-								</v-btn>
-								<v-btn class="text-green-darken-1" :loading="submitLoading" @click="submitDeductions">
-									Submit
-								</v-btn>
-							</v-card-actions>
-						</v-card>
-					</v-dialog>
-				</v-col>
-			</td>
+						<v-btn
+							class="py-7 bg-grey-lighten-1 text-grey-darken-3"
+							@click="submitDialog = true"
+							:disabled="scoreSheetDisabled"
+							block
+							flat
+						>
+							<p style="font-size: 1.2rem;">submit deductions</p>
+						</v-btn>
+						<v-dialog
+							v-model="submitDialog"
+							persistent
+							max-width="400"
+						>
+							<v-card>
+								<v-card-title class="bg-black">
+									<v-icon id="remind">mdi-information</v-icon>
+									Submit Deductions
+								</v-card-title>
+								<v-card-text>
+									Please confirm that you wish to finalize the deductions for <b>{{ event.title }}</b>.
+									This action cannot be undone.
+								</v-card-text>
+								<v-card-actions>
+									<v-spacer></v-spacer>
+									<v-btn prepend-icon="mdi-close" class="text-red-darken-1"
+										   @click="submitDialog = false">
+										Close
+									</v-btn>
+									<v-btn class="text-green-darken-1" :loading="submitLoading"
+										   @click="submitDeductions">
+										Submit
+									</v-btn>
+								</v-card-actions>
+							</v-card>
+						</v-dialog>
+					</v-col>
+				</td>
+			</tr>
 			</tfoot>
 		</v-table>
 
