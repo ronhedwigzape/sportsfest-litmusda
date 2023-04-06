@@ -38,14 +38,14 @@
 				<th
 					style="width: 13%"
 					class="text-uppercase text-center text-grey-darken-4 font-weight-bold py-3"
-					:class="{ 'bg-grey-lighten-4': coordinates.x == criteria.length && !scoreSheetDisabled }, $vuetify.display.mdAndDown ? 'text-h6' : 'text-h4'"
+					:class="{ 'bg-grey-lighten-4': coordinates.x == criteria.length && !scoreSheetDisabled }, $vuetify.display.mdAndDown ? 'text-h6' : 'text-h5'"
 				>
 					Total
 				</th>
 				<th
 					style="width: 13%"
 					class="text-uppercase text-center text-grey-darken-4 font-weight-bold py-3"
-					:class="$vuetify.display.mdAndDown ? 'text-h6' : 'text-h4'"
+					:class="$vuetify.display.mdAndDown ? 'text-h6' : 'text-h5'"
 
 				>
 					Rank

@@ -18,15 +18,14 @@
 				<th
 					style="width: 13%;"
 					colspan="2"
-					class="text-uppercase text-center font-weight-bold text-grey-darken-4 py-3"
-					:class="$vuetify.display.mdAndDown ? 'text-h6' : 'text-h4'"
+					class="text-uppercase text-center font-weight-bold text-h4 text-grey-darken-4 py-3"
 				>
 					{{ event.title }}
 				</th>
 				<th
 					style="width: 13%;"
 					class="text-uppercase text-center text-grey-darken-4 py-3"
-					:class="$vuetify.display.mdAndDown ? 'text-subtitle-1' : 'text-h4'"
+					:class="$vuetify.display.mdAndDown ? 'text-h6' : 'text-h5'"
 				>
 					Deduction
 				</th>
@@ -126,7 +125,7 @@
 							block
 							flat
 						>
-							<p style="font-size: 1.2rem;">submit deductions</p>
+							<p style="font-size: 1.2rem;">Submit Deductions</p>
 						</v-btn>
 						<v-dialog
 							v-model="submitDialog"
