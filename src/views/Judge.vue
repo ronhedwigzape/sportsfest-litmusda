@@ -519,7 +519,7 @@ export default {
 					ratings.push(rating);
 				}
 			}
-			// send data when ratings are locked
+			// send data
 			$.ajax({
 				url: `${this.$store.getters.appURL}/${this.$store.getters['auth/getUser'].userType}.php`,
 				type: 'POST',
@@ -527,7 +527,8 @@ export default {
 					withCredentials: true
 				},
 				data: {
-					ratings
+					ratings,
+                    locking: true
 				},
 				success: (data, textStatus, jqXHR) => {
 					if (this.submitLoading) {
@@ -542,23 +543,6 @@ export default {
 							for (let i = 0; i < this.teams.length; i++) {
 								this.totals[`team_${this.teams[i].id}`].is_locked = true;
 							}
-							// make another request for storing rating.is_locked value to database
-							$.ajax({
-								url: `${this.$store.getters.appURL}/${this.$store.getters['auth/getUser'].userType}.php`,
-								type: 'POST',
-								xhrFields: {
-									withCredentials: true
-								},
-								data: {
-									ratings
-								},
-								success: (data, textStatus, jqXHR) => {
-									console.log(`${jqXHR.status}: ${jqXHR.statusText}`);
-								},
-								error: (error) => {
-									alert(`ERROR ${error.status}: ${error.statusText}`);
-								}
-							});
 						}, 600);
 					}
 					console.log(`${jqXHR.status}: ${jqXHR.statusText}`);
