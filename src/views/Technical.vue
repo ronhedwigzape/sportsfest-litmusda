@@ -144,9 +144,9 @@
 								</v-card-text>
 								<v-card-actions>
 									<v-spacer></v-spacer>
-									<v-btn prepend-icon="mdi-close" class="text-red-darken-1"
+									<v-btn class="text-red-darken-1"
 										   @click="submitDialog = false">
-										Close
+										Go Back
 									</v-btn>
 									<v-btn class="text-green-darken-1" :loading="submitLoading"
 										   @click="submitDeductions">

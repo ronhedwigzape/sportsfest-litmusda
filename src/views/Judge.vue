@@ -205,8 +205,8 @@
 								</v-card-text>
 								<v-card-actions>
 									<v-spacer></v-spacer>
-									<v-btn prepend-icon="mdi-close" class="text-red-darken-1"
-										   @click="submitDialog = false">Close
+									<v-btn class="text-red-darken-1" @click="submitDialog = false">
+                                        Go Back
 									</v-btn>
 									<v-btn class="text-green-darken-1" :loading="submitLoading" @click="submitRatings">
 										Submit
@@ -236,8 +236,8 @@
 								</v-card-text>
 								<v-card-actions>
 									<v-spacer></v-spacer>
-									<v-btn color="red-darken-4" prepend-icon="mdi-close" @click="inspectDialog = false">
-										Close
+									<v-btn color="red-darken-4" @click="inspectDialog = false">
+										Go Back
 									</v-btn>
 								</v-card-actions>
 							</v-card>
