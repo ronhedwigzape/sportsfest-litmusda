@@ -86,7 +86,7 @@
 						single-line
 						:min="0"
 						:max="100"
-						:loading="deductions[`loading_${team.id}`]"
+						:loading="deductions[`${event.slug}_${team.id}`].loading"
 						v-model.number="deductions[`${event.slug}_${team.id}`].value"
 						@change="saveDeduction(deductions[`${event.slug}_${team.id}`], team.id)"
 						:class="{
@@ -263,7 +263,7 @@ export default {
 			}
 		},
 		saveDeduction(deduction, teamId) {
-			this.deductions[`loading_${teamId}`] = true
+            deduction.loading = true;
 
 			if (deduction.value < 0 || deduction.value === '') {
 				deduction.value = 0;
@@ -280,9 +280,9 @@ export default {
 					deduction: deduction
 				},
 				success: (data, textStatus, jqXHR) => {
-					if (this.deductions[`loading_${teamId}`]) {
+					if (deduction.loading) {
 						setTimeout(() => {
-							this.deductions[`loading_${teamId}`] = false;
+                            deduction.loading = false;
 						}, 1000);
 					}
 					console.log(`${jqXHR.status}: ${jqXHR.statusText}`);
