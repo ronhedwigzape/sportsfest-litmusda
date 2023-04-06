@@ -39,12 +39,12 @@
                         <div class="modal-body">
                             <div class="form-group">
                                 <label> Number </label>
-                                <input type="number" name="number" class="form-control" placeholder="Enter your Number" min="1" max="256" autocomplete="off" required>
+                                <input type="number" name="number" class="form-control" placeholder="Enter Number" min="1" max="256" autocomplete="off" required>
                             </div>
 
                             <div class="form-group">
                                 <label> Name </label>
-                                <input type="text" name="name" class="form-control" placeholder="Enter your Name" autocomplete="off" required>
+                                <input type="text" name="name" class="form-control" placeholder="Enter Name" autocomplete="off" required>
                             </div>
 
                             <div class="form-group">
@@ -62,13 +62,13 @@
 
                             <div class="form-group">
                                 <label>Username</label>
-                                <input type="text" name="username" pattern="[a-zA-Z0-9]+" class="form-control" placeholder="Enter your Username" autocomplete="off" required>
+                                <input type="text" name="username" pattern="[a-zA-Z0-9]+" class="form-control" placeholder="Enter Username" autocomplete="off" required>
                             </div>
 
                             <div class="form-group">
                                 <label> Password </label>
                                 <div class="input-group">
-                                    <input type="password" name="password" class="form-control" placeholder="Enter your password" autocomplete="off" pattern="^(?=.*[a-zA-Z])(?=.*\d).+$" required>
+                                    <input type="password" name="password" class="form-control" placeholder="Enter Password" autocomplete="off" pattern="^(?=.*[a-zA-Z])(?=.*\d).+$" required>
                                     <button type="button" class="btn btn-secondary toggle-password" data-toggle="tooltip" data-placement="bottom" title="Toggle password visibility"><i class="fas fa-eye"></i></button>
                                 </div>
                             </div>
@@ -100,12 +100,12 @@
                             <input type="hidden" name="update_id" id="update_id">
                             <div class="form-group">
                                 <label> Number </label>
-                                <input type="number" name="number" id="number" class="form-control" placeholder="Enter your Number" min="1" max="256" autocomplete="off" required>
+                                <input type="number" name="number" id="number" class="form-control" placeholder="Enter Number" min="1" max="256" autocomplete="off" required>
                             </div>
 
                             <div class="form-group">
                                 <label> Name </label>
-                                <input type="text" name="name" id="name" class="form-control" placeholder="Enter your Name" autocomplete="off" required>
+                                <input type="text" name="name" id="name" class="form-control" placeholder="Enter Name" autocomplete="off" required>
                             </div>
 
                             <div class="form-group">
@@ -123,13 +123,13 @@
 
                             <div class="form-group">
                                 <label>Username</label>
-                                <input type="text" name="username" id="username" pattern="[a-zA-Z0-9]+" class="form-control" placeholder="Enter your Username" autocomplete="off" required>
+                                <input type="text" name="username" id="username" pattern="[a-zA-Z0-9]+" class="form-control" placeholder="Enter Username" autocomplete="off" required>
                             </div>
 
                             <div class="form-group">
                                 <label> Password </label>
                                 <div class="input-group">
-                                    <input type="password" name="password" id="password" class="form-control" placeholder="Enter your password" autocomplete="off" pattern="^(?=.*[a-zA-Z])(?=.*\d).+$" required>
+                                    <input type="password" name="password" id="password" class="form-control" placeholder="Enter Password" autocomplete="off" pattern="^(?=.*[a-zA-Z])(?=.*\d).+$" required>
                                     <button type="button" class="btn btn-secondary toggle-password" data-toggle="tooltip" data-placement="bottom" title="Toggle password visibility"><i class="fas fa-eye"></i></button>
                                 </div>
                             </div>
