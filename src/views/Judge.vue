@@ -13,7 +13,11 @@
 		>
 			<thead>
 				<tr>
-					<th colspan="2" class="text-uppercase text-center font-weight-bold text-h4 text-grey-darken-4 py-3">
+					<th
+                        colspan="2"
+                        class="text-uppercase text-center font-weight-bold text-grey-darken-4 py-3"
+                        :class="$vuetify.display.mdAndDown ? 'text-h5' : 'text-h4'"
+                    >
 						{{ event.title }}
 					</th>
 					<th
@@ -30,15 +34,14 @@
 					<th
 						style="width: 13%"
 						class="text-uppercase text-center text-grey-darken-4 font-weight-bold py-3"
-						:class="{ 'bg-grey-lighten-4': coordinates.x == criteria.length && !scoreSheetDisabled }, $vuetify.display.mdAndDown ? 'text-h6' : 'text-h4'"
+						:class="{ 'bg-grey-lighten-4': coordinates.x == criteria.length && !scoreSheetDisabled }, $vuetify.display.mdAndDown ? 'text-body-1' : 'text-h6'"
 					>
 						Total
 					</th>
 					<th
 						style="width: 13%"
 						class="text-uppercase text-center text-grey-darken-4 font-weight-bold py-3"
-						:class="$vuetify.display.mdAndDown ? 'text-h6' : 'text-h4'"
-
+                        :class="$vuetify.display.mdAndDown ? 'text-body-1' : 'text-h6'"
 					>
 						Rank
 					</th>
@@ -210,7 +213,7 @@
 								</v-card-text>
 								<v-card-actions>
 									<v-spacer></v-spacer>
-									<v-btn color="red-darken-4" prepend-icon="mdi-close" @click="inspectDialog = false">Close</v-btn>
+									<v-btn color="red-darken-4" @click="inspectDialog = false">Go Back</v-btn>
 								</v-card-actions>
 							</v-card>
 						</v-dialog>

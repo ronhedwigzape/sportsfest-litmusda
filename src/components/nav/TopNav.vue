@@ -90,43 +90,43 @@
 
 
 <script>
-import $ from "jquery";
+    import $ from "jquery";
 
-export default {
-	name: "TopNav",
-	data() {
-		return {
-			dialog: false,
-            signingOut: false,
-			signedOut: false
-		}
-	},
-	methods: {
-		signOut() {
-            this.signingOut = true;
-			$.ajax({
-				url: `${this.$store.getters.appURL}/index.php`,
-				type: 'POST',
-				xhrFields: {
-					withCredentials: true
-				},
-				data: {
-					signOut: this.signedOut
-				},
-				success: (data) => {
-					data = JSON.parse(data);
-					this.$store.commit('auth/setUser', data.user = null);
-					this.$router.push('/');
-                    this.signingOut = false;
-				},
-				error: (error) => {
-					alert(`ERROR ${error.status}: ${error.statusText}`);
-                    this.signingOut = false;
-				},
-			})
-		},
-	}
-}
+    export default {
+        name: "TopNav",
+        data() {
+            return {
+                dialog: false,
+                signingOut: false,
+                signedOut: false
+            }
+        },
+        methods: {
+            signOut() {
+                this.signingOut = true;
+                $.ajax({
+                    url: `${this.$store.getters.appURL}/index.php`,
+                    type: 'POST',
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    data: {
+                        signOut: this.signedOut
+                    },
+                    success: (data) => {
+                        data = JSON.parse(data);
+                        this.$store.commit('auth/setUser', data.user = null);
+                        this.$router.push('/');
+                        this.signingOut = false;
+                    },
+                    error: (error) => {
+                        alert(`ERROR ${error.status}: ${error.statusText}`);
+                        this.signingOut = false;
+                    },
+                })
+            },
+        }
+    }
 </script>
 
 

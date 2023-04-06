@@ -16,6 +16,7 @@
 	</v-app>
 </template>
 
+
 <script>
     import $ from 'jquery';
 

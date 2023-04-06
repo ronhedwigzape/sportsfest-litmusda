@@ -17,15 +17,15 @@
                 <tr>
                     <th
                         colspan="2"
-                        class="text-uppercase text-center font-weight-bold text-grey-darken-4 py-3"
-                        :class="$vuetify.display.mdAndDown ? 'text-h6' : 'text-h4'"
+                        class="text-uppercase text-center font-weight-bold text-h4 text-grey-darken-4 py-3"
+                        :class="$vuetify.display.mdAndDown ? 'text-h5' : 'text-h4'"
                     >
                         {{ event.title }}
                     </th>
                     <th
                         style="width: 1rem;"
                         class="text-uppercase text-center text-grey-darken-4 py-3"
-                        :class="$vuetify.display.mdAndDown ? 'text-subtitle-1' : 'text-h5'"
+                        :class="$vuetify.display.mdAndDown ? 'text-body-1' : 'text-h6'"
                     >
                         Deduction
                     </th>
