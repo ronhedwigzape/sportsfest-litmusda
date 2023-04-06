@@ -353,7 +353,7 @@ class Technical extends User
 
         // update or insert
         if($stored)
-            $deduction->update();
+            $deduction->update(true);
         else
             $deduction->insert();
     }

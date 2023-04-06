@@ -1,12 +1,12 @@
 <template>
 	<v-app-bar color="black" :class="{ 'pl-5': $vuetify.display.mdAndUp }">
 		<v-app-bar-nav-icon
-            v-if="$vuetify.display.smAndDown"
+			v-if="$vuetify.display.smAndDown"
 			@click.stop="$store.state.app.sideNav = !$store.state.app.sideNav"
 		/>
 		<h3 v-if="$vuetify.display.mdAndUp" id="topnav">{{ $store.getters.appName }}</h3>
 		<h4 v-else-if="$vuetify.display.smAndDown" id="topnav">{{ $store.getters.appName }}</h4>
-		<v-spacer />
+		<v-spacer/>
 		<div v-if="$store.getters['auth/getUser'] !== null">
 			<v-chip
 				:color="$store.getters['auth/getUser'] !== null ?
@@ -15,7 +15,7 @@
 					'red-lighten-2' : ''"
 				:style="$vuetify.display.mdAndDown ? 'font-size: 12px' : ''"
 			>
-				<v-icon start icon="mdi-account-circle" />
+				<v-icon start icon="mdi-account-circle"/>
 				{{ $store.getters['auth/getUser'].name }}
 			</v-chip>
 
@@ -43,7 +43,7 @@
 						<v-btn
 							:class="$vuetify.display.mdAndDown ? 'ma-1' : 'ma-3'"
 							icon="mdi-dots-vertical"
-							v-bind="props" />
+							v-bind="props"/>
 					</template>
 					<v-list>
 						<v-list-item
@@ -51,15 +51,17 @@
 							class="text-red-darken-3 text-uppercase"
 							style="font-size: 1rem;"
 							variant="text"
-						><v-icon icon="mdi-logout"/>
-							Logout
+						>
+							<v-icon icon="mdi-logout"/>
+							Log Out
 						</v-list-item>
 					</v-list>
 				</v-menu>
 			</template>
 			<v-card class="bg-dark">
 				<v-card-title class="bg-black">
-				<v-icon id="remind">mdi-alert-circle</v-icon> Confirm Logout
+					<v-icon id="remind">mdi-alert-circle</v-icon>
+					Confirm Logout
 				</v-card-title>
 				<v-card-text>Are you sure you want to log out?</v-card-text>
 				<v-card-actions>
@@ -68,6 +70,7 @@
 						color="green-darken-1"
 						variant="text"
 						@click="dialog = false"
+                        :disabled="signingOut"
 					>
 						Go Back
 					</v-btn>
@@ -75,6 +78,7 @@
 						color="red-darken-1"
 						variant="text"
 						@click="signOut"
+                        :loading="signingOut"
 					>
 						Log Out
 					</v-btn>
@@ -92,11 +96,13 @@ export default {
 	data() {
 		return {
 			dialog: false,
+            signingOut: false,
 			signedOut: false
 		}
 	},
 	methods: {
 		signOut() {
+            this.signingOut = true;
 			$.ajax({
 				url: `${this.$store.getters.appURL}/index.php`,
 				type: 'POST',
@@ -110,9 +116,11 @@ export default {
 					data = JSON.parse(data);
 					this.$store.commit('auth/setUser', data.user = null);
 					this.$router.push('/');
+                    this.signingOut = false;
 				},
 				error: (error) => {
 					alert(`ERROR ${error.status}: ${error.statusText}`);
+                    this.signingOut = false;
 				},
 			})
 		},
@@ -149,10 +157,20 @@ export default {
 }
 
 @keyframes tilt-shaking {
-	0% { transform: rotate(0deg); }
-	25% { transform: rotate(10deg); }
-	50% { transform: rotate(0deg); }
-	75% { transform: rotate(-10deg); }
-	100% { transform: rotate(0deg); }
+	0% {
+		transform: rotate(0deg);
+	}
+	25% {
+		transform: rotate(10deg);
+	}
+	50% {
+		transform: rotate(0deg);
+	}
+	75% {
+		transform: rotate(-10deg);
+	}
+	100% {
+		transform: rotate(0deg);
+	}
 }
 </style>

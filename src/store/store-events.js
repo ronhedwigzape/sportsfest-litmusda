@@ -15,19 +15,19 @@ export default {
         },
         getCategorizedEvents(state) {
             const categories = [];
-            for(let i = 0; i < state.categories.length; i++) {
+            for (let i = 0; i < state.categories.length; i++) {
                 const category = state.categories[i];
 
                 // scan category Events
                 const categoryEvents = [];
-                for(let j = 0; j < state.events.length; j++) {
+                for (let j = 0; j < state.events.length; j++) {
                     const event = state.events[j];
-                    if(event.category_id === category.id)
+                    if (event.category_id === category.id)
                         categoryEvents.push(event);
                 }
 
                 // push to categories
-                if(categoryEvents.length > 0) {
+                if (categoryEvents.length > 0) {
                     categories.push({
                         category,
                         events: categoryEvents
