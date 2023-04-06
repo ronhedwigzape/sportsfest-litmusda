@@ -304,7 +304,7 @@ export default {
 				deductions.push(deduction);
 			}
 
-			// Calls request to submit deductions after deduction is locked.
+			// submit deductions
 			$.ajax({
 				url: `${this.$store.getters.appURL}/${this.$store.getters['auth/getUser'].userType}.php`,
 				type: 'POST',
@@ -312,10 +312,10 @@ export default {
 					withCredentials: true
 				},
 				data: {
-					deductions
+					deductions,
+                    locking: true
 				},
 				success: (data, textStatus, jqXHR) => {
-
 					if (this.submitLoading) {
 						setTimeout(() => {
 							this.submitLoading = false
@@ -324,23 +324,6 @@ export default {
 							for (let i = 0; i < deductions.length; i++) {
 								deductions[i].is_locked = true;
 							}
-							// make request again for storing deduction.is_locked
-							$.ajax({
-								url: `${this.$store.getters.appURL}/${this.$store.getters['auth/getUser'].userType}.php`,
-								type: 'POST',
-								xhrFields: {
-									withCredentials: true
-								},
-								data: {
-									deductions
-								},
-								success: (data, textStatus, jqXHR) => {
-									console.log(`${jqXHR.status}: ${jqXHR.statusText}`);
-								},
-								error: (error) => {
-									alert(`ERROR ${error.status}: ${error.statusText}`);
-								}
-							});
 						}, 600);
 					}
 
