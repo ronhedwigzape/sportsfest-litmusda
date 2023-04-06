@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import {createRouter, createWebHistory} from 'vue-router'
 import store from '../store'
 
 const router = createRouter({
@@ -10,8 +10,8 @@ const router = createRouter({
             component: () => import('../views/Login.vue'),
             beforeEnter: (to, from, next) => {
                 const user = store.getters['auth/getUser'];
-                if(user)
-                    next({ name: user.userType });
+                if (user)
+                    next({name: user.userType});
                 else
                     next();
             }
@@ -22,11 +22,11 @@ const router = createRouter({
             component: () => import('../views/Admin.vue'),
             beforeEnter: (to, from, next) => {
                 const user = store.getters['auth/getUser'];
-                if(!user)
-                    next({ name: 'login' });
+                if (!user)
+                    next({name: 'login'});
                 else {
-                    if(user.userType !== to.name)
-                        next({ name: user.userType })
+                    if (user.userType !== to.name)
+                        next({name: user.userType})
                     else
                         next();
                 }
@@ -38,11 +38,11 @@ const router = createRouter({
             component: () => import('../views/Judge.vue'),
             beforeEnter: (to, from, next) => {
                 const user = store.getters['auth/getUser'];
-                if(!user)
-                    next({ name: 'login' });
+                if (!user)
+                    next({name: 'login'});
                 else {
-                    if(user.userType !== to.name)
-                        next({ name: user.userType })
+                    if (user.userType !== to.name)
+                        next({name: user.userType})
                     else
                         next();
                 }
@@ -54,11 +54,11 @@ const router = createRouter({
             component: () => import('../views/Technical.vue'),
             beforeEnter: (to, from, next) => {
                 const user = store.getters['auth/getUser'];
-                if(!user)
-                    next({ name: 'login' });
+                if (!user)
+                    next({name: 'login'});
                 else {
-                    if(user.userType !== to.name)
-                        next({ name: user.userType })
+                    if (user.userType !== to.name)
+                        next({name: user.userType})
                     else
                         next();
                 }

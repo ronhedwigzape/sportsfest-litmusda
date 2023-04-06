@@ -5,7 +5,7 @@ require_once 'User.php';
 class Judge extends User
 {
     // table
-    protected $table_events = 'judge_events';
+    protected $table_events = 'judge_event';
 
     // properties
     protected $is_chairman = false;
@@ -467,7 +467,7 @@ class Judge extends User
 
         // update or insert
         if($stored)
-            $rating->update();
+            $rating->update(true);
         else
             $rating->insert();
     }

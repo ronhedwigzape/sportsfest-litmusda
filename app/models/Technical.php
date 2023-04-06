@@ -5,7 +5,7 @@ require_once 'User.php';
 class Technical extends User
 {
     // table
-    protected $table_events = 'technical_events';
+    protected $table_events = 'technical_event';
 
 
     /***************************************************************************
@@ -353,7 +353,7 @@ class Technical extends User
 
         // update or insert
         if($stored)
-            $deduction->update();
+            $deduction->update(true);
         else
             $deduction->insert();
     }

@@ -66,17 +66,22 @@ else {
             );
         }
 
-        // set is_locked ratings to true
+        // submit ratings
         else if(isset($_POST['ratings'])) {
             require_once 'models/Criterion.php';
             require_once 'models/Team.php';
+
+            // determine if locking ratings or not
+            $locking = false;
+            if(isset($_POST['locking']))
+                $locking = filter_var($_POST['locking'], FILTER_VALIDATE_BOOLEAN);
 
             foreach($_POST['ratings'] as $rating) {
                 $judge->setCriterionTeamRating(
                     Criterion::findById($rating['criterion_id']),
                     Team::findById($rating['team_id']),
                     floatval($rating['value']),
-                    filter_var($rating['is_locked'], FILTER_VALIDATE_BOOLEAN)
+                    filter_var($rating['is_locked'], FILTER_VALIDATE_BOOLEAN) || $locking
                 );
             }
         }
