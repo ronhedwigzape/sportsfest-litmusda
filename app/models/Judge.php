@@ -467,7 +467,7 @@ class Judge extends User
 
         // update or insert
         if($stored)
-            $rating->update();
+            $rating->update(true);
         else
             $rating->insert();
     }

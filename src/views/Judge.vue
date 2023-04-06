@@ -38,14 +38,14 @@
 				<th
 					style="width: 13%"
 					class="text-uppercase text-center text-grey-darken-4 font-weight-bold py-3"
-					:class="{ 'bg-grey-lighten-4': coordinates.x == criteria.length && !scoreSheetDisabled }, $vuetify.display.mdAndDown ? 'text-h6' : 'text-h4'"
+					:class="{ 'bg-grey-lighten-4': coordinates.x == criteria.length && !scoreSheetDisabled }, $vuetify.display.mdAndDown ? 'text-h6' : 'text-h5'"
 				>
 					Total
 				</th>
 				<th
 					style="width: 13%"
 					class="text-uppercase text-center text-grey-darken-4 font-weight-bold py-3"
-					:class="$vuetify.display.mdAndDown ? 'text-h6' : 'text-h4'"
+					:class="$vuetify.display.mdAndDown ? 'text-h6' : 'text-h5'"
 
 				>
 					Rank
@@ -205,8 +205,8 @@
 								</v-card-text>
 								<v-card-actions>
 									<v-spacer></v-spacer>
-									<v-btn prepend-icon="mdi-close" class="text-red-darken-1"
-										   @click="submitDialog = false">Close
+									<v-btn class="text-red-darken-1" @click="submitDialog = false">
+                                        Go Back
 									</v-btn>
 									<v-btn class="text-green-darken-1" :loading="submitLoading" @click="submitRatings">
 										Submit
@@ -236,8 +236,8 @@
 								</v-card-text>
 								<v-card-actions>
 									<v-spacer></v-spacer>
-									<v-btn color="red-darken-4" prepend-icon="mdi-close" @click="inspectDialog = false">
-										Close
+									<v-btn color="red-darken-4" @click="inspectDialog = false">
+										Go Back
 									</v-btn>
 								</v-card-actions>
 							</v-card>
@@ -519,7 +519,7 @@ export default {
 					ratings.push(rating);
 				}
 			}
-			// send data when ratings are locked
+			// send data
 			$.ajax({
 				url: `${this.$store.getters.appURL}/${this.$store.getters['auth/getUser'].userType}.php`,
 				type: 'POST',
@@ -527,7 +527,8 @@ export default {
 					withCredentials: true
 				},
 				data: {
-					ratings
+					ratings,
+                    locking: true
 				},
 				success: (data, textStatus, jqXHR) => {
 					if (this.submitLoading) {
@@ -542,28 +543,12 @@ export default {
 							for (let i = 0; i < this.teams.length; i++) {
 								this.totals[`team_${this.teams[i].id}`].is_locked = true;
 							}
-							// make another request for storing rating.is_locked value to database
-							$.ajax({
-								url: `${this.$store.getters.appURL}/${this.$store.getters['auth/getUser'].userType}.php`,
-								type: 'POST',
-								xhrFields: {
-									withCredentials: true
-								},
-								data: {
-									ratings
-								},
-								success: (data, textStatus, jqXHR) => {
-									console.log(`${jqXHR.status}: ${jqXHR.statusText}`);
-								},
-								error: (error) => {
-									alert(`ERROR ${error.status}: ${error.statusText}`);
-								}
-							});
 						}, 600);
 					}
 					console.log(`${jqXHR.status}: ${jqXHR.statusText}`);
 				},
 				error: (error) => {
+                    this.submitLoading = false
 					alert(`ERROR ${error.status}: ${error.statusText}`);
 				}
 			})

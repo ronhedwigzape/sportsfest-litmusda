@@ -18,15 +18,14 @@
 				<th
 					style="width: 13%;"
 					colspan="2"
-					class="text-uppercase text-center font-weight-bold text-grey-darken-4 py-3"
-					:class="$vuetify.display.mdAndDown ? 'text-h6' : 'text-h4'"
+					class="text-uppercase text-center font-weight-bold text-h4 text-grey-darken-4 py-3"
 				>
 					{{ event.title }}
 				</th>
 				<th
 					style="width: 13%;"
 					class="text-uppercase text-center text-grey-darken-4 py-3"
-					:class="$vuetify.display.mdAndDown ? 'text-subtitle-1' : 'text-h4'"
+					:class="$vuetify.display.mdAndDown ? 'text-h6' : 'text-h5'"
 				>
 					Deduction
 				</th>
@@ -126,7 +125,7 @@
 							block
 							flat
 						>
-							<p style="font-size: 1.2rem;">submit deductions</p>
+							<p style="font-size: 1.2rem;">Submit Deductions</p>
 						</v-btn>
 						<v-dialog
 							v-model="submitDialog"
@@ -144,9 +143,9 @@
 								</v-card-text>
 								<v-card-actions>
 									<v-spacer></v-spacer>
-									<v-btn prepend-icon="mdi-close" class="text-red-darken-1"
+									<v-btn class="text-red-darken-1"
 										   @click="submitDialog = false">
-										Close
+										Go Back
 									</v-btn>
 									<v-btn class="text-green-darken-1" :loading="submitLoading"
 										   @click="submitDeductions">
@@ -304,7 +303,7 @@ export default {
 				deductions.push(deduction);
 			}
 
-			// Calls request to submit deductions after deduction is locked.
+			// submit deductions
 			$.ajax({
 				url: `${this.$store.getters.appURL}/${this.$store.getters['auth/getUser'].userType}.php`,
 				type: 'POST',
@@ -312,10 +311,10 @@ export default {
 					withCredentials: true
 				},
 				data: {
-					deductions
+					deductions,
+                    locking: true
 				},
 				success: (data, textStatus, jqXHR) => {
-
 					if (this.submitLoading) {
 						setTimeout(() => {
 							this.submitLoading = false
@@ -324,23 +323,6 @@ export default {
 							for (let i = 0; i < deductions.length; i++) {
 								deductions[i].is_locked = true;
 							}
-							// make request again for storing deduction.is_locked
-							$.ajax({
-								url: `${this.$store.getters.appURL}/${this.$store.getters['auth/getUser'].userType}.php`,
-								type: 'POST',
-								xhrFields: {
-									withCredentials: true
-								},
-								data: {
-									deductions
-								},
-								success: (data, textStatus, jqXHR) => {
-									console.log(`${jqXHR.status}: ${jqXHR.statusText}`);
-								},
-								error: (error) => {
-									alert(`ERROR ${error.status}: ${error.statusText}`);
-								}
-							});
 						}, 600);
 					}
 
@@ -348,6 +330,7 @@ export default {
 					console.log(`${jqXHR.status}: ${jqXHR.statusText}`);
 				},
 				error: (error) => {
+                    this.submitLoading = false;
 					alert(`ERROR ${error.status}: ${error.statusText}`);
 				}
 			});

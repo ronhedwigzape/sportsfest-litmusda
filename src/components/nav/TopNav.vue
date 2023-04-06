@@ -53,7 +53,7 @@
 							variant="text"
 						>
 							<v-icon icon="mdi-logout"/>
-							Logout
+							Log Out
 						</v-list-item>
 					</v-list>
 				</v-menu>
@@ -70,6 +70,7 @@
 						color="green-darken-1"
 						variant="text"
 						@click="dialog = false"
+                        :disabled="signingOut"
 					>
 						Go Back
 					</v-btn>
@@ -77,6 +78,7 @@
 						color="red-darken-1"
 						variant="text"
 						@click="signOut"
+                        :loading="signingOut"
 					>
 						Log Out
 					</v-btn>
@@ -94,11 +96,13 @@ export default {
 	data() {
 		return {
 			dialog: false,
+            signingOut: false,
 			signedOut: false
 		}
 	},
 	methods: {
 		signOut() {
+            this.signingOut = true;
 			$.ajax({
 				url: `${this.$store.getters.appURL}/index.php`,
 				type: 'POST',
@@ -112,9 +116,11 @@ export default {
 					data = JSON.parse(data);
 					this.$store.commit('auth/setUser', data.user = null);
 					this.$router.push('/');
+                    this.signingOut = false;
 				},
 				error: (error) => {
 					alert(`ERROR ${error.status}: ${error.statusText}`);
+                    this.signingOut = false;
 				},
 			})
 		},
