@@ -205,10 +205,18 @@
 								</v-card-text>
 								<v-card-actions>
 									<v-spacer></v-spacer>
-									<v-btn class="text-red-darken-1" @click="submitDialog = false">
+									<v-btn
+                                        class="text-red-darken-1"
+                                        :disabled="submitLoading"
+                                        @click="submitDialog = false"
+                                    >
 										Go Back
 									</v-btn>
-									<v-btn class="text-green-darken-1" :loading="submitLoading" @click="submitRatings">
+									<v-btn
+                                        class="text-green-darken-1"
+                                        :loading="submitLoading"
+                                        @click="submitRatings"
+                                    >
 										Submit
 									</v-btn>
 								</v-card-actions>
