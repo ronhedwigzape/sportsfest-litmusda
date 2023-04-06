@@ -206,7 +206,7 @@
 								<v-card-actions>
 									<v-spacer></v-spacer>
 									<v-btn class="text-red-darken-1" @click="submitDialog = false">
-                                        Go Back
+										Go Back
 									</v-btn>
 									<v-btn class="text-green-darken-1" :loading="submitLoading" @click="submitRatings">
 										Submit
@@ -511,7 +511,6 @@ export default {
 			this.submitLoading = true;
 			// prepare ratings array
 			let ratings = [];
-			let rating = {};
 			for (let i = 0; i < this.teams.length; i++) {
 				const team = this.teams[i];
 				for (let criterion of this.criteria) {
@@ -528,7 +527,7 @@ export default {
 				},
 				data: {
 					ratings,
-                    locking: true
+					locking: true
 				},
 				success: (data, textStatus, jqXHR) => {
 					if (this.submitLoading) {
@@ -548,7 +547,7 @@ export default {
 					console.log(`${jqXHR.status}: ${jqXHR.statusText}`);
 				},
 				error: (error) => {
-                    this.submitLoading = false
+					this.submitLoading = false
 					alert(`ERROR ${error.status}: ${error.statusText}`);
 				}
 			})

@@ -312,7 +312,7 @@ export default {
 				},
 				data: {
 					deductions,
-                    locking: true
+					locking: true
 				},
 				success: (data, textStatus, jqXHR) => {
 					if (this.submitLoading) {
@@ -330,7 +330,7 @@ export default {
 					console.log(`${jqXHR.status}: ${jqXHR.statusText}`);
 				},
 				error: (error) => {
-                    this.submitLoading = false;
+					this.submitLoading = false;
 					alert(`ERROR ${error.status}: ${error.statusText}`);
 				}
 			});
