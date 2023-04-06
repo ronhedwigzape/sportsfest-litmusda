@@ -331,6 +331,7 @@ export default {
 					console.log(`${jqXHR.status}: ${jqXHR.statusText}`);
 				},
 				error: (error) => {
+                    this.submitLoading = false;
 					alert(`ERROR ${error.status}: ${error.statusText}`);
 				}
 			});
