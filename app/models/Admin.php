@@ -231,6 +231,7 @@ class Admin extends User
                 ]
             ];
             $team_row['points'] = 0;
+            $team_row['title']  = '';
 
             // push $team_row to $result['teams']
             $result['teams'][$key_team] = $team_row;
@@ -298,12 +299,17 @@ class Admin extends User
         }
 
         // get final fractional rank and points
+        $unique_final_fractional_ranks = [];
         $ctr = 0;
         for($i = 0; $i < sizeof($unique_final_adjustments); $i++) {
             $key = 'rank_' . ($i + 1);
             $group = $rank_group[$key];
             $size = sizeof($group);
             $fractional_rank = $ctr + ((($size * ($size + 1)) / 2) / $size);
+
+            // push to $unique_final_fractional_ranks
+            if(!in_array($fractional_rank, $unique_final_fractional_ranks))
+                $unique_final_fractional_ranks[] = $fractional_rank;
 
             // write $fractional_rank to $group members and accumulate points
             $points = 0;
@@ -326,6 +332,24 @@ class Admin extends User
             }*/
 
             $ctr += $size;
+        }
+
+        // sort $unique_final_fractional_ranks
+        sort($unique_final_fractional_ranks);
+
+        // determine winners (case-to-case basis depending on organizer's guidelines)
+        $i = 0;
+        foreach($event->getAllTitles() as $key_title => $title) {
+            // update title of $unique_final_fractional_ranks[$i]'th team
+            foreach($result['teams'] as $key_team => $arr_team) {
+                if($arr_team['rank']['final']['fractional'] == $unique_final_fractional_ranks[$i]) {
+                    $result['teams'][$key_team]['title'] = $title->getTitle();
+                }
+            }
+
+            $i += 1;
+            if($i >= sizeof($unique_final_fractional_ranks))
+                break;
         }
 
         // return $result

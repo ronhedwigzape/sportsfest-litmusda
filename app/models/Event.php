@@ -614,6 +614,108 @@ class Event extends App
 
 
     /***************************************************************************
+     * Set event title on a given rank
+     *
+     * @param int $rank
+     * @param string $title
+     * @return void
+     */
+    public function setRankTitle($rank, $title)
+    {
+        require_once 'Title.php';
+
+        // check if title is stored or not
+        $stored = Title::stored($this->id, $rank);
+
+        // instantiate title
+        $title_obj = new Title();
+        if($stored)
+            $title_obj = Title::find($this->id, $rank);
+
+        // set properties
+        $title_obj->setEventId($this->id);
+        $title_obj->setRank($rank);
+        $title_obj->setTitle($title);
+
+        // update or insert
+        if($stored)
+            $title_obj->update();
+        else
+            $title_obj->insert();
+    }
+
+
+    /***************************************************************************
+     * Get event title of given rank, as object
+     *
+     * @param int $rank
+     * @return bool|Title
+     */
+    public function getRankTitle($rank)
+    {
+        require_once 'Title.php';
+
+        // insert title if not yet stored
+        if(!Title::stored($this->id, $rank)) {
+            $title = new Title();
+            $title->setEventId($this->id);
+            $title->setRank($rank);
+            $title->insert();
+        }
+
+        // return title
+        return Title::find($this->id, $rank);
+    }
+
+
+    /***************************************************************************
+     * Get event title of given rank, as array
+     *
+     * @param $rank
+     * @return array
+     */
+    public function getRankTitleRow($rank)
+    {
+        return ($this->getRankTitle($rank))->toArray();
+    }
+
+
+    /***************************************************************************
+     * Get all event titles as array of objects
+     *
+     * @return Title[]
+     */
+    public function getAllTitles()
+    {
+        require_once 'Title.php';
+        $ranks = Title::ranks();
+
+        $titles = [];
+        foreach($ranks as $rank) {
+            $key = $this->slug.'_rank-'.$rank;
+            $titles[$key] = $this->getRankTitle($rank);
+        }
+        return $titles;
+    }
+
+
+    /***************************************************************************
+     * Get all event titles as array of arrays
+     *
+     * @return array
+     */
+    public function getRowTitles()
+    {
+        $titles = [];
+        foreach($this->getAllTitles() as $title) {
+            $key = $this->slug.'_rank-'.$title->getRank();
+            $titles[$key] = $this->getRankTitleRow($title->getRank());
+        }
+        return $titles;
+    }
+
+
+    /***************************************************************************
      * Set team arrangement order
      *
      * @param Team $team
