@@ -110,20 +110,26 @@
 				>
 					Final Rank
 				</th>
+                <th
+                    class="text-center text-uppercase font-weight-bold text-grey-darken-4 py-3"
+                    :class="$vuetify.display.mdAndDown ? 'text-caption' : ''"
+                >
+                    Title
+                </th>
 			</tr>
 			</thead>
 			<tbody>
 			<tr v-for="(team, teamKey, teamIndex) in teams" :key="team.id">
 				<td
 					class="text-center font-weight-bold"
-					:class="$vuetify.display.mdAndDown ? 'text-h6' : 'text-h5'"
+					:class="`${$vuetify.display.mdAndDown ? 'text-h6' : 'text-h5'}${team.title !== '' ? ' bg-yellow-lighten-3' : ''}`"
 				>
 					{{ teamIndex + 1 }}
 				</td>
 				<td
 					class="text-center text-uppercase font-weight-bold"
-					:style="{'color': team.color}"
-					:class="$vuetify.display.mdAndDown ? 'text-caption' : ''"
+					:style="{'color': `${team.color} !important` }"
+					:class="`${$vuetify.display.mdAndDown ? 'text-caption' : ''}${team.title !== '' ? ' bg-yellow-lighten-3' : ''}`"
 				>
 					{{ team.name }}
 				</td>
@@ -132,7 +138,8 @@
 						class="text-center text-uppercase font-weight-bold text-red-darken-3"
 						:class="{
 							'bg-grey-lighten-3' : !team.deductions.inputs[technicalKey].is_locked,
-							'bg-white' : team.deductions.inputs[technicalKey].is_locked
+							'bg-white' : team.deductions.inputs[technicalKey].is_locked && team.title === '',
+							'bg-yellow-lighten-3': team.deductions.inputs[technicalKey].is_locked && team.title !== '',
 						}, $vuetify.display.mdAndDown ? 'text-caption' : ''"
 					>
 						{{ team.deductions.inputs[technicalKey].value.toFixed(2) }}
@@ -143,7 +150,8 @@
 						class="text-center"
 						:class="{
 							'bg-grey-lighten-3' : !team.ratings.inputs[`judge_${judge.id}`].final.is_locked,
-							'bg-white' : team.ratings.inputs[`judge_${judge.id}`].final.is_locked,
+							'bg-white' : team.ratings.inputs[`judge_${judge.id}`].final.is_locked && team.title === '',
+							'bg-yellow-lighten-3' : team.ratings.inputs[`judge_${judge.id}`].final.is_locked && team.title !== '',
 							'text-dark-darken-1': judge.is_chairman == 0,
 							'text-red-darken-3': judge.is_chairman == 1
 						}, $vuetify.display.mdAndDown ? 'text-caption' : ''"
@@ -154,7 +162,8 @@
 						class="text-center font-weight-bold text-blue-darken-2"
 						:class="{
 							'bg-grey-lighten-3' : !team.ratings.inputs[`judge_${judge.id}`].final.is_locked,
-							'bg-white' : team.ratings.inputs[`judge_${judge.id}`].final.is_locked
+							'bg-white' : team.ratings.inputs[`judge_${judge.id}`].final.is_locked && team.title === '',
+							'bg-yellow-lighten-3' : team.ratings.inputs[`judge_${judge.id}`].final.is_locked && team.title !== '',
 						}, $vuetify.display.mdAndDown ? 'text-caption' : ''"
 					>
 						{{ team.ratings.inputs[`judge_${judge.id}`].rank.fractional.toFixed(2) }}
@@ -162,28 +171,34 @@
 				</template>
 				<td
 					class="text-center font-weight-bold text-green-darken-4"
-					:class="$vuetify.display.mdAndDown ? 'text-caption' : ''"
+					:class="`${$vuetify.display.mdAndDown ? 'text-caption' : ''}${team.title !== '' ? ' bg-yellow-lighten-3' : ''}`"
 				>
 					{{ team.ratings.average.toFixed(2) }}
 				</td>
 				<td
 					class="text-center font-weight-bold text-blue-darken-4"
-					:class="$vuetify.display.mdAndDown ? 'text-caption' : ''"
+					:class="`${$vuetify.display.mdAndDown ? 'text-caption' : ''}${team.title !== '' ? ' bg-yellow-lighten-3' : ''}`"
 				>
 					{{ team.rank.total.fractional.toFixed(2) }}
 				</td>
 				<td
 					class="text-center font-weight-bold text-grey-darken-1"
-					:class="$vuetify.display.mdAndDown ? 'text-caption' : ''"
+					:class="`${$vuetify.display.mdAndDown ? 'text-caption' : ''}${team.title !== '' ? ' bg-yellow-lighten-3' : ''}`"
 				>
 					{{ team.rank.initial.fractional.toFixed(2) }}
 				</td>
 				<td
 					class="text-center font-weight-bold"
-					:class="$vuetify.display.mdAndDown ? 'text-caption' : ''"
+					:class="`${$vuetify.display.mdAndDown ? 'text-caption' : ''}${team.title !== '' ? ' bg-yellow-lighten-3' : ''}`"
 				>
 					{{ team.rank.final.fractional }}
 				</td>
+                <td
+                    class="text-center font-weight-bold"
+                    :class="`${$vuetify.display.mdAndDown ? 'text-caption' : ''}${team.title !== '' ? ' bg-yellow-lighten-3' : ''}`"
+                >
+                    {{ team.title }}
+                </td>
 			</tr>
 			</tbody>
 			<tfoot>
