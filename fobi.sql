@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 02, 2023 at 03:29 PM
+-- Generation Time: Apr 07, 2023 at 05:31 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.1.12
 
@@ -470,6 +470,21 @@ CREATE TABLE `technical_event` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `titles`
+--
+
+CREATE TABLE `titles` (
+  `id` smallint(5) UNSIGNED NOT NULL,
+  `event_id` smallint(5) UNSIGNED NOT NULL,
+  `rank` tinyint(3) UNSIGNED NOT NULL DEFAULT 1,
+  `title` varchar(255) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 --
 -- Indexes for dumped tables
 --
@@ -599,6 +614,13 @@ ALTER TABLE `technical_event`
   ADD KEY `event_id` (`event_id`);
 
 --
+-- Indexes for table `titles`
+--
+ALTER TABLE `titles`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `event_id` (`event_id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -705,6 +727,12 @@ ALTER TABLE `technical_event`
   MODIFY `id` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `titles`
+--
+ALTER TABLE `titles`
+  MODIFY `id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- Constraints for dumped tables
 --
 
@@ -789,6 +817,12 @@ ALTER TABLE `ratings`
 ALTER TABLE `technical_event`
   ADD CONSTRAINT `technical_event_ibfk_2` FOREIGN KEY (`technical_id`) REFERENCES `technicals` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `technical_event_ibfk_3` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `titles`
+--
+ALTER TABLE `titles`
+  ADD CONSTRAINT `titles_ibfk_1` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
