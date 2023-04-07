@@ -16,6 +16,7 @@ require_once 'app/models/Category.php';
 require_once 'app/models/Event.php';
 require_once 'app/models/Criterion.php';
 require_once 'app/models/Point.php';
+require_once 'app/models/Title.php';
 require_once 'app/models/Team.php';
 require_once 'app/models/Participant.php';
 require_once 'app/models/Arrangement.php';
@@ -32,6 +33,7 @@ function resetDatabase(): void
         'arrangements',
         'participants',
         'teams',
+        'titles',
         'points',
         'eliminations',
         'event_noshows',
