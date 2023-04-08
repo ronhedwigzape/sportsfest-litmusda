@@ -2,7 +2,7 @@
 	<v-navigation-drawer
 		theme="dark"
 		v-model="$store.state.app.sideNav"
-		:permanent="$vuetify.display.mdAndUp"
+		:permanent="$vuetify.display.lgAndUp"
 	>
 		<v-col class="d-flex justify-center">
 			<v-img
@@ -60,8 +60,8 @@ export default {
 				}
 			});
 
-			// close sidebar when screen is smAndDown
-			if (this.$vuetify.display.smAndDown)
+			// close sidebar when screen is mdAndDown
+			if (this.$vuetify.display.mdAndDown)
 				this.$store.state.app.sideNav = false;
 		}
 	},

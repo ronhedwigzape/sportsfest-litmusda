@@ -1,11 +1,11 @@
 <template>
-	<v-app-bar color="black" :class="{ 'pl-5': $vuetify.display.mdAndUp }">
+	<v-app-bar color="black" :class="{ 'pl-5': $vuetify.display.lgAndUp }">
 		<v-app-bar-nav-icon
-			v-if="$vuetify.display.smAndDown"
+			v-if="$vuetify.display.mdAndDown"
 			@click.stop="$store.state.app.sideNav = !$store.state.app.sideNav"
 		/>
-		<h3 v-if="$vuetify.display.mdAndUp" id="topnav">{{ $store.getters.appName }}</h3>
-		<h4 v-else-if="$vuetify.display.smAndDown" id="topnav">{{ $store.getters.appName }}</h4>
+		<h3 v-if="$vuetify.display.lgAndUp" id="topnav">{{ $store.getters.appName }}</h3>
+		<h4 v-else-if="$vuetify.display.mdAndDown" id="topnav">{{ $store.getters.appName }}</h4>
 		<v-spacer/>
 		<div v-if="$store.getters['auth/getUser'] !== null">
 			<v-chip
@@ -21,8 +21,8 @@
 
 			<v-avatar
 				size="35"
-				v-if="$vuetify.display.mdAndUp"
-				:class="$vuetify.display.mdAndUp ? 'ms-3' : ''"
+				v-if="$vuetify.display.lgAndUp"
+				:class="$vuetify.display.lgAndUp ? 'ms-3' : ''"
 			>
 				<v-img
 					:src="`${$store.getters.appURL}/crud/uploads/${$store.getters['auth/getUser'].avatar}`"

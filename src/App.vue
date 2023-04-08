@@ -61,7 +61,7 @@ export default {
 			this.$store.commit('setWindowHeight', window.innerHeight);
 
 			// check sidebar
-			if (this.$vuetify.display.smAndDown)
+			if (this.$vuetify.display.mdAndDown)
 				this.$store.state.app.sideNav = false;
 		},
 
@@ -110,7 +110,7 @@ export default {
 		this.handleWindowResize();
 
 		// manage sidebar
-		if (this.$vuetify.display.mdAndUp)
+		if (this.$vuetify.display.lgAndUp)
 			this.$store.state.app.sideNav = true;
 	},
 	destroyed() {
