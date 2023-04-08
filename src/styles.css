@@ -13,7 +13,7 @@ input[type=number] {
     font-style: normal;
     font-weight: 100;
     src: local('Roboto Thin'), local('Roboto-Thin'),
-    url('/assets/fonts/Roboto/Roboto-Thin.ttf') format('truetype');
+    url('/fonts/Roboto/Roboto-Thin.ttf') format('truetype');
 }
 
 @font-face {
@@ -21,7 +21,7 @@ input[type=number] {
     font-style: normal;
     font-weight: 300;
     src: local('Roboto Light'), local('Roboto-Light'),
-    url('/assets/fonts/Roboto/Roboto-Light.ttf') format('truetype');
+    url('/fonts/Roboto/Roboto-Light.ttf') format('truetype');
 }
 
 @font-face {
@@ -29,7 +29,7 @@ input[type=number] {
     font-style: normal;
     font-weight: 400;
     src: local('Roboto'), local('Roboto-Regular'),
-    url('/assets/fonts/Roboto/Roboto-Regular.ttf') format('truetype');
+    url('/fonts/Roboto/Roboto-Regular.ttf') format('truetype');
 }
 
 @font-face {
@@ -37,7 +37,7 @@ input[type=number] {
     font-style: normal;
     font-weight: 500;
     src: local('Roboto Medium'), local('Roboto-Medium'),
-    url('/assets/fonts/Roboto/Roboto-Medium.ttf') format('truetype');
+    url('/fonts/Roboto/Roboto-Medium.ttf') format('truetype');
 }
 
 @font-face {
@@ -45,7 +45,7 @@ input[type=number] {
     font-style: normal;
     font-weight: 700;
     src: local('Roboto Bold'), local('Roboto-Bold'),
-    url('/assets/fonts/Roboto/Roboto-Bold.ttf') format('truetype');
+    url('/fonts/Roboto/Roboto-Bold.ttf') format('truetype');
 }
 
 @font-face {
@@ -53,7 +53,7 @@ input[type=number] {
     font-style: normal;
     font-weight: 900;
     src: local('Roboto Black'), local('Roboto-Black'),
-    url('/assets/fonts/Roboto/Roboto-Black.ttf') format('truetype');
+    url('/fonts/Roboto/Roboto-Black.ttf') format('truetype');
 }
 
 body {
