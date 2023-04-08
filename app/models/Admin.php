@@ -110,7 +110,8 @@ class Admin extends User
         $result = [
             'technicals' => [],
             'judges'     => [],
-            'teams'      => []
+            'teams'      => [],
+            'winners'    => []
         ];
 
         // get all teams
@@ -340,7 +341,10 @@ class Admin extends User
             // update title of $unique_final_fractional_ranks[$i]'th team
             foreach($result['teams'] as $key_team => $arr_team) {
                 if($arr_team['rank']['final']['fractional'] == $unique_final_fractional_ranks[$i]) {
-                    $result['teams'][$key_team]['title'] = $title->getTitle();
+                    $t = trim($title->getTitle());
+                    $result['teams'][$key_team]['title'] = $t;
+                    if($t != '')
+                        $result['winners'][$key_team] = $t;
                 }
             }
 

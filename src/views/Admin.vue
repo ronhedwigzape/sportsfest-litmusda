@@ -272,14 +272,14 @@ export default {
 	},
 	data() {
 		return {
-			event: null,
+			event     : null,
+			teams     : [],
+			judges    : [],
+			technicals: [],
+			winners   : [],
+
 			timer: null,
 			openUnlockDialog: false,
-			results: {},
-			teams: [],
-			judges: [],
-			technicals: [],
-			teamIndex: 0
 		}
 	},
 	computed: {
@@ -291,9 +291,14 @@ export default {
 		$route: {
 			immediate: true,
 			handler(to, from) {
-				this.event = null;
 				if (this.timer)
 					clearTimeout(this.timer);
+					
+				this.event     = null;
+				this.teams     = [];
+				this.judges    = [];
+				this.technicals= [];
+				this.winners   = [];
 				this.tabulate();
 			}
 		}
@@ -313,11 +318,12 @@ export default {
 					},
 					success: (data) => {
 						data = JSON.parse(data);
-						this.event = data.event;
-						this.teams = data.results.teams;
-						this.judges = data.results.judges;
+						this.event      = data.event;
+						this.teams      = data.results.teams;
+						this.judges     = data.results.judges;
 						this.technicals = data.results.technicals;
-						console.log(data)
+                        this.winners    = data.results.winners;
+
 						// request again
 						if (data.event.slug === this.$route.params.eventSlug) {
 							this.timer = setTimeout(() => {
