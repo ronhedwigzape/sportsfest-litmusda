@@ -23,7 +23,17 @@ else {
             $technical->ping();
 
             echo json_encode([
-                'pinged' => true
+                'pinged'  => true,
+                'calling' => $technical->isCalling()
+            ]);
+        }
+
+        // call help for technical
+        else if(isset($_POST['call'])) {
+            $technical->call(filter_var($_POST['call'], FILTER_VALIDATE_BOOLEAN));
+
+            echo json_encode([
+                'called' => true,
             ]);
         }
 
@@ -64,7 +74,6 @@ else {
                 Team::findById($deduction['team_id']),
                 floatval($deduction['value'])
             );
-
         }
 
         // submit deductions

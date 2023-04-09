@@ -29,17 +29,41 @@
 						class="text-center text-uppercase font-weight-bold text-red-darken-4 py-3"
 						:class="$vuetify.display.mdAndDown ? 'text-caption' : ''"
 					>
-						Deduct {{ technicalIndex + 1 }}
-						<v-btn
-							class="unlock"
-							@click="unlockTechnicalDeductions(technical)"
-							variant="text"
-							size="x-small"
-							icon
-							style="position: absolute; top: 0; right: 1px"
-						>
-							<v-icon icon="mdi-lock-open-variant"/>
-						</v-btn>
+                        <!-- technical unlock deductions -->
+                        <v-btn
+                            class="unlock"
+                            @click="unlockTechnicalDeductions(technical)"
+                            variant="text"
+                            size="x-small"
+                            icon
+                            style="position: absolute; top: 0; right: 1px"
+                        >
+                            <v-icon icon="mdi-lock-open-variant"/>
+                        </v-btn>
+                        Deduct
+                        <div>
+                            <div class="d-flex justify-center">
+                                <v-icon
+                                    class="online-status"
+                                    icon="mdi-circle-medium"
+                                    :color="technical.online ? 'success' : 'error'"
+                                    style="margin-left: -8px;"
+                                />
+                                {{ technicalIndex + 1 }}
+                            </div>
+                        </div>
+                        &nbsp;
+
+                        <!-- technical help status -->
+                        <div class="help-status mt-1" v-if="technical.calling">
+                            <v-chip
+                                size="small"
+                                color="warning"
+                                variant="flat"
+                            >
+                                HELP
+                            </v-chip>
+                        </div>
 					</th>
 				</template>
 				<template v-for="judge in judges" :key="judge.id">
@@ -47,6 +71,7 @@
 						class="text-center text-uppercase py-3"
 						:class="$vuetify.display.mdAndDown ? 'text-caption' : ''"
 					>
+                        <!-- judge unlock ratings -->
 						<v-btn
 							class="unlock"
 							@click="unlockJudgeRatings(judge)"
@@ -61,19 +86,39 @@
 							:class="{
                                 'text-dark-darken-1': judge.is_chairman == 0,
                                 'text-red-darken-3': judge.is_chairman == 1
-                            	}"
+                            }"
 						>
-							Judge
+                            Judge
 							<div>
-								{{ judge.number }}<span v-if="judge.is_chairman == 1">*</span>
+                                <div class="d-flex justify-center">
+                                    <v-icon
+                                        class="online-status"
+                                        icon="mdi-circle-medium"
+                                        :color="judge.online ? 'success' : 'error'"
+                                        style="margin-left: -8px;"
+                                    />
+                                    {{ judge.number }}<span v-if="judge.is_chairman == 1">*</span>
+                                </div>
 							</div>
-							<b :class="{
-									'text-dark-darken-1': judge.is_chairman == 0,
-									'text-red-darken-4': judge.is_chairman == 1
-                            		}"
+							<b
+                                :class="{
+                                    'text-dark-darken-1': judge.is_chairman == 0,
+                                    'text-red-darken-4': judge.is_chairman == 1
+                                }"
 							>
 								Total
 							</b>
+
+                            <!-- judge help status -->
+                            <div class="help-status mt-1" v-if="judge.calling">
+                                <v-chip
+                                    size="small"
+                                    color="warning"
+                                    variant="flat"
+                                >
+                                    HELP
+                                </v-chip>
+                            </div>
 						</div>
 					</th>
 					<th
@@ -81,8 +126,9 @@
 						:class="$vuetify.display.mdAndDown ? 'text-caption' : ''"
 					>
 						Judge
-						<div v-if="judge.is_chairman == 1">CHAIRMAN</div>
-						<div v-else>{{ judge.number }}</div>
+						<div>
+                            {{ judge.number }}<span v-if="judge.is_chairman == 1">*</span>
+                        </div>
 						<b class="text-blue-darken-3">Rank</b>
 					</th>
 				</template>
@@ -207,7 +253,7 @@
 					<v-row>
 						<template v-for="technical in technicals" :key="technical.id">
 							<v-col>
-								<v-card class="text-center mb-5" flat>
+								<v-card class="text-center mb-5" :class="{ 'text-warning': technical.calling }" flat>
 									<v-card-title class="pt-16 font-weight-bold">
 										{{ technical.name }}
 									</v-card-title>
@@ -225,7 +271,7 @@
 						</template>
 						<template v-for="judge in judges" :key="judge.id">
 							<v-col>
-								<v-card class="text-center mb-5" flat>
+								<v-card class="text-center mb-5" :class="{ 'text-warning': judge.calling }" flat>
 									<v-card-title class="pt-16 font-weight-bold">
 										{{ judge.name }}
 									</v-card-title>
