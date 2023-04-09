@@ -17,7 +17,8 @@
         background: white !important;
     }
 
-    .online-status {
+    .online-status,
+    .help-status {
         display: none !important;
     }
 }

@@ -23,7 +23,17 @@ else {
             $judge->ping();
 
             echo json_encode([
-                'pinged' => true
+                'pinged'  => true,
+                'calling' => $judge->isCalling()
+            ]);
+        }
+
+        // call help for judge
+        else if(isset($_POST['call'])) {
+            $judge->call(filter_var($_POST['call'], FILTER_VALIDATE_BOOLEAN));
+
+            echo json_encode([
+                'called' => true,
             ]);
         }
 

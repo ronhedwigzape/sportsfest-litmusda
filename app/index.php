@@ -30,7 +30,7 @@ else if(isset($_POST['username']) && isset($_POST['password'])) {
     if($user) {
         // successfully logged in
         echo json_encode([
-            'user' => $user->toArray()
+            'user' => [...$user->toArray(), 'calling' => $user->isCalling()]
         ]);
     }
     else

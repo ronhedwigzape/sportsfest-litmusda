@@ -6,8 +6,36 @@
 		/>
 		<h3 v-if="$vuetify.display.lgAndUp" id="topnav">{{ $store.getters.appName }}</h3>
 		<h4 v-else-if="$vuetify.display.mdAndDown" id="topnav">{{ $store.getters.appName }}</h4>
-		<v-spacer/>
-		<div v-if="$store.getters['auth/getUser'] !== null">
+
+		<template v-if="$store.getters['auth/getUser'] !== null">
+            <v-spacer/>
+
+            <!-- help button -->
+            <v-btn
+                v-if="$store.getters['auth/getUser'].userType !== 'admin'"
+                variant="outlined"
+                class="mr-5"
+                size="small"
+                :color="askingForHelp ? 'warning' : 'brown'"
+                :disabled="helpDisabled"
+                @click="toggleHelp"
+            >
+                <template v-if="askingForHelp">
+                    <v-progress-circular
+                        indeterminate
+                        color="warning"
+                        size="16"
+                        width="2"
+                        class="mr-2"
+                    />
+                    <template v-if="$vuetify.display.lgAndUp">Asking for </template>Help
+                </template>
+                <template v-else>
+                    <template v-if="$vuetify.display.lgAndUp">Ask for </template>Help
+                </template>
+            </v-btn>
+
+            <!-- user info -->
 			<v-chip
 				:color="$store.getters['auth/getUser'] !== null ?
 					$store.getters['auth/getUser'].userType === 'admin' ? 'amber' :
@@ -18,7 +46,6 @@
 				<v-icon start icon="mdi-account-circle"/>
 				{{ $store.getters['auth/getUser'].name }}
 			</v-chip>
-
 			<v-avatar
 				size="35"
 				v-if="$vuetify.display.lgAndUp"
@@ -28,7 +55,7 @@
 					:src="`${$store.getters.appURL}/crud/uploads/${$store.getters['auth/getUser'].avatar}`"
 				/>
 			</v-avatar>
-		</div>
+		</template>
 
 		<!--	Sign out	-->
 		<v-dialog
@@ -97,9 +124,15 @@ export default {
 		return {
 			dialog: false,
             signingOut: false,
-			signedOut: false
+			signedOut: false,
+            helpDisabled: false
 		}
 	},
+    computed: {
+        askingForHelp() {
+            return this.$store.getters['auth/getUser'].calling;
+        }
+    },
 	methods: {
 		signOut() {
             this.signingOut = true;
@@ -122,8 +155,38 @@ export default {
 					alert(`ERROR ${error.status}: ${error.statusText}`);
                     this.signingOut = false;
 				},
-			})
+			});
 		},
+
+        toggleHelp() {
+            // momentarily disable help button
+            this.helpDisabled = true;
+            setTimeout(() => {
+                this.helpDisabled = false;
+            }, 30);
+
+            // make help request
+            const user = this.$store.getters['auth/getUser'];
+            user.calling = !user.calling;
+            $.ajax({
+                url: `${this.$store.getters.appURL}/${user.userType}.php`,
+                type: 'POST',
+                xhrFields: {
+                    withCredentials: true
+                },
+                data: {
+                    call: user.calling
+                },
+                success: (data) => {
+                    data = JSON.parse(data);
+
+                },
+                error: (error) => {
+                    alert(`ERROR ${error.status}: ${error.statusText}`);
+                    user.calling = !user.calling;
+                },
+            });
+        }
 	}
 }
 </script>
