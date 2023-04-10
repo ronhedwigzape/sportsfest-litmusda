@@ -36,6 +36,7 @@
 		</v-list>
 		<template v-slot:append>
 			<v-col class="text-center mt-4" cols="12">
+                <v-btn class="mb-3" variant="tonal" @click="refresh" block :loading="refreshing">REFRESH</v-btn>
 				&copy; <strong class="text-uppercase">ACLC Iriga 2023</strong>
 			</v-col>
 		</template>
@@ -48,7 +49,9 @@ import $ from 'jquery';
 export default {
 	name: "SideNav",
 	data() {
-		return {}
+		return {
+            refreshing: false
+        }
 	},
 	methods: {
 		handleEventChange(event) {
@@ -63,7 +66,12 @@ export default {
 			// close sidebar when screen is mdAndDown
 			if (this.$vuetify.display.mdAndDown)
 				this.$store.state.app.sideNav = false;
-		}
+		},
+
+        refresh() {
+            this.refreshing = true;
+            window.location.reload();
+        }
 	},
 	created() {
 		$.ajax({
