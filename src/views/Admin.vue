@@ -27,7 +27,10 @@
 				<template v-for="(technical, technicalKey, technicalIndex) in technicals" :key="technical.id">
 					<th
 						class="text-center text-uppercase font-weight-bold text-red-darken-4 py-3"
-						:class="$vuetify.display.mdAndDown ? 'text-caption' : ''"
+                        :class="{
+                            'text-caption': $vuetify.display.mdAndDown,
+                            'bg-red-lighten-3': !technical.online
+                        }"
 					>
                         <!-- technical unlock deductions -->
                         <v-btn
@@ -42,15 +45,7 @@
                         </v-btn>
                         Deduct
                         <div>
-                            <div class="d-flex justify-center">
-                                <v-icon
-                                    class="online-status"
-                                    icon="mdi-circle-medium"
-                                    :color="technical.online ? 'success' : 'error'"
-                                    style="margin-left: -8px;"
-                                />
-                                {{ technicalIndex + 1 }}
-                            </div>
+                            {{ technicalIndex + 1 }}
                         </div>
                         &nbsp;
 
@@ -69,7 +64,10 @@
 				<template v-for="judge in judges" :key="judge.id">
 					<th
 						class="text-center text-uppercase py-3"
-						:class="$vuetify.display.mdAndDown ? 'text-caption' : ''"
+                        :class="{
+                            'text-caption': $vuetify.display.mdAndDown,
+                            'bg-red-lighten-3': !judge.online
+                        }"
 					>
                         <!-- judge unlock ratings -->
 						<v-btn
@@ -90,15 +88,7 @@
 						>
                             Judge
 							<div>
-                                <div class="d-flex justify-center">
-                                    <v-icon
-                                        class="online-status"
-                                        icon="mdi-circle-medium"
-                                        :color="judge.online ? 'success' : 'error'"
-                                        style="margin-left: -8px;"
-                                    />
-                                    {{ judge.number }}<span v-if="judge.is_chairman == 1">*</span>
-                                </div>
+                                {{ judge.number }}<span v-if="judge.is_chairman == 1">*</span>
 							</div>
 							<b
                                 :class="{
