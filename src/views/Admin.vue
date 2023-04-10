@@ -40,7 +40,8 @@
                             variant="text"
                             size="x-small"
                             icon
-                            style="position: absolute; top: 0; right: 1px"
+                            :ripple="false"
+                            style="position: absolute; top: -7px; right: -7px"
                         >
                             <v-icon icon="mdi-lock-open-variant"/>
                         </v-btn>
@@ -78,7 +79,8 @@
 							variant="text"
 							size="x-small"
 							icon
-							style="position: absolute; top: 0; right: 1px"
+                            :ripple="false"
+                            style="position: absolute; top: -7px; right: -7px"
 						>
 							<v-icon icon="mdi-lock-open-variant"/>
 						</v-btn>
