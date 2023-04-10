@@ -34,6 +34,7 @@
 					>
                         <!-- technical unlock deductions -->
                         <v-btn
+                            v-if="technicalSubmitted[technicalKey]"
                             class="unlock"
                             @click="unlockTechnicalDeductions(technical)"
                             variant="text"
@@ -61,7 +62,7 @@
                         </div>
 					</th>
 				</template>
-				<template v-for="judge in judges" :key="judge.id">
+				<template v-for="(judge, judgeKey, judgeIndex) in judges" :key="judge.id">
 					<th
 						class="text-center text-uppercase py-3"
                         :class="{
@@ -71,6 +72,7 @@
 					>
                         <!-- judge unlock ratings -->
 						<v-btn
+                            v-if="judgeSubmitted[judgeKey]"
 							class="unlock"
 							@click="unlockJudgeRatings(judge)"
 							variant="text"
@@ -158,14 +160,14 @@
 			<tr v-for="(team, teamKey, teamIndex) in teams" :key="team.id">
 				<td
 					class="text-center font-weight-bold"
-					:class="`${$vuetify.display.mdAndDown ? 'text-h6' : 'text-h5'}${team.title !== '' ? ' bg-yellow-lighten-3' : ''}`"
+					:class="`${$vuetify.display.mdAndDown ? 'text-h6' : 'text-h5'}${allSubmitted && team.title !== '' ? ' bg-yellow-lighten-3' : ''}`"
 				>
 					{{ teamIndex + 1 }}
 				</td>
 				<td
 					class="text-center text-uppercase font-weight-bold"
 					:style="{'color': `${team.color} !important` }"
-					:class="`${$vuetify.display.mdAndDown ? 'text-caption' : ''}${team.title !== '' ? ' bg-yellow-lighten-3' : ''}`"
+					:class="`${$vuetify.display.mdAndDown ? 'text-caption' : ''}${allSubmitted && team.title !== '' ? ' bg-yellow-lighten-3' : ''}`"
 				>
 					{{ team.name }}
 				</td>
@@ -175,7 +177,7 @@
 						:class="{
 							'bg-grey-lighten-3' : !team.deductions.inputs[technicalKey].is_locked,
 							'bg-white' : team.deductions.inputs[technicalKey].is_locked && team.title === '',
-							'bg-yellow-lighten-3': team.deductions.inputs[technicalKey].is_locked && team.title !== '',
+							'bg-yellow-lighten-3': allSubmitted && team.deductions.inputs[technicalKey].is_locked && team.title !== '',
 						}, $vuetify.display.mdAndDown ? 'text-caption' : ''"
 					>
 						{{ team.deductions.inputs[technicalKey].value.toFixed(2) }}
@@ -187,7 +189,7 @@
 						:class="{
 							'bg-grey-lighten-3' : !team.ratings.inputs[`judge_${judge.id}`].final.is_locked,
 							'bg-white' : team.ratings.inputs[`judge_${judge.id}`].final.is_locked && team.title === '',
-							'bg-yellow-lighten-3' : team.ratings.inputs[`judge_${judge.id}`].final.is_locked && team.title !== '',
+							'bg-yellow-lighten-3' : allSubmitted && team.ratings.inputs[`judge_${judge.id}`].final.is_locked && team.title !== '',
 							'text-dark-darken-1': judge.is_chairman == 0,
 							'text-red-darken-3': judge.is_chairman == 1
 						}, $vuetify.display.mdAndDown ? 'text-caption' : ''"
@@ -197,9 +199,9 @@
 					<td
 						class="text-center font-weight-bold text-blue-darken-2"
 						:class="{
-							'bg-grey-lighten-3' : !team.ratings.inputs[`judge_${judge.id}`].final.is_locked,
-							'bg-white' : team.ratings.inputs[`judge_${judge.id}`].final.is_locked && team.title === '',
-							'bg-yellow-lighten-3' : team.ratings.inputs[`judge_${judge.id}`].final.is_locked && team.title !== '',
+							'bg-grey-lighten-3': !team.ratings.inputs[`judge_${judge.id}`].final.is_locked,
+							'bg-white': team.ratings.inputs[`judge_${judge.id}`].final.is_locked && team.title === '',
+							'bg-yellow-lighten-3': allSubmitted && team.ratings.inputs[`judge_${judge.id}`].final.is_locked && team.title !== '',
 						}, $vuetify.display.mdAndDown ? 'text-caption' : ''"
 					>
 						{{ team.ratings.inputs[`judge_${judge.id}`].rank.fractional.toFixed(2) }}
@@ -207,31 +209,31 @@
 				</template>
 				<td
 					class="text-center font-weight-bold text-green-darken-4"
-					:class="`${$vuetify.display.mdAndDown ? 'text-caption' : ''}${team.title !== '' ? ' bg-yellow-lighten-3' : ''}`"
+					:class="`${$vuetify.display.mdAndDown ? 'text-caption' : ''}${allSubmitted && team.title !== '' ? ' bg-yellow-lighten-3' : ''}`"
 				>
 					{{ team.ratings.average.toFixed(2) }}
 				</td>
 				<td
 					class="text-center font-weight-bold text-blue-darken-4"
-					:class="`${$vuetify.display.mdAndDown ? 'text-caption' : ''}${team.title !== '' ? ' bg-yellow-lighten-3' : ''}`"
+					:class="`${$vuetify.display.mdAndDown ? 'text-caption' : ''}${allSubmitted && team.title !== '' ? ' bg-yellow-lighten-3' : ''}`"
 				>
 					{{ team.rank.total.fractional.toFixed(2) }}
 				</td>
 				<td
 					class="text-center font-weight-bold text-grey-darken-1"
-					:class="`${$vuetify.display.mdAndDown ? 'text-caption' : ''}${team.title !== '' ? ' bg-yellow-lighten-3' : ''}`"
+					:class="`${$vuetify.display.mdAndDown ? 'text-caption' : ''}${allSubmitted && team.title !== '' ? ' bg-yellow-lighten-3' : ''}`"
 				>
 					{{ team.rank.initial.fractional.toFixed(2) }}
 				</td>
 				<td
 					class="text-center font-weight-bold"
-					:class="`${$vuetify.display.mdAndDown ? 'text-caption' : ''}${team.title !== '' ? ' bg-yellow-lighten-3' : ''}`"
+					:class="`${$vuetify.display.mdAndDown ? 'text-caption' : ''}${allSubmitted && team.title !== '' ? ' bg-yellow-lighten-3' : ''}`"
 				>
 					{{ team.rank.final.fractional }}
 				</td>
                 <td
                     class="text-center font-weight-bold"
-                    :class="`${$vuetify.display.mdAndDown ? 'text-caption' : ''}${team.title !== '' ? ' bg-yellow-lighten-3' : ''}`"
+                    :class="`${$vuetify.display.mdAndDown ? 'text-caption' : ''}${allSubmitted && team.title !== '' ? ' bg-yellow-lighten-3' : ''}`"
                 >
                     {{ team.title }}
                 </td>
@@ -321,7 +323,46 @@ export default {
 	computed: {
 		scoreSheetHeight() {
 			return this.$store.getters.windowHeight - 64;
-		}
+		},
+        technicalSubmitted() {
+            const status = {};
+            for(const technicalKey in this.technicals) {
+                let submitted = true;
+                for(const teamKey in this.teams) {
+                    if(!this.teams[teamKey].deductions.inputs[technicalKey].is_locked) {
+                        submitted = false;
+                        break;
+                    }
+                }
+                status[technicalKey] = submitted;
+            }
+            return status;
+        },
+        judgeSubmitted() {
+            const status = {};
+            for(const judgeKey in this.judges) {
+                let submitted = true;
+                for(const teamKey in this.teams) {
+                    if(!this.teams[teamKey].ratings.inputs[judgeKey].rank.rating.is_locked) {
+                        submitted = false;
+                        break;
+                    }
+                }
+                status[judgeKey] = submitted;
+            }
+            return status;
+        },
+        allSubmitted() {
+            let status = true;
+            const submissions = {...this.technicalSubmitted, ...this.judgeSubmitted};
+            for(const key in submissions) {
+                if(!submissions[key]) {
+                    status = false;
+                    break;
+                }
+            }
+            return status;
+        }
 	},
 	watch: {
 		$route: {
