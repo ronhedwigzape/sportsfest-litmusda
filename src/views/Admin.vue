@@ -27,30 +27,27 @@
 				<template v-for="(technical, technicalKey, technicalIndex) in technicals" :key="technical.id">
 					<th
 						class="text-center text-uppercase font-weight-bold text-red-darken-4 py-3"
-						:class="$vuetify.display.mdAndDown ? 'text-caption' : ''"
+                        :class="{
+                            'text-caption': $vuetify.display.mdAndDown,
+                            'bg-red-lighten-3': !technical.online
+                        }"
 					>
                         <!-- technical unlock deductions -->
                         <v-btn
+                            v-if="technicalSubmitted[technicalKey]"
                             class="unlock"
                             @click="unlockTechnicalDeductions(technical)"
                             variant="text"
                             size="x-small"
                             icon
-                            style="position: absolute; top: 0; right: 1px"
+                            :ripple="false"
+                            style="position: absolute; top: -7px; right: -7px"
                         >
                             <v-icon icon="mdi-lock-open-variant"/>
                         </v-btn>
                         Deduct
                         <div>
-                            <div class="d-flex justify-center">
-                                <v-icon
-                                    class="online-status"
-                                    icon="mdi-circle-medium"
-                                    :color="technical.online ? 'success' : 'error'"
-                                    style="margin-left: -8px;"
-                                />
-                                {{ technicalIndex + 1 }}
-                            </div>
+                            {{ technicalIndex + 1 }}
                         </div>
                         &nbsp;
 
@@ -66,19 +63,24 @@
                         </div>
 					</th>
 				</template>
-				<template v-for="judge in judges" :key="judge.id">
+				<template v-for="(judge, judgeKey, judgeIndex) in judges" :key="judge.id">
 					<th
 						class="text-center text-uppercase py-3"
-						:class="$vuetify.display.mdAndDown ? 'text-caption' : ''"
+                        :class="{
+                            'text-caption': $vuetify.display.mdAndDown,
+                            'bg-red-lighten-3': !judge.online
+                        }"
 					>
                         <!-- judge unlock ratings -->
 						<v-btn
+                            v-if="judgeSubmitted[judgeKey]"
 							class="unlock"
 							@click="unlockJudgeRatings(judge)"
 							variant="text"
 							size="x-small"
 							icon
-							style="position: absolute; top: 0; right: 1px"
+                            :ripple="false"
+                            style="position: absolute; top: -7px; right: -7px"
 						>
 							<v-icon icon="mdi-lock-open-variant"/>
 						</v-btn>
@@ -90,15 +92,7 @@
 						>
                             Judge
 							<div>
-                                <div class="d-flex justify-center">
-                                    <v-icon
-                                        class="online-status"
-                                        icon="mdi-circle-medium"
-                                        :color="judge.online ? 'success' : 'error'"
-                                        style="margin-left: -8px;"
-                                    />
-                                    {{ judge.number }}<span v-if="judge.is_chairman == 1">*</span>
-                                </div>
+                                {{ judge.number }}<span v-if="judge.is_chairman == 1">*</span>
 							</div>
 							<b
                                 :class="{
@@ -168,14 +162,14 @@
 			<tr v-for="(team, teamKey, teamIndex) in teams" :key="team.id">
 				<td
 					class="text-center font-weight-bold"
-					:class="`${$vuetify.display.mdAndDown ? 'text-h6' : 'text-h5'}${team.title !== '' ? ' bg-yellow-lighten-3' : ''}`"
+					:class="`${$vuetify.display.mdAndDown ? 'text-h6' : 'text-h5'}${allSubmitted && team.title !== '' ? ' bg-yellow-lighten-3' : ''}`"
 				>
 					{{ teamIndex + 1 }}
 				</td>
 				<td
 					class="text-center text-uppercase font-weight-bold"
 					:style="{'color': `${team.color} !important` }"
-					:class="`${$vuetify.display.mdAndDown ? 'text-caption' : ''}${team.title !== '' ? ' bg-yellow-lighten-3' : ''}`"
+					:class="`${$vuetify.display.mdAndDown ? 'text-caption' : ''}${allSubmitted && team.title !== '' ? ' bg-yellow-lighten-3' : ''}`"
 				>
 					{{ team.name }}
 				</td>
@@ -185,7 +179,7 @@
 						:class="{
 							'bg-grey-lighten-3' : !team.deductions.inputs[technicalKey].is_locked,
 							'bg-white' : team.deductions.inputs[technicalKey].is_locked && team.title === '',
-							'bg-yellow-lighten-3': team.deductions.inputs[technicalKey].is_locked && team.title !== '',
+							'bg-yellow-lighten-3': allSubmitted && team.deductions.inputs[technicalKey].is_locked && team.title !== '',
 						}, $vuetify.display.mdAndDown ? 'text-caption' : ''"
 					>
 						{{ team.deductions.inputs[technicalKey].value.toFixed(2) }}
@@ -197,7 +191,7 @@
 						:class="{
 							'bg-grey-lighten-3' : !team.ratings.inputs[`judge_${judge.id}`].final.is_locked,
 							'bg-white' : team.ratings.inputs[`judge_${judge.id}`].final.is_locked && team.title === '',
-							'bg-yellow-lighten-3' : team.ratings.inputs[`judge_${judge.id}`].final.is_locked && team.title !== '',
+							'bg-yellow-lighten-3' : allSubmitted && team.ratings.inputs[`judge_${judge.id}`].final.is_locked && team.title !== '',
 							'text-dark-darken-1': judge.is_chairman == 0,
 							'text-red-darken-3': judge.is_chairman == 1
 						}, $vuetify.display.mdAndDown ? 'text-caption' : ''"
@@ -207,9 +201,9 @@
 					<td
 						class="text-center font-weight-bold text-blue-darken-2"
 						:class="{
-							'bg-grey-lighten-3' : !team.ratings.inputs[`judge_${judge.id}`].final.is_locked,
-							'bg-white' : team.ratings.inputs[`judge_${judge.id}`].final.is_locked && team.title === '',
-							'bg-yellow-lighten-3' : team.ratings.inputs[`judge_${judge.id}`].final.is_locked && team.title !== '',
+							'bg-grey-lighten-3': !team.ratings.inputs[`judge_${judge.id}`].final.is_locked,
+							'bg-white': team.ratings.inputs[`judge_${judge.id}`].final.is_locked && team.title === '',
+							'bg-yellow-lighten-3': allSubmitted && team.ratings.inputs[`judge_${judge.id}`].final.is_locked && team.title !== '',
 						}, $vuetify.display.mdAndDown ? 'text-caption' : ''"
 					>
 						{{ team.ratings.inputs[`judge_${judge.id}`].rank.fractional.toFixed(2) }}
@@ -217,31 +211,31 @@
 				</template>
 				<td
 					class="text-center font-weight-bold text-green-darken-4"
-					:class="`${$vuetify.display.mdAndDown ? 'text-caption' : ''}${team.title !== '' ? ' bg-yellow-lighten-3' : ''}`"
+					:class="`${$vuetify.display.mdAndDown ? 'text-caption' : ''}${allSubmitted && team.title !== '' ? ' bg-yellow-lighten-3' : ''}`"
 				>
 					{{ team.ratings.average.toFixed(2) }}
 				</td>
 				<td
 					class="text-center font-weight-bold text-blue-darken-4"
-					:class="`${$vuetify.display.mdAndDown ? 'text-caption' : ''}${team.title !== '' ? ' bg-yellow-lighten-3' : ''}`"
+					:class="`${$vuetify.display.mdAndDown ? 'text-caption' : ''}${allSubmitted && team.title !== '' ? ' bg-yellow-lighten-3' : ''}`"
 				>
 					{{ team.rank.total.fractional.toFixed(2) }}
 				</td>
 				<td
 					class="text-center font-weight-bold text-grey-darken-1"
-					:class="`${$vuetify.display.mdAndDown ? 'text-caption' : ''}${team.title !== '' ? ' bg-yellow-lighten-3' : ''}`"
+					:class="`${$vuetify.display.mdAndDown ? 'text-caption' : ''}${allSubmitted && team.title !== '' ? ' bg-yellow-lighten-3' : ''}`"
 				>
 					{{ team.rank.initial.fractional.toFixed(2) }}
 				</td>
 				<td
 					class="text-center font-weight-bold"
-					:class="`${$vuetify.display.mdAndDown ? 'text-caption' : ''}${team.title !== '' ? ' bg-yellow-lighten-3' : ''}`"
+					:class="`${$vuetify.display.mdAndDown ? 'text-caption' : ''}${allSubmitted && team.title !== '' ? ' bg-yellow-lighten-3' : ''}`"
 				>
 					{{ team.rank.final.fractional }}
 				</td>
                 <td
                     class="text-center font-weight-bold"
-                    :class="`${$vuetify.display.mdAndDown ? 'text-caption' : ''}${team.title !== '' ? ' bg-yellow-lighten-3' : ''}`"
+                    :class="`${$vuetify.display.mdAndDown ? 'text-caption' : ''}${allSubmitted && team.title !== '' ? ' bg-yellow-lighten-3' : ''}`"
                 >
                     {{ team.title }}
                 </td>
@@ -312,6 +306,7 @@ import $ from 'jquery';
 
 export default {
 	name: 'Admin',
+    emits: ['startPing'],
 	components: {
 		TopNav,
 		SideNav
@@ -323,7 +318,6 @@ export default {
 			judges    : [],
 			technicals: [],
 			winners   : {},
-
 			timer: null,
 			openUnlockDialog: false,
 		}
@@ -331,7 +325,46 @@ export default {
 	computed: {
 		scoreSheetHeight() {
 			return this.$store.getters.windowHeight - 64;
-		}
+		},
+        technicalSubmitted() {
+            const status = {};
+            for(const technicalKey in this.technicals) {
+                let submitted = true;
+                for(const teamKey in this.teams) {
+                    if(!this.teams[teamKey].deductions.inputs[technicalKey].is_locked) {
+                        submitted = false;
+                        break;
+                    }
+                }
+                status[technicalKey] = submitted;
+            }
+            return status;
+        },
+        judgeSubmitted() {
+            const status = {};
+            for(const judgeKey in this.judges) {
+                let submitted = true;
+                for(const teamKey in this.teams) {
+                    if(!this.teams[teamKey].ratings.inputs[judgeKey].rank.rating.is_locked) {
+                        submitted = false;
+                        break;
+                    }
+                }
+                status[judgeKey] = submitted;
+            }
+            return status;
+        },
+        allSubmitted() {
+            let status = true;
+            const submissions = {...this.technicalSubmitted, ...this.judgeSubmitted};
+            for(const key in submissions) {
+                if(!submissions[key]) {
+                    status = false;
+                    break;
+                }
+            }
+            return status;
+        }
 	},
 	watch: {
 		$route: {
@@ -396,9 +429,6 @@ export default {
 						unlock_judge_id: judge.id,
 						unlock_event_id: this.event.id
 					},
-					success: (data, textStatus, jqXHR) => {
-						console.log(`${jqXHR.status}: ${jqXHR.statusText}`);
-					},
 					error: (error) => {
 						alert(`ERROR ${error.status}: ${error.statusText}`);
 					},
@@ -415,11 +445,8 @@ export default {
 						withCredentials: true
 					},
 					data: {
-						unlock_technical_id: technical.id,
-						unlock_event_id: this.event.id
-					},
-					success: (data, textStatus, jqXHR) => {
-						console.log(`${jqXHR.status}: ${jqXHR.statusText}`);
+						unlock_technical_id	: technical.id,
+						unlock_event_id		: this.event.id
 					},
 					error: (error) => {
 						alert(`ERROR ${error.status}: ${error.statusText}`);

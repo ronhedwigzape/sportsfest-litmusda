@@ -13,7 +13,10 @@
         display: none !important;
     }
 
-    th, td {
+    th,
+    td,
+    th.bg-red-lighten-3,
+    td.bg-red-lighten-3 {
         background: white !important;
     }
 
