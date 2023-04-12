@@ -70,15 +70,13 @@ export default {
 	name: 'Login',
 	data() {
 		return {
-			loading: false,
-			show1: false,
-			show2: true,
-			username: '',
-			password: '',
-			img: `${import.meta.env.BASE_URL}foundation-logo.png`,
-			rules: {
-				required: value => !!value || 'Required.',
-			},
+			loading		: false,
+			show1		: false,
+			show2		: true,
+			username	: '',
+			password	: '',
+			img			: `${import.meta.env.BASE_URL}foundation-logo.png`,
+			rules		: {	required: value => !!value || 'Required.' }
 		}
 	},
 	methods: {
@@ -119,7 +117,6 @@ export default {
 }
 </script>
 
-
 <style scoped>
 .background-image {
 	background: url('/bg-img.png') no-repeat center fixed !important;
@@ -145,7 +142,6 @@ export default {
 	animation: animatedGradient 3s ease alternate infinite;
 	background-size: 300% 300%;
 }
-
 
 @keyframes animatedGradient {
 	0% {

@@ -191,17 +191,17 @@ export default {
 	},
 	data() {
 		return {
-			dialog: false,
-			submitDialog: false,
-			submitLoading: false,
-			event: null,
-			timer: null,
-			teams: [],
-			deductions: {},
-			submitDeduction: {},
-			coordinates: {
-				x: -1,
-				y: -1
+			dialog			: false,
+			submitDialog	: false,
+			submitLoading	: false,
+			event			: null,
+			timer			: null,
+			teams			: [],
+			deductions		: {},
+			submitDeduction	: {},
+			coordinates		: {
+					x: -1,
+					y: -1
 			}
 		}
 	},
@@ -249,12 +249,11 @@ export default {
 						getDeductionSheet: this.$route.params.eventSlug
 					},
 					success: (data) => {
-						data = JSON.parse(data);
-						this.deductions = data.deductions;
-						this.event = data.event;
-						this.teams = data.teams;
-						this.submitDeduction = {};
-						console.log(data)
+						data 					= JSON.parse(data);
+						this.deductions 		= data.deductions;
+						this.event 				= data.event;
+						this.teams 				= data.teams;
+						this.submitDeduction 	= {};
 
 						for (let i = 0; i < this.teams.length; i++) {
 							const team = this.teams[i];
@@ -292,7 +291,6 @@ export default {
                             deduction.loading = false;
 						}, 1000);
 					}
-					console.log(`${jqXHR.status}: ${jqXHR.statusText}`);
 				},
 				error: (error) => {
 					alert(`ERROR ${error.status}: ${error.statusText}`);
@@ -324,17 +322,15 @@ export default {
 				success: (data, textStatus, jqXHR) => {
 					if (this.submitLoading) {
 						setTimeout(() => {
-							this.submitLoading = false
-							this.submitDialog = false;
+							this.submitLoading 	= false
+							this.submitDialog 	= false;
 							// locks deductions of current event
 							for (let i = 0; i < deductions.length; i++) {
 								deductions[i].is_locked = true;
 							}
 						}, 600);
 					}
-
 					this.submitDeduction['is_locked'] = true;
-					console.log(`${jqXHR.status}: ${jqXHR.statusText}`);
 				},
 				error: (error) => {
 					this.submitLoading = false;
@@ -384,17 +380,6 @@ tbody td, th {
 tbody td {
 	border-bottom: 1px solid #ddd;
 	padding-bottom: 1rem !important;
-}
-
-#submit {
-	background: linear-gradient(-45deg, #e73c7e, #23a6d5, #23d5ab, #e8af45);
-	background-size: 200% 200%;
-
-	text-fill-color: transparent;
-	-webkit-background-clip: text;
-	-webkit-text-fill-color: transparent;
-
-	animation: shine 10s ease infinite;
 }
 
 #remind {

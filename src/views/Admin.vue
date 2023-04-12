@@ -318,7 +318,6 @@ export default {
 			judges    : [],
 			technicals: [],
 			winners   : {},
-
 			timer: null,
 			openUnlockDialog: false,
 		}
@@ -430,9 +429,6 @@ export default {
 						unlock_judge_id: judge.id,
 						unlock_event_id: this.event.id
 					},
-					success: (data, textStatus, jqXHR) => {
-						console.log(`${jqXHR.status}: ${jqXHR.statusText}`);
-					},
 					error: (error) => {
 						alert(`ERROR ${error.status}: ${error.statusText}`);
 					},
@@ -449,11 +445,8 @@ export default {
 						withCredentials: true
 					},
 					data: {
-						unlock_technical_id: technical.id,
-						unlock_event_id: this.event.id
-					},
-					success: (data, textStatus, jqXHR) => {
-						console.log(`${jqXHR.status}: ${jqXHR.statusText}`);
+						unlock_technical_id	: technical.id,
+						unlock_event_id		: this.event.id
 					},
 					error: (error) => {
 						alert(`ERROR ${error.status}: ${error.statusText}`);
