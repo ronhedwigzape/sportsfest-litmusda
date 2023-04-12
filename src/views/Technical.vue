@@ -214,10 +214,10 @@ export default {
 			let disabled = true;
 			// get deduction.is_locked and pass value to disabled variable
 			for (let i = 0; i < this.teams.length; i++) {
-				const team = this.teams[i];
+				const team 	  = this.teams[i];
 				let deduction = this.deductions[`${this.event.slug}_${team.id}`];
 				if (!deduction.is_locked) {
-					disabled = false;
+					disabled  = false;
 					break;
 				}
 			}
@@ -249,15 +249,15 @@ export default {
 						getDeductionSheet: this.$route.params.eventSlug
 					},
 					success: (data) => {
-						data 					= JSON.parse(data);
-						this.deductions 		= data.deductions;
-						this.event 				= data.event;
-						this.teams 				= data.teams;
-						this.submitDeduction 	= {};
+						data 				 = JSON.parse(data);
+						this.deductions 	 = data.deductions;
+						this.event 			 = data.event;
+						this.teams 			 = data.teams;
+						this.submitDeduction = {};
 
 						for (let i = 0; i < this.teams.length; i++) {
-							const team = this.teams[i];
-							let deduction = this.deductions[`${this.event.slug}_${team.id}`];
+							const team 		  = this.teams[i];
+							let deduction 	  = this.deductions[`${this.event.slug}_${team.id}`];
 							deduction.loading = false;
 						}
 
@@ -303,7 +303,7 @@ export default {
 			// prepare deductions
 			let deductions = [];
 			for (let i = 0; i < this.teams.length; i++) {
-				const team = this.teams[i];
+				const team 		= this.teams[i];
 				const deduction = this.deductions[`${this.event.slug}_${team.id}`]
 				deductions.push(deduction);
 			}

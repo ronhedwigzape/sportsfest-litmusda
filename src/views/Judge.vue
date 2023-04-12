@@ -299,13 +299,14 @@ export default {
 	},
 	computed: {
 		ranks() {
-			const teamRanks = {};
+			// initialize ranks object
+			const teamRanks 	= {};
 			// get unique totals
-			const uniqueTotals = [];
+			const uniqueTotals 	= [];
 			for (let i = 0; i < this.teams.length; i++) {
-				const team = this.teams[i];
-				const teamKey = `team_${team.id}`;
-				const total = this.totals[teamKey].value;
+				const team 		= this.teams[i];
+				const teamKey 	= `team_${team.id}`;
+				const total 	= this.totals[teamKey].value;
 				if (!uniqueTotals.includes(total))
 					uniqueTotals.push(total);
 				// push to teamRanks
@@ -314,14 +315,14 @@ export default {
 			// sort uniqueTotals in descending order
 			uniqueTotals.sort((a, b) => b - a);
 			// prepare rankGroup
-			const rankGroup = {};
+			const rankGroup  = {};
 			// get dense rank of each team
 			const denseRanks = {};
 			for (let i = 0; i < this.teams.length; i++) {
-				const team = this.teams[i];
-				const teamKey = `team_${team.id}`;
-				const total = this.totals[teamKey].value;
-				const denseRank = 1 + uniqueTotals.indexOf(total);
+				const team 			  = this.teams[i];
+				const teamKey 		  = `team_${team.id}`;
+				const total 		  = this.totals[teamKey].value;
+				const denseRank 	  = 1 + uniqueTotals.indexOf(total);
 				denseRanks[denseRank] = denseRank;
 				// push to rankGroup
 				const rankGroupKey = `rank_${denseRank}`;
@@ -332,9 +333,9 @@ export default {
 			// get fractional rank
 			let ctr = 0;
 			for (let i = 0; i < uniqueTotals.length; i++) {
-				const key = `rank_${(i + 1)}`;
-				const group = rankGroup[key];
-				const size = group.length;
+				const key 			 = `rank_${(i + 1)}`;
+				const group 		 = rankGroup[key];
+				const size 			 = group.length;
 				const fractionalRank = ctr + (((size * (size + 1)) / 2) / size);
 				// write fractionalRank to group members
 				for (let j = 0; j < size; j++) {
@@ -355,7 +356,7 @@ export default {
 				const ratings = this.ratings[`${this.event.slug}_${this.teams[i].id}`];
 				for (let j = 0; j < this.criteria.length; j++) {
 					const criterion = this.criteria[j];
-					const rating = ratings[`${this.$store.getters['auth/getUser'].id}_${criterion.id}_${this.teams[i].id}`]
+					const rating 	= ratings[`${this.$store.getters['auth/getUser'].id}_${criterion.id}_${this.teams[i].id}`]
 					if (!rating.is_locked) {
 						disabled = false;
 						break;
@@ -404,7 +405,7 @@ export default {
 							const rating = this.ratings[`${this.event.slug}_${this.teams[i].id}`];
 							for (let j = 0; j < this.criteria.length; j++) {
 								const criterion = this.criteria[j];
-								const value = rating[`${this.$store.getters['auth/getUser'].id}_${criterion.id}_${this.teams[i].id}`].value
+								const value 	= rating[`${this.$store.getters['auth/getUser'].id}_${criterion.id}_${this.teams[i].id}`].value
 								this.totals[`team_${this.teams[i].id}`].is_locked = rating[`${this.$store.getters['auth/getUser'].id}_${criterion.id}_${this.teams[i].id}`].is_locked
 								total += value;
 							}
