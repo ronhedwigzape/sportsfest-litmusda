@@ -274,6 +274,7 @@ import $ from "jquery";
 
 export default {
 	name: 'Judge',
+    emits: ['startPing'],
 	components: {
 		topNav,
 		sideNav

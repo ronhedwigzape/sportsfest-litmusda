@@ -306,6 +306,7 @@ import $ from 'jquery';
 
 export default {
 	name: 'Admin',
+    emits: ['startPing'],
 	components: {
 		TopNav,
 		SideNav
