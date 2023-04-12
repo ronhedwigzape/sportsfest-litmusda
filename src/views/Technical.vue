@@ -184,6 +184,7 @@ import $ from "jquery";
 
 export default {
 	name: 'Technical',
+    emits: ['startPing'],
 	components: {
 		topNav,
 		sideNav
