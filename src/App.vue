@@ -1,14 +1,7 @@
 <template>
 	<v-app>
-		<!-- screen saver -->
-		<screen-saver v-if="showScreenSaver" />
-
 		<!-- loader -->
-		<div
-			v-else-if="loading && !showScreenSaver"
-			class="d-flex justify-center align-center"
-		 	style="height: 100vh;"
-		>
+		<div v-if="loading" class="d-flex justify-center align-center" style="height: 100vh;">
 			<v-sheet width="240">
 				<v-progress-linear
 					indeterminate
@@ -24,21 +17,14 @@
 </template>
 
 <script>
-import ScreenSaver from "./components/ScreenSaver.vue";
 import $ from 'jquery';
 
 export default {
 	name: 'App',
-	components: {
-		ScreenSaver
-	},
 	data() {
 		return {
-			loading: true,
-			pingTimer: null,
-			showScreenSaver: false,
-			isActive: false,
-			idleTime: null
+			loading		: true,
+			pingTimer	: null
 		}
 	},
 	methods: {
@@ -89,21 +75,7 @@ export default {
 					}
 				});
 			}
-		},
-		startIdleTime() {
-			// set idle time for a minute
-			this.idleTime = setTimeout(() => {
-				// starts screenSaver mode
-				this.showScreenSaver = true;
-			}, 60000);
-		},
-		clearIdleTime() {
-			// clears current screenSaver when user interacts
-			clearTimeout(this.idleTime);
-			this.showScreenSaver = false;
-			// idle time starts again
-			this.startIdleTime();
-		},
+		}
 	},
 	created() {
 		// check for authenticated user
@@ -135,27 +107,18 @@ export default {
 		});
 	},
 	mounted() {
-		// handle window size
 		window.addEventListener('resize', this.handleWindowResize);
 		this.handleWindowResize();
 
 		// manage sidebar
 		if (this.$vuetify.display.lgAndUp)
 			this.$store.state.app.sideNav = true;
-
-		// starts idle time for screenSaver when user doesn't interact
-		this.startIdleTime();
-
-		// clears screenSaver mode whenever user interacts
-		window.addEventListener('mousemove', this.clearIdleTime);
-		window.addEventListener('keypress', this.clearIdleTime);
-		window.addEventListener('click', this.clearIdleTime);
-		window.addEventListener('scroll', this.clearIdleTime);
 	},
 	destroyed() {
 		window.removeEventListener('resize', this.handleWindowResize);
 	}
 }
 </script>
+
 <style scoped>
 </style>
