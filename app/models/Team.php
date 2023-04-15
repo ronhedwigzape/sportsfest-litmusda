@@ -124,17 +124,18 @@ class Team extends App
 
         // gather teams
         $team = new Team();
-        $sql = "SELECT id FROM $team->table ORDER BY id";
+        $sql  = "SELECT id FROM $team->table ";
+        if(sizeof($eliminated_team_ids) > 0) {
+            $sql .= "WHERE id NOT IN (" . implode(', ', $eliminated_team_ids) . ") ";
+        }
+        $sql .= "ORDER BY id";
         $stmt = $team->conn->prepare($sql);
         $stmt->execute();
         $result = $stmt->get_result();
+
         $teams = [];
         while($row = $result->fetch_assoc()) {
-            $team_id = $row['id'];
-
-            // push to $teams if not eliminated
-            if(!in_array($team_id, $eliminated_team_ids))
-                $teams[] = new Team($team_id);
+            $teams[] = new Team($row['id']);
         }
 
         // sort teams for an event
