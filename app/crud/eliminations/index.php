@@ -34,13 +34,12 @@ require_once '../../models/Team.php';
     $competitions = Competition::all();
     foreach ($competitions as $competition) { ?>
         <h2 class="text-center fw-bold text-uppercase"><?= $competition->getTitle(); ?></h2>
-
         <?php
         $categories = Category::all($competition->getId());
         foreach ($categories as $category) { ?>
             <hr>
             <div class="row d-flex justify-content-center">
-                <h3 class="text-center"><?= $category->getTitle(); ?></h3>
+                <h3 class="text-center text-uppercase"><u><?= $category->getTitle(); ?></u></h3>
                 <?php
                     $events = Event::all($category->getId());
                 foreach ($events as $event) {
@@ -48,11 +47,6 @@ require_once '../../models/Team.php';
                     $event_id = $event->getId();
                 ?>
                     <div class="col-lg-4 col-md-6 text-center mt-3">
-                        <button
-                            class="btn btn-danger mb-3"
-                        >
-                            Eliminate All
-                        </button>
                         <table class="table table-bordered text-center">
                             <thead>
                             <tr>

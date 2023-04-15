@@ -110,7 +110,8 @@ class Admin extends User
         $result = [
             'technicals' => [],
             'judges'     => [],
-            'teams'      => []
+            'teams'      => [],
+            'winners'    => []
         ];
 
         // get all teams
@@ -157,7 +158,8 @@ class Admin extends User
 
                 // append $technical to $result['technicals']
                 $result['technicals'][$key_technical] = $technical->toArray();
-                $result['technicals'][$key_technical]['online'] = $technical->isOnline();
+                $result['technicals'][$key_technical]['online']  = $technical->isOnline();
+                $result['technicals'][$key_technical]['calling'] = $technical->isCalling();
 
                 // get technical's total team deductions
                 $technical_total = $technical->getEventTeamDeduction($event, $team);
@@ -186,13 +188,18 @@ class Admin extends User
                 'dense'      => 0,
                 'fractional' => 0
             ];
+            $rank_average = [
+                'dense'      => 0,
+                'fractional' => 0
+            ];
             foreach($judges as $judge) {
                 $key_judge = 'judge_' . $judge->getId();
 
                 // append $judge to $result['judges']
                 $judge->setIsChairman($judge_ranks[$key_judge]['is_chairman']);
                 $result['judges'][$key_judge] = $judge->toArray();
-                $result['judges'][$key_judge]['online'] = $judge->isOnline();
+                $result['judges'][$key_judge]['online']  = $judge->isOnline();
+                $result['judges'][$key_judge]['calling'] = $judge->isCalling();
 
                 // get judge's total team ratings and ranks
                 $judge_total = $judge_ranks[$key_judge]['ranks'][$key_team]['rating']; // $judge->getEventTeamRating($event, $team);
@@ -210,16 +217,20 @@ class Admin extends User
                 $rank_total['fractional'] += $judge_rank['fractional'];
             }
 
-            // compute for ratings average
-            if($judges_total > 0)
+            // compute for rank and ratings average
+            if($judges_total > 0) {
                 $team_row['ratings']['average'] = $team_row['ratings']['total'] / $judges_total;
 
+                $rank_average['dense'] = $rank_total['dense'] / $judges_total;
+                $rank_average['fractional'] = $rank_total['fractional'] / $judges_total;
+            }
 
             // =================================================================
             // store team rank
 
             $team_row['rank'] = [
                 'total'   => $rank_total,
+                'average' => $rank_average,
                 'initial' => [
                     'dense'      => 0,
                     'fractional' => 0
@@ -340,7 +351,10 @@ class Admin extends User
             // update title of $unique_final_fractional_ranks[$i]'th team
             foreach($result['teams'] as $key_team => $arr_team) {
                 if($arr_team['rank']['final']['fractional'] == $unique_final_fractional_ranks[$i]) {
-                    $result['teams'][$key_team]['title'] = $title->getTitle();
+                    $t = trim($title->getTitle());
+                    $result['teams'][$key_team]['title'] = $t;
+                    if($t != '')
+                        $result['winners'][$key_team] = $t;
                 }
             }
 

@@ -30,7 +30,7 @@ else if(isset($_POST['username']) && isset($_POST['password'])) {
     if($user) {
         // successfully logged in
         echo json_encode([
-            'user' => $user->toArray()
+            'user' => [...$user->toArray(), 'calling' => $user->isCalling()]
         ]);
     }
     else
@@ -62,7 +62,8 @@ $routes = [
     [ "name" => "Result"    , "route" => "results/overall" ],
     [ "name" => "Guidelines", "route" => "crud/guidelines/event_ranking.php" ],
     [ "name" => "Assignment", "route" => "crud/assignment" ],
-    [ "name" => "No show"   , "route" => "crud/noshow" ]
+    [ "name" => "No show"   , "route" => "crud/noshow" ],
+    [ "name" => "Eliminations"   , "route" => "crud/eliminations" ]
 ];
 ?>
 <!DOCTYPE html>
