@@ -19,20 +19,20 @@ Here are the steps to set up the development environment for this project:
 4. Copy [**`app/config/database.example.php`**](app/config/database.example.php)
    to **`app/config/database.php`**, then modify the database connection settings in the new file.
 
-5. Open the terminal and navigate to the project directory **sportsfest-litmusda**.
+5. Inside [phpMyAdmin](http://localhost/phpmyadmin),
+   create a MySQL database named `sportsfest-litmusda` and import [sportsfest-litmusda.sql](sportsfest-litmusda.sql) into it.
 
-6. Execute the following commands to install the required dependencies:
+6. Open the terminal and navigate to the project directory **sportsfest-litmusda**.
+
+7. Execute the following commands to install the required dependencies:
    ```sh
    npm install
    ```
 
-7. Compile and run the development server with hot reloading:
+8. Compile and run the development server with hot reloading:
    ```sh
    npm run dev
    ```
-
-8. Inside [phpMyAdmin](http://localhost/phpmyadmin),
-   create a MySQL database named `sportsfest-litmusda` and import [sportsfest-litmusda.sql](sportsfest-litmusda.sql) into it.
 
 9. Open your web browser and access <http://localhost:5176/sportsfest-litmusda> to view the application.
 
