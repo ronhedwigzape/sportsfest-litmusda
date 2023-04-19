@@ -124,6 +124,7 @@
 							)"
 						:disabled="ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].is_locked"
 						:id="`input_${teamIndex}_${criterionIndex}`"
+						@keyup.prevent="handleRatingKeyUp(team)"
 						@keydown.down.prevent="moveDown(criterionIndex, teamIndex)"
 						@keydown.enter="moveDown(criterionIndex, teamIndex)"
 						@keydown.up.prevent="moveUp(criterionIndex, teamIndex)"
@@ -421,12 +422,17 @@ export default {
 		},
 		saveRating(rating, percentage, team) {
 			this.totals[`team_${team.id}`].loading = true;
+
 			// validates rating
 			if (rating.value < 0 || rating.value === '') {
 				rating.value = 0;
 			} else if (rating.value > percentage) {
 				rating.value = percentage;
 			}
+
+			// handle rating change in real-time
+			this.handleRatingKeyUp(team);
+
 			// auto-save ratings
 			$.ajax({
 				url: `${this.$store.getters.appURL}/${this.$store.getters['auth/getUser'].userType}.php`,
@@ -438,16 +444,6 @@ export default {
 					rating
 				},
 				success: (data, textStatus, jqXHR) => {
-					let total = 0;
-					// accumulate ratings to total score
-					const teamRating = this.ratings[`${this.event.slug}_${team.id}`];
-					for (let j = 0; j < this.criteria.length; j++) {
-						const criterion = this.criteria[j];
-						total += teamRating[`${this.$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value
-					}
-					// accumulate total adds into totals object
-					this.totals[`team_${team.id}`].value = total;
-					// set timeout for loading
 					if (this.totals[`team_${team.id}`].loading) {
 						setTimeout(() => {
 							this.totals[`team_${team.id}`].loading = false;
@@ -456,7 +452,7 @@ export default {
 				},
 				error: (error) => {
 					alert(`ERROR ${error.status}: ${error.statusText}`);
-				},
+				}
 			});
 		},
 		calculateTotalScores(team) {
@@ -558,6 +554,20 @@ export default {
 					alert(`ERROR ${error.status}: ${error.statusText}`);
 				}
 			})
+		},
+		handleRatingKeyUp(team) {
+			// initialize total
+			let total = 0;
+
+			// accumulate ratings to total score
+			const teamRating = this.ratings[`${this.event.slug}_${team.id}`];
+			for (let i = 0; i < this.criteria.length; i++) {
+				const criterion = this.criteria[i];
+				total += Number(teamRating[`${this.$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value);
+			}
+
+			// accumulate total adds into totals object
+			this.totals[`team_${team.id}`].value = total;
 		},
 		move(x, y, focus = true) {
 			// move to input
