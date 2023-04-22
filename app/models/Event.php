@@ -877,11 +877,11 @@ class Event extends App
 
 
     /***************************************************************************
-     * Get teams which are eliminated from the event, as array of objects
+     * Get teams which are eliminated from the event, as a result set
      *
-     * @return Team[]
+     * @return array
      */
-    public function getAllEliminatedTeams()
+    private function getResultEliminatedTeams()
     {
         require_once 'Team.php';
 
@@ -889,13 +889,44 @@ class Event extends App
         $stmt->bind_param("i", $this->id);
         $stmt->execute();
 
-        $result = $stmt->get_result();
+        return $stmt->get_result();
+    }
+
+
+    /***************************************************************************
+     * Get teams which are eliminated from the event, as array of objects
+     *
+     * @return Team[]
+     */
+    public function getAllEliminatedTeams()
+    {
+        require_once 'Team.php';
+        $result = $this->getResultEliminatedTeams();
+
         $teams = [];
         while($row = $result->fetch_assoc()) {
             $teams[] = new Team($row['team_id']);
         }
 
         return $teams;
+    }
+
+
+    /***************************************************************************
+     * Get id's of teams which are eliminated from the event
+     *
+     * @return array
+     */
+    public function getRowEliminatedTeamIds()
+    {
+        $result = $this->getResultEliminatedTeams();
+
+        $team_ids = [];
+        while($row = $result->fetch_assoc()) {
+            $team_ids[] = $row['team_id'];
+        }
+
+        return $team_ids;
     }
 
 
