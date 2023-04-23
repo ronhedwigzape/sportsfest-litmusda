@@ -103,7 +103,6 @@
 					<v-text-field
 						type="number"
 						class="font-weight-bold"
-						variant="underlined"
 						hide-details
 						single-line
 						:min="0"
@@ -111,17 +110,22 @@
 						@change="saveRating(ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`], criterion.percentage, team)"
 						v-model.number="ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value"
 						:class="{
-								'text-error font-weight-bold': (
-									ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value < 0 ||
-									ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value > criterion.percentage
-								),
-								'text-grey-darken-2': ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value === 0
-							}"
+							'text-error font-weight-bold': (
+								ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value < 0 ||
+								ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value > criterion.percentage
+							),
+							'text-grey-darken-2': ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value === 0
+						}"
 						:error="(
-								  ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value.toString().trim() === ''
-							   || ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value < 0
-							   || ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value > criterion.percentage
-							)"
+							  ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value.toString().trim() === ''
+						   || ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value < 0
+						   || ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value > criterion.percentage
+						)"
+						:variant="
+							   ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value < 0
+							|| ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value > criterion.percentage ?
+							'outlined' : 'underlined'
+						"
 						:disabled="ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].is_locked"
 						:id="`input_${teamIndex}_${criterionIndex}`"
 						@keyup.prevent="handleRatingKeyUp(team)"
@@ -146,20 +150,20 @@
 						:max="$store.state.rating.max"
 						@change="calculateTotalScores(team)"
 						:class="{
-								'text-error font-weight-bold': (
-									totals[`team_${team.id}`].value < $store.state.rating.min
-								|| totals[`team_${team.id}`].value > $store.state.rating.max
-								),
-								'text-success font-weight-bold': (
-									totals[`team_${team.id}`].value >= $store.state.rating.min
-								&& totals[`team_${team.id}`].value <= $store.state.rating.max
-								)
-							}"
+							'text-error font-weight-bold': (
+								totals[`team_${team.id}`].value < $store.state.rating.min
+							|| totals[`team_${team.id}`].value > $store.state.rating.max
+							),
+							'text-success font-weight-bold': (
+								totals[`team_${team.id}`].value >= $store.state.rating.min
+							&& totals[`team_${team.id}`].value <= $store.state.rating.max
+							)
+						}"
 						:error="(
-								  totals[`team_${team.id}`].value.toString().trim() === ''
-							   || totals[`team_${team.id}`].value < $store.state.rating.min
-							   || totals[`team_${team.id}`].value > $store.state.rating.max
-						   )"
+							  totals[`team_${team.id}`].value.toString().trim() === ''
+						   || totals[`team_${team.id}`].value < $store.state.rating.min
+						   || totals[`team_${team.id}`].value > $store.state.rating.max
+						)"
 						:disabled="totals[`team_${team.id}`].is_locked"
 						:id="`input_${teamIndex}_${criteria.length}`"
 						@keydown.down.prevent="moveDown(criteria.length, teamIndex)"
