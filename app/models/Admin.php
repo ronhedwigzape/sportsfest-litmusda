@@ -188,6 +188,10 @@ class Admin extends User
                 'dense'      => 0,
                 'fractional' => 0
             ];
+            $rank_average = [
+                'dense'      => 0,
+                'fractional' => 0
+            ];
             foreach($judges as $judge) {
                 $key_judge = 'judge_' . $judge->getId();
 
@@ -213,16 +217,20 @@ class Admin extends User
                 $rank_total['fractional'] += $judge_rank['fractional'];
             }
 
-            // compute for ratings average
-            if($judges_total > 0)
+            // compute for rank and ratings average
+            if($judges_total > 0) {
                 $team_row['ratings']['average'] = $team_row['ratings']['total'] / $judges_total;
 
+                $rank_average['dense'] = $rank_total['dense'] / $judges_total;
+                $rank_average['fractional'] = $rank_total['fractional'] / $judges_total;
+            }
 
             // =================================================================
             // store team rank
 
             $team_row['rank'] = [
                 'total'   => $rank_total,
+                'average' => $rank_average,
                 'initial' => [
                     'dense'      => 0,
                     'fractional' => 0
