@@ -56,6 +56,10 @@ input[type=number] {
     url('/fonts/Roboto/Roboto-Black.ttf') format('truetype');
 }
 
+html {
+    overflow-y: hidden;
+}
+
 body {
     font-family: 'Roboto', sans-serif;
 }
