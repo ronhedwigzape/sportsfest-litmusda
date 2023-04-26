@@ -79,28 +79,32 @@
 				<td>
 					<v-text-field
 						type="number"
-						variant="outlined"
 						align="center"
 						justify="center"
 						hide-details
 						single-line
-						:min="0"
-						:max="100"
+						:min="$store.state.deduction.min"
+						:max="$store.state.deduction.max"
 						:loading="deductions[`${event.slug}_${team.id}`].loading"
 						v-model.number="deductions[`${event.slug}_${team.id}`].value"
 						@change="saveDeduction(deductions[`${event.slug}_${team.id}`], team.id)"
 						:class="{
-								'text-error font-weight-bold': (
-									deductions[`${event.slug}_${team.id}`].value < 0 ||
-									deductions[`${event.slug}_${team.id}`].value > 100
-								),
-								'text-grey-darken-2': deductions[`${event.slug}_${team.id}`].value === 0
-							}"
+							'text-error font-weight-bold': (
+								deductions[`${event.slug}_${team.id}`].value < $store.state.deduction.min ||
+								deductions[`${event.slug}_${team.id}`].value > $store.state.deduction.max
+							),
+							'text-grey-darken-2': deductions[`${event.slug}_${team.id}`].value === 0
+						}"
 						:error="(
-								  deductions[`${event.slug}_${team.id}`].value.toString().trim() === ''
-							   || deductions[`${event.slug}_${team.id}`].value < 0
-							   || deductions[`${event.slug}_${team.id}`].value > 100
-						   )"
+							  deductions[`${event.slug}_${team.id}`].value.toString().trim() === ''
+						   || deductions[`${event.slug}_${team.id}`].value < $store.state.deduction.min
+						   || deductions[`${event.slug}_${team.id}`].value > $store.state.deduction.max
+					    )"
+						:variant="
+							deductions[`${event.slug}_${team.id}`].value < $store.state.deduction.min ||
+							deductions[`${event.slug}_${team.id}`].value > $store.state.deduction.max ?
+							'outlined' : 'underlined'
+						"
 						:disabled="deductions[`${event.slug}_${team.id}`].is_locked"
 						:id="`input_${teamIndex}`"
 						@keydown.down.prevent="moveDown(teamIndex)"
@@ -271,10 +275,10 @@ export default {
 		saveDeduction(deduction, teamId) {
             deduction.loading = true;
 
-			if (deduction.value < 0 || deduction.value === '') {
-				deduction.value = 0;
-			} else if (deduction.value > 100) {
-				deduction.value = 100;
+			if (deduction.value < this.$store.state.deduction.min || deduction.value === '') {
+				deduction.value = this.$store.state.deduction.min;
+			} else if (deduction.value > this.$store.state.deduction.max) {
+				deduction.value = this.$store.state.deduction.max;
 			}
 			$.ajax({
 				url: `${this.$store.getters.appURL}/${this.$store.getters['auth/getUser'].userType}.php`,

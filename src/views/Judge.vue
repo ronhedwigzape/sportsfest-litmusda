@@ -103,7 +103,6 @@
 					<v-text-field
 						type="number"
 						class="font-weight-bold"
-						variant="underlined"
 						hide-details
 						single-line
 						:min="0"
@@ -111,19 +110,25 @@
 						@change="saveRating(ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`], criterion.percentage, team)"
 						v-model.number="ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value"
 						:class="{
-								'text-error font-weight-bold': (
-									ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value < 0 ||
-									ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value > criterion.percentage
-								),
-								'text-grey-darken-2': ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value === 0
-							}"
+							'text-error font-weight-bold': (
+								ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value < 0 ||
+								ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value > criterion.percentage
+							),
+							'text-grey-darken-2': ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value === 0
+						}"
 						:error="(
-								  ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value.toString().trim() === ''
-							   || ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value < 0
-							   || ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value > criterion.percentage
-							)"
+							  ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value.toString().trim() === ''
+						   || ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value < 0
+						   || ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value > criterion.percentage
+						)"
+						:variant="
+							   ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value < 0
+							|| ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value > criterion.percentage ?
+							'outlined' : 'underlined'
+						"
 						:disabled="ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].is_locked"
 						:id="`input_${teamIndex}_${criterionIndex}`"
+						@keyup.prevent="handleRatingKeyUp(team)"
 						@keydown.down.prevent="moveDown(criterionIndex, teamIndex)"
 						@keydown.enter="moveDown(criterionIndex, teamIndex)"
 						@keydown.up.prevent="moveUp(criterionIndex, teamIndex)"
@@ -145,20 +150,20 @@
 						:max="$store.state.rating.max"
 						@change="calculateTotalScores(team)"
 						:class="{
-								'text-error font-weight-bold': (
-									totals[`team_${team.id}`].value < $store.state.rating.min
-								|| totals[`team_${team.id}`].value > $store.state.rating.max
-								),
-								'text-success font-weight-bold': (
-									totals[`team_${team.id}`].value >= $store.state.rating.min
-								&& totals[`team_${team.id}`].value <= $store.state.rating.max
-								)
-							}"
+							'text-error font-weight-bold': (
+								totals[`team_${team.id}`].value < $store.state.rating.min
+							|| totals[`team_${team.id}`].value > $store.state.rating.max
+							),
+							'text-success font-weight-bold': (
+								totals[`team_${team.id}`].value >= $store.state.rating.min
+							&& totals[`team_${team.id}`].value <= $store.state.rating.max
+							)
+						}"
 						:error="(
-								  totals[`team_${team.id}`].value.toString().trim() === ''
-							   || totals[`team_${team.id}`].value < $store.state.rating.min
-							   || totals[`team_${team.id}`].value > $store.state.rating.max
-						   )"
+							  totals[`team_${team.id}`].value.toString().trim() === ''
+						   || totals[`team_${team.id}`].value < $store.state.rating.min
+						   || totals[`team_${team.id}`].value > $store.state.rating.max
+						)"
 						:disabled="totals[`team_${team.id}`].is_locked"
 						:id="`input_${teamIndex}_${criteria.length}`"
 						@keydown.down.prevent="moveDown(criteria.length, teamIndex)"
@@ -421,12 +426,17 @@ export default {
 		},
 		saveRating(rating, percentage, team) {
 			this.totals[`team_${team.id}`].loading = true;
+
 			// validates rating
 			if (rating.value < 0 || rating.value === '') {
 				rating.value = 0;
 			} else if (rating.value > percentage) {
 				rating.value = percentage;
 			}
+
+			// handle rating change in real-time
+			this.handleRatingKeyUp(team);
+
 			// auto-save ratings
 			$.ajax({
 				url: `${this.$store.getters.appURL}/${this.$store.getters['auth/getUser'].userType}.php`,
@@ -438,16 +448,6 @@ export default {
 					rating
 				},
 				success: (data, textStatus, jqXHR) => {
-					let total = 0;
-					// accumulate ratings to total score
-					const teamRating = this.ratings[`${this.event.slug}_${team.id}`];
-					for (let j = 0; j < this.criteria.length; j++) {
-						const criterion = this.criteria[j];
-						total += teamRating[`${this.$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value
-					}
-					// accumulate total adds into totals object
-					this.totals[`team_${team.id}`].value = total;
-					// set timeout for loading
 					if (this.totals[`team_${team.id}`].loading) {
 						setTimeout(() => {
 							this.totals[`team_${team.id}`].loading = false;
@@ -456,7 +456,7 @@ export default {
 				},
 				error: (error) => {
 					alert(`ERROR ${error.status}: ${error.statusText}`);
-				},
+				}
 			});
 		},
 		calculateTotalScores(team) {
@@ -558,6 +558,20 @@ export default {
 					alert(`ERROR ${error.status}: ${error.statusText}`);
 				}
 			})
+		},
+		handleRatingKeyUp(team) {
+			// initialize total
+			let total = 0;
+
+			// accumulate ratings to total score
+			const teamRating = this.ratings[`${this.event.slug}_${team.id}`];
+			for (let i = 0; i < this.criteria.length; i++) {
+				const criterion = this.criteria[i];
+				total += Number(teamRating[`${this.$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value);
+			}
+
+			// accumulate total adds into totals object
+			this.totals[`team_${team.id}`].value = total;
 		},
 		move(x, y, focus = true) {
 			// move to input
