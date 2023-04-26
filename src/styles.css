@@ -1,3 +1,4 @@
+/************************** Global styles **************************/
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
     -webkit-appearance: none;
@@ -62,4 +63,110 @@ html {
 
 body {
     font-family: 'Roboto', sans-serif;
+}
+
+/******************* Base Styles for Screensaver *******************/
+
+/* Screensaver */
+div#screenSaver {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    height: 100vh;
+}
+
+/* Screensaver Image */
+div#screenSaver img {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Disable scrollbar for Chrome */
+html::-webkit-scrollbar {
+    display: none;
+}
+
+/* Disable scrollbar for Firefox and Edge */
+#screenSaver {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* Swap Screensaver background-colors */
+.swap {
+    animation: swap-colors 8s linear infinite;
+    background-size: 200% 200%;
+}
+
+/* Fade-in animation for Screensaver image */
+.fade-in {
+    animation: fade-in 3s;
+}
+
+/* Swap-colors Animations */
+@keyframes swap-colors {
+    0% {
+        background-color: #6a6eff;
+    }
+    50% {
+        background-color: #ffffff;
+    }
+    100% {
+        background-color: #6a6eff;
+    }
+}
+
+/* Fade-in animation for Screensaver image */
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+/****************** Responsive styles for Screensaver ******************/
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+    /* Image height set for extra-small devices */
+    div#screenSaver img {
+        height: 10rem;
+    }
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+    /* Image height set for small devices */
+    div#screenSaver img {
+        height: 15rem;
+    }
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+    /* Image height set for medium devices */
+    div#screenSaver img {
+        height: 20rem;
+    }
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+    /* Image height set for large devices */
+    div#screenSaver img {
+        height: 25rem;
+    }
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+    /* Image height set for extra-large devices */
+    div#screenSaver img {
+        height: 30rem;
+    }
 }
