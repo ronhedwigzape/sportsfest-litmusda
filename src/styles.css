@@ -143,7 +143,7 @@ html::-webkit-scrollbar {
 @media only screen and (min-width: 600px) {
     /* Image height set for small devices */
     div#screenSaver img {
-        height: 10rem;
+        height: 15rem;
     }
 }
 
