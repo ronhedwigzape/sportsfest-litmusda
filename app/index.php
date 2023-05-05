@@ -57,7 +57,7 @@ else if(isset($_POST['signOut'])) {
 
 
 $routes = [
-    [ "name" => "Tabulation", "route" => "http://localhost/sportsfest-litmusda" ],
+    [ "name" => "Tabulation", "route" => "/sportsfest-litmusda" ],
     [ "name" => "CRUD", "route" => "crud/competitions.php" ],
     [ "name" => "Guidelines", "route" => "crud/guidelines/event_ranking.php" ],
     [ "name" => "User Assignments", "route" => "crud/assignment" ],
