@@ -174,7 +174,7 @@
 						@focus.passive="updateCoordinates(criteria.length, teamIndex)"
 					/>
 				</td>
-				<td class="text-center"> {{ ranks[`team_${team.id}`] }}</td>
+				<td class="text-center font-weight-bold text-grey-darken-2"> {{ ranks[`team_${team.id}`] }}</td>
 			</tr>
 			</tbody>
 			<!--	Dialog	  -->
