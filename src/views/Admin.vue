@@ -182,7 +182,9 @@
 							'bg-yellow-lighten-3': allSubmitted && team.deductions.inputs[technicalKey].is_locked && team.title !== '',
 						}, $vuetify.display.mdAndDown ? 'text-caption' : ''"
 					>
-						{{ team.deductions.inputs[technicalKey].value.toFixed(2) }}
+                        <span :class="{ blurred: !team.deductions.inputs[technicalKey].is_locked && team.deductions.inputs[technicalKey].value <= 0 }">
+						    {{ team.deductions.inputs[technicalKey].value.toFixed(2) }}
+                        </span>
 					</td>
 				</template>
 				<template v-for="judge in judges" :key="judge.id">
@@ -196,7 +198,9 @@
 							'text-red-darken-3': judge.is_chairman == 1
 						}, $vuetify.display.mdAndDown ? 'text-caption' : ''"
 					>
-						{{ team.ratings.inputs[`judge_${judge.id}`].final.deducted.toFixed(2) }}
+                        <span :class="{ blurred: !team.ratings.inputs[`judge_${judge.id}`].final.is_locked && team.ratings.inputs[`judge_${judge.id}`].final.deducted <= 0 }">
+						    {{ team.ratings.inputs[`judge_${judge.id}`].final.deducted.toFixed(2) }}
+                        </span>
 					</td>
 					<td
 						class="text-center font-weight-bold text-blue-darken-2"
@@ -206,7 +210,9 @@
 							'bg-yellow-lighten-3': allSubmitted && team.ratings.inputs[`judge_${judge.id}`].final.is_locked && team.title !== '',
 						}, $vuetify.display.mdAndDown ? 'text-caption' : ''"
 					>
-						{{ team.ratings.inputs[`judge_${judge.id}`].rank.fractional.toFixed(2) }}
+                        <span :class="{ blurred: !team.ratings.inputs[`judge_${judge.id}`].final.is_locked && team.ratings.inputs[`judge_${judge.id}`].final.deducted <= 0 }">
+						    {{ team.ratings.inputs[`judge_${judge.id}`].rank.fractional.toFixed(2) }}
+                        </span>
 					</td>
 				</template>
 				<td
@@ -243,10 +249,10 @@
 			</tbody>
 			<tfoot>
 			<tr>
-				<td colspan="20">
-					<v-row>
+				<td :colspan="12 + totalJudges + totalTechnicals">
+					<v-row class="justify-center">
 						<template v-for="technical in technicals" :key="technical.id">
-							<v-col>
+							<v-col md="3">
 								<v-card class="text-center mb-5" :class="{ 'text-warning': technical.calling }" flat>
 									<v-card-title class="pt-16 font-weight-bold">
 										{{ technical.name }}
@@ -264,7 +270,7 @@
 							</v-col>
 						</template>
 						<template v-for="judge in judges" :key="judge.id">
-							<v-col>
+							<v-col md="3">
 								<v-card class="text-center mb-5" :class="{ 'text-warning': judge.calling }" flat>
 									<v-card-title class="pt-16 font-weight-bold">
 										{{ judge.name }}
@@ -326,6 +332,12 @@ export default {
 		scoreSheetHeight() {
 			return this.$store.getters.windowHeight - 64;
 		},
+        totalTechnicals() {
+            return Object.values(this.technicals).length;
+        },
+        totalJudges() {
+            return Object.values(this.judges).length;
+        },
         technicalSubmitted() {
             const status = {};
             for(const technicalKey in this.technicals) {
@@ -472,4 +484,7 @@ th, td {
 	border: 1px solid #ddd;
 }
 
+.blurred {
+    opacity: 0.3;
+}
 </style>
