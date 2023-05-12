@@ -73,6 +73,8 @@ div#screenSaver {
     align-items: center;
     text-align: center;
     height: 100vh;
+    position: relative !important;
+    z-index: 99999 !important;
 }
 
 /* Screensaver Image */
