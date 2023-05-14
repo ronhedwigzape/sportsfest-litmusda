@@ -21,38 +21,6 @@
     <script type="module" src="/src/main.js"></script>
 
     <!-- Screensaver JS -->
-    <script>
-        // initialize screensaver variables
-        let idleTime = null;
-
-        // initialize screensaver
-        document.getElementById("screenSaver").style.display = "none";
-
-        // set idle time for a minute
-        const startIdleTime = () => {
-            idleTime = setTimeout(() => { 
-                // show styles for screen saver
-                document.getElementById("screenSaver").style.display = "block";
-                document.getElementById("app").style.display = "none";
-            }, 150000);
-        }
-       
-        // clear idle time
-        const clearIdleTime = () => {
-            clearTimeout(idleTime);
-            document.getElementById("screenSaver").style.display = "none";
-            document.getElementById("app").style.display = "block";
-            // starts idle time again after idle time is cleared
-            startIdleTime();
-        }
-
-        // starts idle time for screensaver
-        startIdleTime();
-
-        // event handlers for screensaver
-        window.addEventListener('mousemove', clearIdleTime);
-        window.addEventListener('keypress', clearIdleTime);
-        window.addEventListener('click', clearIdleTime);
-    </script>
+    <script type="module" src="/src/screenSaver.js"></script>
 </body>
 </html>

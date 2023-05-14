@@ -73,6 +73,8 @@ div#screenSaver {
     align-items: center;
     text-align: center;
     height: 100vh;
+    position: relative !important;
+    z-index: 99999 !important;
 }
 
 /* Screensaver Image */
@@ -109,13 +111,13 @@ html::-webkit-scrollbar {
 /* Swap-colors Animations */
 @keyframes swap-colors {
     0% {
-        background-color: #6a6eff;
+        background-color: #fff;
     }
     50% {
-        background-color: #ffffff;
+        background-color: #6a6eff;
     }
     100% {
-        background-color: #6a6eff;
+        background-color: #fff;
     }
 }
 
