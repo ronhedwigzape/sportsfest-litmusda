@@ -1,29 +1,45 @@
 // initialize screensaver variables
 let idleTime = null;
+let forced = false;
 
 // initialize screensaver
-document.getElementById("screenSaver").style.display = "none";
+const screenSaver = document.getElementById("screenSaver");
+screenSaver.style.display = "none";
 
 // set idle time for 2 and a half minutes
 const startIdleTime = () => {
     idleTime = setTimeout(() => {
         // show styles for screen saver
-        document.getElementById("screenSaver").style.display = "block";
-    }, 600000);
+        screenSaver.style.display = "block";
+    }, 150000);
 }
 
 // clear idle time
 const clearIdleTime = () => {
     clearTimeout(idleTime);
-    document.getElementById("screenSaver").style.display = "none";
+    screenSaver.style.display = "none";
     // starts idle time again after idle time is cleared
     startIdleTime();
+}
+
+// force screensaver
+const forceScreensaver = () => {
+    screenSaver.style.display = "block";
+    forced = true;
+    setTimeout(() => {
+        forced = false;
+    }, 2400);
 }
 
 // starts idle time for screensaver
 startIdleTime();
 
 // event handlers for screensaver
-window.addEventListener('mousemove', clearIdleTime);
-window.addEventListener('keypress', clearIdleTime);
-window.addEventListener('click', clearIdleTime);
+window.addEventListener('mousemove', function() {
+    if(!forced)
+        clearIdleTime();
+});
+window.addEventListener('keypress', function() {
+    if(!forced)
+        clearIdleTime();
+});
