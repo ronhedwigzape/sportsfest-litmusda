@@ -39,7 +39,7 @@
 				<v-col cols="12">
 					<v-btn class="mb-2" variant="tonal" @click="coverRating" block>COVER</v-btn>
 					<v-btn class="mb-2" variant="tonal" @click="refresh" block :loading="refreshing">REFRESH</v-btn>
-					<div class="mb-2 text-disabled text-uppercase">
+					<div class="pt-2 text-disabled text-uppercase">
 						&copy; {{ $store.state.app.org }}
 					</div>
 				</v-col>
