@@ -38,11 +38,12 @@
                                 class="mt-4 login-btn text-white"
                                 variant="outlined"
                                 type="submit"
+                                size="large"
                                 :loading="loading"
                                 :disabled="loading"
                                 block
                             >
-                                log in
+                                Log in
                             </v-btn>
                             <div class="d-flex align-center justify-center text-disabled pt-3 pt-lg-6">
                                 &copy; {{ $store.state.app.org }}
