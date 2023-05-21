@@ -3,28 +3,28 @@ let idleTime = null;
 let forced = false;
 
 // initialize screensaver
-const screenSaver = document.getElementById("screenSaver");
-screenSaver.style.display = "none";
+const screensaver = document.getElementById("screensaver");
+screensaver.style.display = "none";
 
 // set idle time for 2 and a half minutes
 const startIdleTime = () => {
     idleTime = setTimeout(() => {
         // show styles for screen saver
-        screenSaver.style.display = "block";
+        screensaver.style.display = "block";
     }, 150000);
 }
 
 // clear idle time
 const clearIdleTime = () => {
     clearTimeout(idleTime);
-    screenSaver.style.display = "none";
+    screensaver.style.display = "none";
     // starts idle time again after idle time is cleared
     startIdleTime();
 }
 
 // force screensaver
 const forceScreensaver = () => {
-    screenSaver.style.display = "block";
+    screensaver.style.display = "block";
     forced = true;
     setTimeout(() => {
         forced = false;
@@ -43,3 +43,5 @@ window.addEventListener('keypress', function() {
     if(!forced)
         clearIdleTime();
 });
+
+export default forceScreensaver;

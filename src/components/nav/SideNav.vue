@@ -35,23 +35,29 @@
 			</template>
 		</v-list>
 		<template v-slot:append>
-			<v-col class="text-center mt-4" cols="12">
-                <v-btn class="mb-3" variant="tonal" @click="refresh" block :loading="refreshing">REFRESH</v-btn>
-				&copy; <strong class="text-uppercase">ACLC Iriga 2023</strong>
-			</v-col>
+			<v-row class="text-center mt-2 mb-1 mx-1">
+				<v-col cols="12">
+					<v-btn class="mb-2" variant="tonal" @click="coverRating" block>COVER</v-btn>
+					<v-btn class="mb-2" variant="tonal" @click="refresh" block :loading="refreshing">REFRESH</v-btn>
+					<div class="mb-2 text-disabled text-uppercase">
+						&copy; {{ $store.state.app.org }}
+					</div>
+				</v-col>
+			</v-row>
 		</template>
 	</v-navigation-drawer>
 </template>
 
 <script>
 import $ from 'jquery';
+import forceScreensaver from "@/screensaver";
 
 export default {
 	name: "SideNav",
 	data() {
 		return {
             refreshing: false
-        }
+		}
 	},
 	methods: {
 		handleEventChange(event) {
@@ -67,10 +73,12 @@ export default {
 			if (this.$vuetify.display.mdAndDown)
 				this.$store.state.app.sideNav = false;
 		},
-
         refresh() {
             this.refreshing = true;
             window.location.reload();
+        },
+        coverRating() {
+            forceScreensaver();
         }
 	},
 	created() {
@@ -98,7 +106,7 @@ export default {
 				alert(`ERROR ${error.status}: ${error.statusText}`);
 			},
 		});
-	},
+	}
 }
 </script>
 

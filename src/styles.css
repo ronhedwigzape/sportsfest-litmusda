@@ -68,7 +68,7 @@ body {
 /******************* Base Styles for Screensaver *******************/
 
 /* Screensaver */
-div#screenSaver {
+div#screensaver {
     display: flex;
     align-items: center;
     text-align: center;
@@ -78,12 +78,13 @@ div#screenSaver {
 }
 
 /* Screensaver Image */
-div#screenSaver img {
+div#screensaver img {
     margin: 0;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    transition: 3s;
 }
 
 /* Disable scrollbar for Chrome */
@@ -92,7 +93,7 @@ html::-webkit-scrollbar {
 }
 
 /* Disable scrollbar for Firefox and Edge */
-#screenSaver {
+#screensaver {
     -ms-overflow-style: none;
     scrollbar-width: none;
 }
@@ -136,7 +137,7 @@ html::-webkit-scrollbar {
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {
     /* Image height set for extra-small devices */
-    div#screenSaver img {
+    div#screensaver img {
         height: 10rem;
     }
 }
@@ -144,7 +145,7 @@ html::-webkit-scrollbar {
 /* Small devices (portrait tablets and large phones, 600px and up) */
 @media only screen and (min-width: 600px) {
     /* Image height set for small devices */
-    div#screenSaver img {
+    div#screensaver img {
         height: 15rem;
     }
 }
@@ -152,7 +153,7 @@ html::-webkit-scrollbar {
 /* Medium devices (landscape tablets, 768px and up) */
 @media only screen and (min-width: 768px) {
     /* Image height set for medium devices */
-    div#screenSaver img {
+    div#screensaver img {
         height: 20rem;
     }
 }
@@ -160,7 +161,7 @@ html::-webkit-scrollbar {
 /* Large devices (laptops/desktops, 992px and up) */
 @media only screen and (min-width: 992px) {
     /* Image height set for large devices */
-    div#screenSaver img {
+    div#screensaver img {
         height: 25rem;
     }
 }
@@ -168,7 +169,7 @@ html::-webkit-scrollbar {
 /* Extra large devices (large laptops and desktops, 1200px and up) */
 @media only screen and (min-width: 1200px) {
     /* Image height set for extra-large devices */
-    div#screenSaver img {
+    div#screensaver img {
         height: 30rem;
     }
 }
