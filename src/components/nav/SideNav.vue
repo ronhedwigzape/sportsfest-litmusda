@@ -37,9 +37,9 @@
 		<template v-slot:append>
 			<v-row class="text-center mt-2 mb-1 mx-1">
 				<v-col cols="12">
-					<v-btn class="mb-2" variant="tonal" @click="coverRating" block>COVER</v-btn>
+					<v-btn class="mb-2" variant="tonal" @click="cover" block>COVER</v-btn>
 					<v-btn class="mb-2" variant="tonal" @click="refresh" block :loading="refreshing">REFRESH</v-btn>
-					<div class="mb-2 text-disabled text-uppercase">
+					<div class="pt-2 text-disabled text-uppercase">
 						&copy; {{ $store.state.app.org }}
 					</div>
 				</v-col>
@@ -50,7 +50,6 @@
 
 <script>
 import $ from 'jquery';
-import forceScreensaver from "@/screensaver";
 
 export default {
 	name: "SideNav",
@@ -77,7 +76,7 @@ export default {
             this.refreshing = true;
             window.location.reload();
         },
-        coverRating() {
+        cover() {
             forceScreensaver();
         }
 	},
