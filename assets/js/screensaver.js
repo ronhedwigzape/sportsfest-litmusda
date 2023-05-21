@@ -43,5 +43,3 @@ window.addEventListener('keypress', function() {
     if(!forced)
         clearIdleTime();
 });
-
-export default forceScreensaver;
