@@ -117,7 +117,7 @@ export default {
 <style scoped>
 .background-image {
     height: 100vh;
-    background-image: url("/assets/bg-img-2.jpg");
+    background-image: url("/bg-img-2.jpg");
     background-size: cover;
 }
 

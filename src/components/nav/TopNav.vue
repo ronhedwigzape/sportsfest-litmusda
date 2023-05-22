@@ -16,7 +16,7 @@
                 variant="outlined"
                 class="mr-5"
                 size="small"
-                :color="askingForHelp ? 'warning' : 'brown'"
+                :color="askingForHelp ? 'warning' : 'grey'"
                 :disabled="helpDisabled"
                 @click="toggleHelp"
             >
@@ -28,12 +28,10 @@
                         width="2"
                         class="mr-2"
                     />
-                    <template v-if="$vuetify.display.lgAndUp">Asking for</template>
-                    Help
+                    <template v-if="$vuetify.display.lgAndUp">Asking for </template>Help
                 </template>
                 <template v-else>
-                    <template v-if="$vuetify.display.lgAndUp">Ask for</template>
-                    Help
+                    <template v-if="$vuetify.display.lgAndUp">Ask for </template>Help
                 </template>
             </v-btn>
 
@@ -44,19 +42,18 @@
 					$store.getters['auth/getUser'].userType === 'judge' ? 'green-lighten-2' :
 					'red-lighten-2' : ''"
                 :style="$vuetify.display.mdAndDown ? 'font-size: 12px' : ''"
-                class="me-5"
             >
                 <v-icon start icon="mdi-account-circle"/>
                 {{ $store.getters['auth/getUser'].name }}
             </v-chip>
             <v-avatar
                 size="30"
-                v-if="$vuetify.display.mdAndUp"
+                v-if="$vuetify.display.lgAndUp"
+                :class="$vuetify.display.lgAndUp ? 'ms-3' : ''"
             >
                 <v-img
                     :src="`${$store.getters.appURL}/crud/uploads/${$store.getters['auth/getUser'].avatar}`"
-                >
-                </v-img>
+                />
             </v-avatar>
         </template>
 
@@ -118,6 +115,7 @@
     </v-app-bar>
 </template>
 
+
 <script>
 import $ from "jquery";
 
@@ -128,7 +126,7 @@ export default {
             dialog: false,
             signingOut: false,
             signedOut: false,
-            helpDisabled: false,
+            helpDisabled: false
         }
     },
     computed: {
