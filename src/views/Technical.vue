@@ -105,7 +105,7 @@
 							deductions[`${event.slug}_${team.id}`].value > $store.state.deduction.max ?
 							'outlined' : 'underlined'
 						"
-						:disabled="deductions[`${event.slug}_${team.id}`].is_locked"
+						:disabled="team.disabled || deductions[`${event.slug}_${team.id}`].is_locked"
 						:id="`input_${teamIndex}`"
 						@keydown.down.prevent="moveDown(teamIndex)"
 						@keydown.enter="moveDown(teamIndex)"
@@ -342,31 +342,37 @@ export default {
 				}
 			});
 		},
-		move(y, focus = true) {
+		move(y, callback, focus = true) {
 			// Move to input
 			const nextInput = document.querySelector(`#input_${y}`);
 			if (nextInput) {
-				if (focus)
-					nextInput.focus();
-				if (Number(nextInput.value) <= 0)
-					nextInput.select();
+                if(nextInput.disabled) {
+                    if(callback)
+                        callback(y);
+                }
+                else {
+                    if (focus)
+                        nextInput.focus();
+                    if (Number(nextInput.value) <= 0)
+                        nextInput.select();
+                }
 			}
 		},
 		moveDown(y) {
 			// Move to input below
 			y += 1;
 			if (y < this.teams.length)
-				this.move(y);
+				this.move(y, this.moveDown);
 		},
 		moveUp(y) {
 			// Move to input above
 			y -= 1;
 			if (y >= 0)
-				this.move(y);
+				this.move(y, this.moveUp);
 		},
 		updateCoordinates(y) {
 			this.coordinates.y = y;
-			this.move(y, false);
+			this.move(y, null, false);
 		}
 	},
 

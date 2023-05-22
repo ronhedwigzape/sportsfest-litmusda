@@ -126,7 +126,7 @@
 							|| ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value > criterion.percentage ?
 							'outlined' : 'underlined'
 						"
-						:disabled="ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].is_locked"
+						:disabled="team.disabled || ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].is_locked"
 						:id="`input_${teamIndex}_${criterionIndex}`"
 						@keyup.prevent="handleRatingKeyUp(team)"
 						@keydown.down.prevent="moveDown(criterionIndex, teamIndex)"
@@ -164,7 +164,7 @@
 						   || totals[`team_${team.id}`].value < $store.state.rating.min
 						   || totals[`team_${team.id}`].value > $store.state.rating.max
 						)"
-						:disabled="totals[`team_${team.id}`].is_locked"
+						:disabled="team.disabled || totals[`team_${team.id}`].is_locked"
 						:id="`input_${teamIndex}_${criteria.length}`"
 						@keydown.down.prevent="moveDown(criteria.length, teamIndex)"
 						@keydown.enter="moveDown(criteria.length, teamIndex)"
@@ -181,7 +181,7 @@
                         'text-grey-darken-1': scoreSheetDisabled,
                     }"
                 >
-                    {{ ranks[`team_${team.id}`] }}
+                    <span :style="{'opacity': team.disabled ? 0.6 : 1}">{{ ranks[`team_${team.id}`] }}</span>
                 </td>
 			</tr>
 			</tbody>
@@ -480,7 +480,7 @@ export default {
 			let ratings = [];
 			for (let criterion of this.criteria) {
 				const rating = this.ratings[`${this.event.slug}_${team.id}`][`${this.$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`];
-				rating.value = this.totals[`team_${team.id}`].value * (criterion.percentage / 100);
+				rating.value = this.totals[`team_${team.id}`].value * (criterion.percentage / this.$store.state.rating.max);
 				// Ratings are pushed to array
 				ratings.push(rating);
 			}
@@ -513,7 +513,7 @@ export default {
 
 			// Opens dialog according to ratings
 			for (let i = 0; i < this.teams.length; i++) {
-				if (this.totals[`team_${this.teams[i].id}`].value < minRating || this.totals[`team_${this.teams[i].id}`].value > maxRating) {
+				if (!this.teams[i].disabled && (this.totals[`team_${this.teams[i].id}`].value < minRating || this.totals[`team_${this.teams[i].id}`].value > maxRating)) {
 					this.inspectDialog	= true
 					this.submitDialog 	= false;
 					break;
@@ -581,45 +581,51 @@ export default {
 			// accumulate total adds into totals object
 			this.totals[`team_${team.id}`].value = total;
 		},
-		move(x, y, focus = true) {
+		move(x, y, callback, focus = true) {
 			// move to input
 			const nextInput = document.querySelector(`#input_${y}_${x}`);
 			if (nextInput) {
-				if (focus)
-					nextInput.focus();
-				if (Number(nextInput.value) <= 0)
-					nextInput.select();
+                if(nextInput.disabled) {
+                    if(callback)
+                        callback(x, y);
+                }
+                else {
+                    if (focus)
+                        nextInput.focus();
+                    if (Number(nextInput.value) <= 0)
+                        nextInput.select();
+                }
 			}
 		},
 		moveDown(x, y) {
 			// move to input below
 			y += 1;
 			if (y < this.teams.length)
-				this.move(x, y);
+				this.move(x, y, this.moveDown);
 		},
 		moveUp(x, y) {
 			// move to input above
 			y -= 1;
 			if (y >= 0)
-				this.move(x, y);
+				this.move(x, y, this.moveUp);
 		},
 		moveRight(x, y) {
 			// move to input to the right
 			x += 1;
 			if (x <= this.criteria.length)
-				this.move(x, y);
+				this.move(x, y, this.moveRight);
 		},
 		moveLeft(x, y) {
 			// move to input to the left
 			x -= 1;
 			if (x >= 0)
-				this.move(x, y);
+				this.move(x, y, this.moveLeft);
 		},
 		updateCoordinates(x, y) {
 			// get input coordinates
 			this.coordinates.x = x;
 			this.coordinates.y = y;
-			this.move(x, y, false);
+			this.move(x, y, null, false);
 		}
 	},
 	mounted() {
