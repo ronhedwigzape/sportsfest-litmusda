@@ -21,6 +21,8 @@ else {
         // ping technical
         if(isset($_POST['ping'])) {
             $technical->ping();
+            if(isset($_POST['eventSlug']))
+                $technical->setActivePortion($_POST['eventSlug']);
 
             echo json_encode([
                 'pinged'  => true,
