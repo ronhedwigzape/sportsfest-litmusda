@@ -200,8 +200,12 @@ class User extends App
 
         // online if last ping is below 13 seconds ago
         $is_online = $diff < 13;
-        if(!$is_online && $this->isCalling())
-            $this->call(false);
+        if(!$is_online) {
+            $this->setActivePortion(null);
+            if($this->isCalling())
+                $this->call(false);
+        }
+
         return $is_online;
     }
 
