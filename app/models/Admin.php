@@ -105,6 +105,7 @@ class Admin extends User
     private function tabulateEvent($event)
     {
         require_once 'Team.php';
+        require_once 'Event.php';
 
         // initialize $result
         $result = [
@@ -160,6 +161,8 @@ class Admin extends User
                 $result['technicals'][$key_technical] = $technical->toArray();
                 $result['technicals'][$key_technical]['online']  = $technical->isOnline();
                 $result['technicals'][$key_technical]['calling'] = $technical->isCalling();
+                $active_event = Event::findBySlug($technical->getActivePortion());
+                $result['technicals'][$key_technical]['active_portion_title'] = $active_event ? $active_event->getTitle() : null;
 
                 // get technical's total team deductions
                 $technical_total = $technical->getEventTeamDeduction($event, $team);
@@ -200,6 +203,8 @@ class Admin extends User
                 $result['judges'][$key_judge] = $judge->toArray();
                 $result['judges'][$key_judge]['online']  = $judge->isOnline();
                 $result['judges'][$key_judge]['calling'] = $judge->isCalling();
+                $active_event = Event::findBySlug($judge->getActivePortion());
+                $result['judges'][$key_judge]['active_portion_title'] = $active_event ? $active_event->getTitle() : null;
 
                 // get judge's total team ratings and ranks
                 $judge_total = $judge_ranks[$key_judge]['ranks'][$key_team]['rating']; // $judge->getEventTeamRating($event, $team);

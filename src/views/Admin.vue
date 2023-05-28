@@ -254,7 +254,7 @@
 						<template v-for="technical in technicals" :key="technical.id">
 							<v-col md="3">
 								<v-card class="text-center mb-5" :class="{ 'text-warning': technical.calling }" flat>
-									<v-card-title class="pt-16 font-weight-bold">
+									<v-card-title class="pt-16 pb-1 font-weight-bold">
 										{{ technical.name }}
 									</v-card-title>
 									<v-card-text class="text-center">
@@ -265,6 +265,12 @@
 											</v-chip>
 											<v-chip v-else size="x-small" color="error" variant="flat">OFFLINE</v-chip>
 										</p>
+                                        <div v-if="technical.active_portion_title" class="user-active-portion mt-3 text-caption text-uppercase text-grey-darken-1">
+                                            <div class="d-inline-block" align="left">
+                                                <small>OPENED:</small><br>
+                                                <p style="margin-top: -5px;"><b>{{ technical.active_portion_title }}</b></p>
+                                            </div>
+                                        </div>
 									</v-card-text>
 								</v-card>
 							</v-col>
@@ -272,18 +278,24 @@
 						<template v-for="judge in judges" :key="judge.id">
 							<v-col md="3">
 								<v-card class="text-center mb-5" :class="{ 'text-warning': judge.calling }" flat>
-									<v-card-title class="pt-16 font-weight-bold">
+									<v-card-title class="pt-16 pb-1 font-weight-bold">
 										{{ judge.name }}
 									</v-card-title>
 									<v-card-text class="text-center">
 										Judge {{ judge.number }}
 										<template v-if="judge.is_chairman == 1">* (Chairman)</template>
-										<p class="mt-2 mb-0 online-status">
+                                        <p class="mt-2 mb-0 online-status">
 											<v-chip v-if="judge.online" size="x-small" color="success"
 													variant="outlined">ONLINE
 											</v-chip>
 											<v-chip v-else size="x-small" color="error" variant="flat">OFFLINE</v-chip>
 										</p>
+                                        <div v-if="judge.active_portion_title" class="user-active-portion mt-3 text-caption text-uppercase text-grey-darken-1">
+                                            <div class="d-inline-block" align="left">
+                                                <small>OPENED:</small><br>
+                                                <p style="margin-top: -5px;"><b>{{ judge.active_portion_title }}</b></p>
+                                            </div>
+                                        </div>
 									</v-card-text>
 								</v-card>
 							</v-col>
