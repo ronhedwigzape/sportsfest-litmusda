@@ -35,6 +35,7 @@ else {
 
             $event_slug = trim($_GET['tabulate']);
             $event = Event::findBySlug($event_slug);
+            // $admin->setActivePortion($event_slug);
 
             echo json_encode([
                 'event'   => $event->toArray(),

@@ -53,6 +53,7 @@ else {
 
             $event_slug = trim($_GET['getScoreSheet']);
             $event = Event::findBySlug($event_slug);
+            $judge->setActivePortion($event_slug);
 
             echo json_encode([
                 'event'    => $event->toArray(),

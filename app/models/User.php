@@ -15,6 +15,7 @@ class User extends App
     protected $avatar = 'no-avatar.jpg';
     protected $number;
     protected $userType;
+    protected $active_portion;
     protected $called_at;
     protected $pinged_at;
 
@@ -46,6 +47,7 @@ class User extends App
                 $this->name = $row['name'];
                 $this->avatar = $row['avatar'];
                 $this->number = $row['number'];
+                $this->active_portion = $row['active_portion'];
                 $this->called_at = $row['called_at'];
                 $this->pinged_at = $row['pinged_at'];
             }
@@ -122,8 +124,6 @@ class User extends App
     public function signIn()
     {
         if($this->authenticated()) {
-            $this->ping();
-
             $_SESSION['user'] = $this->toArray();
             $_SESSION['pass'] = $this->password;
             return $this;
@@ -141,6 +141,7 @@ class User extends App
     {
         $this->ping(false);
         $this->call(false);
+        $this->setActivePortion(null);
 
         if(isset($_SESSION['user']))
             session_destroy();
@@ -266,6 +267,21 @@ class User extends App
 
 
     /***************************************************************************
+     * Set active portion
+     *
+     * @param string $portion_slug
+     * @return void
+     */
+    public function setActivePortion($portion_slug)
+    {
+        $this->active_portion = $portion_slug;
+        $stmt = $this->conn->prepare("UPDATE $this->table SET active_portion = ? WHERE id = ?");
+        $stmt->bind_param("si", $this->active_portion, $this->id);
+        $stmt->execute();
+    }
+
+
+    /***************************************************************************
      * Get id
      *
      * @return int
@@ -328,5 +344,16 @@ class User extends App
     public function getPassword()
     {
         return $this->password;
+    }
+
+
+    /***************************************************************************
+     * Get active portion
+     *
+     * @return string
+     */
+    public function getActivePortion()
+    {
+        return $this->active_portion;
     }
 }
