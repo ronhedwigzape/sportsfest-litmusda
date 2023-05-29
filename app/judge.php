@@ -21,6 +21,8 @@ else {
         // ping judge
         if(isset($_POST['ping'])) {
             $judge->ping();
+            if(isset($_POST['eventSlug']))
+                $judge->setActivePortion($_POST['eventSlug']);
 
             echo json_encode([
                 'pinged'  => true,
@@ -53,6 +55,7 @@ else {
 
             $event_slug = trim($_GET['getScoreSheet']);
             $event = Event::findBySlug($event_slug);
+            $judge->setActivePortion($event_slug);
 
             echo json_encode([
                 'event'    => $event->toArray(),

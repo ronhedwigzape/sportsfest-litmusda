@@ -41,6 +41,7 @@
 					:class="{ 'bg-grey-lighten-4': coordinates.x == criteria.length && !scoreSheetDisabled }, $vuetify.display.mdAndDown ? 'text-h6' : 'text-h5'"
 				>
 					Total
+                    <p class="ma-0 text-subtitle-2 text-green-darken-2">{{ minRating.toFixed(2) }} - {{ (maxRating >= 100) ? maxRating.toFixed(0) : maxRating.toFixed(2) }}</p>
 				</th>
 				<th
 					style="width: 13%"
@@ -49,6 +50,7 @@
 
 				>
 					Rank
+                    <p class="ma-0 text-subtitle-2">&nbsp;</p>
 				</th>
 			</tr>
 			</thead>
@@ -126,7 +128,7 @@
 							|| ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].value > criterion.percentage ?
 							'outlined' : 'underlined'
 						"
-						:disabled="ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].is_locked"
+						:disabled="team.disabled || ratings[`${event.slug}_${team.id}`][`${$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`].is_locked"
 						:id="`input_${teamIndex}_${criterionIndex}`"
 						@keyup.prevent="handleRatingKeyUp(team)"
 						@keydown.down.prevent="moveDown(criterionIndex, teamIndex)"
@@ -146,25 +148,25 @@
 						single-line
 						:loading="totals[`team_${team.id}`].loading"
 						v-model.number="totals[`team_${team.id}`].value"
-						:min="$store.state.rating.min"
-						:max="$store.state.rating.max"
+						:min="minRating"
+						:max="maxRating"
 						@change="calculateTotalScores(team)"
 						:class="{
 							'text-error font-weight-bold': (
-								totals[`team_${team.id}`].value < $store.state.rating.min
-							|| totals[`team_${team.id}`].value > $store.state.rating.max
+								totals[`team_${team.id}`].value < minRating
+							|| totals[`team_${team.id}`].value > maxRating
 							),
 							'text-success font-weight-bold': (
-								totals[`team_${team.id}`].value >= $store.state.rating.min
-							&& totals[`team_${team.id}`].value <= $store.state.rating.max
+								totals[`team_${team.id}`].value >= minRating
+							&& totals[`team_${team.id}`].value <= maxRating
 							)
 						}"
 						:error="(
 							  totals[`team_${team.id}`].value.toString().trim() === ''
-						   || totals[`team_${team.id}`].value < $store.state.rating.min
-						   || totals[`team_${team.id}`].value > $store.state.rating.max
+						   || totals[`team_${team.id}`].value < minRating
+						   || totals[`team_${team.id}`].value > maxRating
 						)"
-						:disabled="totals[`team_${team.id}`].is_locked"
+						:disabled="team.disabled || totals[`team_${team.id}`].is_locked"
 						:id="`input_${teamIndex}_${criteria.length}`"
 						@keydown.down.prevent="moveDown(criteria.length, teamIndex)"
 						@keydown.enter="moveDown(criteria.length, teamIndex)"
@@ -181,7 +183,7 @@
                         'text-grey-darken-1': scoreSheetDisabled,
                     }"
                 >
-                    {{ ranks[`team_${team.id}`] }}
+                    <span :style="{'opacity': team.disabled ? 0.6 : 1}">{{ ranks[`team_${team.id}`] }}</span>
                 </td>
 			</tr>
 			</tbody>
@@ -248,9 +250,9 @@
 								</v-card-title>
 								<v-card-text>
 									<p class="mb-2 text-red-darken-4">
-										Sorry, your ratings for {{ event.title }} cannot be submitted as they must be
+                                        Sorry, your ratings for <b>{{ event.title }}</b> cannot be submitted as they must be
 										between
-										<b>{{ $store.state.rating.min }}</b> and <b>{{ $store.state.rating.max }}</b>.
+                                        <big><b>{{ minRating }}</b></big> and <big><b>{{ maxRating }}</b></big>.
 									</p>
 									<p class="text-red-darken-4">Please adjust your ratings and try submitting
 										again.</p>
@@ -378,7 +380,26 @@ export default {
 			}
 			// return value
 			return disabled;
-		}
+		},
+        totalCriteriaPercentage() {
+            let percentage = 0;
+            for(let i=0; i<this.criteria.length; i++) {
+                percentage += this.criteria[i].percentage;
+            }
+            return percentage;
+        },
+        minRating() {
+            if(this.totalCriteriaPercentage >= 100)
+                return this.$store.state.rating.min;
+            else
+                return this.totalCriteriaPercentage * 0.60;
+        },
+        maxRating() {
+            if(this.totalCriteriaPercentage >= 100)
+                return this.$store.state.rating.max;
+            else
+                return this.totalCriteriaPercentage;
+        }
 	},
 	watch: {
 		$route: {
@@ -471,17 +492,16 @@ export default {
 			// set loading state
 			this.totals[`team_${team.id}`].loading = true;
 			// validates total scores
-			if (this.totals[`team_${team.id}`].value < this.$store.state.rating.min || this.totals[`team_${team.id}`].value === '') {
-				this.totals[`team_${team.id}`].value = this.$store.state.rating.min;
-			} else if (this.totals[`team_${team.id}`].value > this.$store.state.rating.max) {
-				this.totals[`team_${team.id}`].value = this.$store.state.rating.max;
+			if (this.totals[`team_${team.id}`].value < this.minRating || this.totals[`team_${team.id}`].value === '') {
+				this.totals[`team_${team.id}`].value = this.minRating;
+			} else if (this.totals[`team_${team.id}`].value > this.maxRating) {
+				this.totals[`team_${team.id}`].value = this.maxRating;
 			}
 			// total score divided and distributed based on criteria percentage
 			let ratings = [];
 			for (let criterion of this.criteria) {
 				const rating = this.ratings[`${this.event.slug}_${team.id}`][`${this.$store.getters['auth/getUser'].id}_${criterion.id}_${team.id}`];
-				rating.value = this.totals[`team_${team.id}`].value * (criterion.percentage / 100);
-				// Ratings are pushed to array
+				rating.value = this.totals[`team_${team.id}`].value * (criterion.percentage / this.totalCriteriaPercentage);
 				ratings.push(rating);
 			}
 			// auto-save total score
@@ -507,13 +527,9 @@ export default {
 			})
 		},
 		openSubmitDialog() {
-			// Define minRating and maxRating
-			let minRating = this.$store.state.rating.min;
-			let maxRating = this.$store.state.rating.max;
-
-			// Opens dialog according to ratings
+			// open dialog according to ratings
 			for (let i = 0; i < this.teams.length; i++) {
-				if (this.totals[`team_${this.teams[i].id}`].value < minRating || this.totals[`team_${this.teams[i].id}`].value > maxRating) {
+				if (!this.teams[i].disabled && (this.totals[`team_${this.teams[i].id}`].value < this.minRating || this.totals[`team_${this.teams[i].id}`].value > this.maxRating)) {
 					this.inspectDialog	= true
 					this.submitDialog 	= false;
 					break;
@@ -581,45 +597,51 @@ export default {
 			// accumulate total adds into totals object
 			this.totals[`team_${team.id}`].value = total;
 		},
-		move(x, y, focus = true) {
+		move(x, y, callback, focus = true) {
 			// move to input
 			const nextInput = document.querySelector(`#input_${y}_${x}`);
 			if (nextInput) {
-				if (focus)
-					nextInput.focus();
-				if (Number(nextInput.value) <= 0)
-					nextInput.select();
+                if(nextInput.disabled) {
+                    if(callback)
+                        callback(x, y);
+                }
+                else {
+                    if (focus)
+                        nextInput.focus();
+                    if (Number(nextInput.value) <= 0)
+                        nextInput.select();
+                }
 			}
 		},
 		moveDown(x, y) {
 			// move to input below
 			y += 1;
 			if (y < this.teams.length)
-				this.move(x, y);
+				this.move(x, y, this.moveDown);
 		},
 		moveUp(x, y) {
 			// move to input above
 			y -= 1;
 			if (y >= 0)
-				this.move(x, y);
+				this.move(x, y, this.moveUp);
 		},
 		moveRight(x, y) {
 			// move to input to the right
 			x += 1;
 			if (x <= this.criteria.length)
-				this.move(x, y);
+				this.move(x, y, this.moveRight);
 		},
 		moveLeft(x, y) {
 			// move to input to the left
 			x -= 1;
 			if (x >= 0)
-				this.move(x, y);
+				this.move(x, y, this.moveLeft);
 		},
 		updateCoordinates(x, y) {
 			// get input coordinates
 			this.coordinates.x = x;
 			this.coordinates.y = y;
-			this.move(x, y, false);
+			this.move(x, y, null, false);
 		}
 	},
 	mounted() {

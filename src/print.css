@@ -21,7 +21,8 @@
     }
 
     .online-status,
-    .help-status {
+    .help-status,
+    .user-active-portion {
         display: none !important;
     }
 }
