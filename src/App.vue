@@ -69,14 +69,21 @@ export default {
 
                             // store current timestamp
                             this.$store.commit('auth/setUserPingTimestamp', Date.now());
-
-							// repeat after m milliseconds
-							const m = 5000;
-							this.pingTimer = setTimeout(() => {
-								this.ping();
-							}, m);
 						}
-					}
+					},
+                    error: (xhr, status, error) => {
+                        if (xhr.status === 0) {
+                            this.$store.commit('auth/setUserPingTimestamp', null);
+                            this.$store.commit('auth/setUserCurrentTimestamp', null);
+                        }
+                    },
+                    complete: () => {
+                        // repeat after m milliseconds
+                        const m = 5000;
+                        this.pingTimer = setTimeout(() => {
+                            this.ping();
+                        }, m);
+                    }
 				});
 			}
 		}
