@@ -249,10 +249,10 @@
 			</tbody>
 			<tfoot>
 			<tr>
-				<td :colspan="12 + totalJudges + totalTechnicals">
+				<td :colspan="12 + totalSignatories">
 					<v-row class="justify-center">
 						<template v-for="technical in technicals" :key="technical.id">
-							<v-col md="3">
+							<v-col :md="signatoryColumnWidth">
 								<v-card class="text-center mb-5" :class="{ 'text-warning': technical.calling }" flat>
 									<v-card-title class="pt-16 pb-1 font-weight-bold">
 										{{ technical.name }}
@@ -276,7 +276,7 @@
 							</v-col>
 						</template>
 						<template v-for="judge in judges" :key="judge.id">
-							<v-col md="3">
+							<v-col :md="signatoryColumnWidth">
 								<v-card class="text-center mb-5" :class="{ 'text-warning': judge.calling }" flat>
 									<v-card-title class="pt-16 pb-1 font-weight-bold">
 										{{ judge.name }}
@@ -349,6 +349,12 @@ export default {
         },
         totalJudges() {
             return Object.values(this.judges).length;
+        },
+        totalSignatories() {
+            return this.totalTechnicals + this.totalJudges;
+        },
+        signatoryColumnWidth() {
+            return [4, 7, 8, 10, 11, 12, 13, 14].includes(this.totalSignatories) ? '3' : '4';
         },
         technicalSubmitted() {
             const status = {};
