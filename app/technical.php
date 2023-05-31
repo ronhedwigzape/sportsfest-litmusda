@@ -21,6 +21,8 @@ else {
         // ping technical
         if(isset($_POST['ping'])) {
             $technical->ping();
+            if(isset($_POST['eventSlug']))
+                $technical->setActivePortion($_POST['eventSlug']);
 
             echo json_encode([
                 'pinged'  => true,
@@ -53,6 +55,7 @@ else {
 
             $event_slug = trim($_GET['getDeductionSheet']);
             $event = Event::findBySlug($event_slug);
+            $technical->setActivePortion($event_slug);
 
             echo json_encode([
                 'event'      => $event->toArray(),

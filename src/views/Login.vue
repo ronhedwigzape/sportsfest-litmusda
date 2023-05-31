@@ -97,6 +97,8 @@ export default {
 					}
 					data = JSON.parse(data);
 					this.$store.commit('auth/setUser', data.user);
+                    this.$store.commit('auth/setUserPingTimestamp', Date.now());
+                    this.$store.commit('auth/setUserCurrentTimestamp', Date.now());
 					this.$router.replace({name: data.user.userType});
 				},
 				error: (error) => {
