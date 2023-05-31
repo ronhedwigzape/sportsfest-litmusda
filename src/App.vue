@@ -23,8 +23,8 @@ export default {
 	name: 'App',
 	data() {
 		return {
-			loading		: true,
-			pingTimer	: null
+			loading: true,
+			pingTimer : null
 		}
 	},
 	methods: {
@@ -67,6 +67,9 @@ export default {
 							if (data.calling != null)
 								this.$store.state['auth'].user.calling = data.calling;
 
+                            // store current timestamp
+                            this.$store.commit('auth/setUserPingTimestamp', Date.now());
+
 							// repeat after m milliseconds
 							const m = 5000;
 							this.pingTimer = setTimeout(() => {
@@ -93,6 +96,8 @@ export default {
 				data = JSON.parse(data);
 				if (data.user) {
 					this.$store.commit('auth/setUser', data.user);
+                    this.$store.commit('auth/setUserPingTimestamp', Date.now());
+                    this.$store.commit('auth/setUserCurrentTimestamp', Date.now());
 					this.$router.replace({
 						name: data.user.userType
 					});

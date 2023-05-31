@@ -14,6 +14,12 @@ export default {
     mutations: {
         setUser(state, payload) {
             state.user = payload;
+        },
+        setUserPingTimestamp: (state, timestamp) => {
+            state.user.pingTimestamp = timestamp;
+        },
+        setUserCurrentTimestamp: (state, timestamp) => {
+            state.user.currentTimestamp = timestamp;
         }
     }
 };
