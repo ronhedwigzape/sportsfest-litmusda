@@ -214,10 +214,8 @@ export default {
         }
     },
     unmounted() {
-        if (this.$store.getters['auth/getUser'].userType !== 'admin') {
-            if (this.statusTimer)
-                clearInterval(this.statusTimer);
-        }
+        if (this.statusTimer)
+            clearInterval(this.statusTimer);
     }
 }
 </script>
