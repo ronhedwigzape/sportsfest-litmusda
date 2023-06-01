@@ -37,19 +37,22 @@
 
             <!-- user info -->
             <v-chip
-                :color="$store.getters['auth/getUser'] !== null ?
-					$store.getters['auth/getUser'].userType === 'admin' ? 'amber' :
-					$store.getters['auth/getUser'].userType === 'judge' ? 'green-lighten-2' :
-					'red-lighten-2' : ''"
+                :color="
+                    $store.getters['auth/getUser'] !== null
+                    ? (
+                        ($store.getters['auth/getUser'].userType === 'admin')
+					    ? 'amber'
+					    : (isUserOnline ? 'green-lighten-2' : 'red-lighten-2')
+					  )
+                    : 'grey-lighten-1'"
                 :style="$vuetify.display.mdAndDown ? 'font-size: 12px' : ''"
             >
-                <v-icon start icon="mdi-account-circle"/>
                 {{ $store.getters['auth/getUser'].name }}
             </v-chip>
             <v-avatar
                 size="30"
                 v-if="$vuetify.display.smAndUp"
-                :class="$vuetify.display.smAndUp ? 'ms-3' : ''"
+                :class="$vuetify.display.smAndUp ? 'ms-2' : ''"
             >
                 <v-img
                     :src="`${$store.getters.appURL}/crud/uploads/${$store.getters['auth/getUser'].avatar}`"
