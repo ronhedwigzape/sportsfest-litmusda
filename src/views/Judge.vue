@@ -25,7 +25,7 @@
 					v-for="(criterion, criterionIndex) in criteria"
 					style="width: 13%"
 					class="text-center text-uppercase py-3"
-					:class="{ 'bg-grey-lighten-4': coordinates.x == criterionIndex && !scoreSheetDisabled }"
+					:class="{ 'bg-grey-lighten-3': coordinates.x == criterionIndex && !scoreSheetDisabled }"
 				>
 					<div class="d-flex h-100 flex-column align-content-space-between">
 						<p class="text-grey-darken-2" :class="$vuetify.display.mdAndDown ? 'text-subtitle-1' : ''">
@@ -38,7 +38,7 @@
 				<th
 					style="width: 13%"
 					class="text-uppercase text-center text-grey-darken-4 font-weight-bold py-3"
-					:class="{ 'bg-grey-lighten-4': coordinates.x == criteria.length && !scoreSheetDisabled }, $vuetify.display.mdAndDown ? 'text-h6' : 'text-h5'"
+					:class="{ 'bg-grey-lighten-3': coordinates.x == criteria.length && !scoreSheetDisabled }, $vuetify.display.mdAndDown ? 'text-h6' : 'text-h5'"
 				>
 					Total
                     <p class="ma-0 text-subtitle-2 text-green-darken-2">{{ minRating.toFixed(2) }} - {{ (maxRating >= 100) ? maxRating.toFixed(0) : maxRating.toFixed(2) }}</p>
@@ -58,7 +58,7 @@
 			<tr
 				v-for="(team, teamIndex) in teams"
 				:key="team.id"
-				:class="{ 'bg-grey-lighten-4': coordinates.y == teamIndex && !scoreSheetDisabled }"
+				:class="{ 'bg-grey-lighten-3': coordinates.y == teamIndex && !scoreSheetDisabled }"
 			>
 				<td
 					class="text-uppercase text-center font-weight-bold text-grey-darken-4"
@@ -100,7 +100,7 @@
 				<td
 					v-for="(criterion, criterionIndex) in criteria"
 					:key="criterion.id"
-					:class="{ 'bg-grey-lighten-4': coordinates.x == criterionIndex && !scoreSheetDisabled }"
+					:class="{ 'bg-grey-lighten-3': coordinates.x == criterionIndex && !scoreSheetDisabled }"
 				>
 					<v-text-field
 						type="number"
@@ -139,7 +139,7 @@
 						@focus.passive="updateCoordinates(criterionIndex, teamIndex)"
 					/>
 				</td>
-				<td :class="{ 'bg-grey-lighten-4': coordinates.x == criteria.length && !scoreSheetDisabled }">
+				<td :class="{ 'bg-grey-lighten-3': coordinates.x == criteria.length && !scoreSheetDisabled }">
 					<v-text-field
 						type="number"
 						class="font-weight-bold"

@@ -35,7 +35,7 @@
 			<tr
 				v-for="(team, teamIndex) in teams"
 				:key="team.id"
-				:class="{ 'bg-grey-lighten-4': coordinates.y == teamIndex && !scoreSheetDisabled }"
+				:class="{ 'bg-grey-lighten-3': coordinates.y == teamIndex && !scoreSheetDisabled }"
 			>
 				<td
 					class="text-uppercase text-center text-grey-darken-4 font-weight-bold"
