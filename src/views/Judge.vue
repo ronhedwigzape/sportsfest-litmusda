@@ -38,7 +38,7 @@
 							{{ criterion.title }}
                         </p>
 						<b
-                            class="text-grey-darken-2 text-h6"
+                            class="text-grey-darken-2 text-h6 pt-1"
                             :class="{
                                 'text-body-2 text-uppercase font-weight-bold': $vuetify.display.mdAndDown,
                                 'text-grey-darken-4': coordinates.x == criterionIndex && !scoreSheetDisabled
