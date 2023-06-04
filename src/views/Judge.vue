@@ -28,16 +28,30 @@
 					:class="{ 'bg-grey-lighten-4': coordinates.x == criterionIndex && !scoreSheetDisabled }"
 				>
 					<div class="d-flex h-100 flex-column align-content-space-between">
-						<p class="text-grey-darken-2" :class="$vuetify.display.mdAndDown ? 'text-subtitle-1' : ''">
-							{{ criterion.title }}</p>
-						<b class="text-grey-darken-4"
-						   :class="$vuetify.display.mdAndDown ? 'text-subtitle-2 font-weight-bold' : ''"
-						   style="margin-top: auto">{{ criterion.percentage }}%</b>
+						<p
+                            class="text-grey-darken-1"
+                            :class="{
+                                'text-subtitle-1': $vuetify.display.mdAndDown,
+                                'text-grey-darken-3': coordinates.x == criterionIndex && !scoreSheetDisabled
+                            }"
+                        >
+							{{ criterion.title }}
+                        </p>
+						<b
+                            class="text-grey-darken-2"
+                            :class="{
+                                'text-subtitle-2 font-weight-bold': $vuetify.display.mdAndDown,
+                                'text-grey-darken-4': coordinates.x == criterionIndex && !scoreSheetDisabled
+                            }"
+                            style="margin-top: auto"
+                        >
+                            {{ criterion.percentage }}%
+                        </b>
 					</div>
 				</th>
 				<th
 					style="width: 13%"
-					class="text-uppercase text-center text-grey-darken-4 font-weight-bold py-3"
+					class="text-uppercase text-center text-grey-darken-3 font-weight-bold py-3"
 					:class="{ 'bg-grey-lighten-4': coordinates.x == criteria.length && !scoreSheetDisabled }, $vuetify.display.mdAndDown ? 'text-h6' : 'text-h5'"
 				>
 					Total
@@ -45,7 +59,7 @@
 				</th>
 				<th
 					style="width: 13%"
-					class="text-uppercase text-center text-grey-darken-4 font-weight-bold py-3"
+					class="text-uppercase text-center text-grey-darken-3 font-weight-bold py-3"
 					:class="$vuetify.display.mdAndDown ? 'text-h6' : 'text-h5'"
 
 				>
@@ -61,8 +75,11 @@
 				:class="{ 'bg-grey-lighten-4': coordinates.y == teamIndex && !scoreSheetDisabled }"
 			>
 				<td
-					class="text-uppercase text-center font-weight-bold text-grey-darken-4"
-					:class="$vuetify.display.mdAndDown ? 'text-h5' : 'text-h4'"
+					class="text-uppercase text-center font-weight-bold text-grey-darken-2 text-h4"
+                    :class="{
+                        'text-h5': $vuetify.display.mdAndDown,
+                        'text-grey-darken-4': coordinates.y == teamIndex && !scoreSheetDisabled
+                    }"
 				>
 					{{ teamIndex + 1 }}
 				</td>
