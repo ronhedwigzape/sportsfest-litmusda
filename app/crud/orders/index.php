@@ -9,6 +9,24 @@ require_once '../../models/Event.php';
 require_once '../../models/Team.php';
 require_once '../../models/Arrangement.php';
 
+const GROUP = 'Team';
+
+function findArrangementId($eventId, $order) {
+    global $conn;
+    $stmt = $conn->prepare("SELECT id FROM `arrangements` WHERE event_id = ? AND `order` = ?");
+    if (!$stmt) {
+        die('Error in prepared statement: ' . $conn->error);
+    }
+    $stmt->bind_param("ii", $eventId, $order);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    if ($row = $result->fetch_assoc()) {
+        return $row['id'];
+    } else {
+        return false;
+    }
+}
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -19,7 +37,7 @@ require_once '../../models/Arrangement.php';
     <link rel="stylesheet" href="../../crud/dist/bootstrap-5.2.3/css/bootstrap.min.css">
     <link rel="stylesheet" href="../../crud/dist/fontawesome-6.3.0/css/all.min.css">
     <script src="../../crud/dist/jquery-3.6.4/jquery-3.6.4.min.js"></script>
-    <title>Orders</title>   
+    <title>Orders</title>
 </head>
 <body>
 <div id="app" class="container mt-3">
@@ -46,41 +64,32 @@ require_once '../../models/Arrangement.php';
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th>Team</th>
                                     <th>Order <i class="fa-solid fa-arrow-down-1-9"></i></th>
+                                    <th><?= GROUP ?></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php
-                                    $teams = Team::all($event->getId());
-                                    foreach ($teams as $team) {
-                                ?>
+                                <?php for ($order = 1; $order <= Team::count(); $order++) { ?>
                                 <tr class="border">
+                                    <td class="fw-bold"><?= $order ?></td>
                                     <td>
-                                        <div class="d-flex">
-                                            <div class="d-flex align-items-center">
-                                                <img class="ms-2 rounded-5" src="../uploads/<?= $team->getLogo() ?>" style="height: 3rem;" alt="Photo of <?= $team->getName() ?>">
-                                            </div>
-                                            <div class="ms-3 text-start">
-                                                <p class="m-0 fw-bold" style="line-height: 1.1;"><?= $team->getName() ?></p>
-                                                <small class="m-0" style="font-size: 12px"><?= $team->getColor() ?></small>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <?php $arrangement = Arrangement::find($event->getId(), $team->getId()) ?>
-                                        <div>
-                                            <select 
-                                                class="form-select"
-                                                id="team-order"
-                                                onchange="handleTeamOrder(<?= $team->getId() ?>, <?= $event->getId() ?>, this.value)"
-                                            >
-                                                <option id="<?= $team->getId() ?>-<?= $event->getId() ?>" selected><?= $arrangement ? $arrangement->getOrder() : 0 ?></option>
-                                                <?php for($i = 1; $i <= Team::count(); $i++) { ?>
-                                                        <option value="<?= $i ?>"><?= $i ?></option>
-                                                <?php } ?>
-                                            </select>
-                                        </div>
+                                        <?php
+                                            $arrangement = Arrangement::findById(findArrangementId($event->getId(), $order));
+                                            $arrangements = $arrangement !== false ? Arrangement::find($event->getId(), $arrangement->getTeamId()) : false;
+                                        ?>
+                                        <select
+                                            class="form-select" onchange="handleTeamOrder(this.value, <?= $event->getId() ?>, <?= $order ?>)"
+                                        >
+                                            <option selected>
+                                                <?= $arrangements ? $arrangements->getTeamId() . " - " . $arrangements->getTeam()->getName() : 'Select your ' . GROUP ?>
+                                            </option>
+                                            <?php
+                                                $teams = Team::all($event->getId());
+                                                foreach ($teams as $team) {
+                                            ?>
+                                            <option value="<?= $team->getId() ?>"><?= $team->getId() ?> - <?= $team->getName() ?></option>
+                                            <?php } ?>
+                                        </select>
                                     </td>
                                 </tr>
                                 <?php } ?>
@@ -93,28 +102,28 @@ require_once '../../models/Arrangement.php';
     <?php } ?>
 </div>
 <script>
-    function handleTeamOrder(teamId, eventId, order) {
-        $(document).ready(function() {
-            $.ajax({
-                url: 'controller.php',
-                type: 'POST',
-                xhrFields: {
-                    withCredentials: true
-                },
-                data: {
-                    teamId,
-                    eventId,
-                    order
-                },
-                success: (data, textStatus, jqXHR) => {
-                    console.log(`${jqXHR.status}: ${jqXHR.statusText}`);
-                },
-                error: (error) => {
-                    alert(`ERROR ${error.status}: ${error.statusText}`);
-                }
-            });
+function handleTeamOrder(teamId, eventId, order) {
+    $(document).ready(function() {
+        $.ajax({
+            url: 'controller.php',
+            type: 'POST',
+            xhrFields: {
+                withCredentials: true
+            },
+            data: {
+                teamId,
+                eventId,
+                order
+            },
+            success: (data, textStatus, jqXHR) => {
+                console.log(`${jqXHR.status}: ${jqXHR.statusText}`);
+            },
+            error: (error) => {
+                alert(`ERROR ${error.status}: ${error.statusText}`);
+            }
         });
-    }
+    });
+}
 </script>
 </body>
 </html>
