@@ -208,22 +208,22 @@ class Arrangement extends App
     {
         // check id
         if(self::exists($this->id))
-            App::returnError('HTTP/1.1 500', 'Insert Error: arrangement [id = ' . $this->id . '] already exists.');
+            App::returnError('HTTP/1.1 409', 'Insert Error: arrangement [id = ' . $this->id . '] already exists.');
 
         // check event_id
         require_once 'Event.php';
         if(!Event::exists($this->event_id))
-            App::returnError('HTTP/1.1 500', 'Insert Error: event [id = ' . $this->event_id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Insert Error: event [id = ' . $this->event_id . '] does not exist.');
 
         // check team_id
         require_once 'Team.php';
         if(!Team::exists($this->team_id))
-            App::returnError('HTTP/1.1 500', 'Insert Error: team [id = ' . $this->team_id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Insert Error: team [id = ' . $this->team_id . '] does not exist.');
 
         // check order
         $orders = self::orders();
         if(!in_array($this->order, $orders))
-            App::returnError('HTTP/1.1 500', 'Insert Error: order must be within [' . implode(', ', $orders) . '], [given = ' . $this->order . '].');
+            App::returnError('HTTP/1.1 422', 'Insert Error: order must be within [' . implode(', ', $orders) . '], [given = ' . $this->order . '].');
 
         // proceed with insert if not yet stored
         if(!self::stored($this->event_id, $this->team_id)) {
@@ -244,26 +244,26 @@ class Arrangement extends App
     {
         // check id
         if(!self::exists($this->id))
-            App::returnError('HTTP/1.1 500', 'Update Error: arrangement [id = ' . $this->id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Update Error: arrangement [id = ' . $this->id . '] does not exist.');
 
         // check event_id
         require_once 'Event.php';
         if(!Event::exists($this->event_id))
-            App::returnError('HTTP/1.1 500', 'Update Error: event [id = ' . $this->event_id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Update Error: event [id = ' . $this->event_id . '] does not exist.');
 
         // check team_id
         require_once 'Team.php';
         if(!Team::exists($this->team_id))
-            App::returnError('HTTP/1.1 500', 'Update Error: team [id = ' . $this->team_id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Update Error: team [id = ' . $this->team_id . '] does not exist.');
 
         // check order
         $orders = self::orders();
         if(!in_array($this->order, $orders))
-            App::returnError('HTTP/1.1 500', 'Update Error: order must be within [' . implode(', ', $orders) . '], [given = ' . $this->order . '].');
+            App::returnError('HTTP/1.1 422', 'Update Error: order must be within [' . implode(', ', $orders) . '], [given = ' . $this->order . '].');
 
         // check arrangement redundancy
         if(self::stored($this->event_id, $this->team_id, $this->id))
-            App::returnError('HTTP/1.1 500', 'Update Error: arrangement [event_id = ' . $this->event_id . ', team_id = ' . $this->team_id . '] already exists.');
+            App::returnError('HTTP/1.1 409', 'Update Error: arrangement [event_id = ' . $this->event_id . ', team_id = ' . $this->team_id . '] already exists.');
 
         // proceed with update
         $stmt = $this->conn->prepare("UPDATE $this->table SET event_id = ?, team_id = ?, `order` = ? WHERE id = ?");
@@ -281,7 +281,7 @@ class Arrangement extends App
     {
         // check id
         if(!self::exists($this->id))
-            App::returnError('HTTP/1.1 500', 'Delete Error: arrangement [id = ' . $this->id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Delete Error: arrangement [id = ' . $this->id . '] does not exist.');
 
         // proceed with delete
         $stmt = $this->conn->prepare("DELETE FROM $this->table WHERE id = ?");

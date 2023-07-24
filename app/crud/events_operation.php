@@ -8,8 +8,8 @@ require_once '../models/Event.php';
 if(isset($_POST['insertdata'])) {
 
     $category_id = $_POST['category_id'];
-    $slug = $_POST['slug'];
-    $title = $_POST['title'];
+    $slug        = $_POST['slug'];
+    $title       = $_POST['title'];
 
     $event = new Event();
     $event->setCategoryId($category_id);
@@ -36,7 +36,7 @@ if (isset($_POST['updatedata'])) {
 // Delete Data
 if(isset($_POST['deletedata'])) {
 
-    $id = $_POST['delete_id'];
+    $id    = $_POST['delete_id'];
     $event = Event::findById($id);
     $event->delete();
 }

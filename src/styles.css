@@ -1,8 +1,175 @@
+/************************** Global styles **************************/
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
+
 input[type=number] {
     text-align: center !important;
+}
+
+@font-face {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 100;
+    src: local('Roboto Thin'), local('Roboto-Thin'),
+    url('/fonts/Roboto/Roboto-Thin.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 300;
+    src: local('Roboto Light'), local('Roboto-Light'),
+    url('/fonts/Roboto/Roboto-Light.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Roboto'), local('Roboto-Regular'),
+    url('/fonts/Roboto/Roboto-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 500;
+    src: local('Roboto Medium'), local('Roboto-Medium'),
+    url('/fonts/Roboto/Roboto-Medium.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 700;
+    src: local('Roboto Bold'), local('Roboto-Bold'),
+    url('/fonts/Roboto/Roboto-Bold.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 900;
+    src: local('Roboto Black'), local('Roboto-Black'),
+    url('/fonts/Roboto/Roboto-Black.ttf') format('truetype');
+}
+
+html {
+    overflow-y: hidden;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
+/******************* Base Styles for Screensaver *******************/
+
+/* Screensaver */
+div#screensaver {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    height: 100vh;
+    position: relative !important;
+    z-index: 99999 !important;
+}
+
+/* Screensaver Image */
+div#screensaver img {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: 3s;
+}
+
+/* Disable scrollbar for Chrome */
+html::-webkit-scrollbar {
+    display: none;
+}
+
+/* Disable scrollbar for Firefox and Edge */
+#screensaver {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* Swap Screensaver background-colors */
+.swap {
+    animation: swap-colors 8s linear infinite;
+    background-size: 200% 200%;
+}
+
+/* Fade-in animation for Screensaver image */
+.fade-in {
+    animation: fade-in 3s;
+}
+
+/* Swap-colors Animations */
+@keyframes swap-colors {
+    0% {
+        background-color: #fff;
+    }
+    50% {
+        background-color: #6a6eff;
+    }
+    100% {
+        background-color: #fff;
+    }
+}
+
+/* Fade-in animation for Screensaver image */
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+/****************** Responsive styles for Screensaver ******************/
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+    /* Image height set for extra-small devices */
+    div#screensaver img {
+        height: 10rem;
+    }
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+    /* Image height set for small devices */
+    div#screensaver img {
+        height: 15rem;
+    }
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+    /* Image height set for medium devices */
+    div#screensaver img {
+        height: 20rem;
+    }
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+    /* Image height set for large devices */
+    div#screensaver img {
+        height: 25rem;
+    }
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+    /* Image height set for extra-large devices */
+    div#screensaver img {
+        height: 30rem;
+    }
 }

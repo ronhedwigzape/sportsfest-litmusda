@@ -155,12 +155,12 @@ class Criterion extends App
     {
         // check id
         if(self::exists($this->id))
-            App::returnError('HTTP/1.1 500', 'Insert Error: criterion [id = ' . $this->id . '] already exists.');
+            App::returnError('HTTP/1.1 409', 'Insert Error: criterion [id = ' . $this->id . '] already exists.');
 
         // check event_id
         require_once 'Event.php';
         if(!Event::exists($this->event_id))
-            App::returnError('HTTP/1.1 500', 'Insert Error: event [id = ' . $this->event_id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Insert Error: event [id = ' . $this->event_id . '] does not exist.');
 
         // proceed with insert
         $stmt = $this->conn->prepare("INSERT INTO $this->table(event_id, title, percentage) VALUES(?, ?, ?)");
@@ -179,12 +179,12 @@ class Criterion extends App
     {
         // check id
         if(!self::exists($this->id))
-            App::returnError('HTTP/1.1 500', 'Update Error: criterion [id = ' . $this->id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Update Error: criterion [id = ' . $this->id . '] does not exist.');
 
         // check event_id
         require_once 'Event.php';
         if(!Event::exists($this->event_id))
-            App::returnError('HTTP/1.1 500', 'Update Error: event [id = ' . $this->event_id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Update Error: event [id = ' . $this->event_id . '] does not exist.');
 
         // proceed with update
         $stmt = $this->conn->prepare("UPDATE $this->table SET event_id = ?, title = ?, percentage = ? WHERE id = ?");
@@ -202,7 +202,7 @@ class Criterion extends App
     {
         // check id
         if(!self::exists($this->id))
-            App::returnError('HTTP/1.1 500', 'Delete Error: criterion [id = ' . $this->id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Delete Error: criterion [id = ' . $this->id . '] does not exist.');
 
         // proceed with delete
         $stmt = $this->conn->prepare("DELETE FROM $this->table WHERE id = ?");

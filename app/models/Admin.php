@@ -105,12 +105,14 @@ class Admin extends User
     private function tabulateEvent($event)
     {
         require_once 'Team.php';
+        require_once 'Event.php';
 
         // initialize $result
         $result = [
             'technicals' => [],
             'judges'     => [],
-            'teams'      => []
+            'teams'      => [],
+            'winners'    => []
         ];
 
         // get all teams
@@ -157,7 +159,10 @@ class Admin extends User
 
                 // append $technical to $result['technicals']
                 $result['technicals'][$key_technical] = $technical->toArray();
-                $result['technicals'][$key_technical]['online'] = $technical->isOnline();
+                $result['technicals'][$key_technical]['online']  = $technical->isOnline();
+                $result['technicals'][$key_technical]['calling'] = $technical->isCalling();
+                $active_event = Event::findBySlug($technical->getActivePortion());
+                $result['technicals'][$key_technical]['active_portion_title'] = $active_event ? $active_event->getTitle() : null;
 
                 // get technical's total team deductions
                 $technical_total = $technical->getEventTeamDeduction($event, $team);
@@ -186,13 +191,20 @@ class Admin extends User
                 'dense'      => 0,
                 'fractional' => 0
             ];
+            $rank_average = [
+                'dense'      => 0,
+                'fractional' => 0
+            ];
             foreach($judges as $judge) {
                 $key_judge = 'judge_' . $judge->getId();
 
                 // append $judge to $result['judges']
                 $judge->setIsChairman($judge_ranks[$key_judge]['is_chairman']);
                 $result['judges'][$key_judge] = $judge->toArray();
-                $result['judges'][$key_judge]['online'] = $judge->isOnline();
+                $result['judges'][$key_judge]['online']  = $judge->isOnline();
+                $result['judges'][$key_judge]['calling'] = $judge->isCalling();
+                $active_event = Event::findBySlug($judge->getActivePortion());
+                $result['judges'][$key_judge]['active_portion_title'] = $active_event ? $active_event->getTitle() : null;
 
                 // get judge's total team ratings and ranks
                 $judge_total = $judge_ranks[$key_judge]['ranks'][$key_team]['rating']; // $judge->getEventTeamRating($event, $team);
@@ -210,16 +222,20 @@ class Admin extends User
                 $rank_total['fractional'] += $judge_rank['fractional'];
             }
 
-            // compute for ratings average
-            if($judges_total > 0)
+            // compute for rank and ratings average
+            if($judges_total > 0) {
                 $team_row['ratings']['average'] = $team_row['ratings']['total'] / $judges_total;
 
+                $rank_average['dense'] = $rank_total['dense'] / $judges_total;
+                $rank_average['fractional'] = $rank_total['fractional'] / $judges_total;
+            }
 
             // =================================================================
             // store team rank
 
             $team_row['rank'] = [
                 'total'   => $rank_total,
+                'average' => $rank_average,
                 'initial' => [
                     'dense'      => 0,
                     'fractional' => 0
@@ -231,6 +247,7 @@ class Admin extends User
                 ]
             ];
             $team_row['points'] = 0;
+            $team_row['title']  = '';
 
             // push $team_row to $result['teams']
             $result['teams'][$key_team] = $team_row;
@@ -298,12 +315,17 @@ class Admin extends User
         }
 
         // get final fractional rank and points
+        $unique_final_fractional_ranks = [];
         $ctr = 0;
         for($i = 0; $i < sizeof($unique_final_adjustments); $i++) {
             $key = 'rank_' . ($i + 1);
             $group = $rank_group[$key];
             $size = sizeof($group);
             $fractional_rank = $ctr + ((($size * ($size + 1)) / 2) / $size);
+
+            // push to $unique_final_fractional_ranks
+            if(!in_array($fractional_rank, $unique_final_fractional_ranks))
+                $unique_final_fractional_ranks[] = $fractional_rank;
 
             // write $fractional_rank to $group members and accumulate points
             $points = 0;
@@ -323,6 +345,27 @@ class Admin extends User
             }
 
             $ctr += $size;
+        }
+
+        // sort $unique_final_fractional_ranks
+        sort($unique_final_fractional_ranks);
+
+        // determine winners (case-to-case basis depending on organizer's guidelines)
+        $i = 0;
+        foreach($event->getAllTitles() as $key_title => $title) {
+            // update title of $unique_final_fractional_ranks[$i]'th team
+            foreach($result['teams'] as $key_team => $arr_team) {
+                if($arr_team['rank']['final']['fractional'] == $unique_final_fractional_ranks[$i]) {
+                    $t = trim($title->getTitle());
+                    $result['teams'][$key_team]['title'] = $t;
+                    if($t != '')
+                        $result['winners'][$key_team] = $t;
+                }
+            }
+
+            $i += 1;
+            if($i >= sizeof($unique_final_fractional_ranks))
+                break;
         }
 
         // return $result

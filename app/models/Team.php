@@ -12,6 +12,7 @@ class Team extends App
     protected $name;
     protected $color;
     protected $logo;
+    protected $disabled = false;
 
 
     /***************************************************************************
@@ -80,10 +81,11 @@ class Team extends App
     public function toArray()
     {
         return [
-            'id'    => $this->id,
-            'name'  => $this->name,
-            'color' => $this->color,
-            'logo'  => $this->logo
+            'id'       => $this->id,
+            'name'     => $this->name,
+            'color'    => $this->color,
+            'logo'     => $this->logo,
+            'disabled' => $this->disabled
         ];
     }
 
@@ -113,28 +115,32 @@ class Team extends App
     public static function all($event_id = 0)
     {
         // gather team ids of eliminated teams
+        $event = null;
         $eliminated_team_ids = [];
         if($event_id > 0) {
             require_once 'Event.php';
             $event = Event::findById($event_id);
-            foreach($event->getAllEliminatedTeams() as $eliminated_team) {
-                $eliminated_team_ids[] = $eliminated_team->getId();
-            }
+            $eliminated_team_ids = $event->getRowEliminatedTeamIds();
         }
 
         // gather teams
         $team = new Team();
-        $sql = "SELECT id FROM $team->table ORDER BY id";
+        $sql  = "SELECT id FROM $team->table ";
+        if(sizeof($eliminated_team_ids) > 0) {
+            $sql .= "WHERE id NOT IN (" . implode(', ', $eliminated_team_ids) . ") ";
+        }
+        $sql .= "ORDER BY id";
         $stmt = $team->conn->prepare($sql);
         $stmt->execute();
         $result = $stmt->get_result();
+
         $teams = [];
         while($row = $result->fetch_assoc()) {
-            $team_id = $row['id'];
-
-            // push to $teams if not eliminated
-            if(!in_array($team_id, $eliminated_team_ids))
-                $teams[] = new Team($team_id);
+            $team = new Team($row['id']);
+            if($event) {
+                $team->disabled = $team->hasNotShownUpForEvent($event);
+            }
+            $teams[] = $team;
         }
 
         // sort teams for an event
@@ -143,22 +149,26 @@ class Team extends App
             $sorted_teams   = [];
             $assigned_teams = [];
             $arrangements = Arrangement::all($event_id);
+
             for($i = 0; $i < sizeof($arrangements); $i++) {
                 $arrangement = $arrangements[$i];
 
                 $arranged_team = $arrangement->getTeam();
-                $key = 'team_' . $arrangement->getOrder();
-                if(!isset($sorted_teams[$key]) && !in_array($arranged_team->getId(), $assigned_teams)) {
-                    // push $arranged_team to $sorted_teams
-                    $sorted_teams[$key] = $arranged_team;
-                    $assigned_teams[] = $arranged_team->getId();
+                $arranged_team_id = $arranged_team->getId();
+                if(!in_array($arranged_team_id, $eliminated_team_ids)) {
+                    $key = 'team_' . $arrangement->getOrder();
+                    if(!isset($sorted_teams[$key]) && !in_array($arranged_team_id, $assigned_teams)) {
+                        // push $arranged_team to $sorted_teams
+                        $sorted_teams[$key] = $arranged_team;
+                        $assigned_teams[] = $arranged_team_id;
 
-                    // remove $arranged_team from $teams
-                    for($j = 0; $j < sizeof($teams); $j++) {
-                        if($teams[$j]->getId() == $arranged_team->getId()) {
-                            unset($teams[$j]);
-                            $teams = array_values($teams);
-                            break;
+                        // remove $arranged_team from $teams
+                        for($j = 0; $j < sizeof($teams); $j++) {
+                            if($teams[$j]->getId() == $arranged_team_id) {
+                                unset($teams[$j]);
+                                $teams = array_values($teams);
+                                break;
+                            }
                         }
                     }
                 }
@@ -166,12 +176,12 @@ class Team extends App
 
             // merge $sorted_teams and remaining $teams
             $final_teams  = [];
-            $total_orders = sizeof(Arrangement::orders()) - sizeof($eliminated_team_ids);
+            $total_orders = sizeof(Arrangement::orders());
             for($i = 1; $i <= $total_orders; $i++) {
                 $key = 'team_' . $i;
                 if(isset($sorted_teams[$key]))
                     $final_teams[] = $sorted_teams[$key];
-                else {
+                else if(isset($teams[0])) {
                     $final_teams[] = $teams[0];
                     unset($teams[0]);
                     $teams = array_values($teams);
@@ -225,7 +235,7 @@ class Team extends App
     {
         // check id
         if(self::exists($this->id))
-            App::returnError('HTTP/1.1 500', 'Insert Error: team [id = ' . $this->id . '] already exists.');
+            App::returnError('HTTP/1.1 409', 'Insert Error: team [id = ' . $this->id . '] already exists.');
 
         // proceed with insert
         $stmt = $this->conn->prepare("INSERT INTO $this->table(name, color, logo) VALUES(?, ?, ?)");
@@ -244,7 +254,7 @@ class Team extends App
     {
         // check id
         if(!self::exists($this->id))
-            App::returnError('HTTP/1.1 500', 'Update Error: team [id = ' . $this->id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Update Error: team [id = ' . $this->id . '] does not exist.');
 
         // proceed with update
         $stmt = $this->conn->prepare("UPDATE $this->table SET name = ?, color = ?, logo = ? WHERE id = ?");
@@ -262,7 +272,7 @@ class Team extends App
     {
         // check id
         if(!self::exists($this->id))
-            App::returnError('HTTP/1.1 500', 'Delete Error: team [id = ' . $this->id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Delete Error: team [id = ' . $this->id . '] does not exist.');
 
         // proceed with delete
         $stmt = $this->conn->prepare("DELETE FROM $this->table WHERE id = ?");
@@ -360,9 +370,10 @@ class Team extends App
      * @param string $middle_name
      * @param string $last_name
      * @param string $gender
+     * @param string $avatar
      * @return void
      */
-    public function addParticipant($event, $number, $first_name, $middle_name, $last_name, $gender)
+    public function addParticipant($event, $number, $first_name, $middle_name, $last_name, $gender = 'male', $avatar = 'no-avatar.jpg')
     {
         require_once 'Participant.php';
         $participant = new Participant();
@@ -373,6 +384,7 @@ class Team extends App
         $participant->setMiddleName($middle_name);
         $participant->setLastName($last_name);
         $participant->setGender($gender);
+        $participant->setAvatar($avatar);
         $participant->insert();
     }
 

@@ -45,7 +45,7 @@
                             ?>
                             <div class="form-group">
                                 <label>Event</label>
-                                <select name="event_id" class="form-control" required <?php if (!empty($entity_category)) echo 'disabled'; ?>>
+                                <select name="event_id" class="form-control">
                                     <option value="">Select Event</option>
                                     <?php foreach ($events as $event) {
                                         $selected = ($event->getSlug() == $entity_category) ? 'selected' : '';
@@ -56,12 +56,12 @@
 
                             <div class="form-group">
                                 <label> Title </label>
-                                <input type="text" name="title" class="form-control" placeholder="Enter your Title" autocomplete="off" required>
+                                <input type="text" name="title" class="form-control" placeholder="Enter Title" autocomplete="off" required>
                             </div>
 
                             <div class="form-group">
                                 <label> Percentage </label>
-                                <input type="number" name="percentage" class="form-control" min="1" max="100" placeholder="Enter your Percentage from 1 to 100" autocomplete="off" required>
+                                <input type="number" name="percentage" class="form-control" min="1" max="100" placeholder="Enter Percentage from 1 to 100" autocomplete="off" required>
                             </div>
                         </div>
 
@@ -97,7 +97,7 @@
                             ?>
                             <div class="form-group">
                                 <label>Event</label>
-                                <select name="event_id" class="form-control" required>
+                                <select name="event_id" class="form-control">
                                     <option value="">Select Event</option>
                                     <?php foreach ($events as $event) {
                                         $selected = ($event->getSlug() == $entity_category) ? 'selected' : '';
@@ -108,12 +108,12 @@
 
                             <div class="form-group">
                                 <label> Title </label>
-                                <input type="text" name="title" id="title" class="form-control" placeholder="Enter your Title" autocomplete="off" required>
+                                <input type="text" name="title" id="title" class="form-control" placeholder="Enter Title" autocomplete="off" required>
                             </div>
 
                             <div class="form-group">
                                 <label> Percentage </label>
-                                <input type="number" name="percentage" id="percentage" class="form-control" min="1" max="100" placeholder="Enter your Percentage from 1 to 100" autocomplete="off" required>
+                                <input type="number" name="percentage" id="percentage" class="form-control" min="1" max="100" placeholder="Enter Percentage from 1 to 100" autocomplete="off" required>
                             </div>
                         </div>
 

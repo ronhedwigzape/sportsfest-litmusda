@@ -188,16 +188,16 @@ class Category extends App
     {
         // check id
         if(self::exists($this->id))
-            App::returnError('HTTP/1.1 500', 'Insert Error: category [id = ' . $this->id . '] already exists.');
+            App::returnError('HTTP/1.1 409', 'Insert Error: category [id = ' . $this->id . '] already exists.');
 
         // check competition_id
         require_once 'Competition.php';
         if(!Competition::exists($this->competition_id))
-            App::returnError('HTTP/1.1 500', 'Insert Error: competition [id = ' . $this->competition_id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Insert Error: competition [id = ' . $this->competition_id . '] does not exist.');
 
         // check slug
         if(self::slugExists($this->slug))
-            App::returnError('HTTP/1.1 500', 'Insert Error: category [slug = ' . $this->slug . '] already exists.');
+            App::returnError('HTTP/1.1 409', 'Insert Error: category [slug = ' . $this->slug . '] already exists.');
 
         // proceed with insert
         $stmt = $this->conn->prepare("INSERT INTO $this->table(competition_id, slug, title) VALUES(?, ?, ?)");
@@ -216,16 +216,16 @@ class Category extends App
     {
         // check id
         if(!self::exists($this->id))
-            App::returnError('HTTP/1.1 500', 'Update Error: category [id = ' . $this->id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Update Error: category [id = ' . $this->id . '] does not exist.');
 
         // check competition_id
         require_once 'Competition.php';
         if(!Competition::exists($this->competition_id))
-            App::returnError('HTTP/1.1 500', 'Update Error: competition [id = ' . $this->competition_id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Update Error: competition [id = ' . $this->competition_id . '] does not exist.');
 
         // check slug
         if(self::slugExists($this->slug, $this->id))
-            App::returnError('HTTP/1.1 500', 'Update Error: category [slug = ' . $this->slug . '] already exists.');
+            App::returnError('HTTP/1.1 409', 'Update Error: category [slug = ' . $this->slug . '] already exists.');
 
         // proceed with update
         $stmt = $this->conn->prepare("UPDATE $this->table SET competition_id = ?, slug = ?, title = ? WHERE id = ?");
@@ -243,7 +243,7 @@ class Category extends App
     {
         // check id
         if(!self::exists($this->id))
-            App::returnError('HTTP/1.1 500', 'Delete Error: category [id = ' . $this->id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Delete Error: category [id = ' . $this->id . '] does not exist.');
 
         // proceed with delete
         $stmt = $this->conn->prepare("DELETE FROM $this->table WHERE id = ?");

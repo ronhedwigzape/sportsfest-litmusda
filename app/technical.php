@@ -21,9 +21,21 @@ else {
         // ping technical
         if(isset($_POST['ping'])) {
             $technical->ping();
+            if(isset($_POST['eventSlug']))
+                $technical->setActivePortion($_POST['eventSlug']);
 
             echo json_encode([
-                'pinged' => true
+                'pinged'  => true,
+                'calling' => $technical->isCalling()
+            ]);
+        }
+
+        // call help for technical
+        else if(isset($_POST['call'])) {
+            $technical->call(filter_var($_POST['call'], FILTER_VALIDATE_BOOLEAN));
+
+            echo json_encode([
+                'called' => true,
             ]);
         }
 
@@ -43,6 +55,7 @@ else {
 
             $event_slug = trim($_GET['getDeductionSheet']);
             $event = Event::findBySlug($event_slug);
+            $technical->setActivePortion($event_slug);
 
             echo json_encode([
                 'event'      => $event->toArray(),
@@ -64,21 +77,25 @@ else {
                 Team::findById($deduction['team_id']),
                 floatval($deduction['value'])
             );
-
         }
 
-        // set is_locked deductions to true
+        // submit deductions
         else if(isset($_POST['deductions'])) {
             require_once 'models/Deduction.php';
             require_once 'models/Event.php';
             require_once 'models/Team.php';
+
+            // determine if locking ratings or not
+            $locking = false;
+            if(isset($_POST['locking']))
+                $locking = filter_var($_POST['locking'], FILTER_VALIDATE_BOOLEAN);
 
             foreach($_POST['deductions'] as $deduction) {
                 $technical->setEventTeamDeduction(
                     Event::findById($deduction['event_id']),
                     Team::findById($deduction['team_id']),
                     floatval($deduction['value']),
-                    filter_var($deduction['is_locked'], FILTER_VALIDATE_BOOLEAN)
+                    filter_var($deduction['is_locked'], FILTER_VALIDATE_BOOLEAN) || $locking
                 );
             }
         }

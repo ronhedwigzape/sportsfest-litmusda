@@ -3,17 +3,26 @@
     .v-navigation-drawer {
         display: none !important;
     }
+
     .v-main {
         --v-layout-top: 0 !important;
         --v-layout-left: 0 !important;
     }
+
     .v-btn.unlock {
         display: none !important;
     }
-    th, td {
+
+    th,
+    td,
+    th.bg-red-lighten-3,
+    td.bg-red-lighten-3 {
         background: white !important;
     }
-    .online-status {
+
+    .online-status,
+    .help-status,
+    .user-active-portion {
         display: none !important;
     }
 }

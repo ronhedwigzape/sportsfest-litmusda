@@ -45,7 +45,7 @@
                             ?>
                             <div class="form-group">
                                 <label>Competition</label>
-                                <select name="competition_id" class="form-control" required <?php if (!empty($entity_category)) echo 'disabled'; ?>>
+                                <select name="competition_id" class="form-control">
                                     <option value="">Select Competition</option>
                                     <?php foreach ($competitions as $competition) {
                                         $selected = ($competition->getSlug() == $entity_category) ? 'selected' : '';
@@ -56,12 +56,12 @@
 
                             <div class="form-group">
                                 <label>Slug</label>
-                                <input type="text" name="slug" class="form-control" placeholder="Enter your Slug" autocomplete="off" required>
+                                <input type="text" name="slug" class="form-control" placeholder="Enter Slug" autocomplete="off" required>
                             </div>
 
                             <div class="form-group">
                                 <label>Title</label>
-                                <input type="text" name="title" class="form-control" placeholder="Enter your Title" autocomplete="off" required>
+                                <input type="text" name="title" class="form-control" placeholder="Enter Title" autocomplete="off" required>
                             </div>
                         </div>
 
@@ -97,7 +97,7 @@
                             ?>
                             <div class="form-group">
                                 <label>Competition</label>
-                                <select name="competition_id" id="competition_id" class="form-control" required>
+                                <select name="competition_id" id="competition_id" class="form-control">
                                     <option value="">Select Competition</option>
                                     <?php foreach ($competitions as $competition) {
                                         $selected = ($competition->getSlug() == $entity_category) ? 'selected' : '';
@@ -108,12 +108,12 @@
 
                             <div class="form-group">
                                 <label>Slug</label>
-                                <input type="text" name="slug" id="slug" class="form-control" placeholder="Enter your Slug">
+                                <input type="text" name="slug" id="slug" class="form-control" placeholder="Enter Slug">
                             </div>
 
                             <div class="form-group">
                                 <label>Title</label>
-                                <input type="text" name="title" id="title" class="form-control" placeholder="Enter your Title">
+                                <input type="text" name="title" id="title" class="form-control" placeholder="Enter Title">
                             </div>
                         </div>
 

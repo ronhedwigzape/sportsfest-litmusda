@@ -6,7 +6,7 @@ class Event extends App
 {
     // table
     protected $table = 'events';
-    protected $table_noshows = 'event_noshows';
+    protected $table_noshows = 'noshows';
     protected $table_eliminations = 'eliminations';
 
     // properties
@@ -190,16 +190,16 @@ class Event extends App
     {
         // check id
         if(self::exists($this->id))
-            App::returnError('HTTP/1.1 500', 'Insert Error: event [id = ' . $this->id . '] already exists.');
+            App::returnError('HTTP/1.1 409', 'Insert Error: event [id = ' . $this->id . '] already exists.');
 
         // check category_id
         require_once 'Category.php';
         if(!Category::exists($this->category_id))
-            App::returnError('HTTP/1.1 500', 'Insert Error: category [id = ' . $this->category_id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Insert Error: category [id = ' . $this->category_id . '] does not exist.');
 
         // check slug
         if(self::slugExists($this->slug))
-            App::returnError('HTTP/1.1 500', 'Insert Error: event [slug = ' . $this->slug . '] already exists.');
+            App::returnError('HTTP/1.1 409', 'Insert Error: event [slug = ' . $this->slug . '] already exists.');
 
         // proceed with insert
         $stmt = $this->conn->prepare("INSERT INTO $this->table(category_id, slug, title) VALUES(?, ?, ?)");
@@ -218,16 +218,16 @@ class Event extends App
     {
         // check id
         if(!self::exists($this->id))
-            App::returnError('HTTP/1.1 500', 'Update Error: event [id = ' . $this->id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Update Error: event [id = ' . $this->id . '] does not exist.');
 
         // check category_id
         require_once 'Category.php';
         if(!Category::exists($this->category_id))
-            App::returnError('HTTP/1.1 500', 'Update Error: category [id = ' . $this->category_id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Update Error: category [id = ' . $this->category_id . '] does not exist.');
 
         // check slug
         if(self::slugExists($this->slug, $this->id))
-            App::returnError('HTTP/1.1 500', 'Update Error: event [slug = ' . $this->slug . '] already exists.');
+            App::returnError('HTTP/1.1 409', 'Update Error: event [slug = ' . $this->slug . '] already exists.');
 
         // proceed with update
         $stmt = $this->conn->prepare("UPDATE $this->table SET category_id = ?, slug = ?, title = ? WHERE id = ?");
@@ -245,7 +245,7 @@ class Event extends App
     {
         // check id
         if(!self::exists($this->id))
-            App::returnError('HTTP/1.1 500', 'Delete Error: event [id = ' . $this->id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Delete Error: event [id = ' . $this->id . '] does not exist.');
 
         // proceed with delete
         $stmt = $this->conn->prepare("DELETE FROM $this->table WHERE id = ?");
@@ -614,6 +614,108 @@ class Event extends App
 
 
     /***************************************************************************
+     * Set event title on a given rank
+     *
+     * @param int $rank
+     * @param string $title
+     * @return void
+     */
+    public function setRankTitle($rank, $title)
+    {
+        require_once 'Title.php';
+
+        // check if title is stored or not
+        $stored = Title::stored($this->id, $rank);
+
+        // instantiate title
+        $title_obj = new Title();
+        if($stored)
+            $title_obj = Title::find($this->id, $rank);
+
+        // set properties
+        $title_obj->setEventId($this->id);
+        $title_obj->setRank($rank);
+        $title_obj->setTitle($title);
+
+        // update or insert
+        if($stored)
+            $title_obj->update();
+        else
+            $title_obj->insert();
+    }
+
+
+    /***************************************************************************
+     * Get event title of given rank, as object
+     *
+     * @param int $rank
+     * @return bool|Title
+     */
+    public function getRankTitle($rank)
+    {
+        require_once 'Title.php';
+
+        // insert title if not yet stored
+        if(!Title::stored($this->id, $rank)) {
+            $title = new Title();
+            $title->setEventId($this->id);
+            $title->setRank($rank);
+            $title->insert();
+        }
+
+        // return title
+        return Title::find($this->id, $rank);
+    }
+
+
+    /***************************************************************************
+     * Get event title of given rank, as array
+     *
+     * @param $rank
+     * @return array
+     */
+    public function getRankTitleRow($rank)
+    {
+        return ($this->getRankTitle($rank))->toArray();
+    }
+
+
+    /***************************************************************************
+     * Get all event titles as array of objects
+     *
+     * @return Title[]
+     */
+    public function getAllTitles()
+    {
+        require_once 'Title.php';
+        $ranks = Title::ranks();
+
+        $titles = [];
+        foreach($ranks as $rank) {
+            $key = $this->slug.'_rank-'.$rank;
+            $titles[$key] = $this->getRankTitle($rank);
+        }
+        return $titles;
+    }
+
+
+    /***************************************************************************
+     * Get all event titles as array of arrays
+     *
+     * @return array
+     */
+    public function getRowTitles()
+    {
+        $titles = [];
+        foreach($this->getAllTitles() as $title) {
+            $key = $this->slug.'_rank-'.$title->getRank();
+            $titles[$key] = $this->getRankTitleRow($title->getRank());
+        }
+        return $titles;
+    }
+
+
+    /***************************************************************************
      * Set team arrangement order
      *
      * @param Team $team
@@ -741,7 +843,7 @@ class Event extends App
         // check team id
         $team_id = $team->getId();
         if(!Team::exists($team_id))
-            App::returnError('HTTP/1.1 500', 'NowShow Team Addition Error: team [id = ' . $team_id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'NowShow Team Addition Error: team [id = ' . $team_id . '] does not exist.');
 
         // proceed with addition
         if(!$this->hasTeamNotShownUp($team)) {
@@ -765,12 +867,29 @@ class Event extends App
         // check team id
         $team_id = $team->getId();
         if(!Team::exists($team_id))
-            App::returnError('HTTP/1.1 500', 'NowShow Team Removal Error: team [id = ' . $team_id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'NowShow Team Removal Error: team [id = ' . $team_id . '] does not exist.');
 
         // proceed with removal
         $stmt = $this->conn->prepare("DELETE FROM $this->table_noshows WHERE event_id = ? AND team_id = ?");
         $stmt->bind_param("ii", $this->id, $team_id);
         $stmt->execute();
+    }
+
+
+    /***************************************************************************
+     * Get teams which are eliminated from the event, as a result set
+     *
+     * @return array
+     */
+    private function getResultEliminatedTeams()
+    {
+        require_once 'Team.php';
+
+        $stmt = $this->conn->prepare("SELECT DISTINCT team_id FROM $this->table_eliminations WHERE event_id = ? ORDER BY team_id");
+        $stmt->bind_param("i", $this->id);
+        $stmt->execute();
+
+        return $stmt->get_result();
     }
 
 
@@ -782,18 +901,32 @@ class Event extends App
     public function getAllEliminatedTeams()
     {
         require_once 'Team.php';
+        $result = $this->getResultEliminatedTeams();
 
-        $stmt = $this->conn->prepare("SELECT DISTINCT team_id FROM $this->table_eliminations WHERE event_id = ? ORDER BY team_id");
-        $stmt->bind_param("i", $this->id);
-        $stmt->execute();
-
-        $result = $stmt->get_result();
         $teams = [];
         while($row = $result->fetch_assoc()) {
             $teams[] = new Team($row['team_id']);
         }
 
         return $teams;
+    }
+
+
+    /***************************************************************************
+     * Get id's of teams which are eliminated from the event
+     *
+     * @return array
+     */
+    public function getRowEliminatedTeamIds()
+    {
+        $result = $this->getResultEliminatedTeams();
+
+        $team_ids = [];
+        while($row = $result->fetch_assoc()) {
+            $team_ids[] = $row['team_id'];
+        }
+
+        return $team_ids;
     }
 
 
@@ -844,7 +977,7 @@ class Event extends App
         // check team id
         $team_id = $team->getId();
         if(!Team::exists($team_id))
-            App::returnError('HTTP/1.1 500', 'Team Elimination Error: team [id = ' . $team_id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Team Elimination Error: team [id = ' . $team_id . '] does not exist.');
 
         // proceed with elimination
         if(!$this->hasTeamBeenEliminated($team)) {
@@ -868,7 +1001,7 @@ class Event extends App
         // check team id
         $team_id = $team->getId();
         if(!Team::exists($team_id))
-            App::returnError('HTTP/1.1 500', 'Team Revival Error: team [id = ' . $team_id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Team Revival Error: team [id = ' . $team_id . '] does not exist.');
 
         // proceed with removal
         $stmt = $this->conn->prepare("DELETE FROM $this->table_eliminations WHERE event_id = ? AND team_id = ?");

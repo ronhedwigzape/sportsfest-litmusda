@@ -39,12 +39,12 @@
                         <div class="modal-body">
                             <div class="form-group">
                                 <label> Name </label>
-                                <input type="text" name="name" class="form-control" placeholder="Enter your Name" autocomplete="off" required>
+                                <input type="text" name="name" class="form-control" placeholder="Enter Name" autocomplete="off" required>
                             </div>
 
                             <div class="form-group">
                                 <label> Color </label>
-                                <input type="text" name="color" class="form-control" placeholder="Enter your Color" autocomplete="off" required>
+                                <input type="text" name="color" class="form-control" placeholder="Enter Color" autocomplete="off" required>
                             </div>
 
                             <div class="form-group">
@@ -80,12 +80,12 @@
                             <input type="hidden" name="update_id" id="update_id">
                             <div class="form-group">
                                 <label> Name </label>
-                                <input type="text" name="name" id="name" class="form-control" placeholder="Enter your Name" autocomplete="off" required>
+                                <input type="text" name="name" id="name" class="form-control" placeholder="Enter Name" autocomplete="off" required>
                             </div>
 
                             <div class="form-group">
                                 <label> Color </label>
-                                <input type="text" name="color" id="color" class="form-control" placeholder="Enter your Color" autocomplete="off" required>
+                                <input type="text" name="color" id="color" class="form-control" placeholder="Enter Color" autocomplete="off" required>
                             </div>
 
                             <div class="form-group">

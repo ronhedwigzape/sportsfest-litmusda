@@ -16,6 +16,7 @@ class Participant extends App
     protected $middle_name;
     protected $last_name;
     protected $gender = 'male';
+    protected $avatar = 'no-avatar.jpg';
 
 
     /***************************************************************************
@@ -43,6 +44,7 @@ class Participant extends App
                 $this->middle_name = $row['middle_name'];
                 $this->last_name = $row['last_name'];
                 $this->gender = $row['gender'];
+                $this->avatar = $row['avatar'];
             }
         }
     }
@@ -95,7 +97,8 @@ class Participant extends App
             'first_name'  => $this->first_name,
             'middle_name' => $this->middle_name,
             'last_name'   => $this->last_name,
-            'gender'      => $this->gender
+            'gender'      => $this->gender,
+            'avatar'      => $this->avatar
         ];
     }
 
@@ -184,21 +187,21 @@ class Participant extends App
     {
         // check id
         if(self::exists($this->id))
-            App::returnError('HTTP/1.1 500', 'Insert Error: participant [id = ' . $this->id . '] already exists.');
+            App::returnError('HTTP/1.1 409', 'Insert Error: participant [id = ' . $this->id . '] already exists.');
 
         // check team_id
         require_once 'Team.php';
         if(!Team::exists($this->team_id))
-            App::returnError('HTTP/1.1 500', 'Insert Error: team [id = ' . $this->team_id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Insert Error: team [id = ' . $this->team_id . '] does not exist.');
 
         // check event_id
         require_once 'Event.php';
         if(!Event::exists($this->event_id))
-            App::returnError('HTTP/1.1 500', 'Insert Error: event [id = ' . $this->event_id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Insert Error: event [id = ' . $this->event_id . '] does not exist.');
 
         // proceed with insert
-        $stmt = $this->conn->prepare("INSERT INTO $this->table(team_id, event_id, number, first_name, middle_name, last_name, gender) VALUES(?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("iiissss", $this->team_id, $this->event_id, $this->number, $this->first_name, $this->middle_name, $this->last_name, $this->gender);
+        $stmt = $this->conn->prepare("INSERT INTO $this->table(team_id, event_id, number, first_name, middle_name, last_name, gender, avatar) VALUES(?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("iiisssss", $this->team_id, $this->event_id, $this->number, $this->first_name, $this->middle_name, $this->last_name, $this->gender, $this->avatar);
         $stmt->execute();
         $this->id = $this->conn->insert_id;
     }
@@ -213,21 +216,21 @@ class Participant extends App
     {
         // check id
         if(!self::exists($this->id))
-            App::returnError('HTTP/1.1 500', 'Update Error: participant [id = ' . $this->id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Update Error: participant [id = ' . $this->id . '] does not exist.');
 
         // check team_id
         require_once 'Team.php';
         if(!Team::exists($this->team_id))
-            App::returnError('HTTP/1.1 500', 'Update Error: team [id = ' . $this->team_id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Update Error: team [id = ' . $this->team_id . '] does not exist.');
 
         // check event_id
         require_once 'Event.php';
         if(!Event::exists($this->event_id))
-            App::returnError('HTTP/1.1 500', 'Update Error: event [id = ' . $this->event_id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Update Error: event [id = ' . $this->event_id . '] does not exist.');
 
         // proceed with update
-        $stmt = $this->conn->prepare("UPDATE $this->table SET team_id = ?, event_id = ?, number = ?, first_name = ?, middle_name = ?, last_name = ?, gender = ? WHERE id = ?");
-        $stmt->bind_param("iiissssi", $this->event_id, $this->team_id, $this->number, $this->first_name, $this->middle_name, $this->last_name, $this->gender, $this->id);
+        $stmt = $this->conn->prepare("UPDATE $this->table SET team_id = ?, event_id = ?, number = ?, first_name = ?, middle_name = ?, last_name = ?, gender = ?, avatar = ? WHERE id = ?");
+        $stmt->bind_param("iiisssssi", $this->event_id, $this->team_id, $this->number, $this->first_name, $this->middle_name, $this->last_name, $this->gender, $this->avatar, $this->id);
         $stmt->execute();
     }
 
@@ -241,7 +244,7 @@ class Participant extends App
     {
         // check id
         if(!self::exists($this->id))
-            App::returnError('HTTP/1.1 500', 'Delete Error: participant [id = ' . $this->id . '] does not exist.');
+            App::returnError('HTTP/1.1 404', 'Delete Error: participant [id = ' . $this->id . '] does not exist.');
 
         // proceed with delete
         $stmt = $this->conn->prepare("DELETE FROM $this->table WHERE id = ?");
@@ -338,6 +341,18 @@ class Participant extends App
 
 
     /***************************************************************************
+     * Set avatar
+     *
+     * @param string $avatar
+     * @return void
+     */
+    public function setAvatar($avatar)
+    {
+        $this->avatar = $avatar;
+    }
+
+
+    /***************************************************************************
      * Get id
      *
      * @return int
@@ -422,6 +437,17 @@ class Participant extends App
     public function getGender()
     {
         return $this->gender;
+    }
+
+
+    /***************************************************************************
+     * Get avatar
+     *
+     * @return string
+     */
+    public function getAvatar()
+    {
+        return $this->avatar;
     }
 
 
