@@ -22,6 +22,13 @@
     <link rel="stylesheet" href="../dist/bootstrap-5.2.3/css/bootstrap.min.css">
     <link rel="stylesheet" href="../dist/fontawesome-6.3.0/css/all.min.css">
     <title>CRUD</title>
+    <style>
+        .bigSpinner{
+            margin-left: 48%;
+            margin-top: 100px;
+            display: none;
+        }
+    </style>
 </head>
 <body style="background-color: #B0C4DE" onload="load()">
     <div style="display: flex; width: 30%; margin-left: 20%; margin-top: 50px;">
@@ -46,7 +53,9 @@
                 <?php } ?>
             </select>
         </div>
-
+        <div class="spinner-border text-primary bigSpinner" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
         <div id="result" style="width: 70%; margin-left: 15%;"></div>
     </div>
 
@@ -65,11 +74,12 @@
 
         <div id="technicalResult" style="width: 70%; margin-left: 15%;"></div>
     </div>
-
+    <?php $script_version = time();?>
     <script src="../dist/jquery-3.6.4/jquery-3.6.4.min.js"></script>
     <script src="../dist/bootstrap-5.2.3/js/bootstrap.bundle.min.js"></script>
-    <script src="js/load_data.js"></script>
-    <script src="js/action.js"></script>
-    <script src="js/show_hide.js"></script>
+    <script src="js/load_data.js<?= '?'.$script_version ?>"></script>
+    <script src="js/action.js<?= '?'.$script_version ?>"></script>
+    <script src="js/toggleButton.js<?= '?'.$script_version ?>"></script>
+    <script src="js/show_hide.js<?= '?'.$script_version ?>"></script>
 </body>
 </html>

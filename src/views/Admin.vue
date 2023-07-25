@@ -24,131 +24,119 @@
 				>
 					{{ event.title }}
 				</th>
-				<template v-for="(technical, technicalKey, technicalIndex) in technicals" :key="technical.id">
-					<th
-						class="text-center text-uppercase font-weight-bold text-red-darken-4 py-3"
-                        :class="{
-                            'text-caption': $vuetify.display.mdAndDown,
-                            'bg-red-lighten-3': !technical.online
-                        }"
-					>
-                        <!-- technical unlock deductions -->
-                        <v-btn
-                            v-if="technicalSubmitted[technicalKey]"
-                            class="unlock"
-                            @click="unlockTechnicalDeductions(technical)"
-                            variant="text"
-                            size="x-small"
-                            icon
-                            :ripple="false"
-                            style="position: absolute; top: -7px; right: -7px"
+                <th
+                    v-for="(technical, technicalKey, technicalIndex) in technicals"
+                    :key="technical.id"
+                    class="text-center text-uppercase font-weight-bold text-red-darken-4 py-3"
+                    :class="{ 'bg-red-lighten-3': !technical.online }"
+                >
+                    <!-- technical unlock deductions -->
+                    <v-btn
+                        v-if="technicalSubmitted[technicalKey]"
+                        class="unlock"
+                        @click="unlockTechnicalDeductions(technical)"
+                        variant="text"
+                        size="x-small"
+                        icon
+                        :ripple="false"
+                        style="position: absolute; top: -7px; right: -7px"
+                    >
+                        <v-icon icon="mdi-lock-open-variant"/>
+                    </v-btn>
+
+                    Deduct
+                    <div>
+                        {{ technicalIndex + 1 }}
+                    </div>
+                    &nbsp;
+
+                    <!-- technical help status -->
+                    <div class="help-status mt-1" v-if="technical.calling">
+                        <v-chip
+                            size="small"
+                            color="warning"
+                            variant="flat"
                         >
-                            <v-icon icon="mdi-lock-open-variant"/>
-                        </v-btn>
-                        Deduct
-                        <div>
-                            {{ technicalIndex + 1 }}
-                        </div>
-                        &nbsp;
+                            HELP
+                        </v-chip>
+                    </div>
+                </th>
+                <th
+                    v-for="(judge, judgeKey, judgeIndex) in judges"
+                    :key="judge.id"
+                    class="text-center text-uppercase py-3"
+                    :class="{ 'bg-red-lighten-3': !judge.online }"
+                >
+                    <!-- judge unlock ratings -->
+                    <v-btn
+                        v-if="judgeSubmitted[judgeKey]"
+                        class="unlock"
+                        @click="unlockJudgeRatings(judge)"
+                        variant="text"
+                        size="x-small"
+                        icon
+                        :ripple="false"
+                        style="position: absolute; top: -7px; right: -7px"
+                    >
+                        <v-icon icon="mdi-lock-open-variant"/>
+                    </v-btn>
 
-                        <!-- technical help status -->
-                        <div class="help-status mt-1" v-if="technical.calling">
-                            <v-chip
-                                size="small"
-                                color="warning"
-                                variant="flat"
-                            >
-                                HELP
-                            </v-chip>
-                        </div>
-					</th>
-				</template>
-				<template v-for="(judge, judgeKey, judgeIndex) in judges" :key="judge.id">
-					<th
-						class="text-center text-uppercase py-3"
+                    <div
                         :class="{
-                            'text-caption': $vuetify.display.mdAndDown,
-                            'bg-red-lighten-3': !judge.online
+                            'text-dark-darken-1': judge.is_chairman == 0,
+                            'text-red-darken-3': judge.is_chairman == 1
                         }"
-					>
-                        <!-- judge unlock ratings -->
-						<v-btn
-                            v-if="judgeSubmitted[judgeKey]"
-							class="unlock"
-							@click="unlockJudgeRatings(judge)"
-							variant="text"
-							size="x-small"
-							icon
-                            :ripple="false"
-                            style="position: absolute; top: -7px; right: -7px"
-						>
-							<v-icon icon="mdi-lock-open-variant"/>
-						</v-btn>
-						<div
-							:class="{
-                                'text-dark-darken-1': judge.is_chairman == 0,
-                                'text-red-darken-3': judge.is_chairman == 1
-                            }"
-						>
-                            Judge
-							<div>
-                                {{ judge.number }}<span v-if="judge.is_chairman == 1">*</span>
-							</div>
-							<b
-                                :class="{
-                                    'text-dark-darken-1': judge.is_chairman == 0,
-                                    'text-red-darken-4': judge.is_chairman == 1
-                                }"
-							>
-								Total
-							</b>
-
-                            <!-- judge help status -->
-                            <div class="help-status mt-1" v-if="judge.calling">
-                                <v-chip
-                                    size="small"
-                                    color="warning"
-                                    variant="flat"
-                                >
-                                    HELP
-                                </v-chip>
-                            </div>
-						</div>
-					</th>
-					<th
-						class="text-center text-uppercase py-3 text-blue-darken-2"
-						:class="$vuetify.display.mdAndDown ? 'text-caption' : ''"
-					>
-						Judge
-						<div>
-                            {{ judge.number }}<span v-if="judge.is_chairman == 1">*</span>
+                    >
+                        <div>
+                            Judge {{ judge.number }}<span v-if="judge.is_chairman == 1">*</span>
                         </div>
-						<b class="text-blue-darken-3">Rank</b>
-					</th>
-				</template>
+                        <div
+                            :class="{
+                                'text-dark-darken-1': judge.is_chairman == 0,
+                                'text-red-darken-4': judge.is_chairman == 1
+                            }"
+                        >
+                            <small>Total</small>
+                        </div>
+                        <div class="text-blue-darken-2" style="margin-top: -10px;">
+                            <small>Rank</small>
+                        </div>
+                    </div>
+
+                    <!-- judge help status -->
+                    <div class="help-status mt-1" v-if="judge.calling">
+                        <v-chip
+                            size="small"
+                            color="warning"
+                            variant="flat"
+                        >
+                            HELP
+                        </v-chip>
+                    </div>
+                </th>
 				<th
 					class="text-center text-uppercase font-weight-bold text-green-darken-4 py-3"
 					:class="$vuetify.display.mdAndDown ? 'text-caption' : ''"
 				>
-					Average
+					Total<br>Avg.
 				</th>
 				<th
 					class="text-center text-uppercase font-weight-bold text-blue-darken-4 py-3"
 					:class="$vuetify.display.mdAndDown ? 'text-caption' : ''"
 				>
-					Total Rank
+					Total<br>Rank
 				</th>
 				<th
 					class="text-center text-uppercase font-weight-bold text-grey-darken-1 py-3"
 					:class="$vuetify.display.mdAndDown ? 'text-caption' : ''"
 				>
-					Initial Rank
+					Initial<br>Rank
 				</th>
 				<th
 					class="text-center text-uppercase font-weight-bold text-grey-darken-4 py-3"
 					:class="$vuetify.display.mdAndDown ? 'text-caption' : ''"
 				>
-					Final Rank
+					Final<br>Rank
 				</th>
                 <th
                     class="text-center text-uppercase font-weight-bold text-grey-darken-4 py-3"
@@ -173,48 +161,53 @@
 				>
 					{{ team.name }}
 				</td>
-				<template v-for="(technical, technicalKey, technicalIndex) in technicals" :key="technical.id">
-					<td
-						class="text-center text-uppercase font-weight-bold text-red-darken-3"
-						:class="{
-							'bg-grey-lighten-3' : !team.deductions.inputs[technicalKey].is_locked,
-							'bg-white' : team.deductions.inputs[technicalKey].is_locked && team.title === '',
-							'bg-yellow-lighten-3': allSubmitted && team.deductions.inputs[technicalKey].is_locked && team.title !== '',
-						}, $vuetify.display.mdAndDown ? 'text-caption' : ''"
-					>
-                        <span :class="{ blurred: !team.deductions.inputs[technicalKey].is_locked && team.deductions.inputs[technicalKey].value <= 0 }">
-						    {{ team.deductions.inputs[technicalKey].value.toFixed(2) }}
-                        </span>
-					</td>
-				</template>
-				<template v-for="judge in judges" :key="judge.id">
-					<td
-						class="text-center"
-						:class="{
-							'bg-grey-lighten-3' : !team.ratings.inputs[`judge_${judge.id}`].final.is_locked,
-							'bg-white' : team.ratings.inputs[`judge_${judge.id}`].final.is_locked && team.title === '',
-							'bg-yellow-lighten-3' : allSubmitted && team.ratings.inputs[`judge_${judge.id}`].final.is_locked && team.title !== '',
-							'text-dark-darken-1': judge.is_chairman == 0,
-							'text-red-darken-3': judge.is_chairman == 1
-						}, $vuetify.display.mdAndDown ? 'text-caption' : ''"
-					>
+                <td
+                    v-for="(technical, technicalKey, technicalIndex) in technicals"
+                    :key="technical.id"
+                    class="text-center text-uppercase font-weight-bold text-red-darken-3"
+                    :class="{
+                        'bg-grey-lighten-3' : !team.deductions.inputs[technicalKey].is_locked,
+                        'bg-white' : team.deductions.inputs[technicalKey].is_locked && team.title === '',
+                        'bg-yellow-lighten-3': allSubmitted && team.deductions.inputs[technicalKey].is_locked && team.title !== ''
+                    }"
+                >
+                    <span :class="{ blurred: !team.deductions.inputs[technicalKey].is_locked && team.deductions.inputs[technicalKey].value <= 0 }">
+                        {{ team.deductions.inputs[technicalKey].value.toFixed(2) }}
+                    </span>
+                </td>
+                <td
+                    v-for="judge in judges" :key="judge.id"
+                    class="text-right"
+                    :class="{
+                        'bg-grey-lighten-3' : !team.ratings.inputs[`judge_${judge.id}`].final.is_locked,
+                        'bg-white' : team.ratings.inputs[`judge_${judge.id}`].final.is_locked && team.title === '',
+                        'bg-yellow-lighten-3' : allSubmitted && team.ratings.inputs[`judge_${judge.id}`].final.is_locked && team.title !== ''
+                    }"
+                >
+                    <div
+                        :class="{
+                            'text-dark-darken-1': judge.is_chairman == 0,
+                            'text-red-darken-3': judge.is_chairman == 1
+                        }"
+                    >
                         <span :class="{ blurred: !team.ratings.inputs[`judge_${judge.id}`].final.is_locked && team.ratings.inputs[`judge_${judge.id}`].final.deducted <= 0 }">
-						    {{ team.ratings.inputs[`judge_${judge.id}`].final.deducted.toFixed(2) }}
+                            {{ team.ratings.inputs[`judge_${judge.id}`].final.deducted.toFixed(2) }}
                         </span>
-					</td>
-					<td
-						class="text-center font-weight-bold text-blue-darken-2"
-						:class="{
-							'bg-grey-lighten-3': !team.ratings.inputs[`judge_${judge.id}`].final.is_locked,
-							'bg-white': team.ratings.inputs[`judge_${judge.id}`].final.is_locked && team.title === '',
-							'bg-yellow-lighten-3': allSubmitted && team.ratings.inputs[`judge_${judge.id}`].final.is_locked && team.title !== '',
-						}, $vuetify.display.mdAndDown ? 'text-caption' : ''"
-					>
+                    </div>
+
+                    <div
+                        class="text-right font-weight-bold text-blue-darken-2"
+                        :class="{
+                            'bg-grey-lighten-3' : !team.ratings.inputs[`judge_${judge.id}`].final.is_locked,
+                            'bg-white' : team.ratings.inputs[`judge_${judge.id}`].final.is_locked && team.title === '',
+                            'bg-yellow-lighten-3' : allSubmitted && team.ratings.inputs[`judge_${judge.id}`].final.is_locked && team.title !== ''
+                        }"
+                    >
                         <span :class="{ blurred: !team.ratings.inputs[`judge_${judge.id}`].final.is_locked && team.ratings.inputs[`judge_${judge.id}`].final.deducted <= 0 }">
-						    {{ team.ratings.inputs[`judge_${judge.id}`].rank.fractional.toFixed(2) }}
+                            {{ team.ratings.inputs[`judge_${judge.id}`].rank.fractional.toFixed(2) }}
                         </span>
-					</td>
-				</template>
+                    </div>
+                </td>
 				<td
 					class="text-center font-weight-bold text-green-darken-4"
 					:class="`${$vuetify.display.mdAndDown ? 'text-caption' : ''}${allSubmitted && team.title !== '' ? ' bg-yellow-lighten-3' : ''}`"
