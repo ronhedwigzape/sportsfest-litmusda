@@ -78,20 +78,23 @@ if (isset($_POST['toggleValue'])){
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel">Add Event title</h1>
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Judge: Add Event</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body d-flex">
+            <div class="modal-body d-flex justify-content-center align-items-center">
                 <select class="form-select" aria-label="Default select example"
-                        style="width: 50%; color: white; background-color: #2F4F4F; text-align: center; margin-left: 25%;"
+                        style="width: 50%; color: white; background-color: #2F4F4F; text-align: center;"
                         id="selected_Event<?= $option ?>">
                     <option selected><b>Select Event</b></option>
                     <?php foreach($displayTitle as $disTitle) { ?>
                         <option value="<?= $disTitle->getId() ?>"><?= $disTitle->getTitle() ?></option>
                     <?php } ?>
                 </select>
-                <div class="form-check form-switch" style="margin-left: 25px;">
-                    <input class="form-check-input" value="<?php if (isset($toggleValue)){ echo "true";} else{echo "false";} ?>"  onclick="toggleValue1()"  type="checkbox" id="addEventToggle" style="cursor:pointer;">
+                <div class="d-flex">
+                    <div class="form-check form-switch" style="margin-left: 25px;">
+                        <input class="form-check-input" value="<?php if (isset($toggleValue)){ echo "true";} else{echo "false";} ?>"  onclick="toggleValue1()"  type="checkbox" id="addEventToggle" style="cursor:pointer;">
+                    </div>
+                    Chairman
                 </div>
             </div>
             <div class="modal-footer">
@@ -105,10 +108,14 @@ if (isset($_POST['toggleValue'])){
 </div>
 <table class="table table-bordered" style="margin-top: 10px;">
     <thead>
-    <tr>
-        <th colspan="2" style="text-align: center; font-size: 20px;">
-            Event Title
+    <tr style="font-size: 20px;">
+        <th style="text-align: center;">
+            Event
         </th>
+        <th style="text-align: center;">
+            Chairman
+        </th>
+        <th></th>
     </tr>
     </thead>
     <tbody>
@@ -117,12 +124,14 @@ if (isset($_POST['toggleValue'])){
             <td style="padding-left: 30px;">
                 <?= $eventData->getTitle() ?>
             </td>
-            <td style="width: 10%;">
-                <div class="spinner-border spinner-border-sm text-primary smallSpinner" role="status" id="smSpinner<?= $judgeID ?><?= $eventData->getId() ?>">
-                    <span class="visually-hidden">Loading...</span>
-                </div>
-                <div class="form-check form-switch" onclick="judgeToggle(<?= $judgeID ?>,<?= $eventData->getId() ?>)">
-                    <input class="form-check-input" type="checkbox" id="judgeSwitch<?= $judgeID ?><?= $eventData->getId() ?>" <?php if ($judge_data->isChairmanOfEvent(Event::findById($eventData->getId())) == "1") { echo "checked "; echo "value=true";} else{echo "value=false";} ?> style="cursor: pointer">
+            <td style="width: 10%;" align="center">
+                <div style="height: 25px">
+                    <div class="spinner-border spinner-border-sm text-primary smallSpinner mx-0 d-none" role="status" id="smSpinner<?= $judgeID ?><?= $eventData->getId() ?>">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <div class="form-check form-switch m-0 d-inline-block" onclick="judgeToggle(<?= $judgeID ?>,<?= $eventData->getId() ?>)">
+                        <input class="form-check-input" type="checkbox" id="judgeSwitch<?= $judgeID ?><?= $eventData->getId() ?>" <?php if ($judge_data->isChairmanOfEvent(Event::findById($eventData->getId())) == "1") { echo "checked "; echo "value=true";} else{echo "value=false";} ?> style="cursor: pointer">
+                    </div>
                 </div>
             </td>
             <td style="width: 10%;">

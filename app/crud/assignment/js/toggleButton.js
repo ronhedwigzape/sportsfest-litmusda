@@ -13,14 +13,23 @@ function judgeToggle(judgeID,eventID){
             toggle_id:toggleID
         },
         beforeSend:function (){
-            $('#judgeSwitch'+judgeID+eventID).hide();
-            $('#smSpinner'+judgeID+eventID).show();
+            const judgeSwitch = $('#judgeSwitch'+judgeID+eventID);
+            judgeSwitch.parent().removeClass('d-inline-block');
+            judgeSwitch.parent().addClass('d-none');
+
+            const spinner = $('#smSpinner'+judgeID+eventID);
+            spinner.removeClass('d-none');
+            spinner.addClass('d-inline-block');
         },
         success:function (data,status){
             $('#result').html(data);
-            $('#judgeSwitch'+judgeID+eventID).show();
-            $('#smSpinner'+judgeID+eventID).hide();
+            const judgeSwitch = $('#judgeSwitch'+judgeID+eventID);
+            judgeSwitch.parent().removeClass('d-none');
+            judgeSwitch.parent().addClass('d-inline-block');
+
+            const spinner = $('#smSpinner'+judgeID+eventID);
+            spinner.removeClass('d-inline-block');
+            spinner.addClass('d-none');
         }
     });
-
 }
