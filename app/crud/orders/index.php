@@ -80,14 +80,26 @@ function findArrangementId($eventId, $order) {
                                         <select
                                             class="form-select" onchange="handleTeamOrder(this.value, <?= $event->getId() ?>, <?= $order ?>)"
                                         >
-                                            <option selected>
-                                                <?= $arrangements ? $arrangements->getTeamId() . " - " . $arrangements->getTeam()->getName() : 'Select your ' . GROUP ?>
-                                            </option>
                                             <?php
-                                                $teams = Team::all($event->getId());
-                                                foreach ($teams as $team) {
+                                                $team_ctr = 0;
+                                                foreach (Team::all() as $team) {
+                                                    $team_ctr += 1;
                                             ?>
-                                            <option value="<?= $team->getId() ?>"><?= $team->getId() ?> - <?= $team->getName() ?></option>
+                                                <option
+                                                    value="<?= $team->getId() ?>"
+                                                    <?php
+                                                        if($arrangements) {
+                                                            if($arrangements->getTeamId() == $team->getId())
+                                                                echo " selected";
+                                                        }
+                                                        else {
+                                                            if($team_ctr == $order)
+                                                                echo " selected";
+                                                        }
+                                                    ?>
+                                                >
+                                                    <?= $team->getId() ?> - <?= $team->getName() ?>
+                                                </option>
                                             <?php } ?>
                                         </select>
                                     </td>
