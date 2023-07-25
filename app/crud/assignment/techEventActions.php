@@ -91,7 +91,7 @@ if(isset($_POST['selectedTech'])) {
         <thead>
         <tr>
             <th colspan="2" style="text-align: center; font-size: 20px;">
-                Event Title
+                Event
             </th>
         </tr>
         </thead>
@@ -108,7 +108,7 @@ if(isset($_POST['selectedTech'])) {
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Add Event title</h1>
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Technical: Add Event</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">

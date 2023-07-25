@@ -24,8 +24,14 @@ $(document).ready(function(){
                 url: 'get_data.php',
                 type: 'POST',
                 data: 'option=' + optionValue,
+                beforeSend:function (){
+                    $('.spinner-border').show();
+                    $('#result').hide();
+                },
                 success: function(response){
                     $('#result').html(response);
+                    $('.spinner-border').hide();
+                    $('#result').show();
                 }
             });
         }
@@ -34,6 +40,7 @@ $(document).ready(function(){
         }
     });
 });
+
 
 
 
