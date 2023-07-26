@@ -97,3 +97,8 @@ Here's how to compile the project for production deployment:
    For example:
      - <http://localhost/sportsfest-litmusda>
      - <http://192.168.1.99/sportsfest-litmusda>
+
+
+#### Admin Dashboard
+To configure tabulation settings or view results, access the admin dashboard at <http://localhost/sportsfest-litmusda/app>.
+The default ***username*** and ***password*** is `admin`.
