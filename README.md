@@ -100,5 +100,9 @@ Here's how to compile the project for production deployment:
 
 
 #### Admin Dashboard
-To configure tabulation settings or view results, access the admin dashboard at <http://localhost/sportsfest-litmusda/app>.
+Access the **admin dashboard** at <http://localhost/sportsfest-litmusda/app>.
 The default ***username*** and ***password*** is `admin`.
+
+#### Printing Results
+For **printing results**, click the print button in your browser or press `CTRL + P`,
+then properly set up the page for printing.
