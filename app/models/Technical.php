@@ -333,7 +333,7 @@ class Technical extends User
      * @param Team  $team
      */
     public function setActiveTeamInEvent($event, $team) {
-        $stmt = $this->conn->prepare("UPDATE $this->table_events SET active_team_id = ? WHERE technical_id = ? AND event_id = ?");
+        $stmt = $this->conn->prepare("UPDATE $this->table_events SET active_team_id = ?, has_active_team = 1 WHERE technical_id = ? AND event_id = ?");
         $event_id = $event->getId();
         $team_id  = $team->getId();
         $stmt->bind_param("iii", $team_id, $this->id, $event_id);
@@ -348,18 +348,32 @@ class Technical extends User
      * @return Team|boolean
      */
     public function getActiveTeamInEvent($event) {
-        require_once 'Team.php';
-
         $active_team = false;
-        $stmt = $this->conn->prepare("SELECT active_team_id FROM $this->table_events WHERE technical_id = ? AND event_id = ?");
+        $stmt = $this->conn->prepare("SELECT active_team_id, has_active_team FROM $this->table_events WHERE technical_id = ? AND event_id = ?");
         $event_id = $event->getId();
         $stmt->bind_param("ii", $this->id, $event_id);
         $stmt->execute();
         $result = $stmt->get_result();
         while($row = $result->fetch_assoc()) {
-            $active_team = new Team($row['active_team_id']);
+            if(intval($row['has_active_team']) == 1) {
+                require_once 'Team.php';
+                $active_team = new Team($row['active_team_id']);
+            }
         }
         return $active_team;
+    }
+
+
+    /***************************************************************************
+     * Remove the technical's active team in an event
+     *
+     * @param Event $event
+     */
+    public function removeActiveTeamInEvent($event) {
+        $stmt = $this->conn->prepare("UPDATE $this->table_events SET has_active_team = 0 WHERE technical_id = ? AND event_id = ?");
+        $event_id = $event->getId();
+        $stmt->bind_param("ii", $this->id, $event_id);
+        $stmt->execute();
     }
 
 
