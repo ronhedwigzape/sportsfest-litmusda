@@ -348,8 +348,6 @@ class Technical extends User
      * @return Team|boolean
      */
     public function getActiveTeamInEvent($event) {
-        require_once 'Team.php';
-
         $active_team = false;
         $stmt = $this->conn->prepare("SELECT active_team_id, has_active_team FROM $this->table_events WHERE technical_id = ? AND event_id = ?");
         $event_id = $event->getId();
@@ -357,8 +355,10 @@ class Technical extends User
         $stmt->execute();
         $result = $stmt->get_result();
         while($row = $result->fetch_assoc()) {
-            if(intval($row['has_active_team']) == 1)
+            if(intval($row['has_active_team']) == 1) {
+                require_once 'Team.php';
                 $active_team = new Team($row['active_team_id']);
+            }
         }
         return $active_team;
     }
