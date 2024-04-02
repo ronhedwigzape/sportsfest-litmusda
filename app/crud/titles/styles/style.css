@@ -1,0 +1,31 @@
+input[type="text"] {
+    outline: 3px solid transparent;
+    outline-offset: -3px;
+    transition: border-bottom-color 0.8s ease-out;
+}
+
+input[type="text"]:focus {
+    border-bottom: 3px solid;
+    animation: outline-animation 0.8s forwards;
+}
+
+@keyframes outline-animation {
+    from {
+        border-bottom-color: transparent;
+    }
+    to {
+        border-bottom-color: #4caf50;
+    }
+}
+
+input[type="text"]:not(:focus) {
+    transition: border-bottom-color 0.8s ease-in;
+}
+
+input[type="text"] {
+    width: 100%;
+    border: none;
+    border-bottom: 2px solid #ccc;
+    padding: 8px;
+    transition: background 0.8s ease-in-out;
+}
