@@ -8,29 +8,32 @@ require_once "../../models/Event.php";
 require_once '../../models/Title.php';
 
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['event'])) {
-    $titlesData = json_decode($_POST['event'], true);
+// handle the AJAX request to set titles for each rank
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['event'])) {
+    $eventData = json_decode($_POST['event'], true);
 
-    foreach ($titlesData as $eventId => $titles) {
+    foreach ($eventData as $eventId => $titles) {
+        if (!is_numeric($eventId) || $eventId <= 0) {
+            echo json_encode(['error' => 'Invalid event ID']);
+            exit;
+        }
+
+        $event = new Event($eventId);
+
+        // set titles for each rank
         foreach ($titles as $rank => $title) {
-            $titleObject = Title::find($eventId, $rank);
-            if ($titleObject) {
-                $titleObject->setTitle($title);
-                $titleObject->update();
-            } else {
-                $titleObject = new Title();
-                $titleObject->setEventId($eventId);
-                $titleObject->setRank($rank);
-                $titleObject->setTitle($title);
-                $titleObject->insert();
+            if (!is_numeric($rank) || $rank <= 0) {
+                echo json_encode(['error' => 'Invalid rank']);
+                exit;
             }
+
+            $event->setRankTitle($rank, $title);
         }
     }
 
-    // Send a response to indicate success
-    echo 'Titles saved successfully.';
+    // titles set successfully
+    echo json_encode(['success' => true]);
 } else {
-    // Send an error response if the data is not provided
-    http_response_code(400);
-    echo 'Bad request. Event and titles data are required.';
+    // invalid request method or missing data
+    echo json_encode(['error' => 'Invalid request']);
 }
