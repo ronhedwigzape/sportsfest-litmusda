@@ -14,7 +14,7 @@ export default createStore({
         app: {
             backendDir: 'app',
             sideNav: false,
-            title: 'Sportsfest-LitMusDa 2023',
+            title: 'Sportsfest-LitMusDa 2024',
             org: 'ACLC College Iriga'
         },
         window: {

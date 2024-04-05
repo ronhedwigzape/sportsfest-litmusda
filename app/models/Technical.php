@@ -228,23 +228,16 @@ class Technical extends User
     public function assignEvent($event)
     {
         require_once 'Event.php';
-        require_once 'Team.php';
 
         // check event id
         $event_id = $event->getId();
         if(!Event::exists($event_id))
             App::returnError('HTTP/1.1 404', 'Event Assignment Error: event [id = ' . $event_id . '] does not exist.');
 
-        // check first team
-        $first_team = Team::first_record();
-        if(!$first_team)
-            App::returnError('HTTP/1.1 403', 'Event Assignment Error: There must be at least one team record.');
-
         // proceed with assignment
         if(!$this->hasEvent($event)) {
-            $stmt = $this->conn->prepare("INSERT INTO $this->table_events(technical_id, event_id, active_team_id) VALUES(?, ?, ?)");
-            $active_team_id = $first_team->getId();
-            $stmt->bind_param("iii", $this->id, $event_id, $active_team_id);
+            $stmt = $this->conn->prepare("INSERT INTO $this->table_events(technical_id, event_id) VALUES(?, ?)");
+            $stmt->bind_param("ii", $this->id, $event_id);
             $stmt->execute();
         }
     }
@@ -323,57 +316,6 @@ class Technical extends User
             $events[] = $event->toArray();
         }
         return $events;
-    }
-
-
-    /***************************************************************************
-     * Set the technical's active team in an event
-     *
-     * @param Event $event
-     * @param Team  $team
-     */
-    public function setActiveTeamInEvent($event, $team) {
-        $stmt = $this->conn->prepare("UPDATE $this->table_events SET active_team_id = ?, has_active_team = 1 WHERE technical_id = ? AND event_id = ?");
-        $event_id = $event->getId();
-        $team_id  = $team->getId();
-        $stmt->bind_param("iii", $team_id, $this->id, $event_id);
-        $stmt->execute();
-    }
-
-
-    /***************************************************************************
-     * Get the technical's active team in an event
-     *
-     * @param Event $event
-     * @return Team|boolean
-     */
-    public function getActiveTeamInEvent($event) {
-        $active_team = false;
-        $stmt = $this->conn->prepare("SELECT active_team_id, has_active_team FROM $this->table_events WHERE technical_id = ? AND event_id = ?");
-        $event_id = $event->getId();
-        $stmt->bind_param("ii", $this->id, $event_id);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        while($row = $result->fetch_assoc()) {
-            if(intval($row['has_active_team']) == 1) {
-                require_once 'Team.php';
-                $active_team = new Team($row['active_team_id']);
-            }
-        }
-        return $active_team;
-    }
-
-
-    /***************************************************************************
-     * Remove the technical's active team in an event
-     *
-     * @param Event $event
-     */
-    public function removeActiveTeamInEvent($event) {
-        $stmt = $this->conn->prepare("UPDATE $this->table_events SET has_active_team = 0 WHERE technical_id = ? AND event_id = ?");
-        $event_id = $event->getId();
-        $stmt->bind_param("ii", $this->id, $event_id);
-        $stmt->execute();
     }
 
 

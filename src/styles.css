@@ -98,31 +98,26 @@ html::-webkit-scrollbar {
     scrollbar-width: none;
 }
 
-/* Swap Screensaver background-colors */
-.swap {
-    animation: swap-colors 8s linear infinite;
-    background-size: 200% 200%;
+/* Gradient Screensaver Background */
+@keyframes gradient-shift {
+    0%, 100% {
+        background-position: 0 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
 }
 
-/* Fade-in animation for Screensaver image */
+.swap {
+    background: linear-gradient(60deg, #e73c7e, #23a6d5, #23d5ab, #e8af45, #e73c7e);
+    background-size: 200% 200%;
+    animation: gradient-shift 8s linear infinite;
+}
+
 .fade-in {
     animation: fade-in 3s;
 }
 
-/* Swap-colors Animations */
-@keyframes swap-colors {
-    0% {
-        background-color: #fff;
-    }
-    50% {
-        background-color: #6a6eff;
-    }
-    100% {
-        background-color: #fff;
-    }
-}
-
-/* Fade-in animation for Screensaver image */
 @keyframes fade-in {
     0% {
         opacity: 0;

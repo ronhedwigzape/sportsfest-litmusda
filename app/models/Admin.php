@@ -163,8 +163,6 @@ class Admin extends User
                 $result['technicals'][$key_technical]['calling'] = $technical->isCalling();
                 $active_event = Event::findBySlug($technical->getActivePortion());
                 $result['technicals'][$key_technical]['active_portion_title'] = $active_event ? $active_event->getTitle() : null;
-                $active_team = $result['technicals'][$key_technical]['online'] ? $technical->getActiveTeamInEvent($event) : false;
-                $result['technicals'][$key_technical]['active_team_id'] = $active_team ? $active_team->getId() : null;
 
                 // get technical's total team deductions
                 $technical_total = $technical->getEventTeamDeduction($event, $team);
@@ -207,8 +205,6 @@ class Admin extends User
                 $result['judges'][$key_judge]['calling'] = $judge->isCalling();
                 $active_event = Event::findBySlug($judge->getActivePortion());
                 $result['judges'][$key_judge]['active_portion_title'] = $active_event ? $active_event->getTitle() : null;
-                $active_team = $result['judges'][$key_judge]['online'] ? $judge->getActiveTeamInEvent($event) : false;
-                $result['judges'][$key_judge]['active_team_id'] = $active_team ? $active_team->getId() : null;
 
                 // get judge's total team ratings and ranks
                 $judge_total = $judge_ranks[$key_judge]['ranks'][$key_team]['rating']; // $judge->getEventTeamRating($event, $team);
