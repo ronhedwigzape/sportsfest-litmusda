@@ -227,6 +227,24 @@ class Team extends App
 
 
     /***************************************************************************
+     * Get the first Team record
+     * @return Team|boolean
+     */
+    public static function first_record()
+    {
+        $first_team = false;
+        $team = new Team();
+        $stmt = $team->conn->prepare("SELECT `id` FROM $team->table ORDER BY `id` LIMIT 1");
+        $stmt->execute();
+        $result = $stmt->get_result();
+        while($row = $result->fetch_assoc()) {
+            $first_team = new Team($row['id']);
+        }
+        return $first_team;
+    }
+
+
+    /***************************************************************************
      * Insert team
      *
      * @return void
