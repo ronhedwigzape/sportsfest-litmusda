@@ -48,13 +48,39 @@
             <!-- table body -->
             <tbody>
                 <!-- overall -->
-                <tr style="background: yellow">
+                <tr>
                     <td class="fw-bold p-3">
-                        <h4 class="m-0">OVERALL</h4>
+                        <h5 class="m-0">TOTAL</h5>
                     </td>
                     <?php foreach($results['teams'] as $team_key => $team) { ?>
                         <td align="right">
-                            <h4 class="m-0 fw-normal"><?= number_format($results['teams'][$team_key]['points'], 2) ?></h4>
+                            <h5 class="m-0 fw-normal"><?= number_format(($results['teams'][$team_key]['points'] + $results['teams'][$team_key]['team_deductions']), 2) ?></h5>
+                        </td>
+                        <td align="right">
+
+                        </td>
+                    <?php } ?>
+                </tr>
+                <tr>
+                    <td class="fw-bold p-3">
+                        <h5 class="m-0 text-danger">DEDUCTIONS</h5>
+                    </td>
+                    <?php foreach($results['teams'] as $team_key => $team) { ?>
+                        <td align="right">
+                            <h5 class="m-0 fw-normal text-danger"><?= number_format($results['teams'][$team_key]['team_deductions'], 2) ?></h5>
+                        </td>
+                        <td align="right">
+
+                        </td>
+                    <?php } ?>
+                </tr>
+                <tr style="background: yellow">
+                    <td class="fw-bold p-3">
+                        <h5 class="m-0">OVERALL</h5>
+                    </td>
+                    <?php foreach($results['teams'] as $team_key => $team) { ?>
+                        <td align="right">
+                            <h5 class="m-0"><?= number_format($results['teams'][$team_key]['points'], 2) ?></h5>
                         </td>
                         <td align="right">
                             <h4 class="m-0"><?= number_format($results['teams'][$team_key]['rank']['fractional'], 2) ?></h4>

@@ -596,6 +596,16 @@ class Admin extends User
             'teams'        => []
         ];
 
+        /**
+         * Team point deductions (if any)
+         * [team_{id}' => {deduction}, ...]
+         */
+        define('TEAM_DEDUCTIONS', [
+            'team_1' => 0,
+            'team_2' => 0,
+            'team_3' => 0
+        ]);
+
         // get all teams
         require_once 'Team.php';
         $teams = Team::all();
@@ -604,6 +614,11 @@ class Admin extends User
             $arr_team = $team->toArray();
             $arr_team['inputs'] = [];
             $arr_team['points'] = 0;
+            $arr_team['team_deductions'] = 0;
+            if(isset(TEAM_DEDUCTIONS[$key_team])) {
+                $arr_team['points'] -= TEAM_DEDUCTIONS[$key_team];
+                $arr_team['team_deductions'] = TEAM_DEDUCTIONS[$key_team];
+            }
             $arr_team['rank'] = [
                 'dense'      => 0,
                 'fractional' => 0
