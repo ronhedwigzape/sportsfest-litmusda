@@ -441,4 +441,15 @@ class Rating extends App
         require_once 'Team.php';
         return new Team($this->team_id);
     }
+
+
+    /***************************************************************************
+     * Get table
+     *
+     * @return string
+     */
+    public function getTable()
+    {
+        return $this->table;
+    }
 }
