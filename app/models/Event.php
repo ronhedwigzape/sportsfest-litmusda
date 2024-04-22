@@ -447,6 +447,48 @@ class Event extends App
 
 
     /***************************************************************************
+     * Get all judges with unlocked ratings for the event as array of objects
+     *
+     * @return Judge[]
+     */
+    public function getAllJudgesWithUnlockedRatings()
+    {
+        $judges = [];
+        foreach($this->getAllJudges() as $judge) {
+            if($judge->hasUnlockedRatings($this))
+                $judges[] = $judge;
+        }
+        return $judges;
+    }
+
+
+    /***************************************************************************
+     * Get all judges with unlocked ratings for the event as array of arrays
+     *
+     * @return array
+     */
+    public function getRowJudgesWithUnlockedRatings()
+    {
+        $judges = [];
+        foreach($this->getAllJudgesWithUnlockedRatings() as $judge) {
+            $judges[] = $judge->toArray();
+        }
+        return $judges;
+    }
+
+
+    /***************************************************************************
+     * Determine if this event has judges with unlocked ratings
+     *
+     * @return bool
+     */
+    public function hasJudgesWithUnlockedRatings()
+    {
+        return (sizeof($this->getAllJudgesWithUnlockedRatings()) > 0);
+    }
+
+
+    /***************************************************************************
      * Get all assigned technicals to event as array of objects
      *
      * @return Technical[]
@@ -493,6 +535,48 @@ class Event extends App
     public function hasTechnical($technical)
     {
         return $technical->hasEvent($this);
+    }
+
+
+    /***************************************************************************
+     * Get all technicals with unlocked deductions for the event as array of objects
+     *
+     * @return Technical[]
+     */
+    public function getAllTechnicalsWithUnlockedDeductions()
+    {
+        $technicals = [];
+        foreach($this->getAllTechnicals() as $technical) {
+            if($technical->hasUnlockedDeductions($this))
+                $technicals[] = $technical;
+        }
+        return $technicals;
+    }
+
+
+    /***************************************************************************
+     * Get all technicals with unlocked deductions for the event as array of arrays
+     *
+     * @return array
+     */
+    public function getRowTechnicalsWithUnlockedDeductions()
+    {
+        $technicals = [];
+        foreach($this->getAllTechnicalsWithUnlockedDeductions() as $technical) {
+            $technicals[] = $technical->toArray();
+        }
+        return $technicals;
+    }
+
+
+    /***************************************************************************
+     * Determine if this event has technicals with unlocked deductions
+     *
+     * @return bool
+     */
+    public function hasTechnicalsWithUnlockedDeductions()
+    {
+        return (sizeof($this->getAllTechnicalsWithUnlockedDeductions()) > 0);
     }
 
 
