@@ -505,4 +505,25 @@ class Technical extends User
             $deduction->lock(false);
         }
     }
+
+
+    /***************************************************************************
+     * Determine whether the technical has any unlocked deductions for a given event
+     *
+     * @param Event $event
+     * @return bool
+     */
+    public function hasUnlockedDeductions($event)
+    {
+        require_once 'Deduction.php';
+
+        $deduction = new Deduction();
+        $table_deductions = $deduction->getTable();
+        $event_id = $event->getId();
+        $stmt = $this->conn->prepare("SELECT event_id FROM $table_deductions WHERE technical_id = ? AND event_id = ? AND is_locked = 0 LIMIT 1");
+        $stmt->bind_param("ii", $this->id, $event_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return ($result->num_rows > 0);
+    }
 }

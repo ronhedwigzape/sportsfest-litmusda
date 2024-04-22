@@ -228,7 +228,7 @@ class Judge extends User
     /***************************************************************************
      * Get is_chairman
      *
-     * @return boolean
+     * @return bool
      */
     public function getIsChairman()
     {
@@ -769,5 +769,32 @@ class Judge extends User
                 $rating->lock(false);
             }
         }
+    }
+
+
+    /***************************************************************************
+     * Determine whether the judge has any unlocked ratings for a given event
+     *
+     * @param Event $event
+     * @return bool
+     */
+    public function hasUnlockedRatings($event)
+    {
+        require_once 'Rating.php';
+
+        $bool   = false;
+        $rating = new Rating();
+        $table_ratings = $rating->getTable();
+        foreach($event->getAllCriteria() as $criterion) {
+            $criterion_id = $criterion->getId();
+            $stmt = $this->conn->prepare("SELECT criteria_id FROM $table_ratings WHERE judge_id = ? AND criteria_id = ? AND is_locked = 0 LIMIT 1");
+            $stmt->bind_param("ii", $this->id, $criterion_id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $bool   = $result->num_rows > 0;
+            if($bool)
+                break;
+        }
+        return $bool;
     }
 }
