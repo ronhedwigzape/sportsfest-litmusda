@@ -53,7 +53,7 @@ $competitions = Competition::all();
                                 <thead>
                                 <tr>
                                     <th><?php print_r($event_name); ?></th>
-                                    <th>Action</th>
+                                    <th>Title</th>
                                 </tr>
                                 </thead>
                                 <tbody>
