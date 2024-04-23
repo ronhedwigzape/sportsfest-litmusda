@@ -301,4 +301,80 @@ class Criterion extends App
         require_once 'Event.php';
         return new Event($this->event_id);
     }
+
+
+    /***************************************************************************
+     * Get all assigned judges to criterion as array of objects
+     *
+     * @return Judge[]
+     */
+    public function getAllJudges()
+    {
+        return $this->getEvent()->getAllJudges();
+    }
+
+
+    /***************************************************************************
+     * Get all assigned judges to criterion as array of arrays
+     *
+     * @return array
+     */
+    public function getRowJudges()
+    {
+        return $this->getEvent()->getRowJudges();
+    }
+
+
+    /***************************************************************************
+     * Determine if the criterion has a given judge
+     *
+     * @param Judge $judge
+     * @return bool
+     */
+    public function hasJudge($judge)
+    {
+        return $judge->hasEvent($this->getEvent());
+    }
+
+
+    /***************************************************************************
+     * Get all judges with unlocked ratings for the criterion as array of objects
+     *
+     * @return Judge[]
+     */
+    public function getAllJudgesWithUnlockedRatings()
+    {
+        $judges = [];
+        foreach($this->getAllJudges() as $judge) {
+            if($judge->hasUnlockedRatings($this))
+                $judges[] = $judge;
+        }
+        return $judges;
+    }
+
+
+    /***************************************************************************
+     * Get all judges with unlocked ratings for the criterion as array of arrays
+     *
+     * @return array
+     */
+    public function getRowJudgesWithUnlockedRatings()
+    {
+        $judges = [];
+        foreach($this->getAllJudgesWithUnlockedRatings() as $judge) {
+            $judges[] = $judge->toArray();
+        }
+        return $judges;
+    }
+
+
+    /***************************************************************************
+     * Determine if this criterion has judges with unlocked ratings
+     *
+     * @return bool
+     */
+    public function hasJudgesWithUnlockedRatings()
+    {
+        return (sizeof($this->getAllJudgesWithUnlockedRatings()) > 0);
+    }
 }

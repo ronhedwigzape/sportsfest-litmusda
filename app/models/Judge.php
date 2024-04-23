@@ -773,19 +773,26 @@ class Judge extends User
 
 
     /***************************************************************************
-     * Determine whether the judge has any unlocked ratings for a given event
+     * Determine whether the judge has any unlocked ratings for a given event or criterion
      *
-     * @param Event $event
+     * @param Event|Criterion $entity
      * @return bool
      */
-    public function hasUnlockedRatings($event)
+    public function hasUnlockedRatings($entity)
     {
+        require_once 'Event.php';
+        require_once 'Criterion.php';
         require_once 'Rating.php';
 
-        $bool   = false;
+        $bool     = false;
+        $criteria = [];
+        if($entity instanceof Event)
+            $criteria = $entity->getAllCriteria();
+        else if($entity instanceof Criterion)
+            $criteria = [$entity];
         $rating = new Rating();
         $table_ratings = $rating->getTable();
-        foreach($event->getAllCriteria() as $criterion) {
+        foreach($criteria as $criterion) {
             $criterion_id = $criterion->getId();
             $stmt = $this->conn->prepare("SELECT criteria_id FROM $table_ratings WHERE judge_id = ? AND criteria_id = ? AND is_locked = 0 LIMIT 1");
             $stmt->bind_param("ii", $this->id, $criterion_id);
