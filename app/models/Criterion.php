@@ -366,4 +366,15 @@ class Criterion extends App
         }
         return $judges;
     }
+
+
+    /***************************************************************************
+     * Determine if this criterion has judges with unlocked ratings
+     *
+     * @return bool
+     */
+    public function hasJudgesWithUnlockedRatings()
+    {
+        return (sizeof($this->getAllJudgesWithUnlockedRatings()) > 0);
+    }
 }
