@@ -858,21 +858,6 @@ class Event extends App
 
 
     /***************************************************************************
-     * Get teams which never showed up for the event, as a result set
-     *
-     * @return array
-     */
-    private function getResultNoShowTeams()
-    {
-        $stmt = $this->conn->prepare("SELECT DISTINCT team_id FROM $this->table_noshows WHERE event_id = ? ORDER BY team_id");
-        $stmt->bind_param("i", $this->id);
-        $stmt->execute();
-
-        return $stmt->get_result();
-    }
-
-
-    /***************************************************************************
      * Get teams which never showed up for the event, as array of objects
      *
      * @return Team[]
@@ -892,24 +877,6 @@ class Event extends App
         }
 
         return $teams;
-    }
-
-
-    /***************************************************************************
-     * Get id's of teams which never showed up for the event
-     *
-     * @return array
-     */
-    public function getRowNoShowTeamIds()
-    {
-        $result = $this->getResultNoShowTeams();
-
-        $team_ids = [];
-        while($row = $result->fetch_assoc()) {
-            $team_ids[] = $row['team_id'];
-        }
-
-        return $team_ids;
     }
 
 
@@ -1000,6 +967,8 @@ class Event extends App
      */
     private function getResultEliminatedTeams()
     {
+        require_once 'Team.php';
+
         $stmt = $this->conn->prepare("SELECT DISTINCT team_id FROM $this->table_eliminations WHERE event_id = ? ORDER BY team_id");
         $stmt->bind_param("i", $this->id);
         $stmt->execute();
