@@ -881,11 +881,7 @@ class Event extends App
     {
         require_once 'Team.php';
 
-        $stmt = $this->conn->prepare("SELECT DISTINCT team_id FROM $this->table_noshows WHERE event_id = ? ORDER BY team_id");
-        $stmt->bind_param("i", $this->id);
-        $stmt->execute();
-
-        $result = $stmt->get_result();
+        $result = $this->getResultNoShowTeams();
         $teams = [];
         while($row = $result->fetch_assoc()) {
             $teams[] = new Team($row['team_id']);
