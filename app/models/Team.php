@@ -176,13 +176,11 @@ class Team extends App
             for($i = 1; $i <= $total_orders; $i++) {
                 $key = 'team_' . $i;
                 if(isset($sorted_teams[$key])) {
-                    if($event)
-                        $sorted_teams[$key]->disabled = $sorted_teams[$key]->hasNotShownUpForEvent($event);
+                    $sorted_teams[$key]->disabled = $sorted_teams[$key]->hasNotShownUpForEvent($event);
                     $final_teams[] = $sorted_teams[$key];
                 }
                 else if(isset($teams[0])) {
-                    if($event)
-                        $teams[0]->disabled = $teams[0]->hasNotShownUpForEvent($event);
+                    $teams[0]->disabled = $teams[0]->hasNotShownUpForEvent($event);
                     $final_teams[] = $teams[0];
                     unset($teams[0]);
                     $teams = array_values($teams);
