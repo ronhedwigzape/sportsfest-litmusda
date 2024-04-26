@@ -117,10 +117,12 @@ class Team extends App
         // gather team ids of eliminated teams
         $event = null;
         $eliminated_team_ids = [];
+        $noshow_team_ids     = [];
         if($event_id > 0) {
             require_once 'Event.php';
             $event = Event::findById($event_id);
             $eliminated_team_ids = $event->getRowEliminatedTeamIds();
+            $noshow_team_ids     = $event->getRowNoShowTeamIds();
         }
 
         // gather teams
@@ -176,11 +178,11 @@ class Team extends App
             for($i = 1; $i <= $total_orders; $i++) {
                 $key = 'team_' . $i;
                 if(isset($sorted_teams[$key])) {
-                    $sorted_teams[$key]->disabled = $sorted_teams[$key]->hasNotShownUpForEvent($event);
+                    $sorted_teams[$key]->disabled = in_array($sorted_teams[$key]->getId(), $noshow_team_ids);
                     $final_teams[] = $sorted_teams[$key];
                 }
                 else if(isset($teams[0])) {
-                    $teams[0]->disabled = $teams[0]->hasNotShownUpForEvent($event);
+                    $teams[0]->disabled = in_array($teams[0]->getId(), $noshow_team_ids);
                     $final_teams[] = $teams[0];
                     unset($teams[0]);
                     $teams = array_values($teams);
