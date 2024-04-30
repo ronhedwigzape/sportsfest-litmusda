@@ -165,9 +165,8 @@
 					<v-text-field
 						type="number"
 						class="font-weight-bold"
-                        :variant="(!totalErrors[`team_${team.id}`].empty && totalErrors[`team_${team.id}`].invalid) ? 'filled' : 'outlined'"
-                        :hide-details="!(!totalErrors[`team_${team.id}`].empty && totalErrors[`team_${team.id}`].invalid)"
-						single-line
+                        variant="outlined"
+                        hide-details
 						:loading="totals[`team_${team.id}`].loading"
 						v-model.number="totals[`team_${team.id}`].value"
 						:min="minRating"
@@ -180,7 +179,7 @@
 							'v-input-total-error': !totalErrors[`team_${team.id}`].empty && totalErrors[`team_${team.id}`].invalid
 						}"
                         :error="totalErrors[`team_${team.id}`].empty || totalErrors[`team_${team.id}`].invalid"
-                        :error-messages="(
+                        :label="(
                             (!totalErrors[`team_${team.id}`].empty && totalErrors[`team_${team.id}`].invalid)
                             ? `${minRating} - ${maxRating}` : ''
                         )"
