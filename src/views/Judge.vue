@@ -578,7 +578,7 @@ export default {
                             const inputTotal = this.$refs[`txt-total-${team.id}`];
                             if(inputTotal)
                                 inputTotal[0].focus();
-                            const trTeam = $(`#row--team-${team.id}`);
+                            /*const trTeam = $(`#row--team-${team.id}`);
                             if(trTeam.length > 0) {
                                 const tableWrapper = trTeam.closest('.v-table__wrapper');
                                 if(tableWrapper.length > 0) {
@@ -586,7 +586,7 @@ export default {
                                         scrollTop: trTeam.offset().top
                                     }, 300);
                                 }
-                            }
+                            }*/
                             break;
                         }
                     }
