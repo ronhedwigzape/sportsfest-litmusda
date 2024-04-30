@@ -9,6 +9,37 @@ input[type=number] {
     text-align: center !important;
 }
 
+.v-input-total-error {
+    margin-top: 16px;
+}
+
+.v-input-total-error .v-input__control > .v-field {
+    border-left: 1px solid rgb(var(--v-theme-error));
+    border-top: 1px solid rgb(var(--v-theme-error));
+    border-right: 1px solid rgb(var(--v-theme-error));
+}
+
+.v-input-total-error .v-input__details {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    text-align: center;
+    font-weight: bold;
+    animation: shake-repeat 4.72s ease infinite;
+    transform-origin: 50% 50%;
+}
+
+/* https://codepen.io/dmytrous/pen/vgoWxY */
+@keyframes shake-repeat {
+    0% { transform:translate(0,0) }
+    1.78571% { transform:translate(5px,0) }
+    3.57143% { transform:translate(0,0) }
+    5.35714% { transform:translate(5px,0) }
+    7.14286% { transform:translate(0,0) }
+    8.92857% { transform:translate(5px,0) }
+    10.71429% { transform:translate(0,0) }
+    100% { transform:translate(0,0) }
+}
+
 @font-face {
     font-family: 'Roboto';
     font-style: normal;
