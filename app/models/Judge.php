@@ -786,10 +786,14 @@ class Judge extends User
 
         $bool     = false;
         $criteria = [];
-        if($entity instanceof Event)
-            $criteria = $entity->getAllCriteria();
-        else if($entity instanceof Criterion)
-            $criteria = [$entity];
+        if($entity instanceof Event) {
+            if($this->hasEvent($entity))
+                $criteria = $entity->getAllCriteria();
+        }
+        else if($entity instanceof Criterion) {
+            if($this->hasEvent($entity->getEvent()))
+                $criteria = [$entity];
+        }
         $rating = new Rating();
         $table_ratings = $rating->getTable();
         foreach($criteria as $criterion) {
