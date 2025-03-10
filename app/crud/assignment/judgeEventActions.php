@@ -75,7 +75,6 @@ if(isset($_POST['selectedEvent'])) {
     for($i = 0; $i < count($display); $i++) {
         $displayTitle[] = Event::findById($display[$i]);
     }
-    sleep(1);
 }
 
 //Judge Chairman
@@ -117,8 +116,6 @@ if(isset($_POST['judgeNum'])) {
         $displayTitle[] = Event::findById($display[$i]);
     }
     $judge_data = Judge::findById($judgeID);
-
-    sleep(1);
 }
 
 ?>
